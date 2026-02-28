@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '*.md'
+      - 'LICENSE'
+      - '.gitignore'
     tags:
       - 'v*'
 
