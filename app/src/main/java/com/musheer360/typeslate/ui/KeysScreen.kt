@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -66,10 +65,16 @@ fun KeysScreen() {
                             isTesting = true
                             testResult = null
                             scope.launch {
-                                val result = client.validateKey(newKey.trim())
+                                val trimmedKey = newKey.trim()
+                                if (keys.contains(trimmedKey)) {
+                                    isTesting = false
+                                    testResult = "This key has already been added"
+                                    return@launch
+                                }
+                                val result = client.validateKey(trimmedKey)
                                 isTesting = false
                                 if (result.isSuccess) {
-                                    keyManager.addKey(newKey.trim())
+                                    keyManager.addKey(trimmedKey)
                                     keys = keyManager.getKeys()
                                     newKey = ""
                                     testResult = "Valid key added!"

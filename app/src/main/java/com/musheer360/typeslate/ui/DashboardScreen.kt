@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,23 +23,31 @@ import com.musheer360.typeslate.ui.components.ScreenTitle
 import com.musheer360.typeslate.ui.components.SlateCard
 import kotlinx.coroutines.delay
 
+private fun checkServiceEnabled(context: Context): Boolean {
+    val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+    val enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
+    return enabledServices.any {
+        it.resolveInfo.serviceInfo.packageName == context.packageName
+    }
+}
+
 @Composable
 fun DashboardScreen() {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
-    var isServiceEnabled by remember { mutableStateOf(false) }
-    var keyCount by remember { mutableIntStateOf(0) }
     val keyManager = remember { KeyManager(context) }
-    val lifecycleOwner = LocalLifecycleOwner.current
+    var isServiceEnabled by remember { mutableStateOf(checkServiceEnabled(context)) }
+    var keyCount by remember { mutableIntStateOf(keyManager.getKeys().size) }
 
-    LaunchedEffect(lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+    // Use the Activity lifecycle so polling only restarts when the app returns
+    // from the background, not when switching between navbar tabs.
+    val activityLifecycle = (context as? ComponentActivity)?.lifecycle
+
+    LaunchedEffect(activityLifecycle) {
+        val lifecycle = activityLifecycle ?: return@LaunchedEffect
+        lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             while (true) {
-                val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-                val enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
-                isServiceEnabled = enabledServices.any { 
-                    it.resolveInfo.serviceInfo.packageName == context.packageName 
-                }
+                isServiceEnabled = checkServiceEnabled(context)
                 keyCount = keyManager.getKeys().size
                 delay(3000)
             }

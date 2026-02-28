@@ -28,6 +28,7 @@ fun CommandsScreen() {
     var commands by remember { mutableStateOf(commandManager.getCommands()) }
     var trigger by remember { mutableStateOf("") }
     var prompt by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -47,7 +48,10 @@ fun CommandsScreen() {
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 value = trigger,
-                onValueChange = { trigger = it },
+                onValueChange = {
+                    trigger = it
+                    errorMessage = null
+                },
                 label = { Text("Trigger (e.g., ?code)") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -67,6 +71,14 @@ fun CommandsScreen() {
                     unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
             )
+            errorMessage?.let { msg ->
+                Text(
+                    text = msg,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 13.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
             Spacer(modifier = Modifier.height(12.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -74,13 +86,23 @@ fun CommandsScreen() {
             ) {
                 Button(
                     onClick = {
-                        if (trigger.isNotBlank() && prompt.isNotBlank()) {
+                        val trimmedTrigger = trigger.trim()
+                        if (trimmedTrigger.isNotBlank() && prompt.isNotBlank()) {
+                            if (!trimmedTrigger.startsWith("?")) {
+                                errorMessage = "Trigger must start with '?'"
+                                return@Button
+                            }
+                            if (commands.any { it.trigger == trimmedTrigger }) {
+                                errorMessage = "A command with this trigger already exists"
+                                return@Button
+                            }
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            val newCommand = Command(trigger.trim(), prompt.trim(), false)
+                            val newCommand = Command(trimmedTrigger, prompt.trim(), false)
                             commandManager.addCustomCommand(newCommand)
                             commands = commandManager.getCommands()
                             trigger = ""
                             prompt = ""
+                            errorMessage = null
                         }
                     },
                     enabled = trigger.isNotBlank() && prompt.isNotBlank()
