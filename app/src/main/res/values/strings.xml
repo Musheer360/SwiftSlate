@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TypeSlate</string>
+    <string name="accessibility_service_label">TypeSlate Assistant</string>
+    <string name="accessibility_service_desc">Provides system-wide AI text replacements using Gemini when trigger commands are typed.</string>
+</resources>
