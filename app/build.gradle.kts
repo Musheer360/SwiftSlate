@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-val baseVersion = "1.0.0"
+val baseVersion = "1.0"
 
 android {
     namespace = "com.musheer360.typeslate"
