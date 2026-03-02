@@ -1,10 +1,10 @@
 package com.musheer360.swiftslate
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -26,16 +26,37 @@ import com.musheer360.swiftslate.ui.DashboardScreen
 import com.musheer360.swiftslate.ui.KeysScreen
 import com.musheer360.swiftslate.ui.SettingsScreen
 import com.musheer360.swiftslate.ui.theme.SwiftSlateTheme
+import com.musheer360.swiftslate.update.UpdateWorker
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val startRoute = routeFromIntent(intent)
         setContent {
             SwiftSlateTheme {
-                SwiftSlateMainScreen()
+                SwiftSlateMainScreen(startRoute)
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        val route = routeFromIntent(intent)
+        if (route != null) {
+            setContent {
+                SwiftSlateTheme {
+                    SwiftSlateMainScreen(route)
+                }
+            }
+        }
+    }
+
+    private fun routeFromIntent(intent: Intent?): String? {
+        val nav = intent?.getStringExtra(UpdateWorker.EXTRA_NAVIGATE_TO)
+        return if (nav == UpdateWorker.NAV_SETTINGS) Screen.Settings.route else null
     }
 }
 
@@ -47,10 +68,19 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
 }
 
 @Composable
-fun SwiftSlateMainScreen() {
+fun SwiftSlateMainScreen(startRoute: String? = null) {
     val navController = rememberNavController()
     val items = listOf(Screen.Dashboard, Screen.Keys, Screen.Commands, Screen.Settings)
     val haptic = LocalHapticFeedback.current
+
+    LaunchedEffect(startRoute) {
+        if (startRoute != null) {
+            navController.navigate(startRoute) {
+                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                launchSingleTop = true
+            }
+        }
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
