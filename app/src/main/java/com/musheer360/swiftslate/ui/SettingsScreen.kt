@@ -379,7 +379,18 @@ private fun downloadAndInstall(context: Context, info: UpdateInfo, onComplete: (
             if (id != downloadId) return
             context.unregisterReceiver(this)
             onComplete()
-            installApk(context, fileName)
+
+            val query = DownloadManager.Query().setFilterById(downloadId)
+            val cursor = dm.query(query)
+            if (cursor != null && cursor.moveToFirst()) {
+                val statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                if (statusIndex >= 0 && cursor.getInt(statusIndex) == DownloadManager.STATUS_SUCCESSFUL) {
+                    installApk(context, fileName)
+                } else {
+                    Toast.makeText(context, "Download failed. Please try again.", Toast.LENGTH_SHORT).show()
+                }
+                cursor.close()
+            }
         }
     }
 
@@ -405,7 +416,10 @@ private fun installApk(context: Context, fileName: String) {
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
         fileName
     )
-    if (!file.exists()) return
+    if (!file.exists()) {
+        Toast.makeText(context, "APK file not found. Please try again.", Toast.LENGTH_SHORT).show()
+        return
+    }
 
     val uri = FileProvider.getUriForFile(
         context,

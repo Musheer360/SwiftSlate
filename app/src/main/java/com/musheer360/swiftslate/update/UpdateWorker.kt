@@ -43,7 +43,7 @@ class UpdateWorker(
         } else {
             // Clear stale data if current version matches or exceeds cached version
             val cached = UpdateChecker.getCachedUpdate(applicationContext)
-            if (cached != null && !isNewer(cached.version, currentVersion)) {
+            if (cached != null && !UpdateChecker.isNewer(cached.version, currentVersion)) {
                 UpdateChecker.clearCache(applicationContext)
             }
         }
@@ -94,18 +94,5 @@ class UpdateWorker(
             val manager = applicationContext.getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(channel)
         }
-    }
-
-    private fun isNewer(latest: String, current: String): Boolean {
-        val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
-        val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
-        val size = maxOf(latestParts.size, currentParts.size)
-        for (i in 0 until size) {
-            val l = latestParts.getOrElse(i) { 0 }
-            val c = currentParts.getOrElse(i) { 0 }
-            if (l > c) return true
-            if (l < c) return false
-        }
-        return false
     }
 }

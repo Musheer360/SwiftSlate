@@ -85,7 +85,7 @@ object UpdateChecker {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit().clear().apply()
     }
 
-    private fun isNewer(latest: String, current: String): Boolean {
+    fun isNewer(latest: String, current: String): Boolean {
         val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
         val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
         val size = maxOf(latestParts.size, currentParts.size)

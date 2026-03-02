@@ -30,13 +30,15 @@ import com.musheer360.swiftslate.update.UpdateWorker
 
 class MainActivity : ComponentActivity() {
 
+    private val pendingRoute = mutableStateOf<String?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val startRoute = routeFromIntent(intent)
+        pendingRoute.value = routeFromIntent(intent)
         setContent {
             SwiftSlateTheme {
-                SwiftSlateMainScreen(startRoute)
+                SwiftSlateMainScreen(pendingRoute)
             }
         }
     }
@@ -44,14 +46,7 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        val route = routeFromIntent(intent)
-        if (route != null) {
-            setContent {
-                SwiftSlateTheme {
-                    SwiftSlateMainScreen(route)
-                }
-            }
-        }
+        routeFromIntent(intent)?.let { pendingRoute.value = it }
     }
 
     private fun routeFromIntent(intent: Intent?): String? {
@@ -68,17 +63,19 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
 }
 
 @Composable
-fun SwiftSlateMainScreen(startRoute: String? = null) {
+fun SwiftSlateMainScreen(pendingRoute: MutableState<String?> = mutableStateOf(null)) {
     val navController = rememberNavController()
     val items = listOf(Screen.Dashboard, Screen.Keys, Screen.Commands, Screen.Settings)
     val haptic = LocalHapticFeedback.current
 
-    LaunchedEffect(startRoute) {
-        if (startRoute != null) {
-            navController.navigate(startRoute) {
+    val route = pendingRoute.value
+    LaunchedEffect(route) {
+        if (route != null) {
+            navController.navigate(route) {
                 popUpTo(navController.graph.startDestinationId) { saveState = true }
                 launchSingleTop = true
             }
+            pendingRoute.value = null
         }
     }
 
