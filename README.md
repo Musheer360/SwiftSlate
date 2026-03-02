@@ -333,7 +333,9 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 - Provider selection
   - Google Gemini (default)
   - Custom (OpenAI Compatible)
-- Model selection
+- Gemini model picker
+  - `gemini-2.5-flash-lite` (default)
+  - `gemini-3-flash-preview`
 - Custom endpoint URL & model name
 
 </td>
