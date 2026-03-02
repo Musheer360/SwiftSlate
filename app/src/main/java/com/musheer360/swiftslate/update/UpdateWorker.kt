@@ -73,7 +73,7 @@ class UpdateWorker(
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle("SwiftSlate v${update.version} available")
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
@@ -86,7 +86,7 @@ class UpdateWorker(
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 "App Updates",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "Notifications for new SwiftSlate versions"
             }
