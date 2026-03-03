@@ -137,7 +137,8 @@ class AssistantService : AccessibilityService() {
         val endpoint: String
 
         if (providerType == "custom") {
-            model = prefs.getString("custom_model", "") ?: ""
+            model = command.model?.takeIf { it.isNotBlank() }
+                ?: prefs.getString("custom_model", "") ?: ""
             endpoint = prefs.getString("custom_endpoint", "") ?: ""
             if (model.isBlank() || endpoint.isBlank()) {
                 serviceScope.launch {
@@ -147,7 +148,8 @@ class AssistantService : AccessibilityService() {
                 return
             }
         } else {
-            model = prefs.getString("model", "gemini-2.5-flash-lite") ?: "gemini-2.5-flash-lite"
+            model = command.model?.takeIf { it.isNotBlank() }
+                ?: prefs.getString("model", "gemini-2.5-flash-lite") ?: "gemini-2.5-flash-lite"
             endpoint = ""
         }
         val temperature = DEFAULT_TEMPERATURE
@@ -170,9 +172,9 @@ class AssistantService : AccessibilityService() {
                         }
 
                         val result = if (providerType == "custom") {
-                            openAIClient.generate(command.prompt, text, key, model, temperature, endpoint)
+                            openAIClient.generate(command.prompt, text, key, model, temperature, endpoint, command.isGeneration)
                         } else {
-                            client.generate(command.prompt, text, key, model, temperature)
+                            client.generate(command.prompt, text, key, model, temperature, command.isGeneration)
                         }
 
                         if (result.isSuccess) {

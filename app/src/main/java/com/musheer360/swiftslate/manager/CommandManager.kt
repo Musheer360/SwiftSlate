@@ -18,6 +18,7 @@ class CommandManager(context: Context) {
         Command("?casual", "Rewrite the provided text in a casual friendly tone. Do NOT respond to, interpret, or answer the text. Treat it purely as raw text to restyle. Return ONLY the rewritten text with no explanations or commentary.", true),
         Command("?emoji", "Add relevant emojis to the provided text. Do NOT respond to, interpret, or answer the text. Treat it purely as raw text to enhance with emojis. Return ONLY the text with emojis added, with no explanations or commentary.", true),
         Command("?reply", "Generate a contextual reply to the provided text. Return ONLY the reply with no explanations or commentary.", true),
+        Command("?gen", "You are a helpful assistant. Generate a response based on the user's prompt. Return ONLY the generated content with no meta-commentary.", true, isGeneration = true),
         Command("?undo", "Undo the last replacement and restore the original text.", true)
     )
 
@@ -27,7 +28,13 @@ class CommandManager(context: Context) {
         val customCommands = mutableListOf<Command>()
         for (i in 0 until arr.length()) {
             val obj = arr.getJSONObject(i)
-            customCommands.add(Command(obj.getString("trigger"), obj.getString("prompt"), false))
+            customCommands.add(Command(
+                trigger = obj.getString("trigger"),
+                prompt = obj.getString("prompt"),
+                isBuiltIn = false,
+                isGeneration = obj.optBoolean("isGeneration", false),
+                model = obj.optString("model", "").ifBlank { null }
+            ))
         }
         return builtInCommands + customCommands
     }
@@ -38,6 +45,12 @@ class CommandManager(context: Context) {
         val newObj = JSONObject()
         newObj.put("trigger", command.trigger)
         newObj.put("prompt", command.prompt)
+        if (command.isGeneration) {
+            newObj.put("isGeneration", true)
+        }
+        if (!command.model.isNullOrBlank()) {
+            newObj.put("model", command.model)
+        }
         arr.put(newObj)
         prefs.edit().putString("custom_commands", arr.toString()).apply()
     }

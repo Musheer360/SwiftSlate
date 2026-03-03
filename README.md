@@ -79,6 +79,12 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 ✅  Result         →  "Hola, ¿cómo estás?"
 ```
 
+```
+📝  You type       →  "write a mail to my manager for leave ?gen"
+⏳  SwiftSlate      →  ◐ ◓ ◑ ◒  (processing...)
+✅  Result         →  "Subject: Leave Request ..."
+```
+
 <br>
 
 ## ✨ Features
@@ -122,7 +128,7 @@ No analytics. No telemetry. No intermediary servers. Text is sent directly to th
 
 ## 🧩 Built-in Commands
 
-SwiftSlate ships with **9 commands** plus dynamic translation — ready to use out of the box:
+SwiftSlate ships with **10 commands** plus dynamic translation — ready to use out of the box:
 
 | Trigger | Action | Example |
 |:--------|:-------|:--------|
@@ -134,6 +140,7 @@ SwiftSlate ships with **9 commands** plus dynamic translation — ready to use o
 | **`?casual`** | Rewrite in friendly tone | `Please confirm your attendance at the event` → `Hey, you coming to the event? Let me know!` |
 | **`?emoji`** | Add relevant emojis | `I love this new feature` → `I love this new feature! 🎉❤️✨` |
 | **`?reply`** | Generate a contextual reply | `Do you want to grab lunch tomorrow?` → `Sure, I'd love to! What time works for you?` |
+| **`?gen`** | Generate content from a prompt | `write a haiku about coding` → `Lines of logic flow / Bugs hide in the smallest gaps / Debug, compile, run` |
 | **`?undo`** | Restore text from before the last replacement | Reverts to your original text before AI modified it |
 | **`?translate:XX`** | Translate to any language | `Hello, how are you?` **`?translate:es`** → `Hola, ¿cómo estás?` |
 
@@ -261,7 +268,9 @@ Go beyond the built-ins — create your own trigger → prompt pairs in the **Co
 1. Open the **Commands** screen
 2. Enter a **Trigger** (e.g., `?poem`)
 3. Enter a **Prompt** — the instruction sent to the AI
-4. Tap **"Add Command"**
+4. Optionally set a **Model override** — route this command to a specific model (e.g., `gemini-3-flash-preview`)
+5. Optionally enable **Generation mode** — generates content from your prompt instead of transforming existing text
+6. Tap **"Add Command"**
 
 ### Example Ideas
 
@@ -321,10 +330,12 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 <td width="25%" valign="top">
 
 #### 📝 Commands
-- 9 built-in commands (read-only)
+- 10 built-in commands (read-only)
 - Add custom commands
 - Delete custom commands
 - Trigger + prompt pairs
+- Per-command model override
+- Generation mode toggle
 
 </td>
 <td width="25%" valign="top">

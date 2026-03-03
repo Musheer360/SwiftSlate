@@ -130,7 +130,7 @@ fun DashboardScreen() {
             Text(
                 text = """1. Enable the Accessibility Service.
 2. Add at least one API key.
-3. Type anywhere in Android, ending with a trigger like '?fix' or '?casual'.
+3. Type anywhere in Android, ending with a trigger like '?fix', '?casual', or '?gen'.
 4. Wait a moment for the text to be magically replaced!""".trimIndent(),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 16.sp,

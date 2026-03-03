@@ -28,6 +28,8 @@ fun CommandsScreen() {
     var commands by remember { mutableStateOf(commandManager.getCommands()) }
     var trigger by remember { mutableStateOf("") }
     var prompt by remember { mutableStateOf("") }
+    var commandModel by remember { mutableStateOf("") }
+    var isGeneration by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
@@ -64,13 +66,41 @@ fun CommandsScreen() {
             OutlinedTextField(
                 value = prompt,
                 onValueChange = { prompt = it },
-                label = { Text("Prompt (must ask for JUST modified text)") },
+                label = { Text("Prompt (instruction for the AI)") },
                 modifier = Modifier.fillMaxWidth().height(100.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = commandModel,
+                onValueChange = { commandModel = it },
+                label = { Text("Model override (optional)") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                )
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = isGeneration,
+                    onCheckedChange = { isGeneration = it }
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "Generation mode (generate content instead of transforming text)",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             errorMessage?.let { msg ->
                 Text(
                     text = msg,
@@ -97,11 +127,19 @@ fun CommandsScreen() {
                                 return@Button
                             }
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            val newCommand = Command(trimmedTrigger, prompt.trim(), false)
+                            val newCommand = Command(
+                                trigger = trimmedTrigger,
+                                prompt = prompt.trim(),
+                                isBuiltIn = false,
+                                isGeneration = isGeneration,
+                                model = commandModel.trim().ifBlank { null }
+                            )
                             commandManager.addCustomCommand(newCommand)
                             commands = commandManager.getCommands()
                             trigger = ""
                             prompt = ""
+                            commandModel = ""
+                            isGeneration = false
                             errorMessage = null
                         }
                     },
@@ -138,6 +176,22 @@ fun CommandsScreen() {
                                 fontSize = 14.sp,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
+                            if (cmd.isGeneration) {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "Generation mode",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+                            }
+                            if (!cmd.model.isNullOrBlank()) {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "Model: ${cmd.model}",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+                            }
                             if (cmd.isBuiltIn) {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
