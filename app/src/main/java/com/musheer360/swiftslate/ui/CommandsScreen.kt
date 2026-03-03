@@ -3,6 +3,7 @@ package com.musheer360.swiftslate.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,10 +65,11 @@ fun CommandsScreen() {
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
+            val promptLabel = if (isGeneration) "Prompt (instructions for generation)" else "Prompt (must ask for JUST modified text)"
             OutlinedTextField(
                 value = prompt,
                 onValueChange = { prompt = it },
-                label = { Text(if (isGeneration) "Prompt (instructions for generation)" else "Prompt (must ask for JUST modified text)") },
+                label = { Text(promptLabel) },
                 modifier = Modifier.fillMaxWidth().height(100.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -88,11 +91,17 @@ fun CommandsScreen() {
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .toggleable(
+                        value = isGeneration,
+                        onValueChange = { isGeneration = it },
+                        role = Role.Checkbox
+                    )
             ) {
                 Checkbox(
                     checked = isGeneration,
-                    onCheckedChange = { isGeneration = it }
+                    onCheckedChange = null
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
