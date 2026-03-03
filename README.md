@@ -438,15 +438,6 @@ export KEY_PASSWORD=your_key_password
 
 </details>
 
-### CI/CD
-
-SwiftSlate uses **GitHub Actions** for automated builds and releases:
-
-- Every push to `master` (that changes app code) triggers a signed release build
-- Version numbers are auto-incremented from the base version and git history
-- Signed APKs are automatically uploaded to [GitHub Releases](https://github.com/Musheer360/SwiftSlate/releases)
-- Concurrent builds are cancelled to avoid conflicts
-
 <br>
 
 ## 🤝 Contributing
