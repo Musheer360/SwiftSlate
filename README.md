@@ -111,14 +111,20 @@ Pure black (`#000000`) Material 3 interface designed for OLED screens — saves 
 ### 🤖 Powered by Gemini & Custom Providers
 Ships with Google's Gemini API (`gemini-2.5-flash-lite` or `gemini-3-flash-preview`). Or connect **any OpenAI-compatible endpoint** — use your own provider, model, and base URL.
 
-### 🎨 Custom Commands
-Create your own trigger → prompt pairs. Define `?poem` to turn text into poetry, `?eli5` to simplify for a five-year-old, or anything you can imagine.
+### ✨ Generation Mode (`?gen`)
+Not just text transformation — generate entirely new content from a prompt. Write emails, poems, code, and more with `?gen`. Custom commands can also use generation mode.
+
+### 🎨 Custom Commands & Model Routing
+Create your own trigger → prompt pairs. Define `?poem` to turn text into poetry, `?eli5` to simplify for a five-year-old, or anything you can imagine. Route specific commands to specific models for optimal results.
 
 ### 🔒 Encrypted Key Storage
 API keys are encrypted with **AES-256-GCM** using the Android Keystore. Your keys never leave your device unencrypted.
 
+### 📳 Haptic Feedback
+Tactile confirmation on success and distinct vibration patterns on errors — you always know when SwiftSlate has finished processing.
+
 ### 🛡️ Privacy-First
-No analytics. No telemetry. No intermediary servers. Text is sent directly to the configured provider's API and only when a trigger is detected.
+No analytics. No telemetry. No intermediary servers. Text is sent directly to the configured provider's API and only when a trigger is detected. Password fields are automatically skipped.
 
 </td>
 </tr>
@@ -247,13 +253,15 @@ flowchart TD
 <br>
 
 1. **Event Listening** — SwiftSlate registers an Accessibility Service that listens for `TYPE_VIEW_TEXT_CHANGED` events across all apps
-2. **Fast Exit Optimization** — For performance, it first checks if the last character of typed text matches any known trigger's last character before doing a full scan
-3. **Longest Match** — When a potential match is found, it searches for the longest matching trigger at the end of the text
-4. **Text Extraction** — The text before the trigger is extracted and paired with the command's prompt
-5. **API Call** — The text + prompt is sent to the configured AI provider using the next available key in the round-robin rotation
-6. **Inline Spinner** — While waiting for the response, a spinner animation (`◐ ◓ ◑ ◒`) replaces the text to provide visual feedback
-7. **Text Replacement** — The AI response replaces the original text using `ACTION_SET_TEXT`
-8. **Fallback Strategy** — If `ACTION_SET_TEXT` fails (some apps don't support it), SwiftSlate falls back to a clipboard-based paste approach
+2. **Password Protection** — Password fields are automatically detected and skipped — SwiftSlate never processes sensitive input fields
+3. **Fast Exit Optimization** — For performance, it first checks if the last character of typed text matches any known trigger's last character before doing a full scan
+4. **Longest Match** — When a potential match is found, it searches for the longest matching trigger at the end of the text
+5. **Text Extraction** — The text before the trigger is extracted and paired with the command's prompt
+6. **API Call** — The text + prompt is sent to the configured AI provider using the next available key in the round-robin rotation (90-second timeout)
+7. **Inline Spinner** — While waiting for the response, a spinner animation (`◐ ◓ ◑ ◒`) replaces the text to provide visual feedback
+8. **Text Replacement** — The AI response replaces the original text using `ACTION_SET_TEXT`
+9. **Fallback Strategy** — If `ACTION_SET_TEXT` fails (some apps don't support it), SwiftSlate falls back to a clipboard-based paste approach
+10. **Feedback** — Haptic feedback confirms success (tick) or failure (double-click), and animated overlay toasts display error messages
 
 </details>
 
@@ -363,11 +371,12 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 | | Concern | How SwiftSlate Handles It |
 |:--|:--------|:------------------------|
 | 👁️ | **Text Monitoring** | Only processes text when a trigger command is detected at the end. All other typing is completely ignored. |
+| 🔐 | **Password Fields** | Automatically detected and skipped — SwiftSlate never reads or processes password input fields. |
 | 📡 | **Data Transmission** | Text is sent **only** to the configured AI provider (Google Gemini or your custom endpoint). No other servers are ever contacted. |
-| 🔐 | **Key Storage** | API keys are encrypted with AES-256-GCM using the Android Keystore system before being saved locally. |
+| 🔑 | **Key Storage** | API keys are encrypted with AES-256-GCM using the Android Keystore system before being saved locally. |
 | 📊 | **Analytics** | **None.** Zero telemetry, zero tracking, zero crash reporting. |
 | 📖 | **Open Source** | The entire codebase is open for inspection under the MIT License. |
-| 🔑 | **Permissions** | Only requires the Accessibility Service permission — nothing else. |
+| 🛡️ | **Permissions** | Only requires the Accessibility Service permission — nothing else. Network access is used solely for API calls. |
 
 <br>
 
@@ -428,6 +437,15 @@ export KEY_PASSWORD=your_key_password
 ```
 
 </details>
+
+### CI/CD
+
+SwiftSlate uses **GitHub Actions** for automated builds and releases:
+
+- Every push to `master` (that changes app code) triggers a signed release build
+- Version numbers are auto-incremented from the base version and git history
+- Signed APKs are automatically uploaded to [GitHub Releases](https://github.com/Musheer360/SwiftSlate/releases)
+- Concurrent builds are cancelled to avoid conflicts
 
 <br>
 
