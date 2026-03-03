@@ -2,6 +2,7 @@ name: Dev Build
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - master
     paths:
@@ -20,6 +21,7 @@ concurrency:
 jobs:
   build:
     name: Dev Build (PR #${{ github.event.pull_request.number }})
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
