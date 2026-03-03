@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - master
-    paths-ignore:
-      - '*.md'
-      - 'LICENSE'
-      - '.gitignore'
+    paths:
+      - 'app/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
     tags:
       - 'v*'
 

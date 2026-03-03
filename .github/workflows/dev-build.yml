@@ -1,0 +1,57 @@
+name: Dev Build
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'app/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
+      - 'gradle.properties'
+      - 'gradlew'
+      - 'gradlew.bat'
+
+concurrency:
+  group: dev-build-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Dev Build (PR #${{ github.event.pull_request.number }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Determine dev version
+        id: version
+        run: |
+          BASE_VERSION=$(grep 'val baseVersion' app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
+          SHORT_SHA=$(echo "${{ github.event.pull_request.head.sha }}" | cut -c1-7)
+          VERSION_NAME="${BASE_VERSION}-dev.pr${{ github.event.pull_request.number }}.${SHORT_SHA}"
+          echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Build Debug APK
+        run: |
+          ./gradlew assembleDebug --parallel --no-daemon --stacktrace \
+            -PversionName=${{ steps.version.outputs.version_name }}
+        env:
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2g -XX:+UseG1GC"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SwiftSlate-${{ steps.version.outputs.version_name }}
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14
