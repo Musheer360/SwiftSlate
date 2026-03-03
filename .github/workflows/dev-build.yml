@@ -34,7 +34,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - name: Determine dev version
         id: version
@@ -46,7 +46,7 @@ jobs:
 
       - name: Build Debug APK
         run: |
-          ./gradlew assembleDebug --parallel --no-daemon --stacktrace \
+          ./gradlew assembleDebug --parallel --build-cache --no-daemon --stacktrace \
             -PversionName=${{ steps.version.outputs.version_name }}
         env:
           GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2g -XX:+UseG1GC"
