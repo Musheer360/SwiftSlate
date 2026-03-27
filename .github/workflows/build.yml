@@ -1,9 +1,8 @@
-name: Build Release APK
+name: Build & Release
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
     paths:
       - 'app/**'
       - 'build.gradle.kts'
@@ -11,8 +10,7 @@ on:
       - 'gradle/**'
       - 'gradle.properties'
       - '.github/workflows/**'
-    tags:
-      - 'v*'
+    tags: ['v*']
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,43 +19,261 @@ concurrency:
 permissions:
   contents: write
 
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3g -XX:+UseG1GC"
+
 jobs:
-  ci:
-    name: CI
-    uses: ./.github/workflows/ci.yml
-    secrets: inherit
-    with:
-      release_type: stable
+  version:
+    name: Determine Version
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version_name: ${{ steps.version.outputs.version_name }}
+      version_code: ${{ steps.version.outputs.version_code }}
+      create_tag: ${{ steps.version.outputs.create_tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Determine version
+        id: version
+        shell: bash
+        run: |
+          BASE_VERSION=$(grep 'val baseVersion' app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
+
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            TAG="${{ github.ref_name }}"
+            CREATE_TAG=false
+          else
+            PATCH=$(git tag -l "v${BASE_VERSION}.*" | grep -v beta | sed "s/v${BASE_VERSION}\.//" | sort -n | tail -1)
+            NEXT=$((${PATCH:--1} + 1))
+            TAG="v${BASE_VERSION}.${NEXT}"
+            CREATE_TAG=true
+          fi
+
+          VERSION_NAME="${TAG#v}"
+          VERSION_CODE=$(git rev-list --count HEAD)
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+          echo "version_code=$VERSION_CODE" >> "$GITHUB_OUTPUT"
+          echo "create_tag=${CREATE_TAG}" >> "$GITHUB_OUTPUT"
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
+          gradle-home-cache-cleanup: true
+
+      - name: Run lint
+        id: lint
+        shell: bash
+        run: |
+          for i in 1 2 3; do
+            ./gradlew lint --parallel --build-cache --no-daemon --configuration-cache-problems=warn && break
+            echo "::warning::Lint attempt $i failed, retrying..."
+            sleep 10
+          done
+
+      - name: Upload lint results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lint-results
+          path: app/build/reports/lint-results-*.html
+          retention-days: 14
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
+          gradle-home-cache-cleanup: true
+
+      - name: Run unit tests
+        shell: bash
+        run: |
+          for i in 1 2 3; do
+            ./gradlew test --parallel --build-cache --no-daemon --configuration-cache-problems=warn && break
+            echo "::warning::Test attempt $i failed, retrying..."
+            sleep 10
+          done
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: test-results
+          path: app/build/reports/tests/
+          retention-days: 14
+
+  build:
+    name: Build Signed APK
+    needs: [version, lint, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
+          gradle-home-cache-cleanup: true
+
+      - name: Decode signing keystore
+        shell: bash
+        run: echo "$KEYSTORE_BASE64" | base64 -d > ${{ github.workspace }}/release.keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
+      - name: Build Release APK
+        shell: bash
+        run: |
+          for i in 1 2 3; do
+            ./gradlew assembleRelease --parallel --build-cache --no-daemon --configuration-cache-problems=warn --stacktrace \
+              -PversionCode=${{ needs.version.outputs.version_code }} \
+              -PversionName=${{ needs.version.outputs.version_name }} && break
+            echo "::warning::Build attempt $i failed, retrying..."
+            sleep 15
+          done
+        env:
+          KEYSTORE_FILE: ${{ github.workspace }}/release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Cleanup keystore
+        if: always()
+        shell: bash
+        run: rm -f ${{ github.workspace }}/release.keystore
+
+      - name: Verify APK and log size
+        shell: bash
+        run: |
+          APK_PATH="app/build/outputs/apk/release/app-release.apk"
+          if [ ! -f "$APK_PATH" ]; then
+            echo "::error::APK not found at $APK_PATH"
+            exit 1
+          fi
+          SIZE=$(stat -c%s "$APK_PATH")
+          SIZE_MB=$(awk "BEGIN {printf \"%.2f\", $SIZE / 1048576}")
+          echo "## APK Size: ${SIZE_MB}MB ($SIZE bytes)" >> "$GITHUB_STEP_SUMMARY"
+          echo "::notice::APK size: ${SIZE_MB}MB ($SIZE bytes)"
+          if [ "$SIZE" -lt 100000 ]; then
+            echo "::error::APK suspiciously small ($SIZE bytes)"
+            exit 1
+          fi
+
+      - name: Verify APK signature
+        shell: bash
+        run: |
+          BUILD_TOOLS=$(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)
+          ${BUILD_TOOLS}apksigner verify --print-certs app/build/outputs/apk/release/app-release.apk
+
+      - name: Rename APK
+        shell: bash
+        run: mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/SwiftSlate-${{ needs.version.outputs.tag }}.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: SwiftSlate-${{ needs.version.outputs.tag }}
+          path: app/build/outputs/apk/release/SwiftSlate-*.apk
+          retention-days: 90
 
   release:
     name: Release
-    needs: ci
+    needs: [version, build]
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Download APK
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          name: SwiftSlate-${{ needs.ci.outputs.tag }}
+          name: SwiftSlate-${{ needs.version.outputs.tag }}
           path: artifacts/
 
       - name: Create tag
-        if: needs.ci.outputs.create_tag == 'true'
+        if: needs.version.outputs.create_tag == 'true'
+        shell: bash
         run: |
-          git tag "${{ needs.ci.outputs.tag }}"
-          git push origin "${{ needs.ci.outputs.tag }}"
+          git tag "${{ needs.version.outputs.tag }}"
+          git push origin "${{ needs.version.outputs.tag }}"
 
       - name: Release
-        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
         with:
-          tag_name: ${{ needs.ci.outputs.tag }}
+          tag_name: ${{ needs.version.outputs.tag }}
           files: artifacts/SwiftSlate-*.apk
-          name: SwiftSlate ${{ needs.ci.outputs.tag }}
+          name: SwiftSlate ${{ needs.version.outputs.tag }}
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify-failure:
+    name: Notify on Failure
+    needs: [lint, test, build, release]
+    if: failure()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - name: Create failure issue
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "CI failure on ${GITHUB_REF_NAME} ($(date +%Y-%m-%d))" \
+            --body "Pipeline failed for commit [\`${GITHUB_SHA::7}\`](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}).
+
+          **Run:** [${GITHUB_RUN_ID}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})
+          **Branch:** \`${GITHUB_REF_NAME}\`" \
+            --label "bug"
