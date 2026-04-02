@@ -37,7 +37,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 </div>
 
 > [!NOTE]
-> **SwiftSlate works in most apps** — WhatsApp, Gmail, Twitter/X, Messages, Notes, and more. No copy-pasting. No app switching. Just type and go. Some apps with custom input fields may not be supported ([see limitations](#-known-limitations)).
+> **SwiftSlate works in most apps** — WhatsApp, Gmail, Twitter/X, Messages, Notes, and more. No copy-pasting. No app switching. Just type and go. Some apps with custom input fields may not be supported ([see limitations](#%EF%B8%8F-known-limitations)).
 
 <br>
 
@@ -54,7 +54,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 - [Privacy & Security](#-privacy--security)
 - [Tech Stack](#%EF%B8%8F-tech-stack)
 - [Building from Source](#-building-from-source)
-- [Known Limitations](#-known-limitations)
+- [Known Limitations](#%EF%B8%8F-known-limitations)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -89,7 +89,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 <td width="50%">
 
 ### 🌐 Works Almost Everywhere
-Integrates at the system level via Android's Accessibility Service. Works in **most apps** — messaging, email, social media, notes, browsers, and more. Some apps with custom input fields may not be supported ([see limitations](#-known-limitations)).
+Integrates at the system level via Android's Accessibility Service. Works in **most apps** — messaging, email, social media, notes, browsers, and more. Some apps with custom input fields may not be supported ([see limitations](#%EF%B8%8F-known-limitations)).
 
 ### ⚡ Instant Inline Replacement
 Type, trigger, done. The AI response replaces your text directly in the same field — no copy-pasting, no app switching. A spinner (`◐ ◓ ◑ ◒`) shows progress.
