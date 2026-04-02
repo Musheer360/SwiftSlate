@@ -37,7 +37,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 </div>
 
 > [!NOTE]
-> **SwiftSlate works everywhere** — WhatsApp, Gmail, Twitter/X, Messages, Notes, Chrome, and every other app with a text field. No copy-pasting. No app switching. Just type and go.
+> **SwiftSlate works in most apps** — WhatsApp, Gmail, Twitter/X, Messages, Notes, and more. No copy-pasting. No app switching. Just type and go. Some apps with custom input fields may not be supported ([see limitations](#-known-limitations)).
 
 <br>
 
@@ -54,6 +54,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 - [Privacy & Security](#-privacy--security)
 - [Tech Stack](#%EF%B8%8F-tech-stack)
 - [Building from Source](#-building-from-source)
+- [Known Limitations](#-known-limitations)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -87,8 +88,8 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 <tr>
 <td width="50%">
 
-### 🌐 Works Everywhere
-Integrates at the system level via Android's Accessibility Service. Works in **any app** — messaging, email, social media, notes, browsers, and more.
+### 🌐 Works Almost Everywhere
+Integrates at the system level via Android's Accessibility Service. Works in **most apps** — messaging, email, social media, notes, browsers, and more. Some apps with custom input fields may not be supported ([see limitations](#-known-limitations)).
 
 ### ⚡ Instant Inline Replacement
 Type, trigger, done. The AI response replaces your text directly in the same field — no copy-pasting, no app switching. A spinner (`◐ ◓ ◑ ◒`) shows progress.
@@ -418,6 +419,13 @@ export KEY_PASSWORD=your_key_password
 ```
 
 </details>
+
+<br>
+
+## ⚠️ Known Limitations
+
+- **Some apps use custom input fields** that don't support Android's standard text replacement APIs. SwiftSlate includes a clipboard-based fallback, but apps like **WeChat** and **Chrome's address bar** may still not work. Most standard text fields (messaging apps, email composers, notes, etc.) work fine.
+- **Some OEMs restrict accessibility services.** Certain manufacturers (e.g., OnePlus, Xiaomi) may hide or block third-party accessibility services in their settings UI. If SwiftSlate doesn't appear in your accessibility settings, check for a "Downloaded apps" or "Installed services" section, or try searching for it.
 
 <br>
 
