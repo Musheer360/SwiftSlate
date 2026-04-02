@@ -72,7 +72,7 @@ fun KeysScreen() {
                             testResult = null
                             scope.launch {
                                 val trimmedKey = newKey.trim()
-                                if (keys.contains(trimmedKey)) {
+                                if (keyManager.getKeys().contains(trimmedKey)) {
                                     isTesting = false
                                     testResult = "This key has already been added"
                                     return@launch
