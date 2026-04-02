@@ -102,7 +102,7 @@ class OpenAICompatibleClient {
         withStructured: Boolean
     ): Result<String> {
         var connection: HttpURLConnection? = null
-        try {
+        return try {
             val baseUrl = endpoint.trimEnd('/')
             connection = URL("$baseUrl/chat/completions")
                 .openConnection() as HttpURLConnection
@@ -227,7 +227,7 @@ class OpenAICompatibleClient {
                 Result.failure(Exception("Error $responseCode: $error"))
             }
         } catch (e: Exception) {
-            return Result.failure(e)
+            Result.failure(e)
         } finally {
             connection?.disconnect()
         }

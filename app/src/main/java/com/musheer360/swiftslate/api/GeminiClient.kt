@@ -98,7 +98,7 @@ class GeminiClient {
         withStructured: Boolean
     ): Result<String> {
         var connection: HttpURLConnection? = null
-        try {
+        return try {
             connection = URL("https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey")
                 .openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
@@ -228,7 +228,7 @@ class GeminiClient {
                 Result.failure(Exception("Error $responseCode: $error"))
             }
         } catch (e: Exception) {
-            return Result.failure(e)
+            Result.failure(e)
         } finally {
             connection?.disconnect()
         }
