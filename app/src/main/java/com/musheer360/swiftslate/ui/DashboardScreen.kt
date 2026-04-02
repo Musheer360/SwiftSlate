@@ -15,9 +15,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.ui.components.ScreenTitle
@@ -63,11 +65,11 @@ fun DashboardScreen() {
             .fillMaxSize()
             .padding(24.dp)
     ) {
-        ScreenTitle("Dashboard")
+        ScreenTitle(stringResource(R.string.dashboard_title))
 
         SlateCard {
             Text(
-                text = "Service Status",
+                text = stringResource(R.string.service_status_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurface
@@ -78,7 +80,7 @@ fun DashboardScreen() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = if (isServiceEnabled) "Active" else "Inactive",
+                    text = if (isServiceEnabled) stringResource(R.string.service_status_active) else stringResource(R.string.service_status_inactive),
                     color = if (isServiceEnabled) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error,
                     fontWeight = FontWeight.Bold
                 )
@@ -90,7 +92,7 @@ fun DashboardScreen() {
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                     ) {
-                        Text("Enable", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(stringResource(R.string.service_enable), color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
             }
@@ -100,20 +102,20 @@ fun DashboardScreen() {
 
         SlateCard {
             Text(
-                text = "API Keys",
+                text = stringResource(R.string.dashboard_api_keys_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "$keyCount keys configured",
+                text = stringResource(R.string.dashboard_keys_configured, keyCount),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 16.sp
             )
             if (keyCount == 0) {
                 Text(
-                    text = "Add an API key to get started.",
+                    text = stringResource(R.string.dashboard_add_key_hint),
                     color = MaterialTheme.colorScheme.tertiaryContainer,
                     fontSize = 13.sp,
                     modifier = Modifier.padding(top = 8.dp)
@@ -125,14 +127,14 @@ fun DashboardScreen() {
 
         SlateCard {
             Text(
-                text = "How to use",
+                text = stringResource(R.string.dashboard_how_to_use_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "1. Enable the Accessibility Service.\n2. Add at least one API key.\n3. Type anywhere in Android, ending with a trigger like '${currentPrefix}fix' or '${currentPrefix}casual'.\n4. Wait a moment for the text to be magically replaced!",
+                text = stringResource(R.string.dashboard_how_to_use_body, currentPrefix),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 16.sp,
                 lineHeight = 22.sp

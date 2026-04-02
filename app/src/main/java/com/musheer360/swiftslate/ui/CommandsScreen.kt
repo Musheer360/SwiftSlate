@@ -12,9 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.model.Command
 import com.musheer360.swiftslate.ui.components.ScreenTitle
@@ -30,6 +33,8 @@ fun CommandsScreen() {
     var prompt by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val prefix = commandManager.getTriggerPrefix()
+    val errorPrefixMsg = stringResource(R.string.commands_error_prefix, prefix)
+    val errorDuplicateMsg = stringResource(R.string.commands_error_duplicate)
 
     Column(
         modifier = Modifier
@@ -37,11 +42,11 @@ fun CommandsScreen() {
             .padding(horizontal = 24.dp)
             .padding(top = 24.dp)
     ) {
-        ScreenTitle("Commands")
+        ScreenTitle(stringResource(R.string.commands_title))
 
         SlateCard {
             Text(
-                text = "Add Custom Command",
+                text = stringResource(R.string.commands_add_custom_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurface
@@ -53,7 +58,7 @@ fun CommandsScreen() {
                     trigger = it
                     errorMessage = null
                 },
-                label = { Text("Trigger (e.g., ${prefix}code)") },
+                label = { Text(stringResource(R.string.commands_trigger_label, prefix)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -65,7 +70,7 @@ fun CommandsScreen() {
             OutlinedTextField(
                 value = prompt,
                 onValueChange = { prompt = it },
-                label = { Text("Prompt (e.g., Rewrite as a poem)") },
+                label = { Text(stringResource(R.string.commands_prompt_label)) },
                 modifier = Modifier.fillMaxWidth().height(100.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -90,11 +95,11 @@ fun CommandsScreen() {
                         val trimmedTrigger = trigger.trim()
                         if (trimmedTrigger.isNotBlank() && prompt.isNotBlank()) {
                             if (!trimmedTrigger.startsWith(prefix)) {
-                                errorMessage = "Trigger must start with '$prefix'"
+                                errorMessage = errorPrefixMsg
                                 return@Button
                             }
                             if (commands.any { it.trigger == trimmedTrigger }) {
-                                errorMessage = "A command with this trigger already exists"
+                                errorMessage = errorDuplicateMsg
                                 return@Button
                             }
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -108,7 +113,7 @@ fun CommandsScreen() {
                     },
                     enabled = trigger.isNotBlank() && prompt.isNotBlank()
                 ) {
-                    Text("Add Command")
+                    Text(stringResource(R.string.commands_add_command))
                 }
             }
         }
@@ -122,7 +127,7 @@ fun CommandsScreen() {
             items(commands) { cmd ->
                 SlateCard {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().semantics(mergeDescendants = true) {},
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -142,7 +147,7 @@ fun CommandsScreen() {
                             if (cmd.isBuiltIn) {
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "Built-in",
+                                    text = stringResource(R.string.commands_built_in),
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.tertiary
                                 )
@@ -156,7 +161,7 @@ fun CommandsScreen() {
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Delete,
-                                    contentDescription = "Delete Command",
+                                    contentDescription = stringResource(R.string.commands_delete_command),
                                     tint = MaterialTheme.colorScheme.error
                                 )
                             }

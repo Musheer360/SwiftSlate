@@ -10,9 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
@@ -41,17 +43,21 @@ fun SettingsScreen() {
     var triggerPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
     var prefixError by remember { mutableStateOf<String?>(null) }
 
+    val prefixErrorLength = stringResource(R.string.settings_prefix_error_length)
+    val prefixErrorWhitespace = stringResource(R.string.settings_prefix_error_whitespace)
+    val prefixErrorAlphanumeric = stringResource(R.string.settings_prefix_error_alphanumeric)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        ScreenTitle("Settings")
+        ScreenTitle(stringResource(R.string.settings_title))
 
         SlateCard {
             Text(
-                text = "Provider",
+                text = stringResource(R.string.settings_provider_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurface
@@ -63,7 +69,7 @@ fun SettingsScreen() {
                 onExpandedChange = { providerExpanded = !providerExpanded }
             ) {
                 OutlinedTextField(
-                    value = if (providerType == "gemini") "Google Gemini" else "Custom (OpenAI Compatible)",
+                    value = if (providerType == "gemini") stringResource(R.string.settings_provider_gemini) else stringResource(R.string.settings_provider_custom),
                     onValueChange = {},
                     readOnly = true,
                     modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
@@ -77,7 +83,7 @@ fun SettingsScreen() {
                     onDismissRequest = { providerExpanded = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Google Gemini") },
+                        text = { Text(stringResource(R.string.settings_provider_gemini)) },
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = "gemini"
@@ -86,7 +92,7 @@ fun SettingsScreen() {
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("Custom (OpenAI Compatible)") },
+                        text = { Text(stringResource(R.string.settings_provider_custom)) },
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = "custom"
@@ -103,7 +109,7 @@ fun SettingsScreen() {
         if (providerType == "gemini") {
             SlateCard {
                 Text(
-                    text = "Model",
+                    text = stringResource(R.string.settings_model_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurface
@@ -145,14 +151,14 @@ fun SettingsScreen() {
         } else {
             SlateCard {
                 Text(
-                    text = "Endpoint",
+                    text = stringResource(R.string.settings_endpoint_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Base URL of the OpenAI-compatible API",
+                    text = stringResource(R.string.settings_endpoint_desc),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -164,7 +170,7 @@ fun SettingsScreen() {
                         customEndpoint = it
                         prefs.edit().putString("custom_endpoint", it).remove("structured_output_disabled").apply()
                     },
-                    placeholder = { Text("https://api.example.com/v1") },
+                    placeholder = { Text(stringResource(R.string.settings_endpoint_placeholder)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -178,14 +184,14 @@ fun SettingsScreen() {
 
             SlateCard {
                 Text(
-                    text = "Model",
+                    text = stringResource(R.string.settings_model_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Model identifier from your provider",
+                    text = stringResource(R.string.settings_model_desc),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -197,7 +203,7 @@ fun SettingsScreen() {
                         customModel = it
                         prefs.edit().putString("custom_model", it).remove("structured_output_disabled").apply()
                     },
-                    placeholder = { Text("gpt-4o, claude-3-haiku, etc.") },
+                    placeholder = { Text(stringResource(R.string.settings_model_placeholder)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -212,14 +218,14 @@ fun SettingsScreen() {
 
         SlateCard {
             Text(
-                text = "Trigger Prefix",
+                text = stringResource(R.string.settings_trigger_prefix_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Symbol used before command names (e.g., ${triggerPrefix}fix). Must be a single non-alphanumeric character.",
+                text = stringResource(R.string.settings_trigger_prefix_desc, triggerPrefix),
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -230,9 +236,9 @@ fun SettingsScreen() {
                     val filtered = input.take(1)
                     triggerPrefix = filtered
                     prefixError = when {
-                        filtered.length != 1 -> "Must be exactly 1 character"
-                        filtered[0].isWhitespace() -> "Cannot be whitespace"
-                        filtered[0].isLetterOrDigit() -> "Cannot be a letter or digit"
+                        filtered.length != 1 -> prefixErrorLength
+                        filtered[0].isWhitespace() -> prefixErrorWhitespace
+                        filtered[0].isLetterOrDigit() -> prefixErrorAlphanumeric
                         else -> {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             commandManager.setTriggerPrefix(filtered)
