@@ -60,7 +60,7 @@ class GeminiClient {
         model: String,
         temperature: Double,
         useStructuredOutput: Boolean = false
-    ): Result<String> = withContext(Dispatchers.IO) {
+    ): Result<Pair<String, Int>> = withContext(Dispatchers.IO) {
         structuredOutputFailed = false
 
         val result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput)
@@ -80,7 +80,7 @@ class GeminiClient {
         stripHttpPrefix(result)
     }
 
-    private fun stripHttpPrefix(result: Result<String>): Result<String> {
+    private fun stripHttpPrefix(result: Result<Pair<String, Int>>): Result<Pair<String, Int>> {
         if (result.isFailure) {
             val msg = result.exceptionOrNull()?.message ?: ""
             val cleaned = msg.replaceFirst(Regex("^HTTP_\\d+:\\s*"), "")
@@ -96,7 +96,7 @@ class GeminiClient {
         model: String,
         temperature: Double,
         withStructured: Boolean
-    ): Result<String> {
+    ): Result<Pair<String, Int>> {
         var connection: HttpURLConnection? = null
         return try {
             connection = URL("https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey")
@@ -160,6 +160,9 @@ class GeminiClient {
                     val parts = content?.optJSONArray("parts")
                     if (parts != null && parts.length() > 0) {
                         var resultText = parts.getJSONObject(0).optString("text", "")
+                        val usageMetadata = jsonResponse.optJSONObject("usageMetadata")
+                        val usedTokens = usageMetadata?.optInt("totalTokenCount", 0) ?: 0
+
                         if (resultText.isBlank()) {
                             return Result.failure(Exception("Model returned empty response"))
                         }
@@ -170,7 +173,7 @@ class GeminiClient {
                                 val parsed = JSONObject(resultText)
                                 val extracted = parsed.optString("text", "")
                                 if (extracted.isNotBlank()) {
-                                    return Result.success(extracted)
+                                    return Result.success(Pair(extracted, usedTokens))
                                 }
                                 // JSON parsed but text field empty — treat as empty response
                                 return Result.failure(Exception("Model returned empty response"))
@@ -193,7 +196,7 @@ class GeminiClient {
                         resultText = resultText
                             .replace("---BEGIN TEXT---", "")
                             .replace("---END TEXT---", "")
-                        Result.success(resultText.trim())
+                        Result.success(Pair(resultText.trim(), usedTokens))
                     } else {
                         Result.failure(Exception("No content found in response"))
                     }

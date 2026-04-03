@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -153,17 +154,30 @@ fun CommandsScreen() {
                                 )
                             }
                         }
-                        if (!cmd.isBuiltIn) {
+                        Row {
                             IconButton(onClick = {
                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                commandManager.removeCustomCommand(cmd.trigger)
-                                commands = commandManager.getCommands()
+                                trigger = cmd.trigger
+                                prompt = cmd.prompt
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = stringResource(R.string.commands_delete_command),
-                                    tint = MaterialTheme.colorScheme.error
+                                    imageVector = Icons.Default.ContentCopy,
+                                    contentDescription = "Duplicate command",
+                                    tint = MaterialTheme.colorScheme.primary
                                 )
+                            }
+                            if (!cmd.isBuiltIn) {
+                                IconButton(onClick = {
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    commandManager.removeCustomCommand(cmd.trigger)
+                                    commands = commandManager.getCommands()
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = stringResource(R.string.commands_delete_command),
+                                        tint = MaterialTheme.colorScheme.error
+                                    )
+                                }
                             }
                         }
                     }

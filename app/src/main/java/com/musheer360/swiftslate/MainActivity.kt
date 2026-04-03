@@ -25,6 +25,7 @@ import com.musheer360.swiftslate.ui.CommandsScreen
 import com.musheer360.swiftslate.ui.DashboardScreen
 import com.musheer360.swiftslate.ui.KeysScreen
 import com.musheer360.swiftslate.ui.SettingsScreen
+import com.musheer360.swiftslate.ui.BlocklistScreen
 import com.musheer360.swiftslate.ui.theme.SwiftSlateTheme
 
 class MainActivity : ComponentActivity() {
@@ -94,7 +95,8 @@ fun SwiftSlateMainScreen() {
             composable(Screen.Dashboard.route) { DashboardScreen() }
             composable(Screen.Keys.route) { KeysScreen() }
             composable(Screen.Commands.route) { CommandsScreen() }
-            composable(Screen.Settings.route) { SettingsScreen() }
+            composable(Screen.Settings.route) { SettingsScreen(navController) }
+            composable("blocklist") { BlocklistScreen(navController) }
         }
     }
 }

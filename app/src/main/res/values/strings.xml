@@ -15,6 +15,13 @@
     <string name="dashboard_how_to_use_title">How to use</string>
     <string name="dashboard_how_to_use_body">1. Enable the Accessibility Service.\n2. Add at least one API key.\n3. Type anywhere in Android, ending with a trigger like \'%1$sfix\' or \'%1$scasual\'.\n4. Wait a moment for the text to be magically replaced!</string>
 
+    <!-- Dashboard Stats -->
+    <string name="dashboard_stats_title">Statistics</string>
+    <string name="dashboard_stats_tokens">Tokens used: %1$d</string>
+    <string name="dashboard_stats_requests">Requests this month: %1$d</string>
+    <string name="dashboard_stats_favorite">Favorite command: %1$s</string>
+    <string name="dashboard_stats_none">None</string>
+
     <!-- Keys -->
     <string name="keys_title">API Keys</string>
     <string name="keys_api_key_label">API Key</string>
@@ -52,4 +59,28 @@
     <string name="settings_prefix_error_length">Must be exactly 1 character</string>
     <string name="settings_prefix_error_whitespace">Cannot be whitespace</string>
     <string name="settings_prefix_error_alphanumeric">Cannot be a letter or digit</string>
+    <string name="settings_builtin_lang_title">Language of Built-in Definitions</string>
+    <string name="settings_builtin_lang_auto">System Default</string>
+    <string name="settings_builtin_lang_en">English</string>
+    <string name="settings_builtin_lang_fr">French</string>
+    <string name="settings_builtin_lang_es">Spanish</string>
+    <string name="settings_builtin_lang_de">German</string>
+    <string name="settings_builtin_lang_it">Italian</string>
+    <string name="settings_builtin_lang_pt">Portuguese</string>
+    <string name="settings_builtin_lang_zh">Chinese</string>
+    <string name="settings_builtin_lang_ja">Japanese</string>
+    <string name="settings_builtin_lang_ru">Russian</string>
+
+    <!-- Spinner Styles -->
+    <string name="settings_spinner_style_title">Loading Indicator Style</string>
+    <string name="settings_spinner_style_default">Default (◐◓◑◒)</string>
+    <string name="settings_spinner_style_dots">Dots (⠋⠙⠹⠸)</string>
+    <string name="settings_spinner_style_squares">Squares (▪▫▫)</string>
+    <string name="settings_spinner_style_none">Disabled</string>
+
+    <!-- Blocklist -->
+    <string name="settings_blocklist_title">App Blocklist</string>
+    <string name="settings_blocklist_desc">Select apps where SwiftSlate should not run.</string>
+    <string name="settings_blocklist_button">Manage Blocklist</string>
+    <string name="blocklist_title">App Blocklist</string>
 </resources>
