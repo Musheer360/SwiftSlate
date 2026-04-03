@@ -1,0 +1,11 @@
+{
+  "fix": "Corrija todos os erros de gramática, ortografia e pontuação.",
+  "improve": "Melhore a clareza e a legibilidade.",
+  "shorten": "Encurte preservando o significado principal.",
+  "expand": "Expanda com mais detalhes e contexto.",
+  "formal": "Reescreva em um tom formal e profissional.",
+  "casual": "Reescreva em um tom casual e amigável.",
+  "emoji": "Adicione emojis relevantes ao longo do texto.",
+  "reply": "Gere uma resposta contextual para esta mensagem.",
+  "undo": "Desfaça a última substituição e restaure o texto original."
+}

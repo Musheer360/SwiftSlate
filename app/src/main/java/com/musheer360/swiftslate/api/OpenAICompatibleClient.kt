@@ -63,7 +63,7 @@ class OpenAICompatibleClient {
         temperature: Double,
         endpoint: String,
         useStructuredOutput: Boolean = false
-    ): Result<String> = withContext(Dispatchers.IO) {
+    ): Result<Pair<String, Int>> = withContext(Dispatchers.IO) {
         structuredOutputFailed = false
 
         val result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput)
@@ -83,7 +83,7 @@ class OpenAICompatibleClient {
         stripHttpPrefix(result)
     }
 
-    private fun stripHttpPrefix(result: Result<String>): Result<String> {
+    private fun stripHttpPrefix(result: Result<Pair<String, Int>>): Result<Pair<String, Int>> {
         if (result.isFailure) {
             val msg = result.exceptionOrNull()?.message ?: ""
             val cleaned = msg.replaceFirst(Regex("^HTTP_\\d+:\\s*"), "")
@@ -100,7 +100,7 @@ class OpenAICompatibleClient {
         temperature: Double,
         endpoint: String,
         withStructured: Boolean
-    ): Result<String> {
+    ): Result<Pair<String, Int>> {
         var connection: HttpURLConnection? = null
         return try {
             val baseUrl = endpoint.trimEnd('/')
@@ -162,6 +162,8 @@ class OpenAICompatibleClient {
                     val choice = choices.getJSONObject(0)
                     val message = choice.optJSONObject("message")
                     var resultText = message?.optString("content", "") ?: ""
+                    val usedTokens = jsonResponse.optJSONObject("usage")?.optInt("total_tokens", 0) ?: 0
+
                     if (resultText.isBlank()) {
                         return Result.failure(Exception("Model returned empty response"))
                     }
@@ -172,7 +174,7 @@ class OpenAICompatibleClient {
                             val parsed = JSONObject(resultText)
                             val extracted = parsed.optString("text", "")
                             if (extracted.isNotBlank()) {
-                                return Result.success(extracted)
+                                return Result.success(Pair(extracted, usedTokens))
                             }
                             // JSON parsed but text field empty — treat as empty response
                             return Result.failure(Exception("Model returned empty response"))
@@ -195,7 +197,7 @@ class OpenAICompatibleClient {
                     resultText = resultText
                         .replace("---BEGIN TEXT---", "")
                         .replace("---END TEXT---", "")
-                    Result.success(resultText.trim())
+                    Result.success(Pair(resultText.trim(), usedTokens))
                 } else {
                     Result.failure(Exception("No choices found in response"))
                 }

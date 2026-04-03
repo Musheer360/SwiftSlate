@@ -14,7 +14,11 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.background
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -22,6 +26,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
+import com.musheer360.swiftslate.manager.StatsManager
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
 import kotlinx.coroutines.delay
@@ -40,9 +45,16 @@ fun DashboardScreen() {
     val haptic = LocalHapticFeedback.current
     val keyManager = remember { KeyManager(context) }
     val commandManager = remember { CommandManager(context) }
+    val statsManager = remember { StatsManager(context) }
+    
     var isServiceEnabled by remember { mutableStateOf(checkServiceEnabled(context)) }
     var keyCount by remember { mutableIntStateOf(keyManager.getKeys().size) }
     var currentPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
+    
+    var usedTokens by remember { mutableLongStateOf(statsManager.getUsedTokens()) }
+    var requestsThisMonth by remember { mutableIntStateOf(statsManager.getRequestsThisMonth()) }
+    var favoriteCommand by remember { mutableStateOf(statsManager.getFavoriteCommand() ?: "") }
+    var tokensChartData by remember { mutableStateOf(statsManager.getTokensLast7Days()) }
 
     // Use the Activity lifecycle so polling only restarts when the app returns
     // from the background, not when switching between navbar tabs.
@@ -55,6 +67,10 @@ fun DashboardScreen() {
                 isServiceEnabled = checkServiceEnabled(context)
                 keyCount = keyManager.getKeys().size
                 currentPrefix = commandManager.getTriggerPrefix()
+                usedTokens = statsManager.getUsedTokens()
+                requestsThisMonth = statsManager.getRequestsThisMonth()
+                favoriteCommand = statsManager.getFavoriteCommand() ?: ""
+                tokensChartData = statsManager.getTokensLast7Days()
                 delay(3000)
             }
         }
@@ -64,6 +80,7 @@ fun DashboardScreen() {
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         ScreenTitle(stringResource(R.string.dashboard_title))
 
@@ -127,6 +144,40 @@ fun DashboardScreen() {
 
         SlateCard {
             Text(
+                text = stringResource(R.string.dashboard_stats_title),
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.dashboard_stats_tokens, usedTokens),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(R.string.dashboard_stats_requests, requestsThisMonth),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            val favDisplay = favoriteCommand.ifEmpty { stringResource(R.string.dashboard_stats_none) }
+            Text(
+                text = stringResource(R.string.dashboard_stats_favorite, favDisplay),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 16.sp
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            TokensBarChart(tokensChartData)
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        SlateCard {
+            Text(
                 text = stringResource(R.string.dashboard_how_to_use_title),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
@@ -142,3 +193,59 @@ fun DashboardScreen() {
         }
     }
 }
+
+@Composable
+fun TokensBarChart(data: List<Pair<String, Long>>) {
+    val maxTokens = data.maxOfOrNull { it.second }?.coerceAtLeast(10L) ?: 10L
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        data.forEach { (dateStr, tokens) ->
+            val heightFraction = (tokens.toFloat() / maxTokens.toFloat()).coerceIn(0.02f, 1f)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
+                modifier = Modifier.weight(1f)
+            ) {
+                // Number of tokens rounded to K
+                val displayTokens = if (tokens > 1000) "${tokens / 1000}k" else tokens.toString()
+                if (tokens > 0) {
+                    Text(
+                        text = displayTokens,
+                        fontSize = 9.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        maxLines = 1
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                }
+
+                // The Bar
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .fillMaxHeight(heightFraction * 0.7f) // leave space for labels
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp)
+                        )
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                // Date Label
+                Text(
+                    text = dateStr,
+                    fontSize = 10.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
+        }
+    }
+}
+
