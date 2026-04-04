@@ -106,14 +106,14 @@ Pure black (`#000000`) Material 3 interface designed for OLED screens — saves 
 ### 🤖 Powered by Gemini & Custom Providers
 Ships with Google's Gemini API (`gemini-2.5-flash-lite`, `gemini-3-flash-preview`, or `gemini-3.1-flash-lite-preview`). Or connect **any OpenAI-compatible endpoint** — use your own provider, model, and base URL.
 
-### 🎨 Custom Commands
-Create your own trigger → prompt pairs. Define `?poem` to turn text into poetry, `?eli5` to simplify for a five-year-old, or anything you can imagine.
+### 🎨 Action Types
+Create your own commands mapped to three action types: **AI Action** (rewrite text dynamically), **Content Replacer** (paste static text instantly offline), or **File Share** (pop open a file ready to send).
 
 ### 🔒 Encrypted Key Storage
 API keys are encrypted with **AES-256-GCM** using the Android Keystore. Your keys never leave your device unencrypted.
 
 ### 🛡️ Privacy-First
-No analytics. No telemetry. No intermediary servers. Text is sent directly to the configured provider's API and only when a trigger is detected.
+No analytics. No telemetry. No intermediary servers. Text is sent directly to the configured provider's API and only when a trigger is detected. Text Replacer and File Share commands run entirely offline.
 
 </td>
 </tr>
@@ -255,14 +255,23 @@ flowchart TD
 
 ## 🎨 Custom Commands
 
-Go beyond the built-ins — create your own trigger → prompt pairs in the **Commands** tab.
+Go beyond the built-ins — create your own commands in the **Commands** tab using a dedicated prefix separating AI from offline actions.
+
+### Action Types
+
+When adding a new custom command, tap the top segmented toggle to choose your desired behavior:
+
+1. **AI Action**: Set a prompt (e.g. `Summarize this text in one sentence.`). SwiftSlate extracts your typed text and sends it to your provider with this instruction.
+2. **Content Replacer (Snippets)**: Act as a text expander. Map a trigger (e.g., `/email`) to output static text instantly (`myemail@example.com`). Runs completely offline—zero delay.
+3. **File Share (Macro)**: Map a trigger (e.g., `/resume`) to securely stash a PDF or image path. When triggered, your text clears and Android's native share sheet pops up with the file pre-attached, ready to send anywhere.
 
 ### How to Create One
 
 1. Open the **Commands** screen
-2. Enter a **Trigger** (e.g., `?poem`)
-3. Enter a **Prompt** — the instruction sent to the AI
-4. Tap **"Add Command"**
+2. Select your action type toggle: **AI Action**, **Content Replacer**, or **File Share**.
+3. Enter a **Trigger** (e.g., `?poem` or `/email`)
+4. Enter your **Instruction/Replacement text/File URL**
+5. Tap **"Add Command"**
 
 ### Example Ideas
 

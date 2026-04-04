@@ -263,5 +263,62 @@ fun SettingsScreen() {
                 )
             }
         }
+        
+        Spacer(modifier = Modifier.height(12.dp))
+
+        var replacerPrefix by remember { mutableStateOf(commandManager.getReplacerPrefix()) }
+        var replacerPrefixError by remember { mutableStateOf<String?>(null) }
+
+        SlateCard {
+            Text(
+                text = "Text/File Replacer Prefix",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Symbol used before static snippet and file sharing commands (e.g., /email).",
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            OutlinedTextField(
+                value = replacerPrefix,
+                onValueChange = { input ->
+                    val filtered = input.take(1)
+                    replacerPrefix = filtered
+                    replacerPrefixError = when {
+                        filtered.length != 1 -> prefixErrorLength
+                        filtered[0].isWhitespace() -> prefixErrorWhitespace
+                        filtered[0].isLetterOrDigit() -> prefixErrorAlphanumeric
+                        filtered == triggerPrefix -> "Cannot be the same as AI trigger prefix"
+                        else -> {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            if (!commandManager.setReplacerPrefix(filtered)) {
+                                "Failed to set prefix"
+                            } else {
+                                null
+                            }
+                        }
+                    }
+                },
+                singleLine = true,
+                modifier = Modifier.width(80.dp),
+                isError = replacerPrefixError != null,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                )
+            )
+            replacerPrefixError?.let { msg ->
+                Text(
+                    text = msg,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 13.sp,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+        }
     }
 }
