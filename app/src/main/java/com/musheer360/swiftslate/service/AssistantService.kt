@@ -125,10 +125,12 @@ class AssistantService : AccessibilityService() {
 
         val command = commandManager.findCommand(text) ?: return
 
-        val cleanText = text.substring(0, text.length - command.trigger.length).trim()
+        val precedingTextRaw = text.substring(0, text.length - command.trigger.length)
+        val cleanText = precedingTextRaw.trim()
+
+        if (source.isPassword) { return }
 
         if (command.trigger.endsWith("undo") && command.isBuiltIn) {
-            if (source.isPassword) { return }
             isProcessing = true
             processingStartedAt = System.currentTimeMillis()
             currentJob?.cancel()
@@ -136,12 +138,54 @@ class AssistantService : AccessibilityService() {
             return
         }
 
-        if (cleanText.isEmpty() || source.isPassword) { return }
+        when (command.type) {
+            com.musheer360.swiftslate.model.CommandType.AI -> {
+                if (cleanText.isEmpty()) return
+                isProcessing = true
+                processingStartedAt = System.currentTimeMillis()
+                currentJob?.cancel()
+                processCommand(source, cleanText, command)
+            }
+            com.musheer360.swiftslate.model.CommandType.TEXT_REPLACER -> {
+                handleTextReplacer(source, precedingTextRaw, command.prompt)
+            }
+            com.musheer360.swiftslate.model.CommandType.FILE_SHARE -> {
+                handleFileShare(source, precedingTextRaw, command.prompt)
+            }
+        }
+    }
 
-        isProcessing = true
-        processingStartedAt = System.currentTimeMillis()
-        currentJob?.cancel()
-        processCommand(source, cleanText, command)
+    private fun handleTextReplacer(source: AccessibilityNodeInfo, precedingText: String, replacementText: String) {
+        serviceScope.launch(Dispatchers.Main) {
+            val newText = precedingText + replacementText
+            replaceText(source, newText)
+            performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+        }
+    }
+
+    private fun handleFileShare(source: AccessibilityNodeInfo, precedingText: String, fileUriStr: String) {
+        serviceScope.launch(Dispatchers.Main) {
+            try {
+                replaceText(source, precedingText)
+                
+                val uri = android.net.Uri.parse(fileUriStr)
+                val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                    type = "*/*"
+                    putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                
+                val chooser = android.content.Intent.createChooser(intent, "Share File").apply {
+                    addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                startActivity(chooser)
+                performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+            } catch (e: Exception) {
+                showToast("Could not share file: ${e.message}")
+                performHapticFeedback(HapticFeedbackConstants.REJECT)
+            }
+        }
     }
 
     private fun processCommand(source: AccessibilityNodeInfo, text: String, command: Command) {

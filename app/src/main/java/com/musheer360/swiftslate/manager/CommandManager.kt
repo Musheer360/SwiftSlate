@@ -11,8 +11,10 @@ class CommandManager(context: Context) {
     private val settingsPrefs: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
     companion object {
-        const val DEFAULT_PREFIX = "?"
+        const val DEFAULT_PREFIX = "!"
         const val PREF_TRIGGER_PREFIX = "trigger_prefix"
+        const val DEFAULT_REPLACER_PREFIX = "/"
+        const val PREF_REPLACER_PREFIX = "replacer_prefix"
     }
 
     // Built-in command names (without prefix) and their prompts
@@ -36,25 +38,57 @@ class CommandManager(context: Context) {
         if (newPrefix.length != 1 || newPrefix[0].isLetterOrDigit() || newPrefix[0].isWhitespace()) return false
         val oldPrefix = getTriggerPrefix()
         if (oldPrefix == newPrefix) return true
-        // Write prefix FIRST (synchronous) so built-ins work immediately if process dies mid-migration
+        if (newPrefix == getReplacerPrefix()) return false // Prevent collision
+        
         settingsPrefs.edit().putString(PREF_TRIGGER_PREFIX, newPrefix).commit()
-        // Migrate custom command triggers
+        
+        migratePrefix(oldPrefix, newPrefix, com.musheer360.swiftslate.model.CommandType.AI)
+        return true
+    }
+
+    fun getReplacerPrefix(): String {
+        return settingsPrefs.getString(PREF_REPLACER_PREFIX, DEFAULT_REPLACER_PREFIX) ?: DEFAULT_REPLACER_PREFIX
+    }
+
+    fun setReplacerPrefix(newPrefix: String): Boolean {
+        if (newPrefix.length != 1 || newPrefix[0].isLetterOrDigit() || newPrefix[0].isWhitespace()) return false
+        val oldPrefix = getReplacerPrefix()
+        if (oldPrefix == newPrefix) return true
+        if (newPrefix == getTriggerPrefix()) return false // Prevent collision
+        
+        settingsPrefs.edit().putString(PREF_REPLACER_PREFIX, newPrefix).commit()
+        
+        migratePrefix(oldPrefix, newPrefix, null) // Migrate all replacer types
+        return true
+    }
+
+    private fun migratePrefix(oldPrefix: String, newPrefix: String, filterType: com.musheer360.swiftslate.model.CommandType?) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
         val newArr = JSONArray()
         for (i in 0 until arr.length()) {
             val obj = arr.getJSONObject(i)
+            val typeStr = obj.optString("type", com.musheer360.swiftslate.model.CommandType.AI.name)
+            val type = try { com.musheer360.swiftslate.model.CommandType.valueOf(typeStr) } catch (e: Exception) { com.musheer360.swiftslate.model.CommandType.AI }
+            
+            val shouldMigrate = if (filterType == com.musheer360.swiftslate.model.CommandType.AI) {
+                type == com.musheer360.swiftslate.model.CommandType.AI
+            } else {
+                type == com.musheer360.swiftslate.model.CommandType.TEXT_REPLACER || type == com.musheer360.swiftslate.model.CommandType.FILE_SHARE
+            }
+
             val oldTrigger = obj.getString("trigger")
-            val migrated = if (oldTrigger.startsWith(oldPrefix)) {
+            val migrated = if (shouldMigrate && oldTrigger.startsWith(oldPrefix)) {
                 newPrefix + oldTrigger.removePrefix(oldPrefix)
             } else oldTrigger
+            
             val newObj = JSONObject()
             newObj.put("trigger", migrated)
             newObj.put("prompt", obj.getString("prompt"))
+            newObj.put("type", type.name)
             newArr.put(newObj)
         }
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
-        return true
     }
 
     private fun getBuiltInCommands(): List<Command> {
@@ -68,7 +102,9 @@ class CommandManager(context: Context) {
         val customCommands = mutableListOf<Command>()
         for (i in 0 until arr.length()) {
             val obj = arr.getJSONObject(i)
-            customCommands.add(Command(obj.getString("trigger"), obj.getString("prompt"), false))
+            val typeStr = obj.optString("type", com.musheer360.swiftslate.model.CommandType.AI.name)
+            val type = try { com.musheer360.swiftslate.model.CommandType.valueOf(typeStr) } catch (e: Exception) { com.musheer360.swiftslate.model.CommandType.AI }
+            customCommands.add(Command(obj.getString("trigger"), obj.getString("prompt"), false, type))
         }
         return getBuiltInCommands() + customCommands
     }
@@ -79,6 +115,7 @@ class CommandManager(context: Context) {
         val newObj = JSONObject()
         newObj.put("trigger", command.trigger)
         newObj.put("prompt", command.prompt)
+        newObj.put("type", command.type.name)
         arr.put(newObj)
         prefs.edit().putString("custom_commands", arr.toString()).apply()
     }
