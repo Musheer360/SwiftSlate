@@ -43,8 +43,6 @@ fun KeysScreen() {
     val geminiClient = remember { GeminiClient() }
     val openAIClient = remember { OpenAICompatibleClient() }
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
-    val providerType = prefs.getString("provider_type", "gemini") ?: "gemini"
-    val customEndpoint = prefs.getString("custom_endpoint", "") ?: ""
 
     val validAddedMsg = stringResource(R.string.keys_valid_added)
     val alreadyAddedMsg = stringResource(R.string.keys_already_added)
@@ -89,10 +87,14 @@ fun KeysScreen() {
                                     testSuccess = false
                                     return@launch
                                 }
-                                val result = if (providerType == "custom" && customEndpoint.isNotBlank()) {
-                                    openAIClient.validateKey(trimmedKey, customEndpoint)
-                                } else {
-                                    geminiClient.validateKey(trimmedKey)
+                                val result = run {
+                                    val providerType = prefs.getString("provider_type", "gemini") ?: "gemini"
+                                    val customEndpoint = prefs.getString("custom_endpoint", "") ?: ""
+                                    if (providerType == "custom" && customEndpoint.isNotBlank()) {
+                                        openAIClient.validateKey(trimmedKey, customEndpoint)
+                                    } else {
+                                        geminiClient.validateKey(trimmedKey)
+                                    }
                                 }
                                 isTesting = false
                                 if (result.isSuccess) {
@@ -121,7 +123,7 @@ fun KeysScreen() {
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
-            val (apiKeyUrl, providerName) = if (providerType == "custom") {
+            val (apiKeyUrl, providerName) = if ((prefs.getString("provider_type", "gemini") ?: "gemini") == "custom") {
                 "https://platform.openai.com/api-keys" to "OpenAI"
             } else {
                 "https://aistudio.google.com/api-keys" to "Gemini"
@@ -133,12 +135,14 @@ fun KeysScreen() {
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .clickable { uriHandler.openUri(apiKeyUrl) }
+                    .padding(vertical = 8.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         LazyColumn(
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {

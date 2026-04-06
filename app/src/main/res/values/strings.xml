@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SwiftSlate</string>
     <string name="accessibility_service_label">SwiftSlate Assistant</string>
-    <string name="accessibility_service_desc">Provides system-wide AI text replacements using Gemini when trigger commands are typed.</string>
+    <string name="accessibility_service_desc">Provides system-wide AI text replacements when trigger commands are typed.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Dashboard</string>

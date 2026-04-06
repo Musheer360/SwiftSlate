@@ -25,9 +25,10 @@ class KeyManager(context: Context) {
         private const val PREF_KEY_ARRAY = "keys_array"
     }
 
-    private val rateLimitedKeys = mutableMapOf<String, Long>()
-    private val invalidKeys = mutableSetOf<String>()
+    private val rateLimitedKeys = java.util.concurrent.ConcurrentHashMap<String, Long>()
+    private val invalidKeys: MutableSet<String> = java.util.Collections.newSetFromMap(java.util.concurrent.ConcurrentHashMap<String, Boolean>())
     private val roundRobinIndex = AtomicInteger(0)
+    @Volatile
     private var cachedKeys: List<String>? = null
 
     init {
@@ -47,7 +48,8 @@ class KeyManager(context: Context) {
                 keyGenerator.init(keyGenParameterSpec)
                 keyGenerator.generateKey()
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            android.util.Log.e("KeyManager", "Keystore init failed", e)
         }
     }
 
@@ -56,53 +58,49 @@ class KeyManager(context: Context) {
             val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
             keyStore.load(null)
             keyStore.getKey(KEY_ALIAS, null) as? SecretKey
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            android.util.Log.e("KeyManager", "Failed to get secret key", e)
             null
         }
     }
 
     private fun encrypt(plainText: String): String {
-        val secretKey = getSecretKey() ?: return plainText
-        return try {
-            val cipher = Cipher.getInstance(TRANSFORMATION)
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-            val iv = cipher.iv
-            val cipherText = cipher.doFinal(plainText.toByteArray(StandardCharsets.UTF_8))
-            val ivString = Base64.encodeToString(iv, Base64.NO_WRAP)
-            val cipherTextString = Base64.encodeToString(cipherText, Base64.NO_WRAP)
-            "$ivString$IV_SEPARATOR$cipherTextString"
-        } catch (_: Exception) {
-            plainText
-        }
+        val secretKey = getSecretKey()
+            ?: throw IllegalStateException("Keystore unavailable")
+        val cipher = Cipher.getInstance(TRANSFORMATION)
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+        val iv = cipher.iv
+        val cipherText = cipher.doFinal(plainText.toByteArray(StandardCharsets.UTF_8))
+        val ivString = Base64.encodeToString(iv, Base64.NO_WRAP)
+        val cipherTextString = Base64.encodeToString(cipherText, Base64.NO_WRAP)
+        return "$ivString$IV_SEPARATOR$cipherTextString"
     }
 
-    private fun decrypt(encryptedString: String): String {
+    private fun decrypt(encryptedString: String): String? {
+        // TODO(v1.2): Remove legacy plaintext fallback after migration period
         if (!encryptedString.contains(IV_SEPARATOR)) {
-            return encryptedString
+            return encryptedString // legacy plaintext — backward compat
         }
         val parts = encryptedString.split(IV_SEPARATOR)
-        if (parts.size != 2) return encryptedString
-
+        if (parts.size != 2) return null
         return try {
             val iv = Base64.decode(parts[0], Base64.NO_WRAP)
             val cipherText = Base64.decode(parts[1], Base64.NO_WRAP)
-
-            val secretKey = getSecretKey() ?: return encryptedString
+            val secretKey = getSecretKey() ?: return null
             val cipher = Cipher.getInstance(TRANSFORMATION)
             val spec = GCMParameterSpec(128, iv)
             cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
-
             val plainTextBytes = cipher.doFinal(cipherText)
             String(plainTextBytes, StandardCharsets.UTF_8)
         } catch (_: Exception) {
-            encryptedString
+            null
         }
     }
 
     fun getKeys(): List<String> {
         cachedKeys?.let { return it }
         val encryptedStr = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
-        val jsonStr = decrypt(encryptedStr)
+        val jsonStr = decrypt(encryptedStr) ?: return emptyList()
         val list = mutableListOf<String>()
         try {
             val arr = JSONArray(jsonStr)
@@ -116,9 +114,13 @@ class KeyManager(context: Context) {
     }
 
     private fun saveKeys(keys: List<String>) {
-        cachedKeys = null
         val arr = JSONArray(keys)
-        prefs.edit().putString(PREF_KEY_ARRAY, encrypt(arr.toString())).apply()
+        try {
+            prefs.edit().putString(PREF_KEY_ARRAY, encrypt(arr.toString())).apply()
+            cachedKeys = keys
+        } catch (_: Exception) {
+            cachedKeys = null
+        }
     }
 
     fun addKey(key: String) {

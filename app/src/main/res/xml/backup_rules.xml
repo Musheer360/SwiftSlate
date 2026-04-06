@@ -2,4 +2,5 @@
 <full-backup-content>
     <exclude domain="sharedpref" path="secure_keys_prefs.xml" />
     <exclude domain="sharedpref" path="settings.xml" />
+    <exclude domain="sharedpref" path="commands.xml" />
 </full-backup-content>

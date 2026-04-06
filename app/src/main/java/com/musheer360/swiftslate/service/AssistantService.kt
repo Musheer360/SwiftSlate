@@ -60,12 +60,14 @@ class AssistantService : AccessibilityService() {
     private val handler = Handler(Looper.getMainLooper())
     private var triggerLastChars = setOf<Char>()
     private var cachedPrefix = CommandManager.DEFAULT_PREFIX
+    private var cachedTranslatePrefix = ""
     private var currentJob: Job? = null
     @Volatile
     private var lastOriginalText: String? = null
     private var lastTriggerRefresh = 0L
     private var currentOverlayToast: View? = null
     private var dismissRunnable: Runnable? = null
+    private var watchdogRunnable: Runnable? = null
     private var dismissAnimator: AnimatorSet? = null
     private var enterAnimator: AnimatorSet? = null
 
@@ -96,22 +98,37 @@ class AssistantService : AccessibilityService() {
 
     private fun updateTriggers() {
         cachedPrefix = commandManager.getTriggerPrefix()
+        cachedTranslatePrefix = "${cachedPrefix}translate:"
         val cmds = commandManager.getCommands()
         triggerLastChars = cmds.mapNotNull { it.trigger.lastOrNull() }.toSet()
         lastTriggerRefresh = System.currentTimeMillis()
+    }
+
+    private fun startWatchdog() {
+        watchdogRunnable?.let { handler.removeCallbacks(it) }
+        val runnable = Runnable {
+            if (isProcessing) {
+                currentJob?.cancel()
+                isProcessing = false
+                processingStartedAt = 0L
+            }
+        }
+        watchdogRunnable = runnable
+        handler.postDelayed(runnable, PROCESSING_WATCHDOG_MS)
+    }
+
+    private fun cancelWatchdog() {
+        watchdogRunnable?.let { handler.removeCallbacks(it) }
+        watchdogRunnable = null
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event?.eventType != AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) return
         if (event.packageName?.toString() == packageName) return
 
-        if (isProcessing && processingStartedAt > 0L &&
-            System.currentTimeMillis() - processingStartedAt > PROCESSING_WATCHDOG_MS) {
-            currentJob?.cancel()
-        }
-
         if (isProcessing) return
         val source = event.source ?: return
+        if (source.isPassword) return
         val text = source.text?.toString() ?: return
         if (text.isEmpty()) return
 
@@ -121,7 +138,7 @@ class AssistantService : AccessibilityService() {
 
         val lastChar = text[text.length - 1]
         if (!triggerLastChars.contains(lastChar)) {
-            if (!lastChar.isLetterOrDigit() || !text.contains("${cachedPrefix}translate:")) {
+            if (!lastChar.isLetterOrDigit() || !text.contains(cachedTranslatePrefix)) {
                 return
             }
         }
@@ -131,11 +148,10 @@ class AssistantService : AccessibilityService() {
         val precedingText = text.substring(0, text.length - command.trigger.length)
         val cleanText = precedingText.trim()
 
-        if (source.isPassword) return
-
         if (command.trigger.endsWith("undo") && command.isBuiltIn) {
             isProcessing = true
             processingStartedAt = System.currentTimeMillis()
+            startWatchdog()
             currentJob?.cancel()
             handleUndo(source, cleanText)
             return
@@ -145,6 +161,7 @@ class AssistantService : AccessibilityService() {
             CommandType.TEXT_REPLACER -> {
                 isProcessing = true
                 processingStartedAt = System.currentTimeMillis()
+                startWatchdog()
                 currentJob?.cancel()
                 currentJob = serviceScope.launch {
                     try {
@@ -161,6 +178,7 @@ class AssistantService : AccessibilityService() {
                         }
                     } finally {
                         withContext(NonCancellable + Dispatchers.Main) {
+                            cancelWatchdog()
                             processingStartedAt = 0L
                             if (!handler.postDelayed({ isProcessing = false }, 500)) {
                                 isProcessing = false
@@ -173,6 +191,7 @@ class AssistantService : AccessibilityService() {
                 if (cleanText.isEmpty()) return
                 isProcessing = true
                 processingStartedAt = System.currentTimeMillis()
+                startWatchdog()
                 currentJob?.cancel()
                 processCommand(source, cleanText, command)
             }
@@ -293,6 +312,7 @@ class AssistantService : AccessibilityService() {
                 showToast(mapErrorMessage(e.message ?: "Unknown error"))
             } finally {
                 withContext(NonCancellable + Dispatchers.Main) {
+                    cancelWatchdog()
                     spinnerJob?.cancel()
                     processingStartedAt = 0L
                     if (!handler.postDelayed({ isProcessing = false }, 500)) {
@@ -322,6 +342,7 @@ class AssistantService : AccessibilityService() {
                 showToast("Could not undo")
             } finally {
                 withContext(NonCancellable + Dispatchers.Main) {
+                    cancelWatchdog()
                     processingStartedAt = 0L
                     if (!handler.postDelayed({ isProcessing = false }, 500)) {
                         isProcessing = false
@@ -332,7 +353,7 @@ class AssistantService : AccessibilityService() {
     }
 
     private suspend fun replaceText(source: AccessibilityNodeInfo, newText: String) = withContext(Dispatchers.Main) {
-        source.refresh()
+        if (!source.refresh()) return@withContext
         val bundle = Bundle()
         bundle.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, newText)
 
@@ -362,6 +383,7 @@ class AssistantService : AccessibilityService() {
         clipboard.setPrimaryClip(newClip)
 
         source.refresh()
+        if (source.text == null) return@withContext
         val selectAllArgs = Bundle()
         selectAllArgs.putInt(AccessibilityNodeInfo.ACTION_ARGUMENT_SELECTION_START_INT, 0)
         selectAllArgs.putInt(AccessibilityNodeInfo.ACTION_ARGUMENT_SELECTION_END_INT, source.text?.length ?: 0)
@@ -372,27 +394,25 @@ class AssistantService : AccessibilityService() {
         handler.postDelayed({
             if (oldClip != null) {
                 clipboard.setPrimaryClip(oldClip)
+            } else {
+                clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
             }
-        }, 200)
+        }, 500)
     }
 
-    private fun setFieldText(source: AccessibilityNodeInfo, text: String) {
-        source.refresh()
+    private fun setFieldText(source: AccessibilityNodeInfo, text: String): Boolean {
+        if (!source.refresh()) return false
         val bundle = Bundle().apply {
             putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text)
         }
-        source.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, bundle)
+        return source.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, bundle)
     }
 
     private fun startInlineSpinner(source: AccessibilityNodeInfo, baseText: String): Job {
         return serviceScope.launch(Dispatchers.Main) {
             var frameIndex = 0
             while (isActive) {
-                try {
-                    setFieldText(source, "$baseText ${SPINNER_FRAMES[frameIndex]}")
-                } catch (_: Exception) {
-                    break
-                }
+                if (!setFieldText(source, "$baseText ${SPINNER_FRAMES[frameIndex]}")) break
                 frameIndex = (frameIndex + 1) % SPINNER_FRAMES.size
                 delay(200)
             }
@@ -564,10 +584,13 @@ class AssistantService : AccessibilityService() {
         isProcessing = false
         processingStartedAt = 0L
         currentJob?.cancel()
+        handler.removeCallbacksAndMessages(null)
+        dismissOverlayToast()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
         dismissOverlayToast()
         serviceScope.cancel()
     }

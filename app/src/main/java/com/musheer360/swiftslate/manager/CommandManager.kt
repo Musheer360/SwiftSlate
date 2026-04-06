@@ -11,6 +11,7 @@ class CommandManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("commands", Context.MODE_PRIVATE)
     private val settingsPrefs: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
+    @Volatile
     private var cachedCommands: List<Command>? = null
 
     companion object {
@@ -85,12 +86,19 @@ class CommandManager(context: Context) {
     fun addCustomCommand(command: Command) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
+        val newArr = JSONArray()
+        for (i in 0 until arr.length()) {
+            val obj = arr.getJSONObject(i)
+            if (obj.getString("trigger") != command.trigger) {
+                newArr.put(obj)
+            }
+        }
         val newObj = JSONObject()
         newObj.put("trigger", command.trigger)
         newObj.put("prompt", command.prompt)
         newObj.put("type", command.type.name)
-        arr.put(newObj)
-        prefs.edit().putString("custom_commands", arr.toString()).apply()
+        newArr.put(newObj)
+        prefs.edit().putString("custom_commands", newArr.toString()).apply()
         cachedCommands = null
     }
 
@@ -116,12 +124,14 @@ class CommandManager(context: Context) {
         return try {
             val arr = JSONArray(json)
             if (arr.length() > 100) return false
+            val prefix = getTriggerPrefix()
             for (i in 0 until arr.length()) {
                 val obj = arr.getJSONObject(i)
                 val trigger = obj.optString("trigger", "")
                 val prompt = obj.optString("prompt", "")
                 if (trigger.isBlank() || prompt.isBlank()) return false
                 if (trigger.length > 50 || prompt.length > 5000) return false
+                if (!trigger.startsWith(prefix)) return false
             }
             prefs.edit().putString("custom_commands", arr.toString()).apply()
             cachedCommands = null

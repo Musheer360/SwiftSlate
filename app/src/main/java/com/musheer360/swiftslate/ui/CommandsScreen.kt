@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -32,8 +33,8 @@ fun CommandsScreen() {
     val haptic = LocalHapticFeedback.current
     val commandManager = remember { CommandManager(context) }
     var commands by remember { mutableStateOf(commandManager.getCommands()) }
-    var trigger by remember { mutableStateOf("") }
-    var prompt by remember { mutableStateOf("") }
+    var trigger by rememberSaveable { mutableStateOf("") }
+    var prompt by rememberSaveable { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var selectedType by remember { mutableStateOf(CommandType.AI) }
     var editingTrigger by remember { mutableStateOf<String?>(null) }
@@ -174,6 +175,7 @@ fun CommandsScreen() {
         Spacer(modifier = Modifier.height(24.dp))
 
         LazyColumn(
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {

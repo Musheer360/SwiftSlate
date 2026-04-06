@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -17,6 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.R
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
@@ -27,6 +31,10 @@ fun SettingsScreen() {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
+
+    val scope = rememberCoroutineScope()
+    var saveEndpointJob by remember { mutableStateOf<Job?>(null) }
+    var saveModelJob by remember { mutableStateOf<Job?>(null) }
 
     var providerType by remember { mutableStateOf(prefs.getString("provider_type", "gemini") ?: "gemini") }
     var providerExpanded by remember { mutableStateOf(false) }
@@ -77,15 +85,9 @@ fun SettingsScreen() {
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {
             try {
-                val json = context.contentResolver.openInputStream(it)?.use { stream ->
-                    val bytes = ByteArray(1_000_000)
-                    var totalRead = 0
-                    while (totalRead < bytes.size) {
-                        val read = stream.read(bytes, totalRead, bytes.size - totalRead)
-                        if (read == -1) break
-                        totalRead += read
-                    }
-                    if (stream.read() != -1) null else String(bytes, 0, totalRead)
+                val json = context.contentResolver.openInputStream(it)?.bufferedReader()?.use { reader ->
+                    val text = reader.readText()
+                    if (text.length > 1_000_000) null else text
                 } ?: ""
                 if (commandManager.importCommands(json)) {
                     backupMessage = importSuccessMsg
@@ -224,12 +226,21 @@ fun SettingsScreen() {
                         customEndpoint = it
                         endpointError = when {
                             it.isBlank() -> null
-                            !it.startsWith("https://") -> endpointErrorScheme
                             it.contains(" ") -> endpointErrorSpaces
-                            else -> null
+                            it.startsWith("https://") -> null
+                            it.startsWith("http://") -> {
+                                val host = try { java.net.URL(it).host } catch (_: Exception) { "" }
+                                if (host == "localhost" || host == "127.0.0.1" || host == "10.0.2.2") null
+                                else endpointErrorScheme
+                            }
+                            else -> endpointErrorScheme
                         }
                         if (endpointError == null) {
-                            prefs.edit().putString("custom_endpoint", it).remove("structured_output_disabled").apply()
+                            saveEndpointJob?.cancel()
+                            saveEndpointJob = scope.launch {
+                                delay(500)
+                                prefs.edit().putString("custom_endpoint", it).remove("structured_output_disabled").apply()
+                            }
                         }
                     },
                     placeholder = { Text(stringResource(R.string.settings_endpoint_placeholder)) },
@@ -272,7 +283,11 @@ fun SettingsScreen() {
                     value = customModel,
                     onValueChange = {
                         customModel = it
-                        prefs.edit().putString("custom_model", it).remove("structured_output_disabled").apply()
+                        saveModelJob?.cancel()
+                        saveModelJob = scope.launch {
+                            delay(500)
+                            prefs.edit().putString("custom_model", it).remove("structured_output_disabled").apply()
+                        }
                     },
                     placeholder = { Text(stringResource(R.string.settings_model_placeholder)) },
                     singleLine = true,

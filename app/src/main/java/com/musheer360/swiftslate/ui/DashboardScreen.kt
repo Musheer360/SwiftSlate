@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
-import androidx.activity.ComponentActivity
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -52,15 +52,18 @@ fun DashboardScreen() {
 
     // Use the Activity lifecycle so polling only restarts when the app returns
     // from the background, not when switching between navbar tabs.
-    val activityLifecycle = (context as? ComponentActivity)?.lifecycle
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(activityLifecycle) {
-        val lifecycle = activityLifecycle ?: return@LaunchedEffect
+    LaunchedEffect(lifecycleOwner) {
+        val lifecycle = lifecycleOwner.lifecycle
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             while (true) {
-                isServiceEnabled = checkServiceEnabled(context)
-                keyCount = keyManager.getKeys().size
-                currentPrefix = commandManager.getTriggerPrefix()
+                val newEnabled = checkServiceEnabled(context)
+                val newKeyCount = keyManager.getKeys().size
+                val newPrefix = commandManager.getTriggerPrefix()
+                if (newEnabled != isServiceEnabled) isServiceEnabled = newEnabled
+                if (newKeyCount != keyCount) keyCount = newKeyCount
+                if (newPrefix != currentPrefix) currentPrefix = newPrefix
                 delay(3000)
             }
         }
@@ -164,9 +167,11 @@ fun DashboardScreen() {
                 text = stringResource(R.string.dashboard_github),
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable {
-                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Musheer360/SwiftSlate")))
-                }
+                modifier = Modifier
+                    .clickable {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Musheer360/SwiftSlate")))
+                    }
+                    .padding(vertical = 8.dp)
             )
         }
 
