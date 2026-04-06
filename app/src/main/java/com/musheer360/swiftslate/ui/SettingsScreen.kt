@@ -173,7 +173,7 @@ fun SettingsScreen() {
                         customEndpoint = it
                         endpointError = when {
                             it.isBlank() -> null
-                            !it.startsWith("http://") && !it.startsWith("https://") -> endpointErrorScheme
+                            !it.startsWith("https://") -> endpointErrorScheme
                             it.contains(" ") -> endpointErrorSpaces
                             else -> null
                         }

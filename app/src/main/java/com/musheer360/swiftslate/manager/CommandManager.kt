@@ -11,6 +11,8 @@ class CommandManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("commands", Context.MODE_PRIVATE)
     private val settingsPrefs: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
+    private var cachedCommands: List<Command>? = null
+
     companion object {
         const val DEFAULT_PREFIX = "?"
         const val PREF_TRIGGER_PREFIX = "trigger_prefix"
@@ -56,6 +58,7 @@ class CommandManager(context: Context) {
             newArr.put(newObj)
         }
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
+        cachedCommands = null
         return true
     }
 
@@ -65,6 +68,7 @@ class CommandManager(context: Context) {
     }
 
     fun getCommands(): List<Command> {
+        cachedCommands?.let { return it }
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
         val customCommands = mutableListOf<Command>()
@@ -73,7 +77,9 @@ class CommandManager(context: Context) {
             customCommands.add(Command(obj.getString("trigger"), obj.getString("prompt"), false,
                 try { CommandType.valueOf(obj.optString("type", CommandType.AI.name)) } catch (_: Exception) { CommandType.AI }))
         }
-        return getBuiltInCommands() + customCommands
+        val result = getBuiltInCommands() + customCommands
+        cachedCommands = result
+        return result
     }
 
     fun addCustomCommand(command: Command) {
@@ -85,6 +91,7 @@ class CommandManager(context: Context) {
         newObj.put("type", command.type.name)
         arr.put(newObj)
         prefs.edit().putString("custom_commands", arr.toString()).apply()
+        cachedCommands = null
     }
 
     fun removeCustomCommand(trigger: String) {
@@ -98,6 +105,7 @@ class CommandManager(context: Context) {
             }
         }
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
+        cachedCommands = null
     }
 
     fun findCommand(text: String): Command? {

@@ -61,6 +61,6 @@
     <string name="settings_prefix_error_length">Must be exactly 1 character</string>
     <string name="settings_prefix_error_whitespace">Cannot be whitespace</string>
     <string name="settings_prefix_error_alphanumeric">Cannot be a letter or digit</string>
-    <string name="settings_endpoint_error_scheme">Must start with http:// or https://</string>
+    <string name="settings_endpoint_error_scheme">Must start with https://</string>
     <string name="settings_endpoint_error_spaces">URL cannot contain spaces</string>
 </resources>

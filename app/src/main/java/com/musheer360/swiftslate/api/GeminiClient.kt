@@ -11,6 +11,11 @@ import java.net.URL
 
 class GeminiClient {
 
+    companion object {
+        private val HTTP_CODE_REGEX = Regex("^HTTP_(\\d+):")
+        private val HTTP_PREFIX_REGEX = Regex("^HTTP_\\d+:\\s*")
+    }
+
     @Volatile
     var structuredOutputFailed = false
 
@@ -67,7 +72,7 @@ class GeminiClient {
 
         if (useStructuredOutput && result.isFailure) {
             val msg = result.exceptionOrNull()?.message ?: ""
-            val code = Regex("^HTTP_(\\d+):").find(msg)?.groupValues?.get(1)?.toIntOrNull()
+            val code = HTTP_CODE_REGEX.find(msg)?.groupValues?.get(1)?.toIntOrNull()
             if (code == 400 || code == 422) {
                 val retry = doGenerate(prompt, text, apiKey, model, temperature, false)
                 if (retry.isSuccess) {
@@ -83,7 +88,7 @@ class GeminiClient {
     private fun stripHttpPrefix(result: Result<String>): Result<String> {
         if (result.isFailure) {
             val msg = result.exceptionOrNull()?.message ?: ""
-            val cleaned = msg.replaceFirst(Regex("^HTTP_\\d+:\\s*"), "")
+            val cleaned = msg.replaceFirst(HTTP_PREFIX_REGEX, "")
             if (cleaned != msg) return Result.failure(Exception(cleaned))
         }
         return result

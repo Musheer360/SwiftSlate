@@ -28,6 +28,7 @@ class KeyManager(context: Context) {
     private val rateLimitedKeys = mutableMapOf<String, Long>()
     private val invalidKeys = mutableSetOf<String>()
     private val roundRobinIndex = AtomicInteger(0)
+    private var cachedKeys: List<String>? = null
 
     init {
         try {
@@ -103,6 +104,7 @@ class KeyManager(context: Context) {
     }
 
     fun getKeys(): List<String> {
+        cachedKeys?.let { return it }
         val encryptedStr = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
         val jsonStr = decrypt(encryptedStr)
         val list = mutableListOf<String>()
@@ -114,10 +116,12 @@ class KeyManager(context: Context) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        cachedKeys = list
         return list
     }
 
     private fun saveKeys(keys: List<String>) {
+        cachedKeys = null
         val arr = JSONArray(keys)
         val encryptedStr = encrypt(arr.toString())
         prefs.edit().putString(PREF_KEY_ARRAY, encryptedStr).apply()

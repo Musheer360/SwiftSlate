@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
-    <exclude domain="sharedpref" path="encrypted_keys.xml" />
+    <exclude domain="sharedpref" path="secure_keys_prefs.xml" />
+    <exclude domain="sharedpref" path="settings.xml" />
 </full-backup-content>

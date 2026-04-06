@@ -79,6 +79,7 @@ class AssistantService : AccessibilityService() {
         const val DEFAULT_TEMPERATURE = 0.5
         const val PROCESSING_WATCHDOG_MS = 120_000L
         val SPINNER_FRAMES = arrayOf("◐", "◓", "◑", "◒")
+        private val RETRY_AFTER_REGEX = Regex("retry after (\\d+)s")
         const val TOAST_BACKGROUND_COLOR = 0xE6323232.toInt()
         const val TOAST_DURATION_MS = 3500L
         const val TOAST_BOTTOM_MARGIN_DP = 64
@@ -248,7 +249,7 @@ class AssistantService : AccessibilityService() {
                         val isInvalidKey = msg.contains("Invalid API key", ignoreCase = true) || msg.contains("API key not valid", ignoreCase = true)
 
                         if (isRateLimit) {
-                            val seconds = Regex("retry after (\\d+)s").find(msg)?.groupValues?.get(1)?.toLongOrNull() ?: 60
+                            val seconds = RETRY_AFTER_REGEX.find(msg)?.groupValues?.get(1)?.toLongOrNull() ?: 60
                             keyManager.reportRateLimit(key, seconds)
                         } else if (isInvalidKey) {
                             keyManager.markInvalid(key)
@@ -381,7 +382,11 @@ class AssistantService : AccessibilityService() {
         return serviceScope.launch(Dispatchers.Main) {
             var frameIndex = 0
             while (isActive) {
-                setFieldText(source, "$baseText ${SPINNER_FRAMES[frameIndex]}")
+                try {
+                    setFieldText(source, "$baseText ${SPINNER_FRAMES[frameIndex]}")
+                } catch (_: Exception) {
+                    break
+                }
                 frameIndex = (frameIndex + 1) % SPINNER_FRAMES.size
                 delay(200)
             }
