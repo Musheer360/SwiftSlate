@@ -329,7 +329,7 @@ SwiftSlate supports multiple API keys with intelligent rotation:
 | **Encrypted Storage** | All keys encrypted with AES-256-GCM via Android Keystore before being saved locally |
 
 > [!TIP]
-> Adding **2–3 API keys** helps avoid rate limits during heavy use. Each API key has its own quota.
+> Adding **2–3 API keys from different accounts** helps avoid rate limits during heavy use. On the free tier, all keys under the same account share a single quota — so rotation only helps with keys from separate accounts.
 
 <br>
 
