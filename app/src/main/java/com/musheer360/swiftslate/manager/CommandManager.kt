@@ -3,6 +3,7 @@ package com.musheer360.swiftslate.manager
 import android.content.Context
 import android.content.SharedPreferences
 import com.musheer360.swiftslate.model.Command
+import com.musheer360.swiftslate.model.CommandType
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -10,6 +11,9 @@ class CommandManager(context: Context) {
     private val appContext = context.applicationContext
     private val prefs: SharedPreferences = appContext.getSharedPreferences("commands", Context.MODE_PRIVATE)
     private val settingsPrefs: SharedPreferences = appContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+    @Volatile
+    private var cachedCommands: List<Command>? = null
 
     companion object {
         const val DEFAULT_PREFIX = "?"
@@ -88,9 +92,11 @@ class CommandManager(context: Context) {
             val newObj = JSONObject()
             newObj.put("trigger", migrated)
             newObj.put("prompt", obj.getString("prompt"))
+            newObj.put("type", obj.optString("type", CommandType.AI.name))
             newArr.put(newObj)
         }
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
+        cachedCommands = null
         return true
     }
 
@@ -100,24 +106,37 @@ class CommandManager(context: Context) {
     }
 
     fun getCommands(): List<Command> {
+        cachedCommands?.let { return it }
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
         val customCommands = mutableListOf<Command>()
         for (i in 0 until arr.length()) {
             val obj = arr.getJSONObject(i)
-            customCommands.add(Command(obj.getString("trigger"), obj.getString("prompt"), false))
+            customCommands.add(Command(obj.getString("trigger"), obj.getString("prompt"), false,
+                try { CommandType.valueOf(obj.optString("type", CommandType.AI.name)) } catch (_: Exception) { CommandType.AI }))
         }
-        return getBuiltInCommands() + customCommands
+        val result = (getBuiltInCommands() + customCommands).sortedByDescending { it.trigger.length }
+        cachedCommands = result
+        return result
     }
 
     fun addCustomCommand(command: Command) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
+        val newArr = JSONArray()
+        for (i in 0 until arr.length()) {
+            val obj = arr.getJSONObject(i)
+            if (obj.getString("trigger") != command.trigger) {
+                newArr.put(obj)
+            }
+        }
         val newObj = JSONObject()
         newObj.put("trigger", command.trigger)
         newObj.put("prompt", command.prompt)
-        arr.put(newObj)
-        prefs.edit().putString("custom_commands", arr.toString()).apply()
+        newObj.put("type", command.type.name)
+        newArr.put(newObj)
+        prefs.edit().putString("custom_commands", newArr.toString()).apply()
+        cachedCommands = null
     }
 
     fun removeCustomCommand(trigger: String) {
@@ -131,11 +150,37 @@ class CommandManager(context: Context) {
             }
         }
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
+        cachedCommands = null
+    }
+
+    fun exportCommands(): String {
+        return prefs.getString("custom_commands", "[]") ?: "[]"
+    }
+
+    fun importCommands(json: String): Boolean {
+        return try {
+            val arr = JSONArray(json)
+            if (arr.length() > 100) return false
+            val prefix = getTriggerPrefix()
+            for (i in 0 until arr.length()) {
+                val obj = arr.getJSONObject(i)
+                val trigger = obj.optString("trigger", "")
+                val prompt = obj.optString("prompt", "")
+                if (trigger.isBlank() || prompt.isBlank()) return false
+                if (trigger.length > 50 || prompt.length > 5000) return false
+                if (!trigger.startsWith(prefix)) return false
+            }
+            prefs.edit().putString("custom_commands", arr.toString()).apply()
+            cachedCommands = null
+            true
+        } catch (_: Exception) {
+            false
+        }
     }
 
     fun findCommand(text: String): Command? {
         val commands = getCommands()
-        for (cmd in commands.sortedByDescending { it.trigger.length }) {
+        for (cmd in commands) {  // Already sorted by trigger length in getCommands()
             if (text.endsWith(cmd.trigger)) {
                 return cmd
             }
