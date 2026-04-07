@@ -8,29 +8,83 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class CommandManager(context: Context) {
-    private val prefs: SharedPreferences = context.getSharedPreferences("commands", Context.MODE_PRIVATE)
-    private val settingsPrefs: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    private val appContext = context.applicationContext
+    private val prefs: SharedPreferences = appContext.getSharedPreferences("commands", Context.MODE_PRIVATE)
+    private val settingsPrefs: SharedPreferences = appContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
     @Volatile
     private var cachedCommands: List<Command>? = null
+
+    // Added cache variables for built-in definitions to prevent repetitive disk I/O
+    @Volatile
+    private var cachedBuiltInDefinitions: List<Pair<String, String>>? = null
+    @Volatile
+    private var cachedBuiltInLang: String? = null
 
     companion object {
         const val DEFAULT_PREFIX = "?"
         const val PREF_TRIGGER_PREFIX = "trigger_prefix"
     }
 
-    // Built-in command names (without prefix) and their prompts
-    private val builtInDefinitions = listOf(
-        "fix" to "Fix all grammar, spelling, and punctuation errors.",
-        "improve" to "Improve the clarity and readability.",
-        "shorten" to "Shorten while preserving the core meaning.",
-        "expand" to "Expand with more detail and context.",
-        "formal" to "Rewrite in a formal, professional tone.",
-        "casual" to "Rewrite in a casual, friendly tone.",
-        "emoji" to "Add relevant emojis throughout.",
-        "reply" to "Generate a contextual reply to this message.",
-        "undo" to "Undo the last replacement and restore the original text."
-    )
+    private fun getBuiltInDefinitions(): List<Pair<String, String>> {
+        val langSetting = settingsPrefs.getString("builtin_lang", "auto") ?: "auto"
+
+        // Return cached definitions if the language setting hasn't changed
+        if (cachedBuiltInDefinitions != null && cachedBuiltInLang == langSetting) {
+            return cachedBuiltInDefinitions!!
+        }
+
+        val langToTry = if (langSetting == "auto") {
+            java.util.Locale.getDefault().let { "${it.language}_${it.country}".lowercase() }
+        } else {
+            langSetting
+        }
+
+        var jsonContent: String? = loadJsonFromAsset("builtInDefinitions/$langToTry.json")
+        if (jsonContent == null) {
+            val langOnly = langToTry.substringBefore('_')
+            jsonContent = loadJsonFromAsset("builtInDefinitions/$langOnly.json")
+        }
+        if (jsonContent == null) {
+            jsonContent = loadJsonFromAsset("builtInDefinitions/en_us.json")
+        }
+
+        val list = mutableListOf<Pair<String, String>>()
+        if (jsonContent != null) {
+            try {
+                val jsonObject = JSONObject(jsonContent)
+                val order = listOf("fix", "improve", "shorten", "expand", "formal", "casual", "emoji", "reply", "undo")
+                for (key in order) {
+                    if (jsonObject.has(key)) {
+                        list.add(key to jsonObject.getString(key))
+                    }
+                }
+                val keys = jsonObject.keys()
+                while (keys.hasNext()) {
+                    val key = keys.next()
+                    if (!order.contains(key)) {
+                        list.add(key to jsonObject.getString(key))
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        // Update the cache before returning
+        cachedBuiltInLang = langSetting
+        cachedBuiltInDefinitions = list
+
+        return list
+    }
+
+    private fun loadJsonFromAsset(path: String): String? {
+        return try {
+            appContext.assets.open(path).bufferedReader().use { it.readText() }
+        } catch (e: Exception) {
+            null
+        }
+    }
 
     fun getTriggerPrefix(): String {
         return settingsPrefs.getString(PREF_TRIGGER_PREFIX, DEFAULT_PREFIX) ?: DEFAULT_PREFIX
@@ -40,8 +94,10 @@ class CommandManager(context: Context) {
         if (newPrefix.length != 1 || newPrefix[0].isLetterOrDigit() || newPrefix[0].isWhitespace()) return false
         val oldPrefix = getTriggerPrefix()
         if (oldPrefix == newPrefix) return true
+
         // Write prefix FIRST (synchronous) so built-ins work immediately if process dies mid-migration
         settingsPrefs.edit().putString(PREF_TRIGGER_PREFIX, newPrefix).commit()
+
         // Migrate custom command triggers
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
@@ -65,7 +121,7 @@ class CommandManager(context: Context) {
 
     private fun getBuiltInCommands(): List<Command> {
         val prefix = getTriggerPrefix()
-        return builtInDefinitions.map { (name, prompt) -> Command("$prefix$name", prompt, true) }
+        return getBuiltInDefinitions().map { (name, prompt) -> Command("$prefix$name", prompt, true) }
     }
 
     fun getCommands(): List<Command> {
@@ -143,7 +199,7 @@ class CommandManager(context: Context) {
 
     fun findCommand(text: String): Command? {
         val commands = getCommands()
-        for (cmd in commands) {  // Already sorted by trigger length in getCommands()
+        for (cmd in commands) {
             if (text.endsWith(cmd.trigger)) {
                 return cmd
             }

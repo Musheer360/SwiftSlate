@@ -17,6 +17,14 @@
     <string name="dashboard_version">Versão %1$s</string>
     <string name="dashboard_github">GitHub ↗</string>
 
+    <!-- Dashboard Stats -->
+    <string name="dashboard_stats_title">Estatísticas</string>
+    <string name="dashboard_stats_tokens">Tokens usados: %1$d</string>
+    <string name="dashboard_stats_requests">Pedidos este mês: %1$d</string>
+    <string name="dashboard_stats_favorite">Comando favorito: %1$s</string>
+    <string name="dashboard_stats_none">Nenhum</string>
+
+
     <!-- Keys -->
     <string name="keys_title">Chaves API</string>
     <string name="keys_api_key_label">Chave API</string>
@@ -65,6 +73,18 @@
     <string name="settings_prefix_error_alphanumeric">Não pode ser letra ou dígito</string>
     <string name="settings_endpoint_error_scheme">Deve começar com https://</string>
     <string name="settings_endpoint_error_spaces">A URL não pode conter espaços</string>
+    <string name="settings_builtin_lang_title">Idioma das definições integradas</string>
+    <string name="settings_builtin_lang_auto">Padrão do sistema</string>
+    <string name="settings_builtin_lang_en">Inglês</string>
+    <string name="settings_builtin_lang_fr">Francês</string>
+    <string name="settings_builtin_lang_es">Espanhol</string>
+    <string name="settings_builtin_lang_de">Alemão</string>
+    <string name="settings_builtin_lang_it">Italiano</string>
+    <string name="settings_builtin_lang_pt">Português</string>
+    <string name="settings_builtin_lang_zh">Chinês</string>
+    <string name="settings_builtin_lang_ja">Japonês</string>
+    <string name="settings_builtin_lang_ru">Russo</string>
+
 
     <!-- Backup -->
     <string name="backup_title">Backup &amp; Restauração</string>
@@ -74,4 +94,20 @@
     <string name="backup_export_success">Comandos exportados com sucesso</string>
     <string name="backup_import_success">Comandos importados com sucesso</string>
     <string name="backup_import_error">Arquivo de backup inválido</string>
+
+    <!-- Spinner Styles -->
+    <string name="settings_spinner_style_title">Estilo do indicador de carregamento</string>
+    <string name="settings_spinner_style_default">Padrão (◐◓◑◒)</string>
+    <string name="settings_spinner_style_dots">Pontos (⠋⠙⠹⠸)</string>
+    <string name="settings_spinner_style_squares">Quadrados (▪▫▫)</string>
+    <string name="settings_spinner_style_none">Desativado</string>
+
+    <!-- Blocklist -->
+    <string name="settings_blocklist_title">Lista de bloqueio de apps</string>
+    <string name="settings_blocklist_desc">Selecione os apps onde o SwiftSlate não deve ser executado.</string>
+    <string name="settings_blocklist_button">Gerenciar lista de bloqueio</string>
+    <string name="blocklist_title">Lista de bloqueio de apps</string>
+    <string name="nav_app_bar_navigate_up_description">Voltar</string>
+    <string name="search_apps">Pesquisar apps…</string>
+    <string name="duplicate_command">Duplicar comando</string>
 </resources>

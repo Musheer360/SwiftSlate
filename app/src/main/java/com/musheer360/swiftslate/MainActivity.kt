@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -29,6 +28,7 @@ import com.musheer360.swiftslate.ui.CommandsScreen
 import com.musheer360.swiftslate.ui.DashboardScreen
 import com.musheer360.swiftslate.ui.KeysScreen
 import com.musheer360.swiftslate.ui.SettingsScreen
+import com.musheer360.swiftslate.ui.BlocklistScreen
 import com.musheer360.swiftslate.ui.theme.SwiftSlateTheme
 
 class MainActivity : ComponentActivity() {
@@ -141,7 +141,10 @@ fun SwiftSlateMainScreen() {
             composable(Screen.Dashboard.route) { DashboardScreen() }
             composable(Screen.Keys.route) { KeysScreen() }
             composable(Screen.Commands.route) { CommandsScreen() }
-            composable(Screen.Settings.route) { SettingsScreen() }
+            composable(Screen.Settings.route) {
+                SettingsScreen(onNavigateToBlocklist = { navController.navigate("blocklist") })
+            }
+            composable("blocklist") { BlocklistScreen(navController) }
         }
     }
 }

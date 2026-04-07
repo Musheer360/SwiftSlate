@@ -28,7 +28,6 @@ import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SectionHeader
 import com.musheer360.swiftslate.ui.components.SlateCard
-import com.musheer360.swiftslate.ui.components.SlateDivider
 import com.musheer360.swiftslate.ui.components.SlateItemCard
 import com.musheer360.swiftslate.ui.components.SlateTextField
 import kotlinx.coroutines.launch
@@ -61,6 +60,8 @@ fun KeysScreen() {
         ScreenTitle(stringResource(R.string.keys_title))
 
         SectionHeader(stringResource(R.string.keys_api_key_label))
+
+        // Input Card
         SlateCard {
             SlateTextField(
                 value = newKey,
@@ -115,6 +116,7 @@ fun KeysScreen() {
             ) {
                 Text(if (isTesting) stringResource(R.string.keys_testing) else stringResource(R.string.keys_add_key))
             }
+
             if (testResult != null) {
                 Text(
                     text = testResult!!,
@@ -123,11 +125,13 @@ fun KeysScreen() {
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
+
             val (apiKeyUrl, providerName) = when (prefs.getString("provider_type", "gemini") ?: "gemini") {
                 "groq" -> "https://console.groq.com/keys" to "Groq"
                 "custom" -> null to null
                 else -> "https://aistudio.google.com/api-keys" to "Gemini"
             }
+
             if (apiKeyUrl != null && providerName != null) {
                 Text(
                     text = stringResource(R.string.keys_get_api_key, providerName),
@@ -143,21 +147,29 @@ fun KeysScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // List Section
         if (keys.isNotEmpty()) {
             SectionHeader(stringResource(R.string.dashboard_api_keys_title))
-            SlateCard {
-                LazyColumn(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    itemsIndexed(keys, key = { _, key -> key }) { index, key ->
-                        SlateItemCard {
+            // Weight 1f allows the list to take remaining space and scroll internally
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                itemsIndexed(keys, key = { _, key -> key }) { _, key ->
+                    SlateItemCard {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp)
+                        ) {
                             Text(
                                 text = "••••••••" + key.takeLast(6),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 15.sp,
                                 color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.weight(1f).semantics(mergeDescendants = true) {}
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .semantics(mergeDescendants = true) {}
                             )
                             IconButton(
                                 onClick = {
@@ -182,6 +194,6 @@ fun KeysScreen() {
             Spacer(modifier = Modifier.weight(1f))
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }

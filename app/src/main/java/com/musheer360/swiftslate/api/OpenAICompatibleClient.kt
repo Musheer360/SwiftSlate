@@ -67,7 +67,7 @@ class OpenAICompatibleClient {
         endpoint: String,
         useStructuredOutput: Boolean = false,
         useJsonObjectMode: Boolean = false
-    ): Result<String> = withContext(Dispatchers.IO) {
+    ): Result<Pair<String, Int>> = withContext(Dispatchers.IO) {
         structuredOutputFailed = false
 
         val result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode)
@@ -87,7 +87,7 @@ class OpenAICompatibleClient {
         stripHttpPrefix(result)
     }
 
-    private fun stripHttpPrefix(result: Result<String>): Result<String> {
+    private fun stripHttpPrefix(result: Result<Pair<String, Int>>): Result<Pair<String, Int>> {
         if (result.isFailure) {
             val msg = result.exceptionOrNull()?.message ?: ""
             val cleaned = msg.replaceFirst(HTTP_PREFIX_REGEX, "")
@@ -105,7 +105,7 @@ class OpenAICompatibleClient {
         endpoint: String,
         withStructured: Boolean,
         withJsonObject: Boolean = false
-    ): Result<String> {
+    ): Result<Pair<String, Int>> {
         var connection: HttpURLConnection? = null
         return try {
             val baseUrl = endpoint.trimEnd('/')
@@ -170,6 +170,8 @@ class OpenAICompatibleClient {
                 val response = ApiClientUtils.readResponseBounded(connection)
 
                 val jsonResponse = JSONObject(response)
+                val tokensUsed = jsonResponse.optJSONObject("usage")
+                    ?.optInt("total_tokens", 0) ?: 0
                 val choices = jsonResponse.optJSONArray("choices")
                 if (choices != null && choices.length() > 0) {
                     val choice = choices.getJSONObject(0)
@@ -181,13 +183,13 @@ class OpenAICompatibleClient {
 
                     if (withStructured || withJsonObject) {
                         val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
-                        if (extracted != null) return Result.success(extracted)
                         if (extracted == null && !parseFailed) return Result.failure(Exception("Model returned empty response"))
+                        if (extracted != null) return Result.success(Pair(extracted, tokensUsed))
                         if (withStructured) structuredOutputFailed = true
                     }
 
                     resultText = ApiClientUtils.stripMarkdownFences(resultText)
-                    Result.success(resultText)
+                    Result.success(Pair(resultText, tokensUsed))
                 } else {
                     Result.failure(Exception("No choices found in response"))
                 }

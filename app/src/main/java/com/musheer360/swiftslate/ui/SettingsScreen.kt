@@ -16,6 +16,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.R
@@ -30,7 +31,7 @@ import com.musheer360.swiftslate.ui.components.SlateTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(onNavigateToBlocklist: () -> Unit) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
@@ -105,6 +106,32 @@ fun SettingsScreen() {
             }
         }
     }
+
+    // Built-in language settings
+    var builtinLang by remember { mutableStateOf(prefs.getString("builtin_lang", "auto") ?: "auto") }
+    var builtinLangExpanded by remember { mutableStateOf(false) }
+    val builtinLangOptions = listOf(
+        "auto" to stringResource(R.string.settings_builtin_lang_auto),
+        "en_us" to stringResource(R.string.settings_builtin_lang_en),
+        "fr" to stringResource(R.string.settings_builtin_lang_fr),
+        "es" to stringResource(R.string.settings_builtin_lang_es),
+        "de" to stringResource(R.string.settings_builtin_lang_de),
+        "it" to stringResource(R.string.settings_builtin_lang_it),
+        "pt" to stringResource(R.string.settings_builtin_lang_pt),
+        "zh" to stringResource(R.string.settings_builtin_lang_zh),
+        "ja" to stringResource(R.string.settings_builtin_lang_ja),
+        "ru" to stringResource(R.string.settings_builtin_lang_ru)
+    )
+
+    // Spinner style settings
+    var spinnerStyle by remember { mutableStateOf(prefs.getString("spinner_style", "default") ?: "default") }
+    var spinnerStyleExpanded by remember { mutableStateOf(false) }
+    val spinnerStyleOptions = listOf(
+        "default" to stringResource(R.string.settings_spinner_style_default),
+        "dots" to stringResource(R.string.settings_spinner_style_dots),
+        "squares" to stringResource(R.string.settings_spinner_style_squares),
+        "none" to stringResource(R.string.settings_spinner_style_none)
+    )
 
     Column(
         modifier = Modifier
@@ -306,6 +333,82 @@ fun SettingsScreen() {
         }
 
         Spacer(modifier = Modifier.height(12.dp))
+        SectionHeader(stringResource(R.string.settings_builtin_lang_title))
+
+        SlateCard {
+
+            ExposedDropdownMenuBox(
+                expanded = builtinLangExpanded,
+                onExpandedChange = { builtinLangExpanded = !builtinLangExpanded }
+            ) {
+                OutlinedTextField(
+                    value = builtinLangOptions.find { it.first == builtinLang }?.second ?: "",
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                    )
+                )
+                ExposedDropdownMenu(
+                    expanded = builtinLangExpanded,
+                    onDismissRequest = { builtinLangExpanded = false }
+                ) {
+                    builtinLangOptions.forEach { (code, label) ->
+                        DropdownMenuItem(
+                            text = { Text(label) },
+                            onClick = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                builtinLang = code
+                                prefs.edit().putString("builtin_lang", code).apply()
+                                builtinLangExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        SectionHeader(stringResource(R.string.settings_spinner_style_title))
+
+        SlateCard {
+
+            ExposedDropdownMenuBox(
+                expanded = spinnerStyleExpanded,
+                onExpandedChange = { spinnerStyleExpanded = !spinnerStyleExpanded }
+            ) {
+                OutlinedTextField(
+                    value = spinnerStyleOptions.find { it.first == spinnerStyle }?.second ?: "",
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                    )
+                )
+                ExposedDropdownMenu(
+                    expanded = spinnerStyleExpanded,
+                    onDismissRequest = { spinnerStyleExpanded = false }
+                ) {
+                    spinnerStyleOptions.forEach { (code, label) ->
+                        DropdownMenuItem(
+                            text = { Text(label) },
+                            onClick = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                spinnerStyle = code
+                                prefs.edit().putString("spinner_style", code).apply()
+                                spinnerStyleExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         SectionHeader(stringResource(R.string.settings_trigger_prefix_title))
         SlateCard {
@@ -397,6 +500,32 @@ fun SettingsScreen() {
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        SlateCard {
+            Text(
+                text = stringResource(R.string.settings_blocklist_title),
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(R.string.settings_blocklist_desc),
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onNavigateToBlocklist()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.settings_blocklist_button))
+            }
+        }
     }
 }

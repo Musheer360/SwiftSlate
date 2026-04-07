@@ -64,7 +64,7 @@ class GeminiClient {
         model: String,
         temperature: Double,
         useStructuredOutput: Boolean = false
-    ): Result<String> = withContext(Dispatchers.IO) {
+    ): Result<Pair<String, Int>> = withContext(Dispatchers.IO) {
         structuredOutputFailed = false
 
         val result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput)
@@ -84,7 +84,7 @@ class GeminiClient {
         stripHttpPrefix(result)
     }
 
-    private fun stripHttpPrefix(result: Result<String>): Result<String> {
+    private fun stripHttpPrefix(result: Result<Pair<String, Int>>): Result<Pair<String, Int>> {
         if (result.isFailure) {
             val msg = result.exceptionOrNull()?.message ?: ""
             val cleaned = msg.replaceFirst(HTTP_PREFIX_REGEX, "")
@@ -100,7 +100,7 @@ class GeminiClient {
         model: String,
         temperature: Double,
         withStructured: Boolean
-    ): Result<String> {
+    ): Result<Pair<String, Int>> {
         var connection: HttpURLConnection? = null
         return try {
             connection = URL("https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent")
@@ -156,6 +156,8 @@ class GeminiClient {
                 val response = ApiClientUtils.readResponseBounded(connection)
 
                 val jsonResponse = JSONObject(response)
+                val tokensUsed = jsonResponse.optJSONObject("usageMetadata")
+                    ?.optInt("totalTokenCount", 0) ?: 0
                 val candidates = jsonResponse.optJSONArray("candidates")
                 if (candidates != null && candidates.length() > 0) {
                     val candidate = candidates.getJSONObject(0)
@@ -169,13 +171,13 @@ class GeminiClient {
 
                         if (withStructured) {
                             val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
-                            if (extracted != null) return Result.success(extracted)
                             if (extracted == null && !parseFailed) return Result.failure(Exception("Model returned empty response"))
+                            if (extracted != null) return Result.success(Pair(extracted, tokensUsed))
                             structuredOutputFailed = true
                         }
 
                         resultText = ApiClientUtils.stripMarkdownFences(resultText)
-                        Result.success(resultText)
+                        Result.success(Pair(resultText, tokensUsed))
                     } else {
                         Result.failure(Exception("No content found in response"))
                     }

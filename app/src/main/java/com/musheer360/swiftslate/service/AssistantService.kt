@@ -27,8 +27,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.musheer360.swiftslate.api.GeminiClient
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
+import com.musheer360.swiftslate.manager.BlocklistManager
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
+import com.musheer360.swiftslate.manager.StatsManager
 import com.musheer360.swiftslate.model.Command
 import com.musheer360.swiftslate.model.CommandType
 import kotlinx.coroutines.CancellationException
@@ -49,6 +51,8 @@ class AssistantService : AccessibilityService() {
 
     private lateinit var keyManager: KeyManager
     private lateinit var commandManager: CommandManager
+    private lateinit var blocklistManager: BlocklistManager
+    private lateinit var statsManager: StatsManager
     private val client = GeminiClient()
     private val openAIClient = OpenAICompatibleClient()
     private val serviceJob = SupervisorJob()
@@ -83,7 +87,9 @@ class AssistantService : AccessibilityService() {
         const val TRIGGER_REFRESH_INTERVAL_MS = 5_000L
         const val DEFAULT_TEMPERATURE = 0.5
         const val PROCESSING_WATCHDOG_MS = 120_000L
-        val SPINNER_FRAMES = arrayOf("◐", "◓", "◑", "◒")
+        val SPINNER_FRAMES_DEFAULT = arrayOf("◐", "◓", "◑", "◒")
+        val SPINNER_FRAMES_DOTS = arrayOf("⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏")
+        val SPINNER_FRAMES_SQUARES = arrayOf("▪▫▫", "▫▪▫", "▫▫▪", "▫▪▫")
         private val RETRY_AFTER_REGEX = Regex("retry after (\\d+)s")
         const val TOAST_BACKGROUND_COLOR = 0xE6323232.toInt()
         const val TOAST_DURATION_MS = 3500L
@@ -96,6 +102,8 @@ class AssistantService : AccessibilityService() {
         super.onServiceConnected()
         keyManager = KeyManager(applicationContext)
         commandManager = CommandManager(applicationContext)
+        blocklistManager = BlocklistManager(applicationContext)
+        statsManager = StatsManager(applicationContext)
         updateTriggers()
     }
 
@@ -138,6 +146,11 @@ class AssistantService : AccessibilityService() {
         // Skip events where text matches what we just replaced (prevents IME re-commit race)
         val replaced = lastReplacedText
         if (replaced != null && text == replaced) return
+
+        val packageName = event.packageName?.toString() ?: ""
+        if (packageName.isNotEmpty() && blocklistManager.isBlocked(packageName)) {
+            return
+        }
 
         if (System.currentTimeMillis() - lastTriggerRefresh > TRIGGER_REFRESH_INTERVAL_MS) {
             updateTriggers()
@@ -261,7 +274,10 @@ class AssistantService : AccessibilityService() {
                             spinnerJob.cancel()
                             spinnerJob = null
                             lastOriginalText = originalText
-                            replaceText(source, result.getOrThrow())
+                            val (generatedText, tokensUsed) = result.getOrThrow()
+                            replaceText(source, generatedText)
+                            statsManager.recordRequest(command.trigger)
+                            statsManager.addTokens(tokensUsed)
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                             if (providerType == "gemini" && client.structuredOutputFailed) {
                                 prefs.edit().putBoolean("structured_output_disabled", true).apply()
@@ -447,12 +463,32 @@ class AssistantService : AccessibilityService() {
     }
 
     private fun startInlineSpinner(source: AccessibilityNodeInfo, baseText: String): Job {
+        val prefs = applicationContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val style = prefs.getString("spinner_style", "default") ?: "default"
+
+        if (style == "none") {
+            return serviceScope.launch(Dispatchers.Main) {
+                setFieldText(source, baseText)
+                while (isActive) {
+                    delay(1000)
+                }
+            }
+        }
+
+        val frames = when (style) {
+            "dots" -> SPINNER_FRAMES_DOTS
+            "squares" -> SPINNER_FRAMES_SQUARES
+            else -> SPINNER_FRAMES_DEFAULT
+        }
+
+        val delayMs = if (style == "dots") 100L else 200L
+
         return serviceScope.launch(Dispatchers.Main) {
             var frameIndex = 0
             while (isActive) {
-                if (!setFieldText(source, "$baseText ${SPINNER_FRAMES[frameIndex]}")) break
-                frameIndex = (frameIndex + 1) % SPINNER_FRAMES.size
-                delay(200)
+                if (!setFieldText(source, "$baseText ${frames[frameIndex]}")) break
+                frameIndex = (frameIndex + 1) % frames.size
+                delay(delayMs)
             }
         }
     }

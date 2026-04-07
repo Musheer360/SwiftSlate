@@ -17,6 +17,14 @@
     <string name="dashboard_version">संस्करण %1$s</string>
     <string name="dashboard_github">GitHub ↗</string>
 
+    <!-- Dashboard Stats -->
+    <string name="dashboard_stats_title">आंकड़े</string>
+    <string name="dashboard_stats_tokens">उपयोग किए गए टोकन: %1$d</string>
+    <string name="dashboard_stats_requests">इस महीने के अनुरोध: %1$d</string>
+    <string name="dashboard_stats_favorite">पसंदीदा कमांड: %1$s</string>
+    <string name="dashboard_stats_none">कोई नहीं</string>
+
+
     <!-- Keys -->
     <string name="keys_title">API कुंजियाँ</string>
     <string name="keys_api_key_label">API कुंजी</string>
@@ -65,6 +73,18 @@
     <string name="settings_prefix_error_alphanumeric">अक्षर या अंक नहीं हो सकता</string>
     <string name="settings_endpoint_error_scheme">https:// से शुरू होना चाहिए</string>
     <string name="settings_endpoint_error_spaces">URL में रिक्त स्थान नहीं हो सकते</string>
+    <string name="settings_builtin_lang_title">अंतर्निहित परिभाषाओं की भाषा</string>
+    <string name="settings_builtin_lang_auto">सिस्टम डिफ़ॉल्ट</string>
+    <string name="settings_builtin_lang_en">अंग्रेज़ी</string>
+    <string name="settings_builtin_lang_fr">फ़्रेंच</string>
+    <string name="settings_builtin_lang_es">स्पेनिश</string>
+    <string name="settings_builtin_lang_de">जर्मन</string>
+    <string name="settings_builtin_lang_it">इतालवी</string>
+    <string name="settings_builtin_lang_pt">पुर्तगाली</string>
+    <string name="settings_builtin_lang_zh">चीनी</string>
+    <string name="settings_builtin_lang_ja">जापानी</string>
+    <string name="settings_builtin_lang_ru">रूसी</string>
+
 
     <!-- Backup -->
     <string name="backup_title">बैकअप &amp; पुनर्स्थापना</string>
@@ -74,4 +94,20 @@
     <string name="backup_export_success">कमांड सफलतापूर्वक निर्यात किए गए</string>
     <string name="backup_import_success">कमांड सफलतापूर्वक आयात किए गए</string>
     <string name="backup_import_error">अमान्य बैकअप फ़ाइल</string>
+
+    <!-- Spinner Styles -->
+    <string name="settings_spinner_style_title">लोडिंग इंडिकेटer स्टाइल</string>
+    <string name="settings_spinner_style_default">डिफ़ॉल्ट (◐◓◑◒)</string>
+    <string name="settings_spinner_style_dots">बिंदु (⠋⠙⠹⠸)</string>
+    <string name="settings_spinner_style_squares">वर्ग (▪▫▫)</string>
+    <string name="settings_spinner_style_none">अक्षम</string>
+
+    <!-- Blocklist -->
+    <string name="settings_blocklist_title">ऐप ब्लॉकलिस्ट</string>
+    <string name="settings_blocklist_desc">वे ऐप चुनें जहाँ SwiftSlate नहीं चलना चाहिए।</string>
+    <string name="settings_blocklist_button">ब्लॉकलिस्ट प्रबंधित करें</string>
+    <string name="blocklist_title">ऐप ब्लॉकलिस्ट</string>
+    <string name="nav_app_bar_navigate_up_description">पीछे</string>
+    <string name="search_apps">ऐप खोजें…</string>
+    <string name="duplicate_command">कमांड को डुप्लिकेट करें</string>
 </resources>

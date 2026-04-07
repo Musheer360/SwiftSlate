@@ -17,6 +17,14 @@
     <string name="dashboard_version">Version %1$s</string>
     <string name="dashboard_github">GitHub ↗</string>
 
+    <!-- Dashboard Stats -->
+    <string name="dashboard_stats_title">Statistiken</string>
+    <string name="dashboard_stats_tokens">Verwendete Tokens: %1$d</string>
+    <string name="dashboard_stats_requests">Anfragen in diesem Monat: %1$d</string>
+    <string name="dashboard_stats_favorite">Bevorzugter Befehl: %1$s</string>
+    <string name="dashboard_stats_none">Keine</string>
+
+
     <!-- Keys -->
     <string name="keys_title">API-Schlüssel</string>
     <string name="keys_api_key_label">API-Schlüssel</string>
@@ -65,6 +73,18 @@
     <string name="settings_prefix_error_alphanumeric">Darf kein Buchstabe oder eine Ziffer sein</string>
     <string name="settings_endpoint_error_scheme">Muss mit https:// beginnen</string>
     <string name="settings_endpoint_error_spaces">URL darf keine Leerzeichen enthalten</string>
+    <string name="settings_builtin_lang_title">Sprache der integrierten Definitionen</string>
+    <string name="settings_builtin_lang_auto">Systemstandard</string>
+    <string name="settings_builtin_lang_en">Englisch</string>
+    <string name="settings_builtin_lang_fr">Französisch</string>
+    <string name="settings_builtin_lang_es">Spanisch</string>
+    <string name="settings_builtin_lang_de">Deutsch</string>
+    <string name="settings_builtin_lang_it">Italienisch</string>
+    <string name="settings_builtin_lang_pt">Portugiesisch</string>
+    <string name="settings_builtin_lang_zh">Chinesisch</string>
+    <string name="settings_builtin_lang_ja">Japanisch</string>
+    <string name="settings_builtin_lang_ru">Russisch</string>
+
 
     <!-- Backup -->
     <string name="backup_title">Sicherung &amp; Wiederherstellung</string>
@@ -74,4 +94,20 @@
     <string name="backup_export_success">Befehle erfolgreich exportiert</string>
     <string name="backup_import_success">Befehle erfolgreich importiert</string>
     <string name="backup_import_error">Ungültige Sicherungsdatei</string>
+
+    <!-- Spinner Styles -->
+    <string name="settings_spinner_style_title">Ladeanzeige-Stil</string>
+    <string name="settings_spinner_style_default">Standard (◐◓◑◒)</string>
+    <string name="settings_spinner_style_dots">Punkte (⠋⠙⠹⠸)</string>
+    <string name="settings_spinner_style_squares">Quadrate (▪▫▫)</string>
+    <string name="settings_spinner_style_none">Deaktiviert</string>
+
+    <!-- Blocklist -->
+    <string name="settings_blocklist_title">App-Blockliste</string>
+    <string name="settings_blocklist_desc">Wählen Sie Apps aus, in denen SwiftSlate nicht ausgeführt werden soll.</string>
+    <string name="settings_blocklist_button">Blockliste verwalten</string>
+    <string name="blocklist_title">App-Blockliste</string>
+    <string name="nav_app_bar_navigate_up_description">Zurück</string>
+    <string name="search_apps">Apps suchen…</string>
+    <string name="duplicate_command">Befehl duplizieren</string>
 </resources>
