@@ -50,6 +50,7 @@
     <string name="settings_title">Ajustes</string>
     <string name="settings_provider_title">Proveedor</string>
     <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
     <string name="settings_provider_custom">Personalizado (compatible con OpenAI)</string>
     <string name="settings_model_title">Modelo</string>
     <string name="settings_endpoint_title">Endpoint</string>

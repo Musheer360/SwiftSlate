@@ -50,6 +50,7 @@
     <string name="settings_title">Settings</string>
     <string name="settings_provider_title">Provider</string>
     <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
     <string name="settings_provider_custom">Custom (OpenAI Compatible)</string>
     <string name="settings_model_title">Model</string>
     <string name="settings_endpoint_title">Endpoint</string>

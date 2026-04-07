@@ -50,6 +50,7 @@
     <string name="settings_title">设置</string>
     <string name="settings_provider_title">服务商</string>
     <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
     <string name="settings_provider_custom">自定义（OpenAI 兼容）</string>
     <string name="settings_model_title">模型</string>
     <string name="settings_endpoint_title">接入点</string>

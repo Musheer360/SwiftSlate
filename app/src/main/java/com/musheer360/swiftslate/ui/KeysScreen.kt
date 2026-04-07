@@ -90,10 +90,13 @@ fun KeysScreen() {
                                 val result = run {
                                     val providerType = prefs.getString("provider_type", "gemini") ?: "gemini"
                                     val customEndpoint = prefs.getString("custom_endpoint", "") ?: ""
-                                    if (providerType == "custom" && customEndpoint.isNotBlank()) {
-                                        openAIClient.validateKey(trimmedKey, customEndpoint)
-                                    } else {
-                                        geminiClient.validateKey(trimmedKey)
+                                    when {
+                                        providerType == "groq" ->
+                                            openAIClient.validateKey(trimmedKey, "https://api.groq.com/openai/v1")
+                                        providerType == "custom" && customEndpoint.isNotBlank() ->
+                                            openAIClient.validateKey(trimmedKey, customEndpoint)
+                                        else ->
+                                            geminiClient.validateKey(trimmedKey)
                                     }
                                 }
                                 isTesting = false
@@ -123,20 +126,22 @@ fun KeysScreen() {
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
-            val (apiKeyUrl, providerName) = if ((prefs.getString("provider_type", "gemini") ?: "gemini") == "custom") {
-                "https://platform.openai.com/api-keys" to "OpenAI"
-            } else {
-                "https://aistudio.google.com/api-keys" to "Gemini"
+            val (apiKeyUrl, providerName) = when (prefs.getString("provider_type", "gemini") ?: "gemini") {
+                "groq" -> "https://console.groq.com/keys" to "Groq"
+                "custom" -> null to null
+                else -> "https://aistudio.google.com/api-keys" to "Gemini"
             }
-            Text(
-                text = stringResource(R.string.keys_get_api_key, providerName),
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 13.sp,
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .clickable { uriHandler.openUri(apiKeyUrl) }
-                    .padding(vertical = 8.dp)
-            )
+            if (apiKeyUrl != null && providerName != null) {
+                Text(
+                    text = stringResource(R.string.keys_get_api_key, providerName),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 13.sp,
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .clickable { uriHandler.openUri(apiKeyUrl) }
+                        .padding(vertical = 8.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))

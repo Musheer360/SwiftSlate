@@ -97,6 +97,7 @@ class KeyManager(context: Context) {
         }
     }
 
+    @Synchronized
     fun getKeys(): List<String> {
         cachedKeys?.let { return it }
         val encryptedStr = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
@@ -113,6 +114,7 @@ class KeyManager(context: Context) {
         return list
     }
 
+    @Synchronized
     private fun saveKeys(keys: List<String>) {
         val arr = JSONArray(keys)
         try {

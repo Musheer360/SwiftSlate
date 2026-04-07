@@ -65,17 +65,18 @@ class OpenAICompatibleClient {
         model: String,
         temperature: Double,
         endpoint: String,
-        useStructuredOutput: Boolean = false
+        useStructuredOutput: Boolean = false,
+        useJsonObjectMode: Boolean = false
     ): Result<String> = withContext(Dispatchers.IO) {
         structuredOutputFailed = false
 
-        val result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput)
+        val result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode)
 
         if (useStructuredOutput && result.isFailure) {
             val msg = result.exceptionOrNull()?.message ?: ""
             val code = HTTP_CODE_REGEX.find(msg)?.groupValues?.get(1)?.toIntOrNull()
             if (code == 400 || code == 422) {
-                val retry = doGenerate(prompt, text, apiKey, model, temperature, endpoint, false)
+                val retry = doGenerate(prompt, text, apiKey, model, temperature, endpoint, false, false)
                 if (retry.isSuccess) {
                     structuredOutputFailed = true
                 }
@@ -102,7 +103,8 @@ class OpenAICompatibleClient {
         model: String,
         temperature: Double,
         endpoint: String,
-        withStructured: Boolean
+        withStructured: Boolean,
+        withJsonObject: Boolean = false
     ): Result<String> {
         var connection: HttpURLConnection? = null
         return try {
@@ -116,12 +118,18 @@ class OpenAICompatibleClient {
             connection.connectTimeout = 30_000
             connection.readTimeout = 60_000
 
+            val systemContent = if (withJsonObject) {
+                ApiClientUtils.SYSTEM_PROMPT_PREFIX + prompt + " Respond with JSON: {\"text\": \"your result\"}"
+            } else {
+                ApiClientUtils.SYSTEM_PROMPT_PREFIX + prompt
+            }
+
             val jsonBody = JSONObject().apply {
                 put("model", model)
                 put("messages", JSONArray().apply {
                     put(JSONObject().apply {
                         put("role", "system")
-                        put("content", ApiClientUtils.SYSTEM_PROMPT_PREFIX + prompt)
+                        put("content", systemContent)
                     })
                     put(JSONObject().apply {
                         put("role", "user")
@@ -146,6 +154,10 @@ class OpenAICompatibleClient {
                             })
                         })
                     })
+                } else if (withJsonObject) {
+                    put("response_format", JSONObject().apply {
+                        put("type", "json_object")
+                    })
                 }
             }
 
@@ -167,11 +179,11 @@ class OpenAICompatibleClient {
                         return Result.failure(Exception("Model returned empty response"))
                     }
 
-                    if (withStructured) {
+                    if (withStructured || withJsonObject) {
                         val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
                         if (extracted != null) return Result.success(extracted)
                         if (extracted == null && !parseFailed) return Result.failure(Exception("Model returned empty response"))
-                        structuredOutputFailed = true
+                        if (withStructured) structuredOutputFailed = true
                     }
 
                     resultText = ApiClientUtils.stripMarkdownFences(resultText)

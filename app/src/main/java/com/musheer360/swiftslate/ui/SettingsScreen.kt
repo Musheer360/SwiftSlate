@@ -44,6 +44,11 @@ fun SettingsScreen() {
     var modelExpanded by remember { mutableStateOf(false) }
     val geminiModels = listOf("gemini-2.5-flash-lite", "gemini-3-flash-preview", "gemini-3.1-flash-lite-preview")
 
+    // Groq settings
+    var groqModel by remember { mutableStateOf(prefs.getString("groq_model", "llama-3.3-70b-versatile") ?: "llama-3.3-70b-versatile") }
+    var groqModelExpanded by remember { mutableStateOf(false) }
+    val groqModels = listOf("llama-3.3-70b-versatile", "llama-3.1-8b-instant", "openai/gpt-oss-120b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct")
+
     // Custom provider settings
     var customEndpoint by remember { mutableStateOf(prefs.getString("custom_endpoint", "") ?: "") }
     var customModel by remember { mutableStateOf(prefs.getString("custom_model", "") ?: "") }
@@ -125,7 +130,11 @@ fun SettingsScreen() {
                 onExpandedChange = { providerExpanded = !providerExpanded }
             ) {
                 OutlinedTextField(
-                    value = if (providerType == "gemini") stringResource(R.string.settings_provider_gemini) else stringResource(R.string.settings_provider_custom),
+                    value = when (providerType) {
+                        "gemini" -> stringResource(R.string.settings_provider_gemini)
+                        "groq" -> stringResource(R.string.settings_provider_groq)
+                        else -> stringResource(R.string.settings_provider_custom)
+                    },
                     onValueChange = {},
                     readOnly = true,
                     modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
@@ -144,6 +153,15 @@ fun SettingsScreen() {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = "gemini"
                             prefs.edit().putString("provider_type", "gemini").remove("structured_output_disabled").apply()
+                            providerExpanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.settings_provider_groq)) },
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            providerType = "groq"
+                            prefs.edit().putString("provider_type", "groq").remove("structured_output_disabled").apply()
                             providerExpanded = false
                         }
                     )
@@ -198,6 +216,48 @@ fun SettingsScreen() {
                                     selectedModel = model
                                     prefs.edit().putString("model", model).remove("structured_output_disabled").apply()
                                     modelExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        } else if (providerType == "groq") {
+            SlateCard {
+                Text(
+                    text = stringResource(R.string.settings_model_title),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                ExposedDropdownMenuBox(
+                    expanded = groqModelExpanded,
+                    onExpandedChange = { groqModelExpanded = !groqModelExpanded }
+                ) {
+                    OutlinedTextField(
+                        value = groqModel,
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        )
+                    )
+                    ExposedDropdownMenu(
+                        expanded = groqModelExpanded,
+                        onDismissRequest = { groqModelExpanded = false }
+                    ) {
+                        groqModels.forEach { model ->
+                            DropdownMenuItem(
+                                text = { Text(model) },
+                                onClick = {
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    groqModel = model
+                                    prefs.edit().putString("groq_model", model).remove("structured_output_disabled").apply()
+                                    groqModelExpanded = false
                                 }
                             )
                         }

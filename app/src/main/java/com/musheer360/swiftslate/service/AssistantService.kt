@@ -53,8 +53,7 @@ class AssistantService : AccessibilityService() {
     private val openAIClient = OpenAICompatibleClient()
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(serviceJob + Dispatchers.IO)
-    @Volatile
-    private var isProcessing = false
+    private val isProcessing = java.util.concurrent.atomic.AtomicBoolean(false)
     @Volatile
     private var processingStartedAt = 0L
     private val handler = Handler(Looper.getMainLooper())
@@ -107,9 +106,9 @@ class AssistantService : AccessibilityService() {
     private fun startWatchdog() {
         watchdogRunnable?.let { handler.removeCallbacks(it) }
         val runnable = Runnable {
-            if (isProcessing) {
+            if (isProcessing.get()) {
                 currentJob?.cancel()
-                isProcessing = false
+                isProcessing.set(false)
                 processingStartedAt = 0L
             }
         }
@@ -126,7 +125,7 @@ class AssistantService : AccessibilityService() {
         if (event?.eventType != AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) return
         if (event.packageName?.toString() == packageName) return
 
-        if (isProcessing) return
+        if (isProcessing.get()) return
         val source = event.source ?: return
         if (source.isPassword) return
         val text = source.text?.toString() ?: return
@@ -149,7 +148,7 @@ class AssistantService : AccessibilityService() {
         val cleanText = precedingText.trim()
 
         if (command.trigger.endsWith("undo") && command.isBuiltIn) {
-            isProcessing = true
+            if (!isProcessing.compareAndSet(false, true)) return
             processingStartedAt = System.currentTimeMillis()
             startWatchdog()
             currentJob?.cancel()
@@ -159,7 +158,7 @@ class AssistantService : AccessibilityService() {
 
         when (command.type) {
             CommandType.TEXT_REPLACER -> {
-                isProcessing = true
+                if (!isProcessing.compareAndSet(false, true)) return
                 processingStartedAt = System.currentTimeMillis()
                 startWatchdog()
                 currentJob?.cancel()
@@ -180,8 +179,8 @@ class AssistantService : AccessibilityService() {
                         withContext(NonCancellable + Dispatchers.Main) {
                             cancelWatchdog()
                             processingStartedAt = 0L
-                            if (!handler.postDelayed({ isProcessing = false }, 500)) {
-                                isProcessing = false
+                            if (!handler.postDelayed({ isProcessing.set(false) }, 500)) {
+                                isProcessing.set(false)
                             }
                         }
                     }
@@ -189,7 +188,7 @@ class AssistantService : AccessibilityService() {
             }
             CommandType.AI -> {
                 if (cleanText.isEmpty()) return
-                isProcessing = true
+                if (!isProcessing.compareAndSet(false, true)) return
                 processingStartedAt = System.currentTimeMillis()
                 startWatchdog()
                 currentJob?.cancel()
@@ -211,9 +210,12 @@ class AssistantService : AccessibilityService() {
                 serviceScope.launch {
                     showToast("Custom provider not configured. Set endpoint and model in Settings.")
                 }
-                isProcessing = false
+                isProcessing.set(false)
                 return
             }
+        } else if (providerType == "groq") {
+            model = prefs.getString("groq_model", "llama-3.3-70b-versatile") ?: "llama-3.3-70b-versatile"
+            endpoint = "https://api.groq.com/openai/v1"
         } else {
             model = prefs.getString("model", "gemini-2.5-flash-lite") ?: "gemini-2.5-flash-lite"
             endpoint = ""
@@ -238,26 +240,23 @@ class AssistantService : AccessibilityService() {
                             spinnerJob = startInlineSpinner(source, originalText)
                         }
 
-                        val result = if (providerType == "custom") {
-                            openAIClient.generate(command.prompt, text, key, model, temperature, endpoint, useStructuredOutput)
+                        val isGroq = providerType == "groq"
+                        val result = if (isGroq || providerType == "custom") {
+                            openAIClient.generate(command.prompt, text, key, model, temperature, endpoint,
+                                useStructuredOutput = false,
+                                useJsonObjectMode = isGroq && useStructuredOutput)
                         } else {
                             client.generate(command.prompt, text, key, model, temperature, useStructuredOutput)
                         }
 
                         if (result.isSuccess) {
-                            spinnerJob?.cancel()
+                            spinnerJob.cancel()
                             spinnerJob = null
                             lastOriginalText = originalText
                             replaceText(source, result.getOrThrow())
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                            if (providerType == "custom") {
-                                if (openAIClient.structuredOutputFailed) {
-                                    prefs.edit().putBoolean("structured_output_disabled", true).apply()
-                                }
-                            } else {
-                                if (client.structuredOutputFailed) {
-                                    prefs.edit().putBoolean("structured_output_disabled", true).apply()
-                                }
+                            if (providerType == "gemini" && client.structuredOutputFailed) {
+                                prefs.edit().putBoolean("structured_output_disabled", true).apply()
                             }
                             succeeded = true
                             break
@@ -315,8 +314,8 @@ class AssistantService : AccessibilityService() {
                     cancelWatchdog()
                     spinnerJob?.cancel()
                     processingStartedAt = 0L
-                    if (!handler.postDelayed({ isProcessing = false }, 500)) {
-                        isProcessing = false
+                    if (!handler.postDelayed({ isProcessing.set(false) }, 500)) {
+                        isProcessing.set(false)
                     }
                 }
             }
@@ -344,8 +343,8 @@ class AssistantService : AccessibilityService() {
                 withContext(NonCancellable + Dispatchers.Main) {
                     cancelWatchdog()
                     processingStartedAt = 0L
-                    if (!handler.postDelayed({ isProcessing = false }, 500)) {
-                        isProcessing = false
+                    if (!handler.postDelayed({ isProcessing.set(false) }, 500)) {
+                        isProcessing.set(false)
                     }
                 }
             }
@@ -392,10 +391,13 @@ class AssistantService : AccessibilityService() {
         source.performAction(AccessibilityNodeInfo.ACTION_PASTE)
 
         handler.postDelayed({
-            if (oldClip != null) {
-                clipboard.setPrimaryClip(oldClip)
-            } else {
-                clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
+            val current = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
+            if (current == newText) {
+                if (oldClip != null) {
+                    clipboard.setPrimaryClip(oldClip)
+                } else {
+                    clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
+                }
             }
         }, 500)
     }
@@ -581,7 +583,7 @@ class AssistantService : AccessibilityService() {
     }
 
     override fun onInterrupt() {
-        isProcessing = false
+        isProcessing.set(false)
         processingStartedAt = 0L
         currentJob?.cancel()
         handler.removeCallbacksAndMessages(null)
