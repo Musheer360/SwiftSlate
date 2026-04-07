@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SwiftSlate</string>
     <string name="accessibility_service_label">SwiftSlate Assistant</string>
-    <string name="accessibility_service_desc">Provides system-wide AI text replacements using Gemini when trigger commands are typed.</string>
+    <string name="accessibility_service_desc">Provides system-wide AI text replacements when trigger commands are typed.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Dashboard</string>
@@ -14,6 +14,8 @@
     <string name="dashboard_add_key_hint">Add an API key to get started.</string>
     <string name="dashboard_how_to_use_title">How to use</string>
     <string name="dashboard_how_to_use_body">1. Enable the Accessibility Service.\n2. Add at least one API key.\n3. Type anywhere in Android, ending with a trigger like \'%1$sfix\' or \'%1$scasual\'.\n4. Wait a moment for the text to be magically replaced!</string>
+    <string name="dashboard_version">Version %1$s</string>
+    <string name="dashboard_github">GitHub ↗</string>
 
     <!-- Dashboard Stats -->
     <string name="dashboard_stats_title">Statistics</string>
@@ -31,6 +33,7 @@
     <string name="keys_valid_added">Valid key added!</string>
     <string name="keys_already_added">This key has already been added</string>
     <string name="keys_validation_failed">Validation failed</string>
+    <string name="keys_get_api_key">Get your %1$s API key ↗</string>
 
     <!-- Commands -->
     <string name="commands_title">Commands</string>
@@ -39,14 +42,22 @@
     <string name="commands_prompt_label">Prompt (e.g., Rewrite as a poem)</string>
     <string name="commands_add_command">Add Command</string>
     <string name="commands_delete_command">Delete Command</string>
+    <string name="commands_edit_command">Edit Command</string>
+    <string name="commands_save_command">Save Command</string>
+    <string name="commands_cancel">Cancel</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Text Replacer</string>
+    <string name="commands_replacement_label">Replacement Text (e.g., myemail@example.com)</string>
     <string name="commands_built_in">Built-in</string>
     <string name="commands_error_prefix">Trigger must start with \'%1$s\'</string>
     <string name="commands_error_duplicate">A command with this trigger already exists</string>
+    <string name="commands_error_empty_trigger">Trigger must have a name after the prefix</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_provider_title">Provider</string>
     <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
     <string name="settings_provider_custom">Custom (OpenAI Compatible)</string>
     <string name="settings_model_title">Model</string>
     <string name="settings_endpoint_title">Endpoint</string>
@@ -59,6 +70,8 @@
     <string name="settings_prefix_error_length">Must be exactly 1 character</string>
     <string name="settings_prefix_error_whitespace">Cannot be whitespace</string>
     <string name="settings_prefix_error_alphanumeric">Cannot be a letter or digit</string>
+    <string name="settings_endpoint_error_scheme">Must start with https://</string>
+    <string name="settings_endpoint_error_spaces">URL cannot contain spaces</string>
     <string name="settings_builtin_lang_title">Language of Built-in Definitions</string>
     <string name="settings_builtin_lang_auto">System Default</string>
     <string name="settings_builtin_lang_en">English</string>
@@ -70,6 +83,15 @@
     <string name="settings_builtin_lang_zh">Chinese</string>
     <string name="settings_builtin_lang_ja">Japanese</string>
     <string name="settings_builtin_lang_ru">Russian</string>
+
+    <!-- Backup -->
+    <string name="backup_title">Backup &amp; Restore</string>
+    <string name="backup_desc">Export or import your custom commands as a JSON file.</string>
+    <string name="backup_export">Export</string>
+    <string name="backup_import">Import</string>
+    <string name="backup_export_success">Commands exported successfully</string>
+    <string name="backup_import_success">Commands imported successfully</string>
+    <string name="backup_import_error">Invalid backup file</string>
 
     <!-- Spinner Styles -->
     <string name="settings_spinner_style_title">Loading Indicator Style</string>

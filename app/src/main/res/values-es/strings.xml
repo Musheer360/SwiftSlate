@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">Asistente SwiftSlate</string>
+    <string name="accessibility_service_desc">Proporciona reemplazos de texto con IA en todo el sistema usando Gemini al escribir comandos de activación.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Panel</string>
+    <string name="service_status_title">Estado del servicio</string>
+    <string name="service_status_active">Activo</string>
+    <string name="service_status_inactive">Inactivo</string>
+    <string name="service_enable">Activar</string>
+    <string name="dashboard_api_keys_title">Claves API</string>
+    <string name="dashboard_keys_configured">%1$d claves configuradas</string>
+    <string name="dashboard_add_key_hint">Añade una clave API para comenzar.</string>
+    <string name="dashboard_how_to_use_title">Cómo usar</string>
+    <string name="dashboard_how_to_use_body">1. Activa el servicio de accesibilidad.\n2. Añade al menos una clave API.\n3. Escribe en cualquier lugar de Android, terminando con un comando como \'%1$sfix\' o \'%1$scasual\'.\n4. ¡Espera un momento y el texto se reemplazará automáticamente!</string>
+    <string name="dashboard_version">Versión %1$s</string>
+    <string name="dashboard_github">GitHub ↗</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Claves API</string>
+    <string name="keys_api_key_label">Clave API</string>
+    <string name="keys_testing">Verificando…</string>
+    <string name="keys_add_key">Añadir clave</string>
+    <string name="keys_delete_key">Eliminar clave</string>
+    <string name="keys_valid_added">¡Clave válida añadida!</string>
+    <string name="keys_already_added">Esta clave ya fue añadida</string>
+    <string name="keys_validation_failed">Error de validación</string>
+    <string name="keys_get_api_key">Obtén tu clave API de %1$s ↗</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Comandos</string>
+    <string name="commands_add_custom_title">Añadir comando personalizado</string>
+    <string name="commands_trigger_label">Activador (p. ej., %1$scode)</string>
+    <string name="commands_prompt_label">Instrucción (p. ej., Reescribir como poema)</string>
+    <string name="commands_add_command">Añadir comando</string>
+    <string name="commands_delete_command">Eliminar comando</string>
+    <string name="commands_edit_command">Editar comando</string>
+    <string name="commands_save_command">Guardar comando</string>
+    <string name="commands_cancel">Cancelar</string>
+    <string name="commands_type_ai">IA</string>
+    <string name="commands_type_replacer">Reemplazo de texto</string>
+    <string name="commands_replacement_label">Texto de reemplazo (p. ej., myemail@example.com)</string>
+    <string name="commands_built_in">Integrado</string>
+    <string name="commands_error_prefix">El activador debe comenzar con \'%1$s\'</string>
+    <string name="commands_error_duplicate">Ya existe un comando con este activador</string>
+    <string name="commands_error_empty_trigger">El activador debe tener un nombre después del prefijo</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_provider_title">Proveedor</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Personalizado (compatible con OpenAI)</string>
+    <string name="settings_model_title">Modelo</string>
+    <string name="settings_endpoint_title">Endpoint</string>
+    <string name="settings_endpoint_desc">URL base de la API compatible con OpenAI</string>
+    <string name="settings_model_desc">Identificador del modelo de tu proveedor</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, etc.</string>
+    <string name="settings_trigger_prefix_title">Prefijo de activación</string>
+    <string name="settings_trigger_prefix_desc">Símbolo antes del nombre del comando (p. ej., %1$sfix). Debe ser un solo carácter no alfanumérico.</string>
+    <string name="settings_prefix_error_length">Debe ser exactamente 1 carácter</string>
+    <string name="settings_prefix_error_whitespace">No puede ser un espacio en blanco</string>
+    <string name="settings_prefix_error_alphanumeric">No puede ser una letra o un dígito</string>
+    <string name="settings_endpoint_error_scheme">Debe comenzar con https://</string>
+    <string name="settings_endpoint_error_spaces">La URL no puede contener espacios</string>
+
+    <!-- Backup -->
+    <string name="backup_title">Copia de seguridad &amp; Restauración</string>
+    <string name="backup_desc">Exporta o importa tus comandos personalizados como archivo JSON.</string>
+    <string name="backup_export">Exportar</string>
+    <string name="backup_import">Importar</string>
+    <string name="backup_export_success">Comandos exportados correctamente</string>
+    <string name="backup_import_success">Comandos importados correctamente</string>
+    <string name="backup_import_error">Archivo de copia de seguridad no válido</string>
+</resources>
