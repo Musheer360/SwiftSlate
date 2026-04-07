@@ -100,6 +100,7 @@ fun SlateItemCard(
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
             content = content
         )
     }

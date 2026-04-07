@@ -62,7 +62,7 @@ fun SwiftSlateMainScreen() {
             NavigationBar(
                 containerColor = MaterialTheme.colorScheme.background,
                 tonalElevation = 0.dp,
-                modifier = Modifier.height(56.dp)
+                modifier = Modifier.height(64.dp)
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -107,7 +107,7 @@ fun SwiftSlateMainScreen() {
                 slideIntoContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
-                    tween(250)
+                    tween(200)
                 )
             },
             exitTransition = {
@@ -116,7 +116,25 @@ fun SwiftSlateMainScreen() {
                 slideOutOfContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
-                    tween(250)
+                    tween(200)
+                )
+            },
+            popEnterTransition = {
+                val from = tabOrder[initialState.destination.route] ?: 0
+                val to = tabOrder[targetState.destination.route] ?: 0
+                slideIntoContainer(
+                    if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
+                    else AnimatedContentTransitionScope.SlideDirection.Right,
+                    tween(200)
+                )
+            },
+            popExitTransition = {
+                val from = tabOrder[initialState.destination.route] ?: 0
+                val to = tabOrder[targetState.destination.route] ?: 0
+                slideOutOfContainer(
+                    if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
+                    else AnimatedContentTransitionScope.SlideDirection.Right,
+                    tween(200)
                 )
             }
         ) {

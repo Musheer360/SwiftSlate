@@ -126,6 +126,7 @@ fun DashboardScreen() {
                 }
             }
 
+            Spacer(modifier = Modifier.height(12.dp))
             SlateDivider()
             Spacer(modifier = Modifier.height(12.dp))
 

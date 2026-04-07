@@ -59,7 +59,7 @@
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, आदि।</string>
     <string name="settings_trigger_prefix_title">ट्रिगर प्रीफ़िक्स</string>
-    <string name="settings_trigger_prefix_desc">कमांड नाम से पहले का चिह्न (जैसे, %1$sfix)। एक गैर-अक्षरांकीय वर्ण होना चाहिए।</string>
+    <string name="settings_trigger_prefix_desc">कमांड नाम से पहले का चिह्न (जैसे, %1$sfix)।</string>
     <string name="settings_prefix_error_length">बिल्कुल 1 वर्ण होना चाहिए</string>
     <string name="settings_prefix_error_whitespace">रिक्त स्थान नहीं हो सकता</string>
     <string name="settings_prefix_error_alphanumeric">अक्षर या अंक नहीं हो सकता</string>

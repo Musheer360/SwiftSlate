@@ -59,7 +59,7 @@
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, etc.</string>
     <string name="settings_trigger_prefix_title">Prefijo de activación</string>
-    <string name="settings_trigger_prefix_desc">Símbolo antes del nombre del comando (p. ej., %1$sfix). Debe ser un solo carácter no alfanumérico.</string>
+    <string name="settings_trigger_prefix_desc">Símbolo antes del nombre del comando (p. ej., %1$sfix).</string>
     <string name="settings_prefix_error_length">Debe ser exactamente 1 carácter</string>
     <string name="settings_prefix_error_whitespace">No puede ser un espacio en blanco</string>
     <string name="settings_prefix_error_alphanumeric">No puede ser una letra o un dígito</string>

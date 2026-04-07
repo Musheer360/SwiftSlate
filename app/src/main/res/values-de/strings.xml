@@ -59,7 +59,7 @@
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o, claude-3-haiku usw.</string>
     <string name="settings_trigger_prefix_title">Trigger-Präfix</string>
-    <string name="settings_trigger_prefix_desc">Symbol vor Befehlsnamen (z. B. %1$sfix). Muss ein einzelnes nicht-alphanumerisches Zeichen sein.</string>
+    <string name="settings_trigger_prefix_desc">Symbol vor Befehlsnamen (z. B. %1$sfix).</string>
     <string name="settings_prefix_error_length">Muss genau 1 Zeichen lang sein</string>
     <string name="settings_prefix_error_whitespace">Darf kein Leerzeichen sein</string>
     <string name="settings_prefix_error_alphanumeric">Darf kein Buchstabe oder eine Ziffer sein</string>

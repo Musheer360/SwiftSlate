@@ -59,7 +59,7 @@
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o、claude-3-haiku 等</string>
     <string name="settings_trigger_prefix_title">触发前缀</string>
-    <string name="settings_trigger_prefix_desc">命令名称前的符号（例如 %1$sfix）。必须是单个非字母数字字符。</string>
+    <string name="settings_trigger_prefix_desc">命令名称前的符号（例如 %1$sfix）。</string>
     <string name="settings_prefix_error_length">必须恰好为 1 个字符</string>
     <string name="settings_prefix_error_whitespace">不能为空格</string>
     <string name="settings_prefix_error_alphanumeric">不能为字母或数字</string>
