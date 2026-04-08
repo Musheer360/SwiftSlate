@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -18,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -78,7 +78,7 @@ fun SwiftSlateMainScreen() {
                         selected = currentRoute == screen.route,
                         onClick = {
                             val now = System.currentTimeMillis()
-                            if (now - lastNavTime > 300) {
+                            if (now - lastNavTime > 150) {
                                 lastNavTime = now
                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                 navController.navigate(screen.route) {
@@ -99,7 +99,6 @@ fun SwiftSlateMainScreen() {
         }
     ) { innerPadding ->
         val tabOrder = mapOf("dashboard" to 0, "keys" to 1, "commands" to 2, "settings" to 3)
-        val slideAnim = spring<IntOffset>(dampingRatio = 0.9f, stiffness = 500f)
         NavHost(
             navController = navController,
             startDestination = Screen.Dashboard.route,
@@ -110,7 +109,7 @@ fun SwiftSlateMainScreen() {
                 slideIntoContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
-                    slideAnim
+                    tween(250, easing = FastOutSlowInEasing)
                 )
             },
             exitTransition = {
@@ -119,7 +118,7 @@ fun SwiftSlateMainScreen() {
                 slideOutOfContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
-                    slideAnim
+                    tween(250, easing = FastOutSlowInEasing)
                 )
             },
             popEnterTransition = {
@@ -128,7 +127,7 @@ fun SwiftSlateMainScreen() {
                 slideIntoContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
-                    slideAnim
+                    tween(250, easing = FastOutSlowInEasing)
                 )
             },
             popExitTransition = {
@@ -137,7 +136,7 @@ fun SwiftSlateMainScreen() {
                 slideOutOfContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
-                    slideAnim
+                    tween(250, easing = FastOutSlowInEasing)
                 )
             }
         ) {
