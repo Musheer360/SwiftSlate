@@ -137,7 +137,6 @@ class OpenAICompatibleClient {
                     })
                 })
                 put("temperature", temperature)
-                put("max_tokens", 2048)
                 if (withStructured) {
                     put("response_format", JSONObject().apply {
                         put("type", "json_schema")
@@ -173,6 +172,12 @@ class OpenAICompatibleClient {
                 val choices = jsonResponse.optJSONArray("choices")
                 if (choices != null && choices.length() > 0) {
                     val choice = choices.getJSONObject(0)
+
+                    val finishReason = choice.optString("finish_reason", "")
+                    if (finishReason == "content_filter") {
+                        return Result.failure(Exception("Response blocked by content filter"))
+                    }
+
                     val message = choice.optJSONObject("message")
                     var resultText = message?.optString("content", "") ?: ""
                     if (resultText.isBlank()) {
@@ -180,13 +185,15 @@ class OpenAICompatibleClient {
                     }
 
                     if (withStructured || withJsonObject) {
-                        val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
+                        val (extracted, _) = ApiClientUtils.tryExtractStructuredText(resultText)
                         if (extracted != null) return Result.success(extracted)
-                        if (extracted == null && !parseFailed) return Result.failure(Exception("Model returned empty response"))
                         if (withStructured) structuredOutputFailed = true
                     }
 
                     resultText = ApiClientUtils.stripMarkdownFences(resultText)
+                    if (finishReason == "length") {
+                        resultText += "\n\n[Note: Response may be truncated]"
+                    }
                     Result.success(resultText)
                 } else {
                     Result.failure(Exception("No choices found in response"))

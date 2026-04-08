@@ -210,6 +210,15 @@ class AssistantService : AccessibilityService() {
 
     private fun processCommand(source: AccessibilityNodeInfo, text: String, command: Command) {
         val prefs = applicationContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+        if (!keyManager.keystoreAvailable) {
+            serviceScope.launch { showToast("Secure key storage unavailable. Please reinstall the app.") }
+            cancelWatchdog()
+            processingStartedAt = 0L
+            isProcessing.set(false)
+            return
+        }
+
         val providerType = prefs.getString("provider_type", "gemini") ?: "gemini"
         val model: String
         val endpoint: String
@@ -234,7 +243,10 @@ class AssistantService : AccessibilityService() {
             endpoint = ""
         }
         val temperature = DEFAULT_TEMPERATURE
-        val useStructuredOutput = !prefs.getBoolean("structured_output_disabled", false)
+        val useStructuredOutput = run {
+            val disabledAt = prefs.getLong("structured_output_disabled_at", 0L)
+            System.currentTimeMillis() - disabledAt > 86_400_000L // re-try after 24h
+        }
 
         currentJob = serviceScope.launch {
             val originalText = text
@@ -268,8 +280,9 @@ class AssistantService : AccessibilityService() {
                             lastOriginalText = originalText
                             replaceText(source, result.getOrThrow())
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                            if (providerType == "gemini" && client.structuredOutputFailed) {
-                                prefs.edit().putBoolean("structured_output_disabled", true).apply()
+                            if ((providerType == "gemini" && client.structuredOutputFailed) ||
+                                (providerType in setOf("custom", "groq") && openAIClient.structuredOutputFailed)) {
+                                prefs.edit().putLong("structured_output_disabled_at", System.currentTimeMillis()).apply()
                             }
                             succeeded = true
                             break

@@ -30,6 +30,9 @@ class KeyManager(context: Context) {
     private val roundRobinIndex = AtomicInteger(0)
     @Volatile
     private var cachedKeys: List<String>? = null
+    @Volatile
+    var keystoreAvailable: Boolean = true
+        private set
 
     init {
         try {
@@ -50,6 +53,7 @@ class KeyManager(context: Context) {
             }
         } catch (e: Exception) {
             android.util.Log.e("KeyManager", "Keystore init failed", e)
+            keystoreAvailable = false
         }
     }
 
@@ -115,31 +119,37 @@ class KeyManager(context: Context) {
     }
 
     @Synchronized
-    private fun saveKeys(keys: List<String>) {
+    private fun saveKeys(keys: List<String>): Boolean {
         val arr = JSONArray(keys)
-        try {
+        return try {
             prefs.edit().putString(PREF_KEY_ARRAY, encrypt(arr.toString())).apply()
             cachedKeys = keys
+            true
         } catch (_: Exception) {
             cachedKeys = null
+            false
         }
     }
 
-    fun addKey(key: String) {
+    @Synchronized
+    fun addKey(key: String): Boolean {
         val keys = getKeys().toMutableList()
         if (!keys.contains(key)) {
             keys.add(key)
-            saveKeys(keys)
+            if (!saveKeys(keys)) return false
         }
         invalidKeys.remove(key)
+        return true
     }
 
-    fun removeKey(key: String) {
+    @Synchronized
+    fun removeKey(key: String): Boolean {
         val keys = getKeys().toMutableList()
         keys.remove(key)
-        saveKeys(keys)
+        val saved = saveKeys(keys)
         rateLimitedKeys.remove(key)
         invalidKeys.remove(key)
+        return saved
     }
 
     fun getNextKey(): String? {

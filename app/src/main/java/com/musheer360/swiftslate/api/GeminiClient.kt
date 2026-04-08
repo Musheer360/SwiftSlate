@@ -131,7 +131,6 @@ class GeminiClient {
                 })
                 put("generationConfig", JSONObject().apply {
                     put("temperature", temperature)
-                    put("maxOutputTokens", 2048)
                     if (withStructured) {
                         put("responseMimeType", "application/json")
                         put("responseJsonSchema", JSONObject().apply {
@@ -159,6 +158,12 @@ class GeminiClient {
                 val candidates = jsonResponse.optJSONArray("candidates")
                 if (candidates != null && candidates.length() > 0) {
                     val candidate = candidates.getJSONObject(0)
+
+                    val finishReason = candidate.optString("finishReason", "")
+                    if (finishReason in setOf("SAFETY", "RECITATION", "PROHIBITED_CONTENT", "SPII", "BLOCKLIST")) {
+                        return Result.failure(Exception("Response blocked by safety filters"))
+                    }
+
                     val content = candidate.optJSONObject("content")
                     val parts = content?.optJSONArray("parts")
                     if (parts != null && parts.length() > 0) {
@@ -168,13 +173,15 @@ class GeminiClient {
                         }
 
                         if (withStructured) {
-                            val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
+                            val (extracted, _) = ApiClientUtils.tryExtractStructuredText(resultText)
                             if (extracted != null) return Result.success(extracted)
-                            if (extracted == null && !parseFailed) return Result.failure(Exception("Model returned empty response"))
                             structuredOutputFailed = true
                         }
 
                         resultText = ApiClientUtils.stripMarkdownFences(resultText)
+                        if (finishReason == "MAX_TOKENS") {
+                            resultText += "\n\n[Note: Response may be truncated]"
+                        }
                         Result.success(resultText)
                     } else {
                         Result.failure(Exception("No content found in response"))

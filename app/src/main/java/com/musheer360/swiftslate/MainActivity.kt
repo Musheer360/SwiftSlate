@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -29,6 +30,8 @@ import com.musheer360.swiftslate.ui.DashboardScreen
 import com.musheer360.swiftslate.ui.KeysScreen
 import com.musheer360.swiftslate.ui.SettingsScreen
 import com.musheer360.swiftslate.ui.theme.SwiftSlateTheme
+
+private val TAB_ORDER = mapOf("dashboard" to 0, "keys" to 1, "commands" to 2, "settings" to 3)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +53,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
 }
 
 @Composable
-fun SwiftSlateMainScreen() {
+fun SwiftSlateMainScreen(vm: SwiftSlateViewModel = viewModel()) {
     val navController = rememberNavController()
     val items = listOf(Screen.Dashboard, Screen.Keys, Screen.Commands, Screen.Settings)
     val haptic = LocalHapticFeedback.current
@@ -98,14 +101,13 @@ fun SwiftSlateMainScreen() {
             }
         }
     ) { innerPadding ->
-        val tabOrder = mapOf("dashboard" to 0, "keys" to 1, "commands" to 2, "settings" to 3)
         NavHost(
             navController = navController,
             startDestination = Screen.Dashboard.route,
             modifier = Modifier.padding(innerPadding),
             enterTransition = {
-                val from = tabOrder[initialState.destination.route] ?: 0
-                val to = tabOrder[targetState.destination.route] ?: 0
+                val from = TAB_ORDER[initialState.destination.route] ?: 0
+                val to = TAB_ORDER[targetState.destination.route] ?: 0
                 slideIntoContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
@@ -113,8 +115,8 @@ fun SwiftSlateMainScreen() {
                 )
             },
             exitTransition = {
-                val from = tabOrder[initialState.destination.route] ?: 0
-                val to = tabOrder[targetState.destination.route] ?: 0
+                val from = TAB_ORDER[initialState.destination.route] ?: 0
+                val to = TAB_ORDER[targetState.destination.route] ?: 0
                 slideOutOfContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
@@ -122,8 +124,8 @@ fun SwiftSlateMainScreen() {
                 )
             },
             popEnterTransition = {
-                val from = tabOrder[initialState.destination.route] ?: 0
-                val to = tabOrder[targetState.destination.route] ?: 0
+                val from = TAB_ORDER[initialState.destination.route] ?: 0
+                val to = TAB_ORDER[targetState.destination.route] ?: 0
                 slideIntoContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
@@ -131,8 +133,8 @@ fun SwiftSlateMainScreen() {
                 )
             },
             popExitTransition = {
-                val from = tabOrder[initialState.destination.route] ?: 0
-                val to = tabOrder[targetState.destination.route] ?: 0
+                val from = TAB_ORDER[initialState.destination.route] ?: 0
+                val to = TAB_ORDER[targetState.destination.route] ?: 0
                 slideOutOfContainer(
                     if (to > from) AnimatedContentTransitionScope.SlideDirection.Left
                     else AnimatedContentTransitionScope.SlideDirection.Right,
@@ -140,10 +142,10 @@ fun SwiftSlateMainScreen() {
                 )
             }
         ) {
-            composable(Screen.Dashboard.route) { DashboardScreen() }
-            composable(Screen.Keys.route) { KeysScreen() }
-            composable(Screen.Commands.route) { CommandsScreen() }
-            composable(Screen.Settings.route) { SettingsScreen() }
+            composable(Screen.Dashboard.route) { DashboardScreen(vm.keyManager, vm.commandManager) }
+            composable(Screen.Keys.route) { KeysScreen(vm.keyManager, vm.prefs) }
+            composable(Screen.Commands.route) { CommandsScreen(vm.commandManager) }
+            composable(Screen.Settings.route) { SettingsScreen(vm.commandManager, vm.prefs) }
         }
     }
 }

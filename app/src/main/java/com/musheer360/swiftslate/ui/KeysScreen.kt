@@ -1,6 +1,6 @@
 package com.musheer360.swiftslate.ui
 
-import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,11 +10,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -29,38 +29,46 @@ import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SectionHeader
 import com.musheer360.swiftslate.ui.components.SlateCard
-import com.musheer360.swiftslate.ui.components.SlateDivider
 import com.musheer360.swiftslate.ui.components.SlateItemCard
 import com.musheer360.swiftslate.ui.components.SlateTextField
 import kotlinx.coroutines.launch
 
 @Composable
-fun KeysScreen() {
-    val context = LocalContext.current
+fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
     val haptic = LocalHapticFeedback.current
     val uriHandler = LocalUriHandler.current
-    val keyManager = remember { KeyManager(context) }
     var keys by remember { mutableStateOf(keyManager.getKeys()) }
-    var newKey by remember { mutableStateOf("") }
+    var newKey by rememberSaveable { mutableStateOf("") }
     var isTesting by remember { mutableStateOf(false) }
     var testResult by remember { mutableStateOf<String?>(null) }
     var testSuccess by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val geminiClient = remember { GeminiClient() }
     val openAIClient = remember { OpenAICompatibleClient() }
-    val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
 
     val validAddedMsg = stringResource(R.string.keys_valid_added)
     val alreadyAddedMsg = stringResource(R.string.keys_already_added)
     val validationFailedMsg = stringResource(R.string.keys_validation_failed)
+    val keystoreErrorMsg = stringResource(R.string.keys_keystore_error)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .graphicsLayer { }
+            .graphicsLayer { } // Creates a hardware layer for smooth NavHost slide animations
             .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         ScreenTitle(stringResource(R.string.keys_title))
+
+        if (!keyManager.keystoreAvailable) {
+            SlateCard {
+                Text(
+                    text = keystoreErrorMsg,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 13.sp
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+        }
 
         SectionHeader(stringResource(R.string.keys_api_key_label))
         SlateCard {
@@ -99,7 +107,11 @@ fun KeysScreen() {
                             }
                             isTesting = false
                             if (result.isSuccess) {
-                                keyManager.addKey(trimmedKey)
+                                if (!keyManager.addKey(trimmedKey)) {
+                                    testResult = keystoreErrorMsg
+                                    testSuccess = false
+                                    return@launch
+                                }
                                 keys = keyManager.getKeys()
                                 newKey = ""
                                 testResult = validAddedMsg
@@ -111,7 +123,7 @@ fun KeysScreen() {
                         }
                     }
                 },
-                enabled = newKey.isNotBlank() && !isTesting,
+                enabled = newKey.isNotBlank() && !isTesting && keyManager.keystoreAvailable,
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
             ) {
@@ -155,7 +167,7 @@ fun KeysScreen() {
                     itemsIndexed(keys, key = { _, key -> key }) { index, key ->
                         SlateItemCard {
                             Text(
-                                text = "••••••••" + key.takeLast(6),
+                                text = "••••••••" + key.takeLast(4),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 15.sp,
                                 color = MaterialTheme.colorScheme.onSurface,
@@ -164,8 +176,12 @@ fun KeysScreen() {
                             IconButton(
                                 onClick = {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    keyManager.removeKey(key)
-                                    keys = keyManager.getKeys()
+                                    if (keyManager.removeKey(key)) {
+                                        keys = keyManager.getKeys()
+                                    } else {
+                                        testResult = keystoreErrorMsg
+                                        testSuccess = false
+                                    }
                                 },
                                 modifier = Modifier.size(36.dp)
                             ) {

@@ -26,6 +26,7 @@
     <string name="keys_valid_added">Valid key added!</string>
     <string name="keys_already_added">This key has already been added</string>
     <string name="keys_validation_failed">Validation failed</string>
+    <string name="keys_keystore_error">Secure key storage is unavailable on this device. Keys cannot be saved.</string>
     <string name="keys_get_api_key">Get your %1$s API key ↗</string>
 
     <!-- Commands -->
@@ -74,4 +75,6 @@
     <string name="backup_export_success">Commands exported successfully</string>
     <string name="backup_import_success">Commands imported successfully</string>
     <string name="backup_import_error">Invalid backup file</string>
+    <string name="backup_import_confirm">This will replace all your existing custom commands. Continue?</string>
+    <string name="backup_import_cancel">Cancel</string>
 </resources>

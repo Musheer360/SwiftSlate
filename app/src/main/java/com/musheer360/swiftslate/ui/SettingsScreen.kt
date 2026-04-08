@@ -1,6 +1,6 @@
 package com.musheer360.swiftslate.ui
 
-import android.content.Context
+import android.content.SharedPreferences
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -20,9 +21,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SectionHeader
@@ -31,10 +34,9 @@ import com.musheer360.swiftslate.ui.components.SlateTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
-    val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
 
     val scope = rememberCoroutineScope()
     var saveEndpointJob by remember { mutableStateOf<Job?>(null) }
@@ -51,11 +53,10 @@ fun SettingsScreen() {
     var groqModelExpanded by remember { mutableStateOf(false) }
     val groqModels = listOf("llama-3.3-70b-versatile", "llama-3.1-8b-instant", "openai/gpt-oss-120b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct")
 
-    var customEndpoint by remember { mutableStateOf(prefs.getString("custom_endpoint", "") ?: "") }
-    var customModel by remember { mutableStateOf(prefs.getString("custom_model", "") ?: "") }
+    var customEndpoint by rememberSaveable { mutableStateOf(prefs.getString("custom_endpoint", "") ?: "") }
+    var customModel by rememberSaveable { mutableStateOf(prefs.getString("custom_model", "") ?: "") }
     var endpointError by remember { mutableStateOf<String?>(null) }
 
-    val commandManager = remember { CommandManager(context) }
     var triggerPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
     var prefixError by remember { mutableStateOf<String?>(null) }
 
@@ -67,42 +68,51 @@ fun SettingsScreen() {
 
     var backupMessage by remember { mutableStateOf<String?>(null) }
     var backupSuccess by remember { mutableStateOf(false) }
+    var showImportConfirm by remember { mutableStateOf(false) }
     val exportSuccessMsg = stringResource(R.string.backup_export_success)
     val importSuccessMsg = stringResource(R.string.backup_import_success)
     val importErrorMsg = stringResource(R.string.backup_import_error)
 
     val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
         uri?.let {
-            try {
-                context.contentResolver.openOutputStream(it)?.use { os ->
-                    os.write(commandManager.exportCommands().toByteArray())
+            scope.launch {
+                try {
+                    withContext(Dispatchers.IO) {
+                        context.contentResolver.openOutputStream(it)?.use { os ->
+                            os.write(commandManager.exportCommands().toByteArray())
+                        }
+                    }
+                    backupMessage = exportSuccessMsg
+                    backupSuccess = true
+                } catch (_: Exception) {
+                    backupMessage = importErrorMsg
+                    backupSuccess = false
                 }
-                backupMessage = exportSuccessMsg
-                backupSuccess = true
-            } catch (_: Exception) {
-                backupMessage = importErrorMsg
-                backupSuccess = false
             }
         }
     }
 
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {
-            try {
-                val json = context.contentResolver.openInputStream(it)?.bufferedReader()?.use { reader ->
-                    val text = reader.readText()
-                    if (text.length > 1_000_000) null else text
-                } ?: ""
-                if (commandManager.importCommands(json)) {
-                    backupMessage = importSuccessMsg
-                    backupSuccess = true
-                } else {
+            scope.launch {
+                try {
+                    val json = withContext(Dispatchers.IO) {
+                        context.contentResolver.openInputStream(it)?.bufferedReader()?.use { reader ->
+                            val text = reader.readText()
+                            if (text.length > 1_000_000) null else text
+                        } ?: ""
+                    }
+                    if (commandManager.importCommands(json)) {
+                        backupMessage = importSuccessMsg
+                        backupSuccess = true
+                    } else {
+                        backupMessage = importErrorMsg
+                        backupSuccess = false
+                    }
+                } catch (_: Exception) {
                     backupMessage = importErrorMsg
                     backupSuccess = false
                 }
-            } catch (_: Exception) {
-                backupMessage = importErrorMsg
-                backupSuccess = false
             }
         }
     }
@@ -110,7 +120,7 @@ fun SettingsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .graphicsLayer { }
+            .graphicsLayer { } // Creates a hardware layer for smooth NavHost slide animations
             .padding(horizontal = 20.dp, vertical = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
@@ -143,7 +153,7 @@ fun SettingsScreen() {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = "gemini"
-                            prefs.edit().putString("provider_type", "gemini").remove("structured_output_disabled").apply()
+                            prefs.edit().putString("provider_type", "gemini").remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -152,7 +162,7 @@ fun SettingsScreen() {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = "groq"
-                            prefs.edit().putString("provider_type", "groq").remove("structured_output_disabled").apply()
+                            prefs.edit().putString("provider_type", "groq").remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -161,7 +171,7 @@ fun SettingsScreen() {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = "custom"
-                            prefs.edit().putString("provider_type", "custom").remove("structured_output_disabled").apply()
+                            prefs.edit().putString("provider_type", "custom").remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -196,7 +206,7 @@ fun SettingsScreen() {
                                 onClick = {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     selectedModel = model
-                                    prefs.edit().putString("model", model).remove("structured_output_disabled").apply()
+                                    prefs.edit().putString("model", model).remove("structured_output_disabled_at").apply()
                                     modelExpanded = false
                                 }
                             )
@@ -229,7 +239,7 @@ fun SettingsScreen() {
                                 onClick = {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     groqModel = model
-                                    prefs.edit().putString("groq_model", model).remove("structured_output_disabled").apply()
+                                    prefs.edit().putString("groq_model", model).remove("structured_output_disabled_at").apply()
                                     groqModelExpanded = false
                                 }
                             )
@@ -265,7 +275,7 @@ fun SettingsScreen() {
                             saveEndpointJob?.cancel()
                             saveEndpointJob = scope.launch {
                                 delay(500)
-                                prefs.edit().putString("custom_endpoint", it).remove("structured_output_disabled").apply()
+                                prefs.edit().putString("custom_endpoint", it).remove("structured_output_disabled_at").apply()
                             }
                         }
                     },
@@ -299,7 +309,7 @@ fun SettingsScreen() {
                         saveModelJob?.cancel()
                         saveModelJob = scope.launch {
                             delay(500)
-                            prefs.edit().putString("custom_model", it).remove("structured_output_disabled").apply()
+                            prefs.edit().putString("custom_model", it).remove("structured_output_disabled_at").apply()
                         }
                     },
                     placeholder = { Text(stringResource(R.string.settings_model_placeholder)) }
@@ -381,7 +391,7 @@ fun SettingsScreen() {
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         backupMessage = null
-                        importLauncher.launch(arrayOf("application/json"))
+                        showImportConfirm = true
                     },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.weight(1f).heightIn(min = 48.dp)
@@ -400,5 +410,24 @@ fun SettingsScreen() {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+    }
+
+    if (showImportConfirm) {
+        AlertDialog(
+            onDismissRequest = { showImportConfirm = false },
+            title = { Text(stringResource(R.string.backup_import)) },
+            text = { Text(stringResource(R.string.backup_import_confirm)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showImportConfirm = false
+                    importLauncher.launch(arrayOf("application/json"))
+                }) { Text(stringResource(R.string.backup_import)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showImportConfirm = false }) {
+                    Text(stringResource(R.string.backup_import_cancel))
+                }
+            }
+        )
     }
 }

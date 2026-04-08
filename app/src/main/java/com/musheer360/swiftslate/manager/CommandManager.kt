@@ -13,10 +13,13 @@ class CommandManager(context: Context) {
 
     @Volatile
     private var cachedCommands: List<Command>? = null
+    @Volatile
+    private var cacheTimestamp = 0L
 
     companion object {
         const val DEFAULT_PREFIX = "?"
         const val PREF_TRIGGER_PREFIX = "trigger_prefix"
+        private const val CACHE_TTL_MS = 2_000L
     }
 
     // Built-in command names (without prefix) and their prompts
@@ -36,12 +39,10 @@ class CommandManager(context: Context) {
         return settingsPrefs.getString(PREF_TRIGGER_PREFIX, DEFAULT_PREFIX) ?: DEFAULT_PREFIX
     }
 
-    fun setTriggerPrefix(newPrefix: String): Boolean {
+    @Synchronized fun setTriggerPrefix(newPrefix: String): Boolean {
         if (newPrefix.length != 1 || newPrefix[0].isLetterOrDigit() || newPrefix[0].isWhitespace()) return false
         val oldPrefix = getTriggerPrefix()
         if (oldPrefix == newPrefix) return true
-        // Write prefix FIRST (synchronous) so built-ins work immediately if process dies mid-migration
-        settingsPrefs.edit().putString(PREF_TRIGGER_PREFIX, newPrefix).commit()
         // Migrate custom command triggers
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
@@ -58,7 +59,11 @@ class CommandManager(context: Context) {
             newObj.put("type", obj.optString("type", CommandType.AI.name))
             newArr.put(newObj)
         }
+        // Write commands first, then prefix. If process dies between the two:
+        // - Commands have new prefix, settings has old → built-ins use old prefix, custom use new.
+        //   Custom commands won't match until next setTriggerPrefix call. Acceptable degradation.
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
+        settingsPrefs.edit().putString(PREF_TRIGGER_PREFIX, newPrefix).apply()
         cachedCommands = null
         return true
     }
@@ -68,8 +73,10 @@ class CommandManager(context: Context) {
         return builtInDefinitions.map { (name, prompt) -> Command("$prefix$name", prompt, true) }
     }
 
-    fun getCommands(): List<Command> {
-        cachedCommands?.let { return it }
+    @Synchronized fun getCommands(): List<Command> {
+        val now = System.currentTimeMillis()
+        val cached = cachedCommands
+        if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
         val customCommands = mutableListOf<Command>()
@@ -80,10 +87,11 @@ class CommandManager(context: Context) {
         }
         val result = (getBuiltInCommands() + customCommands).sortedByDescending { it.trigger.length }
         cachedCommands = result
+        cacheTimestamp = System.currentTimeMillis()
         return result
     }
 
-    fun addCustomCommand(command: Command) {
+    @Synchronized fun addCustomCommand(command: Command) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
         val newArr = JSONArray()
@@ -102,7 +110,7 @@ class CommandManager(context: Context) {
         cachedCommands = null
     }
 
-    fun removeCustomCommand(trigger: String) {
+    @Synchronized fun removeCustomCommand(trigger: String) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
         val newArr = JSONArray()
@@ -116,11 +124,11 @@ class CommandManager(context: Context) {
         cachedCommands = null
     }
 
-    fun exportCommands(): String {
+    @Synchronized fun exportCommands(): String {
         return prefs.getString("custom_commands", "[]") ?: "[]"
     }
 
-    fun importCommands(json: String): Boolean {
+    @Synchronized fun importCommands(json: String): Boolean {
         return try {
             val arr = JSONArray(json)
             if (arr.length() > 100) return false

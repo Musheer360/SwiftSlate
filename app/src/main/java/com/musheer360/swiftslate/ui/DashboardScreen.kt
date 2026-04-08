@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -37,7 +37,9 @@ import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SectionHeader
 import com.musheer360.swiftslate.ui.components.SlateCard
 import com.musheer360.swiftslate.ui.components.SlateDivider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 private fun checkServiceEnabled(context: Context): Boolean {
     val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
@@ -48,11 +50,9 @@ private fun checkServiceEnabled(context: Context): Boolean {
 }
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
-    val keyManager = remember { KeyManager(context) }
-    val commandManager = remember { CommandManager(context) }
     var isServiceEnabled by remember { mutableStateOf(checkServiceEnabled(context)) }
     var keyCount by remember { mutableIntStateOf(keyManager.getKeys().size) }
     var currentPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
@@ -62,10 +62,15 @@ fun DashboardScreen() {
     LaunchedEffect(lifecycleOwner) {
         val lifecycle = lifecycleOwner.lifecycle
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            delay(500) // Let navigation animation finish
             while (true) {
-                val newEnabled = checkServiceEnabled(context)
-                val newKeyCount = keyManager.getKeys().size
-                val newPrefix = commandManager.getTriggerPrefix()
+                val (newEnabled, newKeyCount, newPrefix) = withContext(Dispatchers.IO) {
+                    Triple(
+                        checkServiceEnabled(context),
+                        keyManager.getKeys().size,
+                        commandManager.getTriggerPrefix()
+                    )
+                }
                 if (newEnabled != isServiceEnabled) isServiceEnabled = newEnabled
                 if (newKeyCount != keyCount) keyCount = newKeyCount
                 if (newPrefix != currentPrefix) currentPrefix = newPrefix
@@ -77,7 +82,7 @@ fun DashboardScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .graphicsLayer { }
+            .graphicsLayer { } // Creates a hardware layer for smooth NavHost slide animations
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {

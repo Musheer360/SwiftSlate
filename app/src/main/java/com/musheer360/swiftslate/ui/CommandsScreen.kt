@@ -14,10 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,16 +26,13 @@ import com.musheer360.swiftslate.model.CommandType
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SectionHeader
 import com.musheer360.swiftslate.ui.components.SlateCard
-import com.musheer360.swiftslate.ui.components.SlateDivider
 import com.musheer360.swiftslate.ui.components.SlateItemCard
 import com.musheer360.swiftslate.ui.components.SlateTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommandsScreen() {
-    val context = LocalContext.current
+fun CommandsScreen(commandManager: CommandManager) {
     val haptic = LocalHapticFeedback.current
-    val commandManager = remember { CommandManager(context) }
     var commands by remember { mutableStateOf(commandManager.getCommands()) }
     // Display order: built-in first, then custom in insertion order
     val displayCommands by remember(commands) {
@@ -56,7 +51,7 @@ fun CommandsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .graphicsLayer { }
+            .graphicsLayer { } // Creates a hardware layer for smooth NavHost slide animations
             .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         ScreenTitle(stringResource(R.string.commands_title))
