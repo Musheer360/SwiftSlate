@@ -371,7 +371,7 @@ fun SettingsScreen() {
                         exportLauncher.launch("swiftslate-commands.json")
                     },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).defaultMinSize(minHeight = 48.dp)
                 ) {
                     Text(stringResource(R.string.backup_export))
                 }
@@ -382,7 +382,7 @@ fun SettingsScreen() {
                         importLauncher.launch(arrayOf("application/json"))
                     },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).defaultMinSize(minHeight = 48.dp)
                 ) {
                     Text(stringResource(R.string.backup_import))
                 }

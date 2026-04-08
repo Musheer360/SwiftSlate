@@ -111,7 +111,7 @@ fun KeysScreen() {
                 },
                 enabled = newKey.isNotBlank() && !isTesting,
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 48.dp)
             ) {
                 Text(if (isTesting) stringResource(R.string.keys_testing) else stringResource(R.string.keys_add_key))
             }

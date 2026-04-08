@@ -180,7 +180,7 @@ fun CommandsScreen() {
                 },
                 enabled = trigger.isNotBlank() && trigger.trim() != prefix && prompt.isNotBlank(),
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 48.dp)
             ) {
                 Text(if (editingTrigger != null) stringResource(R.string.commands_save_command) else stringResource(R.string.commands_add_command))
             }
