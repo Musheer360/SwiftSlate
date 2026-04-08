@@ -427,7 +427,7 @@ class AssistantService : AccessibilityService() {
             try {
                 if (!source.refresh()) return@Runnable
                 val currentText = source.text?.toString()
-                if (currentText != null && currentText != expectedText && currentText.length < expectedText.length) {
+                if (currentText != null && currentText.isNotEmpty() && currentText != expectedText && currentText.length < expectedText.length) {
                     // IME clobbered our text — re-set it
                     val bundle = Bundle().apply {
                         putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, expectedText)
