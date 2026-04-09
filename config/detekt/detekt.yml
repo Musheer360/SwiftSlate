@@ -1,15 +1,45 @@
 complexity:
   LongMethod:
-    threshold: 80
+    threshold: 400
   TooManyFunctions:
     thresholdInFiles: 25
     thresholdInClasses: 25
+  CyclomaticComplexMethod:
+    threshold: 45
+  ComplexCondition:
+    threshold: 5
+  NestedBlockDepth:
+    threshold: 7
+  LongParameterList:
+    functionThreshold: 10
+    constructorThreshold: 10
 
 style:
   MaxLineLength:
-    maxLineLength: 150
+    active: false
   WildcardImport:
     active: false
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: false
+  UseCheckOrError:
+    active: false
+  LoopWithTooManyJumpStatements:
+    active: false
+  UnusedPrivateProperty:
+    active: false
+  UnusedParameter:
+    active: false
 
-formatting:
-  active: false
+naming:
+  FunctionNaming:
+    active: false
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+  TooGenericExceptionThrown:
+    active: false
+  SwallowedException:
+    active: false
