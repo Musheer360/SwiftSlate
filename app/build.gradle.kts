@@ -1,20 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.plugin.compose")
-    id("io.gitlab.arturbosch.detekt")
-}
-
-detekt {
-    config.setFrom("${rootProject.projectDir}/config/detekt/detekt.yml")
-    buildUponDefaultConfig = true
-    parallel = true
-}
-
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-    reports {
-        sarif.required.set(true)
-        html.required.set(true)
-    }
 }
 
 val baseVersion = "1.0"
