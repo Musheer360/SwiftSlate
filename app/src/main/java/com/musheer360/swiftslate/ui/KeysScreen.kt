@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -148,7 +149,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 13.sp,
                     modifier = Modifier
-                        .clickable { uriHandler.openUri(apiKeyUrl) }
+                        .clickable(interactionSource = null, indication = null) { uriHandler.openUri(apiKeyUrl) }
                         .heightIn(min = 48.dp)
                         .wrapContentHeight(Alignment.CenterVertically)
                 )
@@ -161,7 +162,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
             SectionHeader(stringResource(R.string.dashboard_api_keys_title))
             SlateCard {
                 LazyColumn(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).clip(RoundedCornerShape(8.dp)),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     itemsIndexed(keys, key = { _, key -> key }) { index, key ->

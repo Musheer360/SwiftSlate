@@ -15,7 +15,6 @@
     <string name="dashboard_how_to_use_title">How to use</string>
     <string name="dashboard_how_to_use_body">1. Enable the Accessibility Service.\n2. Add at least one API key.\n3. Type anywhere in Android, ending with a trigger like \'%1$sfix\' or \'%1$scasual\'.\n4. Wait a moment for the text to be magically replaced!</string>
     <string name="dashboard_version">Version %1$s</string>
-    <string name="dashboard_github">GitHub ↗</string>
 
     <!-- Keys -->
     <string name="keys_title">API Keys</string>
@@ -77,4 +76,7 @@
     <string name="backup_import_error">Invalid backup file</string>
     <string name="backup_import_confirm">This will replace all your existing custom commands. Continue?</string>
     <string name="backup_import_cancel">Cancel</string>
+    <string name="settings_check_updates">Check for updates</string>
+    <string name="commands_collapse">Collapse</string>
+    <string name="commands_expand">Expand</string>
 </resources>

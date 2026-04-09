@@ -3,12 +3,10 @@ package com.musheer360.swiftslate.ui
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -29,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.musheer360.swiftslate.BuildConfig
 import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
@@ -173,27 +170,6 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager) {
                 lineHeight = 24.sp
             )
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Text(
-            text = stringResource(R.string.dashboard_version, BuildConfig.VERSION_NAME),
-            fontSize = 13.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Text(
-            text = stringResource(R.string.dashboard_github),
-            fontSize = 13.sp,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    context.startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Musheer360/SwiftSlate"))
-                    )
-                }
-                .heightIn(min = 48.dp)
-                .wrapContentHeight(Alignment.CenterVertically)
-        )
 
         Spacer(modifier = Modifier.height(16.dp))
     }

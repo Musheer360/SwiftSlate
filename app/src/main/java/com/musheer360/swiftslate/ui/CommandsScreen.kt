@@ -1,5 +1,13 @@
 package com.musheer360.swiftslate.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -7,11 +15,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -34,152 +45,206 @@ import com.musheer360.swiftslate.ui.components.SlateTextField
 fun CommandsScreen(commandManager: CommandManager) {
     val haptic = LocalHapticFeedback.current
     var commands by remember { mutableStateOf(commandManager.getCommands()) }
-    // Display order: built-in first, then custom in insertion order
-    val displayCommands by remember(commands) {
-        mutableStateOf(commands.filter { it.isBuiltIn } + commands.filter { !it.isBuiltIn })
+    val displayCommands = remember(commands) {
+        commands.filter { it.isBuiltIn } + commands.filter { !it.isBuiltIn }
     }
     var trigger by rememberSaveable { mutableStateOf("") }
     var prompt by rememberSaveable { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    var selectedType by remember { mutableStateOf(CommandType.AI) }
-    var editingTrigger by remember { mutableStateOf<String?>(null) }
+    var selectedType by rememberSaveable { mutableStateOf(CommandType.AI) }
+    var editingTrigger by rememberSaveable { mutableStateOf<String?>(null) }
+    var isFormExpanded by rememberSaveable { mutableStateOf(false) }
     val prefix = commandManager.getTriggerPrefix()
     val errorPrefixMsg = stringResource(R.string.commands_error_prefix, prefix)
     val errorDuplicateMsg = stringResource(R.string.commands_error_duplicate)
     val errorEmptyTrigger = stringResource(R.string.commands_error_empty_trigger)
+    val collapseLabel = stringResource(R.string.commands_collapse)
+    val expandLabel = stringResource(R.string.commands_expand)
+
+    val chevronRotation by animateFloatAsState(
+        targetValue = if (isFormExpanded) 180f else 0f,
+        animationSpec = tween(250),
+        label = "chevron"
+    )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .graphicsLayer { } // Creates a hardware layer for smooth NavHost slide animations
+            .graphicsLayer { }
             .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         ScreenTitle(stringResource(R.string.commands_title))
 
-        SectionHeader(stringResource(R.string.commands_add_custom_title))
+        // Collapsible form card
         SlateCard {
-            SingleChoiceSegmentedButtonRow(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SegmentedButton(
-                    selected = selectedType == CommandType.AI,
-                    onClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        selectedType = CommandType.AI
-                    },
-                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
-                    colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = MaterialTheme.colorScheme.primary,
-                        activeContentColor = MaterialTheme.colorScheme.onPrimary,
-                        activeBorderColor = MaterialTheme.colorScheme.primary,
-                        inactiveContainerColor = MaterialTheme.colorScheme.surface,
-                        inactiveContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        inactiveBorderColor = MaterialTheme.colorScheme.outline
-                    )
-                ) {
-                    Text(stringResource(R.string.commands_type_ai))
-                }
-                SegmentedButton(
-                    selected = selectedType == CommandType.TEXT_REPLACER,
-                    onClick = {
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        selectedType = CommandType.TEXT_REPLACER
-                    },
-                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
-                    colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = MaterialTheme.colorScheme.primary,
-                        activeContentColor = MaterialTheme.colorScheme.onPrimary,
-                        activeBorderColor = MaterialTheme.colorScheme.primary,
-                        inactiveContainerColor = MaterialTheme.colorScheme.surface,
-                        inactiveContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        inactiveBorderColor = MaterialTheme.colorScheme.outline
-                    )
-                ) {
-                    Text(stringResource(R.string.commands_type_replacer))
-                }
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            SlateTextField(
-                value = trigger,
-                onValueChange = {
-                    trigger = it
-                    errorMessage = null
-                },
-                label = { Text(stringResource(R.string.commands_trigger_label, prefix)) },
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = prompt,
-                onValueChange = { prompt = it },
-                label = { Text(if (selectedType == CommandType.AI) stringResource(R.string.commands_prompt_label) else stringResource(R.string.commands_replacement_label)) },
-                shape = RoundedCornerShape(10.dp),
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                )
-            )
-            errorMessage?.let { msg ->
-                Text(
-                    text = msg,
-                    color = MaterialTheme.colorScheme.error,
-                    fontSize = 13.sp,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            if (editingTrigger != null) {
-                TextButton(
-                    onClick = {
-                        trigger = ""
-                        prompt = ""
-                        errorMessage = null
-                        editingTrigger = null
-                        selectedType = CommandType.AI
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.commands_cancel))
-                }
-            }
-            Button(
-                onClick = {
-                    val trimmedTrigger = trigger.trim()
-                    if (trimmedTrigger.isNotBlank() && prompt.isNotBlank()) {
-                        if (!trimmedTrigger.startsWith(prefix)) {
-                            errorMessage = errorPrefixMsg
-                            return@Button
-                        }
-                        if (trimmedTrigger == prefix || trimmedTrigger.length <= prefix.length) {
-                            errorMessage = errorEmptyTrigger
-                            return@Button
-                        }
-                        if (commands.any { it.trigger == trimmedTrigger && it.trigger != editingTrigger }) {
-                            errorMessage = errorDuplicateMsg
-                            return@Button
-                        }
+                    .clickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClickLabel = if (isFormExpanded) collapseLabel else expandLabel
+                    ) {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        if (editingTrigger != null) {
-                            commandManager.removeCustomCommand(editingTrigger!!)
-                        }
-                        val newCommand = Command(trimmedTrigger, prompt.trim(), false, selectedType)
-                        commandManager.addCustomCommand(newCommand)
-                        commands = commandManager.getCommands()
-                        trigger = ""
-                        prompt = ""
-                        errorMessage = null
-                        editingTrigger = null
-                        selectedType = CommandType.AI
-                    }
-                },
-                enabled = trigger.isNotBlank() && trigger.trim() != prefix && prompt.isNotBlank(),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                        isFormExpanded = !isFormExpanded
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(if (editingTrigger != null) stringResource(R.string.commands_save_command) else stringResource(R.string.commands_add_command))
+                Text(
+                    text = stringResource(R.string.commands_add_custom_title),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = 1.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.rotate(chevronRotation)
+                )
+            }
+
+            AnimatedVisibility(
+                visible = isFormExpanded,
+                enter = expandVertically(
+                    animationSpec = tween(250),
+                    expandFrom = Alignment.Top
+                ) + fadeIn(tween(200, delayMillis = 50)),
+                exit = shrinkVertically(
+                    animationSpec = tween(200),
+                    shrinkTowards = Alignment.Top
+                ) + fadeOut(tween(150))
+            ) {
+                Column {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    SingleChoiceSegmentedButtonRow(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        SegmentedButton(
+                            selected = selectedType == CommandType.AI,
+                            onClick = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                selectedType = CommandType.AI
+                            },
+                            shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                            colors = SegmentedButtonDefaults.colors(
+                                activeContainerColor = MaterialTheme.colorScheme.primary,
+                                activeContentColor = MaterialTheme.colorScheme.onPrimary,
+                                activeBorderColor = MaterialTheme.colorScheme.primary,
+                                inactiveContainerColor = MaterialTheme.colorScheme.surface,
+                                inactiveContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                inactiveBorderColor = MaterialTheme.colorScheme.outline
+                            )
+                        ) {
+                            Text(stringResource(R.string.commands_type_ai))
+                        }
+                        SegmentedButton(
+                            selected = selectedType == CommandType.TEXT_REPLACER,
+                            onClick = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                selectedType = CommandType.TEXT_REPLACER
+                            },
+                            shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                            colors = SegmentedButtonDefaults.colors(
+                                activeContainerColor = MaterialTheme.colorScheme.primary,
+                                activeContentColor = MaterialTheme.colorScheme.onPrimary,
+                                activeBorderColor = MaterialTheme.colorScheme.primary,
+                                inactiveContainerColor = MaterialTheme.colorScheme.surface,
+                                inactiveContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                inactiveBorderColor = MaterialTheme.colorScheme.outline
+                            )
+                        ) {
+                            Text(stringResource(R.string.commands_type_replacer))
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    SlateTextField(
+                        value = trigger,
+                        onValueChange = {
+                            trigger = it
+                            errorMessage = null
+                        },
+                        label = { Text(stringResource(R.string.commands_trigger_label, prefix)) },
+                        singleLine = true
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = prompt,
+                        onValueChange = { prompt = it; errorMessage = null },
+                        label = { Text(if (selectedType == CommandType.AI) stringResource(R.string.commands_prompt_label) else stringResource(R.string.commands_replacement_label)) },
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        )
+                    )
+                    errorMessage?.let { msg ->
+                        Text(
+                            text = msg,
+                            color = MaterialTheme.colorScheme.error,
+                            fontSize = 13.sp,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    if (editingTrigger != null) {
+                        TextButton(
+                            onClick = {
+                                trigger = ""
+                                prompt = ""
+                                errorMessage = null
+                                editingTrigger = null
+                                selectedType = CommandType.AI
+                                isFormExpanded = false
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(stringResource(R.string.commands_cancel))
+                        }
+                    }
+                    Button(
+                        onClick = {
+                            val trimmedTrigger = trigger.trim()
+                            if (trimmedTrigger.isNotBlank() && prompt.isNotBlank()) {
+                                if (!trimmedTrigger.startsWith(prefix)) {
+                                    errorMessage = errorPrefixMsg
+                                    return@Button
+                                }
+                                if (trimmedTrigger == prefix || trimmedTrigger.length <= prefix.length) {
+                                    errorMessage = errorEmptyTrigger
+                                    return@Button
+                                }
+                                if (commands.any { it.trigger == trimmedTrigger && it.trigger != editingTrigger }) {
+                                    errorMessage = errorDuplicateMsg
+                                    return@Button
+                                }
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                if (editingTrigger != null) {
+                                    commandManager.removeCustomCommand(editingTrigger!!)
+                                }
+                                val newCommand = Command(trimmedTrigger, prompt.trim(), false, selectedType)
+                                commandManager.addCustomCommand(newCommand)
+                                commands = commandManager.getCommands()
+                                trigger = ""
+                                prompt = ""
+                                errorMessage = null
+                                editingTrigger = null
+                                selectedType = CommandType.AI
+                                isFormExpanded = false
+                            }
+                        },
+                        enabled = trigger.isNotBlank() && trigger.trim() != prefix && prompt.isNotBlank(),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    ) {
+                        Text(if (editingTrigger != null) stringResource(R.string.commands_save_command) else stringResource(R.string.commands_add_command))
+                    }
+                }
             }
         }
 
@@ -189,7 +254,7 @@ fun CommandsScreen(commandManager: CommandManager) {
             SectionHeader(stringResource(R.string.commands_title))
             SlateCard {
                 LazyColumn(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).clip(RoundedCornerShape(8.dp)),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(bottom = 4.dp)
                 ) {
@@ -236,6 +301,7 @@ fun CommandsScreen(commandManager: CommandManager) {
                                         selectedType = cmd.type
                                         editingTrigger = cmd.trigger
                                         errorMessage = null
+                                        isFormExpanded = true
                                     },
                                     modifier = Modifier.size(36.dp)
                                 ) {
@@ -256,6 +322,7 @@ fun CommandsScreen(commandManager: CommandManager) {
                                             errorMessage = null
                                             editingTrigger = null
                                             selectedType = CommandType.AI
+                                            isFormExpanded = false
                                         }
                                         commands = commandManager.getCommands()
                                     },

@@ -3,6 +3,7 @@ package com.musheer360.swiftslate.ui
 import android.content.SharedPreferences
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,9 +18,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.musheer360.swiftslate.BuildConfig
 import com.musheer360.swiftslate.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -37,6 +40,7 @@ import com.musheer360.swiftslate.ui.components.SlateTextField
 fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
+    val uriHandler = LocalUriHandler.current
 
     val scope = rememberCoroutineScope()
     var saveEndpointJob by remember { mutableStateOf<Job?>(null) }
@@ -410,6 +414,30 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 48.dp)
+                .clickable(interactionSource = null, indication = null) {
+                    uriHandler.openUri("https://github.com/Musheer360/SwiftSlate/releases/latest")
+                },
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.dashboard_version, BuildConfig.VERSION_NAME) + " · ",
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = stringResource(R.string.settings_check_updates),
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 
     if (showImportConfirm) {

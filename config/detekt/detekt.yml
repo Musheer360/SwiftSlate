@@ -1,0 +1,15 @@
+complexity:
+  LongMethod:
+    threshold: 80
+  TooManyFunctions:
+    thresholdInFiles: 25
+    thresholdInClasses: 25
+
+style:
+  MaxLineLength:
+    maxLineLength: 150
+  WildcardImport:
+    active: false
+
+formatting:
+  active: false
