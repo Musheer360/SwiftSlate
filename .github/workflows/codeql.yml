@@ -45,8 +45,7 @@ jobs:
           queries: security-extended
 
       - name: Build for CodeQL
-        shell: bash
-        run: ./gradlew assembleDebug --parallel --no-daemon --configuration-cache-problems=warn
+        uses: github/codeql-action/autobuild@5c8a8a642e79153f5d047b10ec1cba1d1cc65699 # v3.35.1
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@5c8a8a642e79153f5d047b10ec1cba1d1cc65699 # v3.35.1
