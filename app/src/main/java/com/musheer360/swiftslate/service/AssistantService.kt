@@ -135,7 +135,12 @@ class AssistantService : AccessibilityService() {
         val source = event.source ?: return
         if (source.isPassword) return
         val text = source.text?.toString() ?: return
-        if (text.isEmpty()) return
+        if (text.isEmpty()) {
+            verifyRunnable?.let { handler.removeCallbacks(it) }
+            lastReplacedText = null
+            lastReplacedSource = null
+            return
+        }
 
         // Skip events where text matches what we just replaced (prevents IME re-commit race)
         val replaced = lastReplacedText
@@ -439,7 +444,7 @@ class AssistantService : AccessibilityService() {
             try {
                 if (!source.refresh()) return@Runnable
                 val currentText = source.text?.toString()
-                if (currentText != null && currentText.isNotEmpty() && currentText != expectedText && currentText.length < expectedText.length) {
+                if (currentText != null && currentText.isNotEmpty() && currentText != expectedText && currentText.length < expectedText.length && expectedText.startsWith(currentText)) {
                     // IME clobbered our text — re-set it
                     val bundle = Bundle().apply {
                         putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, expectedText)
@@ -453,7 +458,7 @@ class AssistantService : AccessibilityService() {
             }
         }
         verifyRunnable = runnable
-        if (!handler.postDelayed(runnable, 800)) {
+        if (!handler.postDelayed(runnable, 300)) {
             lastReplacedText = null
             lastReplacedAt = 0L
             lastReplacedSource = null
