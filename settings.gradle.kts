@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SwiftSlate"
 include(":app")
+
