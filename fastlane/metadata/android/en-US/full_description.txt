@@ -1,0 +1,33 @@
+SwiftSlate is a system-wide AI text assistant for Android. Type a trigger like "?fix" at the end of any text, in any app, and watch it get replaced instantly.
+
+It works in most apps — WhatsApp, Gmail, Twitter/X, Messages, Notes, and more. No copy-pasting. No app switching. Just type and go.
+
+Features:
+
+• Works system-wide via Android's Accessibility Service
+• Instant inline text replacement — AI response replaces your text directly
+• Multi-provider AI: Google Gemini, Groq, or any OpenAI-compatible endpoint (including local LLMs like Ollama and LM Studio)
+• Text replacer commands run entirely offline with zero latency
+• Multi-key rotation with automatic rate-limit handling
+• API keys encrypted with AES-256-GCM via Android Keystore
+• AMOLED dark theme and light theme with Material 3
+• Localized in 7 languages: English, French, German, Spanish, Portuguese (BR), Hindi, and Simplified Chinese
+• Zero analytics, zero tracking, zero telemetry
+• Tiny APK (~1.3 MB) with zero third-party networking dependencies
+
+Built-in commands:
+
+• ?fix — Fix grammar, spelling, and punctuation
+• ?improve — Improve clarity and readability
+• ?shorten — Shorten while keeping meaning
+• ?expand — Expand with more detail
+• ?formal — Rewrite in professional tone
+• ?casual — Rewrite in friendly tone
+• ?emoji — Add relevant emojis
+• ?reply — Generate a contextual reply
+• ?undo — Restore text from before the last replacement
+• ?translate:XX — Translate to any language
+
+You can also create your own custom AI commands with any prompt, or text replacer commands for instant offline snippets like signatures, canned responses, and shortcuts.
+
+An API key from Google Gemini (free tier available), Groq, or any OpenAI-compatible provider is needed for AI commands. Text replacer commands work without any API key.
