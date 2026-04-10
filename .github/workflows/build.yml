@@ -20,7 +20,7 @@ permissions:
   contents: write
 
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3g -XX:+UseG1GC"
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -XX:+UseG1GC"
 
 jobs:
   version:
@@ -258,6 +258,7 @@ jobs:
           tag_name: ${{ needs.version.outputs.tag }}
           files: artifacts/SwiftSlate-*.apk
           name: SwiftSlate ${{ needs.version.outputs.tag }}
+          generate_release_notes: true
           draft: false
           prerelease: false
         env:
@@ -265,7 +266,7 @@ jobs:
 
   notify-failure:
     name: Notify on Failure
-    needs: [lint, test, build, release]
+    needs: [version, lint, test, build, release]
     if: failure()
     runs-on: ubuntu-latest
     timeout-minutes: 5

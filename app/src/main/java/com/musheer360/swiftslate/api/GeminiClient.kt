@@ -142,7 +142,7 @@ class GeminiClient {
                     put("temperature", temperature)
                     if (withStructured) {
                         put("responseMimeType", "application/json")
-                        put("responseJsonSchema", JSONObject().apply {
+                        put("responseSchema", JSONObject().apply {
                             put("type", "object")
                             put("properties", JSONObject().apply {
                                 put("text", JSONObject().apply {
@@ -207,7 +207,7 @@ class GeminiClient {
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
                 val detail = if (apiMessage.isNotEmpty()) apiMessage else "Bad request"
                 Result.failure(Exception("HTTP_${responseCode}: $detail"))
-            } else if (responseCode == 403) {
+            } else if (responseCode == 401 || responseCode == 403) {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
                 val detail = if (apiMessage.isNotEmpty()) apiMessage else "Invalid API key"

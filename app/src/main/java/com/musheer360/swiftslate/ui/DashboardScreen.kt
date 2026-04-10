@@ -56,6 +56,15 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    DisposableEffect(context) {
+        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val listener = AccessibilityManager.AccessibilityStateChangeListener {
+            isServiceEnabled = checkServiceEnabled(context)
+        }
+        am.addAccessibilityStateChangeListener(listener)
+        onDispose { am.removeAccessibilityStateChangeListener(listener) }
+    }
+
     LaunchedEffect(lifecycleOwner) {
         val lifecycle = lifecycleOwner.lifecycle
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {

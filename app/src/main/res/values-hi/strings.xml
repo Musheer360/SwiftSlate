@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SwiftSlate</string>
     <string name="accessibility_service_label">SwiftSlate सहायक</string>
-    <string name="accessibility_service_desc">ट्रिगर कमांड टाइप करने पर Gemini का उपयोग करके सिस्टम-व्यापी AI टेक्स्ट प्रतिस्थापन प्रदान करता है।</string>
+    <string name="accessibility_service_desc">ट्रिगर कमांड टाइप करने पर सिस्टम-व्यापी AI टेक्स्ट प्रतिस्थापन प्रदान करता है।</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">डैशबोर्ड</string>
@@ -73,17 +73,17 @@
     <string name="backup_export_success">कमांड सफलतापूर्वक निर्यात किए गए</string>
     <string name="backup_import_success">कमांड सफलतापूर्वक आयात किए गए</string>
     <string name="backup_import_error">अमान्य बैकअप फ़ाइल</string>
-    <string name="keys_keystore_error">Secure key storage is unavailable on this device. Keys cannot be saved.</string>
-    <string name="backup_import_confirm">This will replace all your existing custom commands. Continue?</string>
-    <string name="backup_import_cancel">Cancel</string>
-    <string name="settings_check_updates">Check for updates</string>
-    <string name="commands_collapse">Collapse</string>
-    <string name="commands_expand">Expand</string>
+    <string name="keys_keystore_error">इस डिवाइस पर सुरक्षित कुंजी संग्रहण उपलब्ध नहीं है। कुंजियाँ सहेजी नहीं जा सकतीं।</string>
+    <string name="backup_import_confirm">यह आपके सभी मौजूदा कस्टम कमांड को बदल देगा। जारी रखें?</string>
+    <string name="backup_import_cancel">रद्द करें</string>
+    <string name="settings_check_updates">अपडेट की जाँच करें</string>
+    <string name="commands_collapse">संक्षिप्त करें</string>
+    <string name="commands_expand">विस्तार करें</string>
 
     <!-- Delete confirmation -->
     <string name="delete_confirm_command_title">यह कमांड हटाएँ?</string>
     <string name="delete_confirm_key_title">यह API कुंजी हटाएँ?</string>
     <string name="delete_confirm_message">यह क्रिया पूर्ववत नहीं की जा सकती।</string>
     <string name="delete_confirm_button">हटाएँ</string>
-    <string name="backup_export_error">Export failed</string>
+    <string name="backup_export_error">निर्यात विफल</string>
 </resources>

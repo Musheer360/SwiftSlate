@@ -30,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.musheer360.swiftslate.manager.CommandManager
+import com.musheer360.swiftslate.model.ProviderType
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SectionHeader
 import com.musheer360.swiftslate.ui.components.SlateCard
@@ -46,7 +47,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     var saveEndpointJob by remember { mutableStateOf<Job?>(null) }
     var saveModelJob by remember { mutableStateOf<Job?>(null) }
 
-    var providerType by remember { mutableStateOf(prefs.getString("provider_type", "gemini") ?: "gemini") }
+    var providerType by remember { mutableStateOf(prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI) }
     var providerExpanded by remember { mutableStateOf(false) }
 
     var selectedModel by remember { mutableStateOf(prefs.getString("model", "gemini-2.5-flash-lite") ?: "gemini-2.5-flash-lite") }
@@ -81,8 +82,15 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
             val editor = prefs.edit()
             var needsWrite = false
             if (customEndpoint != (prefs.getString("custom_endpoint", "") ?: "")) {
-                editor.putString("custom_endpoint", customEndpoint)
-                needsWrite = true
+                val isValid = customEndpoint.isBlank() || customEndpoint.startsWith("https://") ||
+                    (customEndpoint.startsWith("http://") && try {
+                        val host = java.net.URL(customEndpoint).host
+                        host == "localhost" || host == "127.0.0.1" || host == "10.0.2.2"
+                    } catch (_: Exception) { false })
+                if (isValid) {
+                    editor.putString("custom_endpoint", customEndpoint)
+                    needsWrite = true
+                }
             }
             if (customModel != (prefs.getString("custom_model", "") ?: "")) {
                 editor.putString("custom_model", customModel)
@@ -157,8 +165,8 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
             ) {
                 SlateTextField(
                     value = when (providerType) {
-                        "gemini" -> stringResource(R.string.settings_provider_gemini)
-                        "groq" -> stringResource(R.string.settings_provider_groq)
+                        ProviderType.GEMINI -> stringResource(R.string.settings_provider_gemini)
+                        ProviderType.GROQ -> stringResource(R.string.settings_provider_groq)
                         else -> stringResource(R.string.settings_provider_custom)
                     },
                     onValueChange = {},
@@ -175,8 +183,8 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         text = { Text(stringResource(R.string.settings_provider_gemini)) },
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            providerType = "gemini"
-                            prefs.edit().putString("provider_type", "gemini").remove("structured_output_disabled_at").apply()
+                            providerType = ProviderType.GEMINI
+                            prefs.edit().putString("provider_type", ProviderType.GEMINI).remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -184,8 +192,8 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         text = { Text(stringResource(R.string.settings_provider_groq)) },
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            providerType = "groq"
-                            prefs.edit().putString("provider_type", "groq").remove("structured_output_disabled_at").apply()
+                            providerType = ProviderType.GROQ
+                            prefs.edit().putString("provider_type", ProviderType.GROQ).remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -193,8 +201,8 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         text = { Text(stringResource(R.string.settings_provider_custom)) },
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            providerType = "custom"
-                            prefs.edit().putString("provider_type", "custom").remove("structured_output_disabled_at").apply()
+                            providerType = ProviderType.CUSTOM
+                            prefs.edit().putString("provider_type", ProviderType.CUSTOM).remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -204,7 +212,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (providerType == "gemini") {
+        if (providerType == ProviderType.GEMINI) {
             SectionHeader(stringResource(R.string.settings_model_title))
             SlateCard {
                 ExposedDropdownMenuBox(
@@ -237,7 +245,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     }
                 }
             }
-        } else if (providerType == "groq") {
+        } else if (providerType == ProviderType.GROQ) {
             SectionHeader(stringResource(R.string.settings_model_title))
             SlateCard {
                 ExposedDropdownMenuBox(

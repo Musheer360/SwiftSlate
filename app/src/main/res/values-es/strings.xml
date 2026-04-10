@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SwiftSlate</string>
     <string name="accessibility_service_label">Asistente SwiftSlate</string>
-    <string name="accessibility_service_desc">Proporciona reemplazos de texto con IA en todo el sistema usando Gemini al escribir comandos de activación.</string>
+    <string name="accessibility_service_desc">Proporciona reemplazos de texto con IA en todo el sistema al escribir comandos de activación.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Panel</string>
@@ -73,17 +73,17 @@
     <string name="backup_export_success">Comandos exportados correctamente</string>
     <string name="backup_import_success">Comandos importados correctamente</string>
     <string name="backup_import_error">Archivo de copia de seguridad no válido</string>
-    <string name="keys_keystore_error">Secure key storage is unavailable on this device. Keys cannot be saved.</string>
-    <string name="backup_import_confirm">This will replace all your existing custom commands. Continue?</string>
-    <string name="backup_import_cancel">Cancel</string>
-    <string name="settings_check_updates">Check for updates</string>
-    <string name="commands_collapse">Collapse</string>
-    <string name="commands_expand">Expand</string>
+    <string name="keys_keystore_error">El almacenamiento seguro de claves no está disponible en este dispositivo. No se pueden guardar las claves.</string>
+    <string name="backup_import_confirm">Esto reemplazará todos tus comandos personalizados existentes. ¿Continuar?</string>
+    <string name="backup_import_cancel">Cancelar</string>
+    <string name="settings_check_updates">Buscar actualizaciones</string>
+    <string name="commands_collapse">Contraer</string>
+    <string name="commands_expand">Expandir</string>
 
     <!-- Delete confirmation -->
     <string name="delete_confirm_command_title">¿Eliminar este comando?</string>
     <string name="delete_confirm_key_title">¿Eliminar esta clave API?</string>
     <string name="delete_confirm_message">Esta acción no se puede deshacer.</string>
     <string name="delete_confirm_button">Eliminar</string>
-    <string name="backup_export_error">Export failed</string>
+    <string name="backup_export_error">Error al exportar</string>
 </resources>

@@ -1,5 +1,8 @@
 package com.musheer360.swiftslate.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,16 +19,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.api.GeminiClient
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import com.musheer360.swiftslate.manager.KeyManager
+import com.musheer360.swiftslate.model.ProviderType
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SectionHeader
 import com.musheer360.swiftslate.ui.components.SlateCard
@@ -35,6 +41,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
+    val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val uriHandler = LocalUriHandler.current
     var keys by remember { mutableStateOf(keyManager.getKeys()) }
@@ -75,9 +82,10 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
         SlateCard {
             SlateTextField(
                 value = newKey,
-                onValueChange = { newKey = it },
+                onValueChange = { if (it.length <= 256) newKey = it },
                 label = { Text(stringResource(R.string.keys_api_key_label)) },
-                singleLine = true
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation()
             )
             Spacer(modifier = Modifier.height(12.dp))
             Button(
@@ -95,12 +103,12 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                                 return@launch
                             }
                             val result = run {
-                                val providerType = prefs.getString("provider_type", "gemini") ?: "gemini"
+                                val providerType = prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI
                                 val customEndpoint = prefs.getString("custom_endpoint", "") ?: ""
                                 when {
-                                    providerType == "groq" ->
+                                    providerType == ProviderType.GROQ ->
                                         openAIClient.validateKey(trimmedKey, "https://api.groq.com/openai/v1")
-                                    providerType == "custom" && customEndpoint.isNotBlank() ->
+                                    providerType == ProviderType.CUSTOM && customEndpoint.isNotBlank() ->
                                         openAIClient.validateKey(trimmedKey, customEndpoint)
                                     else ->
                                         geminiClient.validateKey(trimmedKey)
@@ -117,6 +125,9 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                                 newKey = ""
                                 testResult = validAddedMsg
                                 testSuccess = true
+                                // Clear clipboard to prevent API key leaking via paste history
+                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
                             } else {
                                 testResult = result.exceptionOrNull()?.message ?: validationFailedMsg
                                 testSuccess = false
@@ -138,9 +149,9 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
-            val (apiKeyUrl, providerName) = when (prefs.getString("provider_type", "gemini") ?: "gemini") {
-                "groq" -> "https://console.groq.com/keys" to "Groq"
-                "custom" -> null to null
+            val (apiKeyUrl, providerName) = when (prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI) {
+                ProviderType.GROQ -> "https://console.groq.com/keys" to "Groq"
+                ProviderType.CUSTOM -> null to null
                 else -> "https://aistudio.google.com/api-keys" to "Gemini"
             }
             if (apiKeyUrl != null && providerName != null) {
@@ -165,7 +176,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                     modifier = Modifier.weight(1f).clip(RoundedCornerShape(8.dp)),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    itemsIndexed(keys, key = { index, _ -> index }) { index, key ->
+                    itemsIndexed(keys, key = { index, k -> "$index-${k.hashCode()}" }) { index, key ->
                         SlateItemCard {
                             Text(
                                 text = "••••••••" + key.takeLast(4),

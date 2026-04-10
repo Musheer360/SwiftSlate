@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SwiftSlate</string>
     <string name="accessibility_service_label">Assistente SwiftSlate</string>
-    <string name="accessibility_service_desc">Fornece substituições de texto por IA em todo o sistema usando Gemini quando comandos de ativação são digitados.</string>
+    <string name="accessibility_service_desc">Fornece substituições de texto por IA em todo o sistema quando comandos de ativação são digitados.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Painel</string>
@@ -73,17 +73,17 @@
     <string name="backup_export_success">Comandos exportados com sucesso</string>
     <string name="backup_import_success">Comandos importados com sucesso</string>
     <string name="backup_import_error">Arquivo de backup inválido</string>
-    <string name="keys_keystore_error">Secure key storage is unavailable on this device. Keys cannot be saved.</string>
-    <string name="backup_import_confirm">This will replace all your existing custom commands. Continue?</string>
-    <string name="backup_import_cancel">Cancel</string>
-    <string name="settings_check_updates">Check for updates</string>
-    <string name="commands_collapse">Collapse</string>
-    <string name="commands_expand">Expand</string>
+    <string name="keys_keystore_error">O armazenamento seguro de chaves não está disponível neste dispositivo. As chaves não podem ser salvas.</string>
+    <string name="backup_import_confirm">Isso substituirá todos os seus comandos personalizados existentes. Continuar?</string>
+    <string name="backup_import_cancel">Cancelar</string>
+    <string name="settings_check_updates">Verificar atualizações</string>
+    <string name="commands_collapse">Recolher</string>
+    <string name="commands_expand">Expandir</string>
 
     <!-- Delete confirmation -->
     <string name="delete_confirm_command_title">Excluir este comando?</string>
     <string name="delete_confirm_key_title">Excluir esta chave API?</string>
     <string name="delete_confirm_message">Esta ação não pode ser desfeita.</string>
     <string name="delete_confirm_button">Excluir</string>
-    <string name="backup_export_error">Export failed</string>
+    <string name="backup_export_error">Falha na exportação</string>
 </resources>

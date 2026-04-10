@@ -19,7 +19,7 @@ class CommandManager(context: Context) {
     companion object {
         const val DEFAULT_PREFIX = "?"
         const val PREF_TRIGGER_PREFIX = "trigger_prefix"
-        private const val CACHE_TTL_MS = 2_000L
+        private const val CACHE_TTL_MS = 5_000L
     }
 
     // Built-in command names (without prefix) and their prompts
@@ -45,7 +45,11 @@ class CommandManager(context: Context) {
         settingsPrefs.edit().putString(PREF_TRIGGER_PREFIX, newPrefix).apply()
         // Migrate custom command triggers — idempotent: always fix commands not matching current prefix
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
-        val arr = JSONArray(customStr)
+        val arr = try { JSONArray(customStr) } catch (_: Exception) {
+            prefs.edit().putString("custom_commands", "[]").apply()
+            cachedCommands = null
+            return true
+        }
         val newArr = JSONArray()
         for (i in 0 until arr.length()) {
             val obj = arr.getJSONObject(i)
@@ -71,17 +75,34 @@ class CommandManager(context: Context) {
         return builtInDefinitions.map { (name, prompt) -> Command("$prefix$name", prompt, true) }
     }
 
+    @Volatile
+    private var migrating = false
+
     @Synchronized fun getCommands(): List<Command> {
         val now = System.currentTimeMillis()
         val cached = cachedCommands
         if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
+        val prefix = getTriggerPrefix()
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = JSONArray(customStr)
         val customCommands = mutableListOf<Command>()
+        var needsMigration = false
         for (i in 0 until arr.length()) {
             val obj = arr.getJSONObject(i)
-            customCommands.add(Command(obj.getString("trigger"), obj.getString("prompt"), false,
+            val trigger = obj.getString("trigger")
+            if (!trigger.startsWith(prefix)) needsMigration = true
+            customCommands.add(Command(trigger, obj.getString("prompt"), false,
                 try { CommandType.valueOf(obj.optString("type", CommandType.AI.name)) } catch (_: Exception) { CommandType.AI }))
+        }
+        // Self-heal prefix mismatch (e.g. crash between two apply() calls in setTriggerPrefix)
+        if (needsMigration && !migrating) {
+            migrating = true
+            try {
+                setTriggerPrefix(prefix)
+                return getCommands()
+            } finally {
+                migrating = false
+            }
         }
         val result = (getBuiltInCommands() + customCommands).sortedByDescending { it.trigger.length }
         cachedCommands = result
@@ -138,6 +159,8 @@ class CommandManager(context: Context) {
                 if (trigger.isBlank() || prompt.isBlank()) return false
                 if (trigger.length > 50 || prompt.length > 5000) return false
                 if (!trigger.startsWith(prefix)) return false
+                val type = obj.optString("type", CommandType.AI.name)
+                if (type != CommandType.AI.name && type != CommandType.TEXT_REPLACER.name) return false
             }
             prefs.edit().putString("custom_commands", arr.toString()).apply()
             cachedCommands = null
@@ -155,6 +178,9 @@ class CommandManager(context: Context) {
             }
         }
         val prefix = getTriggerPrefix()
+        // Translate trigger — intentionally accepts any 2-5 char alphanumeric language code
+        // (e.g. "en", "fr", "zh", "pt-BR" without hyphen). Open-ended to support ISO 639 codes
+        // without maintaining a hardcoded list. The AI model handles invalid codes gracefully.
         val translatePrefix = "${prefix}translate:"
         val translateIdx = text.lastIndexOf(translatePrefix)
         if (translateIdx >= 0) {

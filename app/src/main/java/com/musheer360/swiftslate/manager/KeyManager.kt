@@ -23,6 +23,7 @@ class KeyManager(context: Context) {
         private const val TRANSFORMATION = "AES/GCM/NoPadding"
         private const val IV_SEPARATOR = "]"
         private const val PREF_KEY_ARRAY = "keys_array"
+        private const val CACHE_TTL_MS = 5_000L
     }
 
     private val rateLimitedKeys = java.util.concurrent.ConcurrentHashMap<String, Long>()
@@ -30,6 +31,8 @@ class KeyManager(context: Context) {
     private val roundRobinIndex = AtomicInteger(0)
     @Volatile
     private var cachedKeys: List<String>? = null
+    @Volatile
+    private var cacheTimestamp = 0L
     @Volatile
     var keystoreAvailable: Boolean = true
         private set
@@ -100,34 +103,38 @@ class KeyManager(context: Context) {
         }
     }
 
+    private fun JSONArray.toStringList(): List<String> =
+        (0 until length()).map { getString(it) }
+
     @Synchronized
     fun getKeys(): List<String> {
-        cachedKeys?.let { return it }
+        val now = System.currentTimeMillis()
+        val cached = cachedKeys
+        if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
         val encryptedStr = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
-        // Migrate legacy plaintext: if stored value has no IV separator, it's plaintext — re-encrypt it
+        // Legacy plaintext migration — can be removed once all users are on v1.3+
         if (!encryptedStr.contains(IV_SEPARATOR)) {
             return try {
-                prefs.edit().putString(PREF_KEY_ARRAY, encrypt(encryptedStr)).apply()
-                // Re-read after migration
-                val reEncrypted = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
-                val jsonStr = decrypt(reEncrypted) ?: return emptyList()
-                val list = mutableListOf<String>()
-                val arr = JSONArray(jsonStr)
-                for (i in 0 until arr.length()) { list.add(arr.getString(i)) }
+                val encrypted = encrypt(encryptedStr)
+                prefs.edit().putString(PREF_KEY_ARRAY, encrypted).commit()
+                val jsonStr = decrypt(encrypted) ?: return emptyList()
+                val list = JSONArray(jsonStr).toStringList()
                 cachedKeys = list
+                cacheTimestamp = System.currentTimeMillis()
                 list
-            } catch (_: Exception) { emptyList() }
-        }
-        val jsonStr = decrypt(encryptedStr) ?: return emptyList()
-        val list = mutableListOf<String>()
-        try {
-            val arr = JSONArray(jsonStr)
-            for (i in 0 until arr.length()) {
-                list.add(arr.getString(i))
+            } catch (_: Exception) {
+                // Encryption failed (e.g. keystore invalidated) — return plaintext keys so user doesn't lose access
+                try { JSONArray(encryptedStr).toStringList() } catch (_: Exception) { emptyList() }
             }
-        } catch (_: Exception) {
         }
+        val jsonStr = decrypt(encryptedStr) ?: run {
+            cachedKeys = emptyList()
+            cacheTimestamp = System.currentTimeMillis()
+            return emptyList()
+        }
+        val list = try { JSONArray(jsonStr).toStringList() } catch (_: Exception) { emptyList() }
         cachedKeys = list
+        cacheTimestamp = System.currentTimeMillis()
         return list
     }
 
@@ -137,9 +144,11 @@ class KeyManager(context: Context) {
         return try {
             prefs.edit().putString(PREF_KEY_ARRAY, encrypt(arr.toString())).apply()
             cachedKeys = keys
+            cacheTimestamp = System.currentTimeMillis()
             true
         } catch (_: Exception) {
             cachedKeys = null
+            cacheTimestamp = 0L
             false
         }
     }
@@ -165,6 +174,8 @@ class KeyManager(context: Context) {
         return saved
     }
 
+    // All @Synchronized methods use `this` as monitor (reentrant).
+    // getNextKey() intentionally calls getKeys() while holding the lock.
     @Synchronized
     fun getNextKey(): String? {
         val keys = getKeys()

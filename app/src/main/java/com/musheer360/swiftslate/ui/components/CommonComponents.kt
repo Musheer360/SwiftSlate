@@ -5,6 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,7 +61,8 @@ fun SlateTextField(
     singleLine: Boolean = true,
     readOnly: Boolean = false,
     isError: Boolean = false,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     OutlinedTextField(
         value = value,
@@ -71,6 +73,7 @@ fun SlateTextField(
         readOnly = readOnly,
         isError = isError,
         trailingIcon = trailingIcon,
+        visualTransformation = visualTransformation,
         shape = RoundedCornerShape(10.dp),
         modifier = modifier.fillMaxWidth(),
         colors = OutlinedTextFieldDefaults.colors(
