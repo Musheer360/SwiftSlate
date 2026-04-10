@@ -8,7 +8,7 @@
 
 # SwiftSlate
 
-### System-wide AI text assistant for Android — powered by Gemini, custom providers, and local LLMs
+### System-wide AI text assistant for Android — powered by Gemini, Groq, and any OpenAI-compatible endpoint
 
 Type a trigger like **`?fix`** at the end of any text, in any app, and watch it get replaced — instantly.
 
@@ -16,13 +16,14 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 
 [![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](#-getting-started)
 [![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](#%EF%B8%8F-tech-stack)
-[![Gemini](https://img.shields.io/badge/Gemini_AI-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](#-powered-by-gemini-custom-providers--local-llms)
+[![Gemini](https://img.shields.io/badge/Gemini_AI-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](#-supported-ai-providers)
 [![License: MIT](https://img.shields.io/badge/MIT-blue?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 
 [![Latest Release](https://img.shields.io/github/v/release/Musheer360/SwiftSlate?style=flat-square&label=Latest&color=brightgreen)](https://github.com/Musheer360/SwiftSlate/releases/latest)
-[![APK Size](https://img.shields.io/badge/APK_Size-~1.2_MB-blue?style=flat-square)](#)
-[![API 23+](https://img.shields.io/badge/Min_SDK-API_23-orange?style=flat-square)](#)
 [![GitHub Stars](https://img.shields.io/github/stars/Musheer360/SwiftSlate?style=flat-square&color=yellow)](https://github.com/Musheer360/SwiftSlate/stargazers)
+[![APK Size](https://img.shields.io/badge/APK_Size-~1.3_MB-blue?style=flat-square)](#)
+[![API 23+](https://img.shields.io/badge/Min_SDK-API_23-orange?style=flat-square)](#)
+[![Build](https://img.shields.io/github/actions/workflow/status/Musheer360/SwiftSlate/build.yml?branch=master&style=flat-square&label=CI)](https://github.com/Musheer360/SwiftSlate/actions/workflows/build.yml)
 
 <br>
 
@@ -47,20 +48,24 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 - [Features](#-features)
 - [Built-in Commands](#-built-in-commands)
 - [Text Replacer Commands](#-text-replacer-commands)
+- [Supported AI Providers](#-supported-ai-providers)
 - [Getting Started](#-getting-started)
 - [How It Works](#%EF%B8%8F-how-it-works)
 - [Custom Commands](#-custom-commands)
 - [API Key Management](#-api-key-management)
 - [Backup & Restore](#-backup--restore)
 - [App Screens](#-app-screens)
+- [Screenshots](#-screenshots)
 - [Localization](#-localization)
 - [Privacy & Security](#-privacy--security)
 - [Tech Stack](#%EF%B8%8F-tech-stack)
+- [Architecture](#-architecture)
 - [Building from Source](#-building-from-source)
-- [Known Limitations](#%EF%B8%8F-known-limitations)
 - [Contributing](#-contributing)
+- [Sponsors](#-sponsors)
 - [Support the Project](#-support-the-project)
 - [License](#-license)
+- [Star History](#-star-history)
 
 <br>
 
@@ -102,13 +107,13 @@ Type, trigger, done. The AI response replaces your text directly in the same fie
 Add multiple API keys for automatic round-robin rotation. If one key hits a rate limit, SwiftSlate seamlessly switches to the next.
 
 ### 🌙 AMOLED Dark Theme
-Pure black (`#000000`) Material 3 interface designed for OLED screens — saves battery and looks stunning.
+Pure black (`#000000`) Material 3 interface designed for OLED screens — saves battery and looks stunning. Light theme also included.
 
 </td>
 <td width="50%">
 
-### 🤖 Powered by Gemini, Custom Providers & Local LLMs
-Ships with Google's Gemini API. Or connect **any OpenAI-compatible endpoint** — cloud providers, or **local LLMs** like [Ollama](https://ollama.com), [LM Studio](https://lmstudio.ai), and others running on your network.
+### 🤖 Multi-Provider AI
+Ships with Google Gemini, Groq, or connect **any OpenAI-compatible endpoint** — cloud providers, or **local LLMs** like [Ollama](https://ollama.com), [LM Studio](https://lmstudio.ai), and others running on your network.
 
 ### 🛠️ Two Command Types
 **AI commands** send text to your provider for intelligent transformation. **Text replacer commands** run entirely offline for instant local text manipulation — no API key needed.
@@ -157,7 +162,7 @@ Use any standard language code with `?translate:XX`:
 | `it` | Italian | `ru` | Russian | `nl` | Dutch |
 | `tr` | Turkish | `pl` | Polish | `sv` | Swedish |
 
-…and many more. Any language code recognized by Google Translate works.
+…and many more. Any ISO 639 language code works — the AI model handles it.
 
 </details>
 
@@ -165,9 +170,7 @@ Use any standard language code with `?translate:XX`:
 
 ## 🛠️ Text Replacer Commands
 
-Beyond AI, you can create **text replacer commands** that run **entirely offline** — no API key, no network, instant execution. These are custom commands you define with the "Text Replacer" type.
-
-Text replacer commands replace the trigger with a fixed string. They're perfect for:
+Beyond AI, you can create **text replacer commands** that run **entirely offline** — no API key, no network, instant execution:
 
 | Use Case | Trigger | Replacement | Result |
 |:---------|:--------|:------------|:-------|
@@ -181,6 +184,19 @@ Text replacer commands replace the trigger with a fixed string. They're perfect 
 
 <br>
 
+## 🤖 Supported AI Providers
+
+| Provider | Models | Notes |
+|:---------|:-------|:------|
+| **Google Gemini** (default) | `gemini-2.5-flash-lite`, `gemini-3-flash-preview`, `gemini-3.1-flash-lite-preview` | Free tier available at [aistudio.google.com](https://aistudio.google.com) |
+| **Groq** | `llama-3.3-70b-versatile`, `llama-3.1-8b-instant`, `openai/gpt-oss-120b`, `openai/gpt-oss-20b`, `meta-llama/llama-4-scout-17b-16e-instruct` | Free tier at [console.groq.com](https://console.groq.com/keys) |
+| **Custom (OpenAI-compatible)** | Any model your endpoint supports | Works with Ollama, LM Studio, vLLM, any `/v1/chat/completions` endpoint |
+
+> [!TIP]
+> For local LLMs, set the endpoint to your machine's local address (e.g., `http://localhost:11434/v1` for Ollama). HTTP is allowed for `localhost`, `127.0.0.1`, and `10.0.2.2`.
+
+<br>
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -188,12 +204,12 @@ Text replacer commands replace the trigger with a fixed string. They're perfect 
 | Requirement | Details |
 |:------------|:--------|
 | **Android Device** | Android 6.0+ (API 23 or higher) |
-| **API Key** | Free Gemini key at [aistudio.google.com](https://aistudio.google.com), or a key from any OpenAI-compatible provider. *Not required for text replacer commands.* |
+| **API Key** | Free Gemini key at [aistudio.google.com](https://aistudio.google.com), or a key from Groq / any OpenAI-compatible provider. *Not required for text replacer commands.* |
 
 ### Installation
 
 > [!TIP]
-> The APK is only ~1.2 MB — lightweight with zero external dependencies for networking or JSON.
+> The APK is only ~1.3 MB — lightweight with zero external dependencies for networking or JSON.
 
 **1.** Download the latest APK from the [**Releases**](https://github.com/Musheer360/SwiftSlate/releases/latest) page
 
@@ -269,10 +285,11 @@ flowchart TD
 4. **Command Routing** — Text replacer commands execute immediately on-device. AI commands proceed to the API call path
 5. **API Call** — The text + prompt is sent to the configured AI provider using the next available key in the round-robin rotation
 6. **Inline Spinner** — While waiting for the AI response, a spinner animation (`◐ ◓ ◑ ◒`) replaces the text to provide visual feedback
-7. **Watchdog Timer** — A safety timer auto-cancels stuck processing jobs to prevent the service from becoming unresponsive
+7. **Watchdog Timer** — A 120-second safety timer auto-cancels stuck processing jobs to prevent the service from becoming unresponsive
 8. **Text Replacement** — The response replaces the original text using `ACTION_SET_TEXT`
-9. **Fallback Strategy** — If `ACTION_SET_TEXT` fails (some apps don't support it), SwiftSlate falls back to a clipboard-based paste approach
-10. **Bounded Responses** — API responses are capped at 1 MB to prevent memory issues from malformed responses
+9. **Fallback Strategy** — If `ACTION_SET_TEXT` fails (some apps don't support it), SwiftSlate falls back to a clipboard-based select-all + paste approach
+10. **Post-Replace Verification** — A delayed check ensures the IME didn't clobber the replacement, re-applying if needed
+11. **Bounded Responses** — API responses are capped at 1 MB to prevent memory issues from malformed responses
 
 </details>
 
@@ -280,7 +297,7 @@ flowchart TD
 
 ## 🎨 Custom Commands
 
-Go beyond the built-ins — create, edit, and manage your own commands in the **Commands** tab.
+Create, edit, and manage your own commands in the **Commands** tab.
 
 ### Two Types of Custom Commands
 
@@ -288,20 +305,6 @@ Go beyond the built-ins — create, edit, and manage your own commands in the **
 |:-----|:-------------|:---------------|:--------|
 | **AI** | Sends text to your AI provider with your custom prompt | Yes | ~1–3 seconds |
 | **Text Replacer** | Replaces the trigger with a fixed string, entirely offline | No | Instant |
-
-### How to Create One
-
-1. Open the **Commands** screen
-2. Select the command type: **AI** or **Text Replacer**
-3. Enter a **Trigger** (e.g., `?poem`)
-4. Enter a **Prompt** (for AI) or **Replacement text** (for Text Replacer)
-5. Tap **"Add Command"**
-
-### Editing & Deleting
-
-- Tap the ✏️ **edit icon** on any custom command to modify its trigger, prompt, or type
-- Tap the 🗑️ **delete icon** to remove it
-- Built-in commands are read-only
 
 ### Example AI Command Ideas
 
@@ -326,8 +329,9 @@ SwiftSlate supports multiple API keys with intelligent rotation:
 |:--------|:--------|
 | **Round-Robin Rotation** | Keys are used in turn to spread usage evenly across all configured keys |
 | **Rate-Limit Handling** | If a key gets rate-limited (HTTP 429), SwiftSlate tracks the cooldown and skips it automatically |
-| **Invalid Key Detection** | Keys returning 403 errors are marked invalid and excluded from rotation |
+| **Invalid Key Detection** | Keys returning 401/403 errors are marked invalid and excluded from rotation |
 | **Encrypted Storage** | All keys encrypted with AES-256-GCM via Android Keystore before being saved locally |
+| **Live Validation** | Keys are validated against the provider's API before being saved |
 
 > [!TIP]
 > Adding **2–3 API keys from different accounts** helps avoid rate limits during heavy use. On the free tier, all keys under the same account share a single quota — so rotation only helps with keys from separate accounts.
@@ -361,7 +365,7 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 - Enable/disable toggle
 - API key count
 - Quick-start guide
-- Version info & GitHub link
+- Version info & update check
 
 </td>
 <td width="25%" valign="top">
@@ -386,14 +390,8 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 <td width="25%" valign="top">
 
 #### ⚙️ Settings
-- **Provider selection**
-  - Google Gemini (default)
-  - Custom (OpenAI-compatible)
-  - Local LLMs (Ollama, LM Studio)
-- **Gemini model picker**
-  - `gemini-2.5-flash-lite`
-  - `gemini-3-flash-preview`
-  - `gemini-3.1-flash-lite-preview`
+- **Provider selection** (Gemini, Groq, Custom)
+- **Model picker** per provider
 - Custom endpoint URL & model
 - Trigger prefix customization
 - Backup & restore commands
@@ -401,6 +399,22 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 </td>
 </tr>
 </table>
+
+<br>
+
+## 📸 Screenshots
+
+<!-- Add your screenshots here. Recommended: 4 screenshots side by side showing Dashboard, Keys, Commands, and Settings screens. -->
+<!-- Example:
+<div align="center">
+<img src="screenshots/dashboard.png" width="200" alt="Dashboard" />
+<img src="screenshots/keys.png" width="200" alt="Keys" />
+<img src="screenshots/commands.png" width="200" alt="Commands" />
+<img src="screenshots/settings.png" width="200" alt="Settings" />
+</div>
+-->
+
+*Screenshots coming soon — contributions welcome!*
 
 <br>
 
@@ -430,7 +444,7 @@ The app automatically uses your device's language. Contributions for additional 
 | | Concern | How SwiftSlate Handles It |
 |:--|:--------|:------------------------|
 | 👁️ | **Text Monitoring** | Only processes text when a trigger command is detected at the end. All other typing is completely ignored. Password fields are always skipped. |
-| 📡 | **Data Transmission** | Text is sent **only** to the configured AI provider (Google Gemini or your custom endpoint). No other servers are ever contacted. Text replacer commands never leave your device. |
+| 📡 | **Data Transmission** | Text is sent **only** to the configured AI provider (Google Gemini, Groq, or your custom endpoint). No other servers are ever contacted. Text replacer commands never leave your device. |
 | 🔐 | **Key Storage** | API keys are encrypted with AES-256-GCM using the Android Keystore system. Encryption failures throw rather than falling back to plaintext. |
 | 📊 | **Analytics** | **None.** Zero telemetry, zero tracking, zero crash reporting. |
 | 📖 | **Open Source** | The entire codebase is open for inspection under the MIT License. |
@@ -444,7 +458,6 @@ The app automatically uses your device's language. Contributions for additional 
 <table>
 <tr><td><strong>Language</strong></td><td>Kotlin 2.1</td></tr>
 <tr><td><strong>UI</strong></td><td>Jetpack Compose · Material 3</td></tr>
-<tr><td><strong>Navigation</strong></td><td>Navigation Compose</td></tr>
 <tr><td><strong>Async</strong></td><td>Kotlin Coroutines</td></tr>
 <tr><td><strong>HTTP</strong></td><td><code>HttpURLConnection</code> (zero external dependencies)</td></tr>
 <tr><td><strong>JSON</strong></td><td><code>org.json</code> (Android built-in)</td></tr>
@@ -460,12 +473,46 @@ The app automatically uses your device's language. Contributions for additional 
 
 <br>
 
+## 🏛️ Architecture
+
+```
+com.musheer360.swiftslate/
+├── service/
+│   └── AssistantService.kt      # Core accessibility service — event listening,
+│                                 # trigger detection, text replacement, inline spinner
+├── api/
+│   ├── GeminiClient.kt          # Google Gemini API client
+│   ├── OpenAICompatibleClient.kt # Unified client for Groq + any OpenAI-compatible endpoint
+│   └── ApiClientUtils.kt        # Shared utilities — response parsing, error handling,
+│                                 # structured output extraction, system prompt
+├── manager/
+│   ├── KeyManager.kt            # AES-256-GCM encrypted key storage, round-robin rotation,
+│   │                            # rate-limit tracking, invalid key detection
+│   └── CommandManager.kt        # Command CRUD, trigger matching (longest-match),
+│                                # prefix migration, import/export
+├── model/
+│   ├── Command.kt               # Command data class (AI or Text Replacer)
+│   └── ProviderType.kt          # Provider constants (gemini, groq, custom)
+├── ui/
+│   ├── DashboardScreen.kt       # Service status, key count, quick-start guide
+│   ├── KeysScreen.kt            # API key management with live validation
+│   ├── CommandsScreen.kt        # Command list, add/edit/delete with collapsible form
+│   ├── SettingsScreen.kt        # Provider, model, prefix, backup/restore
+│   ├── components/              # Reusable UI components (cards, text fields, dividers)
+│   └── theme/Theme.kt           # AMOLED dark + light Material 3 color schemes
+├── MainActivity.kt              # AnimatedContent tab navigation (4 tabs)
+├── SwiftSlateViewModel.kt       # Shared ViewModel exposing managers + prefs
+└── SwiftSlateApp.kt             # Application class — SharedPreferences pre-warming
+```
+
+<br>
+
 ## 🔨 Building from Source
 
 ### Prerequisites
 
 - [**Android Studio**](https://developer.android.com/studio) (latest stable)
-- **JDK 17**
+- **JDK 17+**
 - **Android SDK** with API level 36
 
 ### Build
@@ -479,6 +526,12 @@ cd SwiftSlate
 ./gradlew assembleDebug
 
 # Output: app/build/outputs/apk/debug/app-debug.apk
+```
+
+### Install on device
+
+```bash
+adb install app/build/outputs/apk/debug/app-debug.apk
 ```
 
 <details>
@@ -535,6 +588,25 @@ git push origin feature/amazing-feature
 
 <br>
 
+## 💜 Sponsors
+
+SwiftSlate is made possible by the generous support of its sponsors. Thank you!
+
+<table>
+<tr>
+<td align="center">
+<a href="https://github.com/lifearien">
+<img src="https://github.com/lifearien.png" width="80" alt="lifearien" /><br>
+<strong>@lifearien</strong>
+</a>
+</td>
+</tr>
+</table>
+
+Want to see your name here? [**Become a sponsor →**](https://github.com/sponsors/Musheer360)
+
+<br>
+
 ## ❤️ Support the Project
 
 SwiftSlate is free, open source, and built in my spare time. If it's useful to you, consider supporting its development:
@@ -547,6 +619,22 @@ SwiftSlate is free, open source, and built in my spare time. If it's useful to y
 ## 📄 License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+<br>
+
+## 📈 Star History
+
+<div align="center">
+
+<a href="https://star-history.com/#Musheer360/SwiftSlate&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Musheer360/SwiftSlate&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Musheer360/SwiftSlate&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Musheer360/SwiftSlate&type=Date" width="600" />
+  </picture>
+</a>
+
+</div>
 
 <br>
 
