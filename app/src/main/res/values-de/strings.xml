@@ -5,23 +5,18 @@
 
     <!-- Dashboard -->
     <string name="dashboard_title">Dashboard</string>
-    <string name="service_status_title">Dienststatus</string>
     <string name="service_status_active">Aktiv</string>
     <string name="service_status_inactive">Inaktiv</string>
     <string name="service_enable">Aktivieren</string>
     <string name="dashboard_api_keys_title">API-Schlüssel</string>
     <string name="dashboard_keys_configured">%1$d Schlüssel konfiguriert</string>
     <string name="dashboard_add_key_hint">Füge einen API-Schlüssel hinzu, um zu beginnen.</string>
-    <string name="dashboard_how_to_use_title">So funktioniert\'s</string>
-    <string name="dashboard_how_to_use_body">1. Aktiviere den Accessibility-Dienst.\n2. Füge mindestens einen API-Schlüssel hinzu.\n3. Tippe irgendwo in Android und beende mit einem Trigger wie \'%1$sfix\' oder \'%1$scasual\'.\n4. Warte einen Moment, bis der Text automatisch ersetzt wird!</string>
-    <string name="dashboard_version">Version %1$s</string>
 
     <!-- Keys -->
     <string name="keys_title">API-Schlüssel</string>
     <string name="keys_api_key_label">API-Schlüssel</string>
     <string name="keys_testing">Wird getestet…</string>
     <string name="keys_add_key">Schlüssel hinzufügen</string>
-    <string name="keys_delete_key">Schlüssel löschen</string>
     <string name="keys_valid_added">Gültiger Schlüssel hinzugefügt!</string>
     <string name="keys_already_added">Dieser Schlüssel wurde bereits hinzugefügt</string>
     <string name="keys_validation_failed">Validierung fehlgeschlagen</string>
@@ -53,11 +48,8 @@
     <string name="settings_provider_custom">Benutzerdefiniert (OpenAI-kompatibel)</string>
     <string name="settings_model_title">Modell</string>
     <string name="settings_endpoint_title">Endpoint</string>
-    <string name="settings_endpoint_desc">Basis-URL der OpenAI-kompatiblen API</string>
-    <string name="settings_model_desc">Modellkennung deines Anbieters</string>
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o, claude-3-haiku usw.</string>
-    <string name="settings_trigger_prefix_title">Trigger-Präfix</string>
     <string name="settings_trigger_prefix_desc">Symbol vor Befehlsnamen (z. B. %1$sfix).</string>
     <string name="settings_prefix_error_length">Muss genau 1 Zeichen lang sein</string>
     <string name="settings_prefix_error_whitespace">Darf kein Leerzeichen sein</string>
@@ -66,7 +58,6 @@
     <string name="settings_endpoint_error_spaces">URL darf keine Leerzeichen enthalten</string>
 
     <!-- Backup -->
-    <string name="backup_title">Sicherung &amp; Wiederherstellung</string>
     <string name="backup_desc">Exportiere oder importiere deine benutzerdefinierten Befehle als JSON-Datei.</string>
     <string name="backup_export">Exportieren</string>
     <string name="backup_import">Importieren</string>
@@ -86,4 +77,15 @@
     <string name="delete_confirm_message">Diese Aktion kann nicht rückgängig gemacht werden.</string>
     <string name="delete_confirm_button">Löschen</string>
     <string name="backup_export_error">Export fehlgeschlagen</string>
+    <string name="commands_search_hint">Befehle durchsuchen…</string>
+    <string name="commands_search_close">Suche schließen</string>
+    <string name="commands_search_empty">Keine Befehle gefunden</string>
+    <string name="keys_empty">Keine API-Schlüssel hinzugefügt</string>
+    <string name="dashboard_monthly_requests">Diesen Monat</string>
+    <string name="dashboard_favorite_command">Top-Befehl</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Letzte 7 Tage</string>
+    <string name="settings_temperature_title">Temperatur</string>
+    <string name="settings_made_by">Mit Liebe gemacht von Musheer Alam</string>
+    <string name="settings_sponsor">Auf GitHub sponsern</string>
 </resources>

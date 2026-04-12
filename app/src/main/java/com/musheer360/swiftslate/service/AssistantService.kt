@@ -32,6 +32,7 @@ import com.musheer360.swiftslate.api.GenerateResult
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
+import com.musheer360.swiftslate.manager.StatsManager
 import com.musheer360.swiftslate.model.Command
 import com.musheer360.swiftslate.model.CommandType
 import com.musheer360.swiftslate.model.ProviderType
@@ -55,6 +56,7 @@ class AssistantService : AccessibilityService() {
 
     private lateinit var keyManager: KeyManager
     private lateinit var commandManager: CommandManager
+    private lateinit var statsManager: StatsManager
     private val client = GeminiClient()
     private val openAIClient = OpenAICompatibleClient()
     private val serviceJob = SupervisorJob()
@@ -113,6 +115,7 @@ class AssistantService : AccessibilityService() {
         super.onServiceConnected()
         keyManager = KeyManager(applicationContext)
         commandManager = CommandManager(applicationContext)
+        statsManager = StatsManager(applicationContext)
         updateTriggers()
     }
 
@@ -159,6 +162,7 @@ class AssistantService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event?.eventType != AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) return
         if (event.packageName?.toString() == packageName) return
+        if (!::keyManager.isInitialized) return
 
         if (isProcessing.get()) return
         val source = event.source ?: return
@@ -241,6 +245,7 @@ class AssistantService : AccessibilityService() {
                             lastUndoSourceId = sourceId(source)
                             replaceText(source, precedingText + command.prompt)
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                            statsManager.recordUsage(command.trigger)
                         }
                     } catch (e: CancellationException) {
                         throw e
@@ -291,7 +296,7 @@ class AssistantService : AccessibilityService() {
         currentJob = serviceScope.launch {
             val thisJob = coroutineContext[Job]
             val prefs = applicationContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
-            val providerType = prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI
+            val providerType = ProviderType.sanitize(prefs.getString("provider_type", null))
             val model: String
             val endpoint: String
 
@@ -315,7 +320,7 @@ class AssistantService : AccessibilityService() {
                 model = prefs.getString("model", "gemini-2.5-flash-lite") ?: "gemini-2.5-flash-lite"
                 endpoint = ""
             }
-            val temperature = DEFAULT_TEMPERATURE
+            val temperature = prefs.getFloat("temperature", DEFAULT_TEMPERATURE.toFloat()).toDouble()
             val useStructuredOutput = run {
                 val disabledAt = prefs.getLong("structured_output_disabled_at", 0L)
                 System.currentTimeMillis() - disabledAt > 86_400_000L // re-try after 24h
@@ -358,6 +363,7 @@ class AssistantService : AccessibilityService() {
                                 prefs.edit().putLong("structured_output_disabled_at", System.currentTimeMillis()).apply()
                             }
                             succeeded = true
+                            statsManager.recordUsage(command.trigger)
                             break
                         }
 
@@ -373,6 +379,7 @@ class AssistantService : AccessibilityService() {
                             is ApiError.InvalidKey -> {
                                 keyManager.markInvalid(key)
                             }
+                            is ApiError.ServerError -> continue // 5xx — try next key
                             else -> break // Non-retryable error, stop trying other keys
                         }
                     }

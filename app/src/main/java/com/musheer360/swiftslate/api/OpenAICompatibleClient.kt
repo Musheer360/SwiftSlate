@@ -134,7 +134,8 @@ class OpenAICompatibleClient {
             }
 
             val jsonBody = JSONObject().apply {
-                put("model", model)
+                val safeModel = model.replace(Regex("[^a-zA-Z0-9._\\-/]"), "")
+                put("model", safeModel)
                 put("messages", JSONArray().apply {
                     put(JSONObject().apply {
                         put("role", "system")
@@ -236,6 +237,7 @@ class OpenAICompatibleClient {
             val apiError = when (e) {
                 is ApiException -> e.apiError
                 is SocketTimeoutException, is UnknownHostException, is ConnectException -> ApiError.Network(e.message ?: "Network error")
+                is org.json.JSONException -> ApiError.Other("Invalid response from server")
                 else -> ApiError.Other(e.message ?: "Unknown error")
             }
             if (e is ApiException) Result.failure(e) else Result.failure(ApiException(apiError, e.message ?: "Unknown error"))

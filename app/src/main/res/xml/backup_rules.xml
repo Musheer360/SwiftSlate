@@ -3,4 +3,5 @@
     <exclude domain="sharedpref" path="secure_keys_prefs.xml" />
     <exclude domain="sharedpref" path="settings.xml" />
     <exclude domain="sharedpref" path="commands.xml" />
+    <exclude domain="sharedpref" path="stats.xml" />
 </full-backup-content>

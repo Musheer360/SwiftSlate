@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.R
@@ -76,7 +77,7 @@ fun CommandsScreen(commandManager: CommandManager) {
     }
 
     val chevronRotation by animateFloatAsState(
-        targetValue = if (isFormExpanded) 180f else 0f,
+        targetValue = if (isFormExpanded) 0f else 180f,
         animationSpec = tween(250),
         label = "chevron"
     )
@@ -89,7 +90,206 @@ fun CommandsScreen(commandManager: CommandManager) {
     ) {
         ScreenTitle(stringResource(R.string.commands_title))
 
-        // Collapsible form card
+        // Search pill
+        if (displayCommands.isNotEmpty()) {
+            val searchLabel = stringResource(R.string.commands_search_hint)
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+                    .semantics { contentDescription = searchLabel },
+                shape = RoundedCornerShape(10.dp),
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 44.dp)
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    BasicTextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        singleLine = true,
+                        textStyle = LocalTextStyle.current.copy(
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        ),
+                        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                        modifier = Modifier.weight(1f),
+                        decorationBox = { innerTextField ->
+                            Box {
+                                if (searchQuery.isEmpty()) {
+                                    Text(
+                                        text = searchLabel,
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        }
+                    )
+                    if (searchQuery.isNotEmpty()) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(R.string.commands_search_close),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier
+                                .size(18.dp)
+                                .clickable(interactionSource = null, indication = null) {
+                                    searchQuery = ""
+                                }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                    Icon(
+                        imageVector = if (expandedIds.isEmpty()) Icons.Default.List else Icons.Default.KeyboardArrowDown,
+                        contentDescription = if (expandedIds.isEmpty()) expandLabel else collapseLabel,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable(interactionSource = null, indication = null) {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                expandedIds = if (expandedIds.isEmpty()) {
+                                    filteredCommands.map { it.trigger }.toSet()
+                                } else {
+                                    emptySet()
+                                }
+                            }
+                    )
+                }
+            }
+
+            // Commands list
+            SlateCard(modifier = Modifier.weight(1f)) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp)),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(bottom = 4.dp)
+                ) {
+                    if (filteredCommands.isEmpty() && searchQuery.isNotBlank()) {
+                        item {
+                            Text(
+                                text = stringResource(R.string.commands_search_empty),
+                                fontSize = 13.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                    items(filteredCommands, key = { it.trigger }) { cmd ->
+                        val isExpanded = cmd.trigger in expandedIds
+                        SlateItemCard(
+                            modifier = Modifier.clickable(
+                                interactionSource = null,
+                                indication = null,
+                                onClickLabel = if (isExpanded) collapseLabel else expandLabel
+                            ) {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                expandedIds = if (isExpanded) expandedIds - cmd.trigger
+                                else expandedIds + cmd.trigger
+                            }
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = cmd.trigger,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 15.sp,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    if (!cmd.isBuiltIn) {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Text(
+                                            text = stringResource(R.string.commands_edit_command),
+                                            fontSize = 13.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.clickable(
+                                                interactionSource = null,
+                                                indication = null
+                                            ) {
+                                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                                trigger = cmd.trigger
+                                                prompt = cmd.prompt
+                                                selectedType = cmd.type
+                                                editingTrigger = cmd.trigger
+                                                errorMessage = null
+                                                isFormExpanded = true
+                                            }
+                                        )
+                                        Text(
+                                            text = " | ",
+                                            fontSize = 13.sp,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                        Text(
+                                            text = stringResource(R.string.commands_delete_command),
+                                            fontSize = 13.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = MaterialTheme.colorScheme.error,
+                                            modifier = Modifier.clickable(
+                                                interactionSource = null,
+                                                indication = null
+                                            ) {
+                                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                                commandToDelete = cmd.trigger
+                                            }
+                                        )
+                                    } else {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Text(
+                                            text = stringResource(R.string.commands_built_in),
+                                            fontSize = 13.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                                AnimatedVisibility(
+                                    visible = isExpanded,
+                                    enter = expandVertically(
+                                        animationSpec = tween(250),
+                                        expandFrom = Alignment.Top
+                                    ) + fadeIn(tween(200)),
+                                    exit = shrinkVertically(
+                                        animationSpec = tween(250),
+                                        shrinkTowards = Alignment.Top
+                                    ) + fadeOut(tween(150))
+                                ) {
+                                    Column {
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = cmd.prompt,
+                                            fontSize = 13.sp,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            Spacer(modifier = Modifier.weight(1f))
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Collapsible form card — at the bottom
         SlateCard {
             Row(
                 modifier = Modifier
@@ -108,8 +308,7 @@ fun CommandsScreen(commandManager: CommandManager) {
                 Text(
                     text = stringResource(R.string.commands_add_custom_title),
                     fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    letterSpacing = 1.sp,
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Icon(
@@ -125,9 +324,9 @@ fun CommandsScreen(commandManager: CommandManager) {
                 enter = expandVertically(
                     animationSpec = tween(250),
                     expandFrom = Alignment.Top
-                ) + fadeIn(tween(200, delayMillis = 50)),
+                ) + fadeIn(tween(200)),
                 exit = shrinkVertically(
-                    animationSpec = tween(200),
+                    animationSpec = tween(250),
                     shrinkTowards = Alignment.Top
                 ) + fadeOut(tween(150))
             ) {
@@ -184,18 +383,12 @@ fun CommandsScreen(commandManager: CommandManager) {
                         singleLine = true
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(
+                    SlateTextField(
                         value = prompt,
                         onValueChange = { prompt = it; errorMessage = null },
                         label = { Text(if (selectedType == CommandType.AI) stringResource(R.string.commands_prompt_label) else stringResource(R.string.commands_replacement_label)) },
-                        shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                        )
+                        singleLine = false,
+                        modifier = Modifier.height(100.dp)
                     )
                     errorMessage?.let { msg ->
                         Text(
@@ -261,198 +454,6 @@ fun CommandsScreen(commandManager: CommandManager) {
                 }
             }
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        if (displayCommands.isNotEmpty()) {
-            // Search pill with expand/collapse toggle
-            val searchLabel = stringResource(R.string.commands_search_hint)
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)
-                    .semantics { contentDescription = searchLabel },
-                shape = RoundedCornerShape(10.dp),
-                color = MaterialTheme.colorScheme.surface
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 44.dp)
-                        .padding(horizontal = 12.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    BasicTextField(
-                        value = searchQuery,
-                        onValueChange = { searchQuery = it },
-                        singleLine = true,
-                        textStyle = LocalTextStyle.current.copy(
-                            fontSize = 15.sp,
-                            color = MaterialTheme.colorScheme.onSurface
-                        ),
-                        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-                        modifier = Modifier.weight(1f),
-                        decorationBox = { innerTextField ->
-                            Box {
-                                if (searchQuery.isEmpty()) {
-                                    Text(
-                                        text = searchLabel,
-                                        fontSize = 15.sp,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                innerTextField()
-                            }
-                        }
-                    )
-                    if (searchQuery.isNotEmpty()) {
-                        IconButton(
-                            onClick = { searchQuery = "" },
-                            modifier = Modifier.size(36.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = stringResource(R.string.commands_search_close),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                    IconButton(
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            expandedIds = if (expandedIds.isEmpty()) {
-                                filteredCommands.map { it.trigger }.toSet()
-                            } else {
-                                emptySet()
-                            }
-                        },
-                        modifier = Modifier.size(36.dp)
-                    ) {
-                        Icon(
-                            imageVector = if (expandedIds.isEmpty()) Icons.Default.List else Icons.Default.KeyboardArrowDown,
-                            contentDescription = if (expandedIds.isEmpty()) expandLabel else collapseLabel,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
-            }
-
-            SlateCard(modifier = Modifier.weight(1f)) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp)),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(bottom = 4.dp)
-                ) {
-                    if (filteredCommands.isEmpty() && searchQuery.isNotBlank()) {
-                        item {
-                            Text(
-                                text = stringResource(R.string.commands_search_empty),
-                                fontSize = 13.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                            )
-                        }
-                    }
-                    items(filteredCommands, key = { it.trigger }) { cmd ->
-                        val isExpanded = cmd.trigger in expandedIds
-                        SlateItemCard(
-                            modifier = Modifier
-                                .clickable(
-                                    interactionSource = null,
-                                    indication = null,
-                                    onClickLabel = if (isExpanded) collapseLabel else expandLabel
-                                ) {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    expandedIds = if (isExpanded) expandedIds - cmd.trigger
-                                    else expandedIds + cmd.trigger
-                                }
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(
-                                        text = cmd.trigger,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 15.sp,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                    if (!cmd.isBuiltIn) {
-                                        Spacer(modifier = Modifier.weight(1f))
-                                        Text(
-                                            text = stringResource(R.string.commands_edit_command),
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 15.sp,
-                                            color = MaterialTheme.colorScheme.primary,
-                                            modifier = Modifier.clickable(
-                                                interactionSource = null,
-                                                indication = null
-                                            ) {
-                                                trigger = cmd.trigger
-                                                prompt = cmd.prompt
-                                                selectedType = cmd.type
-                                                editingTrigger = cmd.trigger
-                                                errorMessage = null
-                                                isFormExpanded = true
-                                            }
-                                        )
-                                        Text(
-                                            text = " | ",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 15.sp,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                        Text(
-                                            text = stringResource(R.string.commands_delete_command),
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 15.sp,
-                                            color = MaterialTheme.colorScheme.error,
-                                            modifier = Modifier.clickable(
-                                                interactionSource = null,
-                                                indication = null
-                                            ) {
-                                                commandToDelete = cmd.trigger
-                                            }
-                                        )
-                                    }
-                                }
-                                AnimatedVisibility(
-                                    visible = isExpanded,
-                                    enter = expandVertically(
-                                        animationSpec = tween(250),
-                                        expandFrom = Alignment.Top
-                                    ) + fadeIn(tween(200)),
-                                    exit = shrinkVertically(
-                                        animationSpec = tween(250),
-                                        shrinkTowards = Alignment.Top
-                                    ) + fadeOut(tween(150))
-                                ) {
-                                    Column {
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text(
-                                            text = cmd.prompt,
-                                            fontSize = 13.sp,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            Spacer(modifier = Modifier.weight(1f))
-        }
-
     }
 
     commandToDelete?.let { triggerToDelete ->

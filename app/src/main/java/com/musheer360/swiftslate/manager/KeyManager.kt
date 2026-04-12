@@ -155,6 +155,7 @@ class KeyManager(context: Context) {
 
     @Synchronized
     fun addKey(key: String): Boolean {
+        if (key.isBlank() || key.length > 256) return false
         val keys = getKeys().toMutableList()
         if (!keys.contains(key)) {
             keys.add(key)

@@ -5,23 +5,18 @@
 
     <!-- Dashboard -->
     <string name="dashboard_title">仪表盘</string>
-    <string name="service_status_title">服务状态</string>
     <string name="service_status_active">已启用</string>
     <string name="service_status_inactive">未启用</string>
     <string name="service_enable">启用</string>
     <string name="dashboard_api_keys_title">API 密钥</string>
     <string name="dashboard_keys_configured">已配置 %1$d 个密钥</string>
     <string name="dashboard_add_key_hint">添加一个 API 密钥以开始使用。</string>
-    <string name="dashboard_how_to_use_title">使用方法</string>
-    <string name="dashboard_how_to_use_body">1. 启用无障碍服务。\n2. 至少添加一个 API 密钥。\n3. 在 Android 任意位置输入文字，以 \'%1$sfix\' 或 \'%1$scasual\' 等触发词结尾。\n4. 稍等片刻，文本将自动替换！</string>
-    <string name="dashboard_version">版本 %1$s</string>
 
     <!-- Keys -->
     <string name="keys_title">API 密钥</string>
     <string name="keys_api_key_label">API 密钥</string>
     <string name="keys_testing">验证中…</string>
     <string name="keys_add_key">添加密钥</string>
-    <string name="keys_delete_key">删除密钥</string>
     <string name="keys_valid_added">有效密钥已添加！</string>
     <string name="keys_already_added">此密钥已添加过</string>
     <string name="keys_validation_failed">验证失败</string>
@@ -53,11 +48,8 @@
     <string name="settings_provider_custom">自定义（OpenAI 兼容）</string>
     <string name="settings_model_title">模型</string>
     <string name="settings_endpoint_title">接入点</string>
-    <string name="settings_endpoint_desc">OpenAI 兼容 API 的基础 URL</string>
-    <string name="settings_model_desc">服务商提供的模型标识符</string>
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o、claude-3-haiku 等</string>
-    <string name="settings_trigger_prefix_title">触发前缀</string>
     <string name="settings_trigger_prefix_desc">命令名称前的符号（例如 %1$sfix）。</string>
     <string name="settings_prefix_error_length">必须恰好为 1 个字符</string>
     <string name="settings_prefix_error_whitespace">不能为空格</string>
@@ -66,7 +58,6 @@
     <string name="settings_endpoint_error_spaces">URL 不能包含空格</string>
 
     <!-- Backup -->
-    <string name="backup_title">备份 &amp; 恢复</string>
     <string name="backup_desc">将自定义命令导出或导入为 JSON 文件。</string>
     <string name="backup_export">导出</string>
     <string name="backup_import">导入</string>
@@ -86,4 +77,15 @@
     <string name="delete_confirm_message">此操作无法撤销。</string>
     <string name="delete_confirm_button">删除</string>
     <string name="backup_export_error">导出失败</string>
+    <string name="commands_search_hint">搜索命令…</string>
+    <string name="commands_search_close">关闭搜索</string>
+    <string name="commands_search_empty">未找到命令</string>
+    <string name="keys_empty">未添加 API 密钥</string>
+    <string name="dashboard_monthly_requests">本月</string>
+    <string name="dashboard_favorite_command">常用命令</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">最近 7 天</string>
+    <string name="settings_temperature_title">温度</string>
+    <string name="settings_made_by">由 Musheer Alam 用心制作</string>
+    <string name="settings_sponsor">在 GitHub 上赞助</string>
 </resources>

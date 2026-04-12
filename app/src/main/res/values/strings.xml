@@ -5,23 +5,22 @@
 
     <!-- Dashboard -->
     <string name="dashboard_title">Dashboard</string>
-    <string name="service_status_title">Service Status</string>
     <string name="service_status_active">Active</string>
     <string name="service_status_inactive">Inactive</string>
     <string name="service_enable">Enable</string>
     <string name="dashboard_api_keys_title">API Keys</string>
     <string name="dashboard_keys_configured">%1$d keys configured</string>
     <string name="dashboard_add_key_hint">Add an API key to get started.</string>
-    <string name="dashboard_how_to_use_title">How to use</string>
-    <string name="dashboard_how_to_use_body">1. Enable the Accessibility Service.\n2. Add at least one API key.\n3. Type anywhere in Android, ending with a trigger like \'%1$sfix\' or \'%1$scasual\'.\n4. Wait a moment for the text to be magically replaced!</string>
-    <string name="dashboard_version">Version %1$s</string>
+    <string name="dashboard_monthly_requests">This Month</string>
+    <string name="dashboard_favorite_command">Top Command</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Last 7 Days</string>
 
     <!-- Keys -->
     <string name="keys_title">API Keys</string>
     <string name="keys_api_key_label">API Key</string>
     <string name="keys_testing">Testing…</string>
     <string name="keys_add_key">Add Key</string>
-    <string name="keys_delete_key">Delete Key</string>
     <string name="keys_valid_added">Valid key added!</string>
     <string name="keys_already_added">This key has already been added</string>
     <string name="keys_validation_failed">Validation failed</string>
@@ -39,7 +38,6 @@
     <string name="commands_edit_command">Edit</string>
     <string name="commands_save_command">Save Command</string>
     <string name="commands_cancel">Cancel</string>
-    <string name="commands_custom">Custom</string>
     <string name="commands_type_ai">AI</string>
     <string name="commands_type_replacer">Local</string>
     <string name="commands_replacement_label">Replacement Text (e.g., myemail@example.com)</string>
@@ -50,17 +48,15 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
-    <string name="settings_provider_title">Provider</string>
+    <string name="settings_provider_title">Model Provider</string>
     <string name="settings_provider_gemini">Google Gemini</string>
     <string name="settings_provider_groq">Groq</string>
     <string name="settings_provider_custom">Custom (OpenAI Compatible)</string>
     <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Temperature</string>
     <string name="settings_endpoint_title">Endpoint</string>
-    <string name="settings_endpoint_desc">Base URL of the OpenAI-compatible API</string>
-    <string name="settings_model_desc">Model identifier from your provider</string>
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, etc.</string>
-    <string name="settings_trigger_prefix_title">Trigger Prefix</string>
     <string name="settings_trigger_prefix_desc">Symbol used before command names (e.g., %1$sfix).</string>
     <string name="settings_prefix_error_length">Must be exactly 1 character</string>
     <string name="settings_prefix_error_whitespace">Cannot be whitespace</string>
@@ -69,8 +65,7 @@
     <string name="settings_endpoint_error_spaces">URL cannot contain spaces</string>
 
     <!-- Backup -->
-    <string name="backup_title">Backup &amp; Restore</string>
-    <string name="backup_desc">Export or import your custom commands as a JSON file.</string>
+    <string name="backup_desc">Export or import your commands as a JSON file.</string>
     <string name="backup_export">Export</string>
     <string name="backup_import">Import</string>
     <string name="backup_export_success">Commands exported successfully</string>
@@ -80,6 +75,8 @@
     <string name="backup_import_confirm">This will replace all your existing custom commands. Continue?</string>
     <string name="backup_import_cancel">Cancel</string>
     <string name="settings_check_updates">Check for updates</string>
+    <string name="settings_made_by">Made with love by Musheer Alam</string>
+    <string name="settings_sponsor">Sponsor on GitHub</string>
     <string name="commands_collapse">Collapse</string>
     <string name="commands_expand">Expand</string>
     <string name="commands_search_hint">Search commands…</string>
@@ -87,7 +84,6 @@
     <string name="commands_search_empty">No commands found</string>
 
     <!-- Delete confirmation -->
-    <string name="cancel">Cancel</string>
     <string name="delete_confirm_command_title">Delete this command?</string>
     <string name="delete_confirm_key_title">Delete this API key?</string>
     <string name="delete_confirm_message">This action cannot be undone.</string>

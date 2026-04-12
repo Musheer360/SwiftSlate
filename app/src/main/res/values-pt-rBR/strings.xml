@@ -5,23 +5,18 @@
 
     <!-- Dashboard -->
     <string name="dashboard_title">Painel</string>
-    <string name="service_status_title">Status do serviço</string>
     <string name="service_status_active">Ativo</string>
     <string name="service_status_inactive">Inativo</string>
     <string name="service_enable">Ativar</string>
     <string name="dashboard_api_keys_title">Chaves API</string>
     <string name="dashboard_keys_configured">%1$d chaves configuradas</string>
     <string name="dashboard_add_key_hint">Adicione uma chave API para começar.</string>
-    <string name="dashboard_how_to_use_title">Como usar</string>
-    <string name="dashboard_how_to_use_body">1. Ative o serviço de acessibilidade.\n2. Adicione pelo menos uma chave API.\n3. Digite em qualquer lugar no Android, terminando com um gatilho como \'%1$sfix\' ou \'%1$scasual\'.\n4. Aguarde um instante e o texto será substituído automaticamente!</string>
-    <string name="dashboard_version">Versão %1$s</string>
 
     <!-- Keys -->
     <string name="keys_title">Chaves API</string>
     <string name="keys_api_key_label">Chave API</string>
     <string name="keys_testing">Testando…</string>
     <string name="keys_add_key">Adicionar chave</string>
-    <string name="keys_delete_key">Excluir chave</string>
     <string name="keys_valid_added">Chave válida adicionada!</string>
     <string name="keys_already_added">Esta chave já foi adicionada</string>
     <string name="keys_validation_failed">Falha na validação</string>
@@ -53,11 +48,8 @@
     <string name="settings_provider_custom">Personalizado (compatível com OpenAI)</string>
     <string name="settings_model_title">Modelo</string>
     <string name="settings_endpoint_title">Endpoint</string>
-    <string name="settings_endpoint_desc">URL base da API compatível com OpenAI</string>
-    <string name="settings_model_desc">Identificador do modelo do seu provedor</string>
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, etc.</string>
-    <string name="settings_trigger_prefix_title">Prefixo de ativação</string>
     <string name="settings_trigger_prefix_desc">Símbolo antes do nome do comando (ex.: %1$sfix).</string>
     <string name="settings_prefix_error_length">Deve ter exatamente 1 caractere</string>
     <string name="settings_prefix_error_whitespace">Não pode ser espaço em branco</string>
@@ -66,7 +58,6 @@
     <string name="settings_endpoint_error_spaces">A URL não pode conter espaços</string>
 
     <!-- Backup -->
-    <string name="backup_title">Backup &amp; Restauração</string>
     <string name="backup_desc">Exporte ou importe seus comandos personalizados como arquivo JSON.</string>
     <string name="backup_export">Exportar</string>
     <string name="backup_import">Importar</string>
@@ -86,4 +77,15 @@
     <string name="delete_confirm_message">Esta ação não pode ser desfeita.</string>
     <string name="delete_confirm_button">Excluir</string>
     <string name="backup_export_error">Falha na exportação</string>
+    <string name="commands_search_hint">Pesquisar comandos…</string>
+    <string name="commands_search_close">Fechar pesquisa</string>
+    <string name="commands_search_empty">Nenhum comando encontrado</string>
+    <string name="keys_empty">Nenhuma chave API adicionada</string>
+    <string name="dashboard_monthly_requests">Este mês</string>
+    <string name="dashboard_favorite_command">Comando principal</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Últimos 7 dias</string>
+    <string name="settings_temperature_title">Temperatura</string>
+    <string name="settings_made_by">Feito com amor por Musheer Alam</string>
+    <string name="settings_sponsor">Patrocinar no GitHub</string>
 </resources>

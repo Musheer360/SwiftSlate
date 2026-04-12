@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,7 +31,6 @@ import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.model.ProviderType
 import com.musheer360.swiftslate.ui.components.ScreenTitle
-import com.musheer360.swiftslate.ui.components.SectionHeader
 import com.musheer360.swiftslate.ui.components.SlateCard
 import com.musheer360.swiftslate.ui.components.SlateItemCard
 import com.musheer360.swiftslate.ui.components.SlateTextField
@@ -75,15 +72,14 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                     fontSize = 13.sp
                 )
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
         }
 
-        SectionHeader(stringResource(R.string.keys_api_key_label))
         SlateCard {
             SlateTextField(
                 value = newKey,
                 onValueChange = { if (it.length <= 256) newKey = it },
-                label = { Text(stringResource(R.string.keys_api_key_label)) },
+                placeholder = { Text(stringResource(R.string.keys_api_key_label)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation()
             )
@@ -161,20 +157,19 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                     fontSize = 13.sp,
                     modifier = Modifier
                         .clickable(interactionSource = null, indication = null) { uriHandler.openUri(apiKeyUrl) }
-                        .heightIn(min = 48.dp)
-                        .wrapContentHeight(Alignment.CenterVertically)
+                        .padding(top = 8.dp)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        SectionHeader(stringResource(R.string.dashboard_api_keys_title))
         if (keys.isNotEmpty()) {
-            SlateCard {
+            SlateCard(modifier = Modifier.weight(1f)) {
                 LazyColumn(
-                    modifier = Modifier.weight(1f).clip(RoundedCornerShape(8.dp)),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(8.dp)),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(bottom = 4.dp)
                 ) {
                     itemsIndexed(keys, key = { index, k -> "$index-${k.hashCode()}" }) { index, key ->
                         SlateItemCard {
@@ -185,20 +180,19 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                                 color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.weight(1f).semantics(mergeDescendants = true) {}
                             )
-                            IconButton(
-                                onClick = {
+                            Text(
+                                text = stringResource(R.string.delete_confirm_button),
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.clickable(
+                                    interactionSource = null,
+                                    indication = null
+                                ) {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     keyToDelete = key
-                                },
-                                modifier = Modifier.size(36.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = stringResource(R.string.keys_delete_key),
-                                    tint = MaterialTheme.colorScheme.error,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
+                                }
+                            )
                         }
                     }
                 }
@@ -240,7 +234,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
             },
             dismissButton = {
                 TextButton(onClick = { keyToDelete = null }) {
-                    Text(stringResource(R.string.cancel))
+                    Text(stringResource(R.string.commands_cancel))
                 }
             }
         )

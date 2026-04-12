@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SlateCard(
     modifier: Modifier = Modifier,
+    fillHeight: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Surface(
@@ -22,7 +23,9 @@ fun SlateCard(
         shadowElevation = 0.dp
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(14.dp)
+                .then(if (fillHeight) Modifier.fillMaxHeight() else Modifier),
             content = content
         )
     }
@@ -36,18 +39,6 @@ fun ScreenTitle(title: String) {
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier.padding(bottom = 20.dp)
-    )
-}
-
-@Composable
-fun SectionHeader(text: String) {
-    Text(
-        text = text.uppercase(),
-        fontSize = 15.sp,
-        fontWeight = FontWeight.SemiBold,
-        letterSpacing = 1.sp,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.padding(bottom = 8.dp)
     )
 }
 

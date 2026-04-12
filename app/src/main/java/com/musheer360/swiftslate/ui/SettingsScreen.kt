@@ -5,9 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.BuildConfig
@@ -32,8 +31,8 @@ import kotlinx.coroutines.withContext
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.model.ProviderType
 import com.musheer360.swiftslate.ui.components.ScreenTitle
-import com.musheer360.swiftslate.ui.components.SectionHeader
 import com.musheer360.swiftslate.ui.components.SlateCard
+import com.musheer360.swiftslate.ui.components.SlateDivider
 import com.musheer360.swiftslate.ui.components.SlateTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +63,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
 
     var triggerPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
     var prefixError by remember { mutableStateOf<String?>(null) }
+    var temperature by remember { mutableStateOf(prefs.getFloat("temperature", 0.5f)) }
 
     val prefixErrorLength = stringResource(R.string.settings_prefix_error_length)
     val prefixErrorWhitespace = stringResource(R.string.settings_prefix_error_whitespace)
@@ -151,14 +151,19 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .graphicsLayer { } // Creates a hardware layer for smooth NavHost slide animations
+            .graphicsLayer { }
             .padding(horizontal = 20.dp, vertical = 16.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         ScreenTitle(stringResource(R.string.settings_title))
 
-        SectionHeader(stringResource(R.string.settings_provider_title))
+        // Card 1: Provider + Model
         SlateCard {
+            Text(
+                text = stringResource(R.string.settings_provider_title),
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             ExposedDropdownMenuBox(
                 expanded = providerExpanded,
                 onExpandedChange = { providerExpanded = !providerExpanded }
@@ -171,11 +176,12 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     },
                     onValueChange = {},
                     readOnly = true,
+                    
                     modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                 )
                 ExposedDropdownMenu(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(10.dp),
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(10.dp),
                     expanded = providerExpanded,
                     onDismissRequest = { providerExpanded = false }
                 ) {
@@ -208,13 +214,14 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     )
                 }
             }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        if (providerType == ProviderType.GEMINI) {
-            SectionHeader(stringResource(R.string.settings_model_title))
-            SlateCard {
+            Spacer(modifier = Modifier.height(8.dp))
+            if (providerType == ProviderType.GEMINI) {
+                Text(
+                    text = stringResource(R.string.settings_model_title),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 ExposedDropdownMenuBox(
                     expanded = modelExpanded,
                     onExpandedChange = { modelExpanded = !modelExpanded }
@@ -223,6 +230,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         value = selectedModel,
                         onValueChange = {},
                         readOnly = true,
+                        
                         modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                     )
                     ExposedDropdownMenu(
@@ -244,10 +252,13 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         }
                     }
                 }
-            }
-        } else if (providerType == ProviderType.GROQ) {
-            SectionHeader(stringResource(R.string.settings_model_title))
-            SlateCard {
+            } else if (providerType == ProviderType.GROQ) {
+                Text(
+                    text = stringResource(R.string.settings_model_title),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 ExposedDropdownMenuBox(
                     expanded = groqModelExpanded,
                     onExpandedChange = { groqModelExpanded = !groqModelExpanded }
@@ -256,6 +267,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         value = groqModel,
                         onValueChange = {},
                         readOnly = true,
+                        
                         modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                     )
                     ExposedDropdownMenu(
@@ -277,16 +289,13 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         }
                     }
                 }
-            }
-        } else {
-            SectionHeader(stringResource(R.string.settings_endpoint_title))
-            SlateCard {
+            } else {
                 Text(
-                    text = stringResource(R.string.settings_endpoint_desc),
+                    text = stringResource(R.string.settings_endpoint_title),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 SlateTextField(
                     value = customEndpoint,
                     onValueChange = {
@@ -311,6 +320,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         }
                     },
                     placeholder = { Text(stringResource(R.string.settings_endpoint_placeholder)) },
+                    
                     isError = endpointError != null
                 )
                 endpointError?.let { msg ->
@@ -321,18 +331,13 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            SectionHeader(stringResource(R.string.settings_model_title))
-            SlateCard {
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = stringResource(R.string.settings_model_desc),
+                    text = stringResource(R.string.settings_model_title),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 SlateTextField(
                     value = customModel,
                     onValueChange = {
@@ -343,14 +348,56 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                             prefs.edit().putString("custom_model", it).remove("structured_output_disabled_at").apply()
                         }
                     },
-                    placeholder = { Text(stringResource(R.string.settings_model_placeholder)) }
+                    placeholder = { Text(stringResource(R.string.settings_model_placeholder)) },
+                    
                 )
             }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_temperature_title),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = String.format("%.1f", temperature),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Slider(
+                value = temperature,
+                onValueChange = {
+                    val newVal = Math.round(it * 10) / 10f
+                    if (newVal != temperature) {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        temperature = newVal
+                    }
+                },
+                onValueChangeFinished = {
+                    prefs.edit().putFloat("temperature", temperature).apply()
+                },
+                valueRange = 0f..2f,
+                steps = 19,
+                modifier = Modifier.fillMaxWidth().height(26.dp),
+                colors = SliderDefaults.colors(
+                    thumbColor = MaterialTheme.colorScheme.primary,
+                    activeTrackColor = MaterialTheme.colorScheme.primary,
+                    inactiveTrackColor = MaterialTheme.colorScheme.outline
+                )
+            )
+            Spacer(modifier = Modifier.height(4.dp))
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        SectionHeader(stringResource(R.string.settings_trigger_prefix_title))
+        // Card 2: Trigger Prefix
         SlateCard {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -393,9 +440,9 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        SectionHeader(stringResource(R.string.backup_title))
+        // Card 3: Backup
         SlateCard {
             Text(
                 text = stringResource(R.string.backup_desc),
@@ -440,31 +487,43 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 48.dp)
-                .clickable(interactionSource = null, indication = null) {
-                    uriHandler.openUri("https://github.com/Musheer360/SwiftSlate/releases/latest")
-                },
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        // Card 4: About
+        SlateCard(modifier = Modifier.weight(1f), fillHeight = true) {
             Text(
-                text = stringResource(R.string.dashboard_version, BuildConfig.VERSION_NAME) + " · ",
-                fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = stringResource(R.string.app_name) + " v" + BuildConfig.VERSION_NAME,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.settings_check_updates),
                 fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(interactionSource = null, indication = null) {
+                    uriHandler.openUri("https://github.com/Musheer360/SwiftSlate/releases/latest")
+                }
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            SlateDivider()
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = stringResource(R.string.settings_made_by),
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(R.string.settings_sponsor),
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(interactionSource = null, indication = null) {
+                    uriHandler.openUri("https://github.com/sponsors/Musheer360")
+                }
             )
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
     }
 
     if (showImportConfirm) {
@@ -474,6 +533,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
             text = { Text(stringResource(R.string.backup_import_confirm)) },
             confirmButton = {
                 TextButton(onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                     showImportConfirm = false
                     importLauncher.launch(arrayOf("application/json"))
                 }) { Text(stringResource(R.string.backup_import)) }

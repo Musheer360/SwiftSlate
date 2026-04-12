@@ -112,7 +112,8 @@ class GeminiClient {
     ): Result<Pair<String, Boolean>> {
         var connection: HttpURLConnection? = null
         return try {
-            connection = URL("https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent")
+            val safeModel = model.replace(Regex("[^a-zA-Z0-9._-]"), "")
+            connection = URL("https://generativelanguage.googleapis.com/v1beta/models/$safeModel:generateContent")
                 .openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")
@@ -222,6 +223,7 @@ class GeminiClient {
             val apiError = when (e) {
                 is ApiException -> e.apiError
                 is SocketTimeoutException, is UnknownHostException, is ConnectException -> ApiError.Network(e.message ?: "Network error")
+                is org.json.JSONException -> ApiError.Other("Invalid response from server")
                 else -> ApiError.Other(e.message ?: "Unknown error")
             }
             if (e is ApiException) Result.failure(e) else Result.failure(ApiException(apiError, e.message ?: "Unknown error"))

@@ -4,10 +4,12 @@
         <exclude domain="sharedpref" path="secure_keys_prefs.xml" />
         <exclude domain="sharedpref" path="settings.xml" />
         <exclude domain="sharedpref" path="commands.xml" />
+        <exclude domain="sharedpref" path="stats.xml" />
     </cloud-backup>
     <device-transfer>
         <exclude domain="sharedpref" path="secure_keys_prefs.xml" />
         <exclude domain="sharedpref" path="settings.xml" />
         <exclude domain="sharedpref" path="commands.xml" />
+        <exclude domain="sharedpref" path="stats.xml" />
     </device-transfer>
 </data-extraction-rules>

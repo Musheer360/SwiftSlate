@@ -5,23 +5,18 @@
 
     <!-- Dashboard -->
     <string name="dashboard_title">डैशबोर्ड</string>
-    <string name="service_status_title">सेवा स्थिति</string>
     <string name="service_status_active">सक्रिय</string>
     <string name="service_status_inactive">निष्क्रिय</string>
     <string name="service_enable">सक्रिय करें</string>
     <string name="dashboard_api_keys_title">API कुंजियाँ</string>
     <string name="dashboard_keys_configured">%1$d कुंजियाँ कॉन्फ़िगर की गईं</string>
     <string name="dashboard_add_key_hint">शुरू करने के लिए एक API कुंजी जोड़ें।</string>
-    <string name="dashboard_how_to_use_title">उपयोग कैसे करें</string>
-    <string name="dashboard_how_to_use_body">1. एक्सेसिबिलिटी सेवा सक्रिय करें।\n2. कम से कम एक API कुंजी जोड़ें।\n3. Android में कहीं भी टाइप करें, अंत में \'%1$sfix\' या \'%1$scasual\' जैसा ट्रिगर लगाएँ।\n4. कुछ पल प्रतीक्षा करें और टेक्स्ट अपने आप बदल जाएगा!</string>
-    <string name="dashboard_version">संस्करण %1$s</string>
 
     <!-- Keys -->
     <string name="keys_title">API कुंजियाँ</string>
     <string name="keys_api_key_label">API कुंजी</string>
     <string name="keys_testing">परीक्षण हो रहा है…</string>
     <string name="keys_add_key">कुंजी जोड़ें</string>
-    <string name="keys_delete_key">कुंजी हटाएँ</string>
     <string name="keys_valid_added">मान्य कुंजी जोड़ी गई!</string>
     <string name="keys_already_added">यह कुंजी पहले से जोड़ी जा चुकी है</string>
     <string name="keys_validation_failed">सत्यापन विफल</string>
@@ -53,11 +48,8 @@
     <string name="settings_provider_custom">कस्टम (OpenAI संगत)</string>
     <string name="settings_model_title">मॉडल</string>
     <string name="settings_endpoint_title">Endpoint</string>
-    <string name="settings_endpoint_desc">OpenAI-संगत API का बेस URL</string>
-    <string name="settings_model_desc">आपके प्रदाता का मॉडल पहचानकर्ता</string>
     <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
     <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, आदि।</string>
-    <string name="settings_trigger_prefix_title">ट्रिगर प्रीफ़िक्स</string>
     <string name="settings_trigger_prefix_desc">कमांड नाम से पहले का चिह्न (जैसे, %1$sfix)।</string>
     <string name="settings_prefix_error_length">बिल्कुल 1 वर्ण होना चाहिए</string>
     <string name="settings_prefix_error_whitespace">रिक्त स्थान नहीं हो सकता</string>
@@ -66,7 +58,6 @@
     <string name="settings_endpoint_error_spaces">URL में रिक्त स्थान नहीं हो सकते</string>
 
     <!-- Backup -->
-    <string name="backup_title">बैकअप &amp; पुनर्स्थापना</string>
     <string name="backup_desc">अपने कस्टम कमांड को JSON फ़ाइल के रूप में निर्यात या आयात करें।</string>
     <string name="backup_export">निर्यात करें</string>
     <string name="backup_import">आयात करें</string>
@@ -86,4 +77,15 @@
     <string name="delete_confirm_message">यह क्रिया पूर्ववत नहीं की जा सकती।</string>
     <string name="delete_confirm_button">हटाएँ</string>
     <string name="backup_export_error">निर्यात विफल</string>
+    <string name="commands_search_hint">कमांड खोजें…</string>
+    <string name="commands_search_close">खोज बंद करें</string>
+    <string name="commands_search_empty">कोई कमांड नहीं मिला</string>
+    <string name="keys_empty">कोई API कुंजी नहीं जोड़ी गई</string>
+    <string name="dashboard_monthly_requests">इस महीने</string>
+    <string name="dashboard_favorite_command">शीर्ष कमांड</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">पिछले 7 दिन</string>
+    <string name="settings_temperature_title">तापमान</string>
+    <string name="settings_made_by">Musheer Alam द्वारा प्यार से बनाया गया</string>
+    <string name="settings_sponsor">GitHub पर प्रायोजित करें</string>
 </resources>

@@ -11,9 +11,13 @@
 
 # Preserve line numbers for readable crash stack traces
 -keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
 # Remove debug logging in release
 -assumenosideeffects class android.util.Log {
     public static int v(...);
     public static int d(...);
+    public static int i(...);
+    public static int w(...);
+    public static int e(...);
 }
