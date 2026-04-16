@@ -1,0 +1,1 @@
+Disabled dependency metadata signing block for F-Droid reproducible build compatibility.
