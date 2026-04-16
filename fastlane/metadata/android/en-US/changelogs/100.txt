@@ -1,0 +1,1 @@
+Added versionCode file to releases for F-Droid auto-update support.
