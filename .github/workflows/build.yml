@@ -252,11 +252,17 @@ jobs:
           git tag "${{ needs.version.outputs.tag }}"
           git push origin "${{ needs.version.outputs.tag }}"
 
+      - name: Write versionCode file for F-Droid auto-update
+        shell: bash
+        run: echo "${{ needs.version.outputs.version_code }}" > artifacts/versionCode.txt
+
       - name: Release
         uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
         with:
           tag_name: ${{ needs.version.outputs.tag }}
-          files: artifacts/SwiftSlate-*.apk
+          files: |
+            artifacts/SwiftSlate-*.apk
+            artifacts/versionCode.txt
           name: SwiftSlate ${{ needs.version.outputs.tag }}
           generate_release_notes: true
           draft: false
