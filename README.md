@@ -132,7 +132,7 @@ App UI available in English, French, German, Spanish, Portuguese (BR), Hindi, an
 
 ## 🧩 Built-in Commands
 
-SwiftSlate ships with **9 AI-powered commands** plus dynamic translation — ready to use out of the box:
+SwiftSlate ships with **10 AI-powered commands** plus dynamic translation — ready to use out of the box:
 
 | Trigger | Action | Example |
 |:--------|:-------|:--------|
@@ -143,6 +143,7 @@ SwiftSlate ships with **9 AI-powered commands** plus dynamic translation — rea
 | **`?formal`** | Rewrite in professional tone | `hey can u send me that file` → `Could you please share the file at your earliest convenience?` |
 | **`?casual`** | Rewrite in friendly tone | `Please confirm your attendance at the event` → `Hey, you coming to the event? Let me know!` |
 | **`?emoji`** | Add relevant emojis | `I love this new feature` → `I love this new feature! 🎉❤️✨` |
+| **`?human`** | Humanize AI-generated text | `I hope this email finds you well. I wanted to delve into...` → `Hope you're doing well. I wanted to dig into...` |
 | **`?reply`** | Generate a contextual reply | `Do you want to grab lunch tomorrow?` → `Sure, I'd love to! What time works for you?` |
 | **`?undo`** | Restore text from before the last replacement | Reverts to your original text before AI modified it |
 | **`?translate:XX`** | Translate to any language | `Hello, how are you?` **`?translate:es`** → `Hola, ¿cómo estás?` |
@@ -381,7 +382,7 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 <td width="25%" valign="top">
 
 #### 📝 Commands
-- 9 built-in commands (read-only)
+- 10 built-in commands (read-only)
 - Add custom commands (AI or Text Replacer)
 - Edit existing custom commands
 - Delete custom commands
