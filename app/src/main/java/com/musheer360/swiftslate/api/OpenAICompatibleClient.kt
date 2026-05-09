@@ -134,7 +134,7 @@ class OpenAICompatibleClient {
             }
 
             val jsonBody = JSONObject().apply {
-                val safeModel = model.replace(Regex("[^a-zA-Z0-9._\\-/]"), "")
+                val safeModel = model.replace(Regex("[^a-zA-Z0-9._\\-/: ]"), "")
                 put("model", safeModel)
                 put("messages", JSONArray().apply {
                     put(JSONObject().apply {
@@ -246,3 +246,4 @@ class OpenAICompatibleClient {
         }
     }
 }
+
