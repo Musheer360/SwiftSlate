@@ -103,6 +103,7 @@ internal fun Throwable?.isTransientNetwork(): Boolean = when (this) {
 }
 
 internal const val MAX_TRANSIENT_NETWORK_RETRIES = 3
+internal const val TRANSIENT_RETRY_BASE_DELAY_MS = 300L
 
 internal fun shouldRetryTransientNetwork(
     error: Throwable?,

@@ -30,6 +30,7 @@ import com.musheer360.swiftslate.api.ApiException
 import com.musheer360.swiftslate.api.GeminiClient
 import com.musheer360.swiftslate.api.GenerateResult
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
+import com.musheer360.swiftslate.api.TRANSIENT_RETRY_BASE_DELAY_MS
 import com.musheer360.swiftslate.api.shouldRetryTransientNetwork
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
@@ -346,7 +347,7 @@ class AssistantService : AccessibilityService() {
                         val isGroq = providerType == ProviderType.GROQ
                         var transientRetryCount = 0
                         var result: Result<GenerateResult>
-                        while (true) {
+                        do {
                             result = if (isGroq || providerType == ProviderType.CUSTOM) {
                                 openAIClient.generate(command.prompt, text, key, model, temperature, endpoint,
                                     useStructuredOutput = false,
@@ -358,8 +359,8 @@ class AssistantService : AccessibilityService() {
                             val error = result.exceptionOrNull()
                             if (!shouldRetryTransientNetwork(error, transientRetryCount)) break
                             transientRetryCount++
-                            delay(300L * transientRetryCount)
-                        }
+                            delay(TRANSIENT_RETRY_BASE_DELAY_MS * transientRetryCount)
+                        } while (true)
 
                         if (result.isSuccess) {
                             spinnerJob?.cancelAndJoin()
