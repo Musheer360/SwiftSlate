@@ -616,7 +616,9 @@ class AssistantService : AccessibilityService() {
             lower.contains("timeout") || lower.contains("timed out") ->
                 "Request timed out. Check your connection."
             lower.contains("unable to resolve host") || lower.contains("no address associated") ||
-                lower.contains("network is unreachable") || lower.contains("no route to host") ->
+                lower.contains("network is unreachable") || lower.contains("no route to host") ||
+                lower.contains("software caused connection abort") || lower.contains("connection reset") ||
+                lower.contains("broken pipe") ->
                 "No internet connection."
             lower.contains("connection refused") || lower.contains("connect failed") ->
                 "Could not reach the API. Check your endpoint URL."

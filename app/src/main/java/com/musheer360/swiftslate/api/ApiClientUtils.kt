@@ -96,7 +96,7 @@ internal object ApiClientUtils {
 }
 
 internal fun Throwable?.isTransientNetwork(): Boolean = when (this) {
-    is SocketTimeoutException, is UnknownHostException, is ConnectException -> true
+    is SocketTimeoutException, is UnknownHostException, is ConnectException, is java.net.SocketException -> true
     is ApiException -> apiError is ApiError.Network
     else -> false
 }
