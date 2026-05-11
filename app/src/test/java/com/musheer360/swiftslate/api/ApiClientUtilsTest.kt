@@ -17,4 +17,3 @@ class ApiClientUtilsTest {
         assertFalse(IllegalStateException("boom").isTransientNetwork())
     }
 }
-
