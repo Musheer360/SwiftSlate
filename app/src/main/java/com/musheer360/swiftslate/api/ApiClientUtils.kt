@@ -101,3 +101,11 @@ internal fun Throwable?.isTransientNetwork(): Boolean = when (this) {
     is ApiException -> apiError is ApiError.Network
     else -> false
 }
+
+internal const val MAX_TRANSIENT_NETWORK_RETRIES = 3
+
+internal fun shouldRetryTransientNetwork(
+    error: Throwable?,
+    retryCount: Int,
+    maxRetries: Int = MAX_TRANSIENT_NETWORK_RETRIES
+): Boolean = retryCount < maxRetries && error.isTransientNetwork()
