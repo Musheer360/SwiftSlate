@@ -618,6 +618,10 @@ class AssistantService : AccessibilityService() {
             lower.contains("unable to resolve host") || lower.contains("no address associated") ||
                 lower.contains("network is unreachable") || lower.contains("no route to host") ->
                 "No internet connection."
+            lower.contains("software caused connection abort") ||
+                lower.contains("connection reset by peer") ||
+                lower.contains("broken pipe") ->
+                "Connection was interrupted. Please try again."
             lower.contains("connection refused") || lower.contains("connect failed") ->
                 "Could not reach the API. Check your endpoint URL."
             lower.contains("bad request") ->

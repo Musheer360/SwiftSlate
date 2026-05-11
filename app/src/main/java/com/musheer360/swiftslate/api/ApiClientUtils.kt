@@ -4,6 +4,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.ConnectException
 import java.net.HttpURLConnection
+import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import org.json.JSONObject
@@ -96,7 +97,7 @@ internal object ApiClientUtils {
 }
 
 internal fun Throwable?.isTransientNetwork(): Boolean = when (this) {
-    is SocketTimeoutException, is UnknownHostException, is ConnectException -> true
+    is SocketTimeoutException, is UnknownHostException, is ConnectException, is SocketException -> true
     is ApiException -> apiError is ApiError.Network
     else -> false
 }

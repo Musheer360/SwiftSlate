@@ -6,6 +6,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.net.ConnectException
 import java.net.HttpURLConnection
+import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.URL
 import java.net.UnknownHostException
@@ -236,7 +237,7 @@ class OpenAICompatibleClient {
         } catch (e: Exception) {
             val apiError = when (e) {
                 is ApiException -> e.apiError
-                is SocketTimeoutException, is UnknownHostException, is ConnectException -> ApiError.Network(e.message ?: "Network error")
+                is SocketTimeoutException, is UnknownHostException, is ConnectException, is SocketException -> ApiError.Network(e.message ?: "Network error")
                 is org.json.JSONException -> ApiError.Other("Invalid response from server")
                 else -> ApiError.Other(e.message ?: "Unknown error")
             }
@@ -246,4 +247,3 @@ class OpenAICompatibleClient {
         }
     }
 }
-
