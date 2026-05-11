@@ -53,7 +53,15 @@ class OpenAICompatibleClient {
                 }
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            when (e) {
+                is SocketTimeoutException ->
+                    Result.failure(Exception("Connection timed out. Check your network and try again."))
+                is UnknownHostException, is ConnectException ->
+                    Result.failure(Exception("Could not connect. Check your network and endpoint URL."))
+                is SocketException ->
+                    Result.failure(Exception("Connection was interrupted. Please try again."))
+                else -> Result.failure(e)
+            }
         } finally {
             connection?.disconnect()
         }

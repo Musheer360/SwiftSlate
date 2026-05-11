@@ -637,7 +637,8 @@ class AssistantService : AccessibilityService() {
                 "Could not reach the API. Check your endpoint URL."
             lower.contains("bad request") ->
                 "Request failed. Check your settings."
-            else -> raw
+            else -> if (raw.length <= 120 && !raw.contains("{") && !raw.contains("at com.")) raw
+                    else "Something went wrong. Please try again."
         }
     }
 

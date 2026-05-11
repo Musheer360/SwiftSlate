@@ -108,13 +108,19 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
         uri?.let {
             scope.launch {
                 try {
-                    withContext(Dispatchers.IO) {
+                    val written = withContext(Dispatchers.IO) {
                         context.contentResolver.openOutputStream(it)?.use { os ->
                             os.write(commandManager.exportCommands().toByteArray())
-                        }
+                            true
+                        } ?: false
                     }
-                    backupMessage = exportSuccessMsg
-                    backupSuccess = true
+                    if (written) {
+                        backupMessage = exportSuccessMsg
+                        backupSuccess = true
+                    } else {
+                        backupMessage = exportErrorMsg
+                        backupSuccess = false
+                    }
                 } catch (_: Exception) {
                     backupMessage = exportErrorMsg
                     backupSuccess = false

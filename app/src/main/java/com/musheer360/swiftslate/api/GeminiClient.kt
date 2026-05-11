@@ -52,7 +52,15 @@ class GeminiClient {
                 }
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            when (e) {
+                is SocketTimeoutException ->
+                    Result.failure(Exception("Connection timed out. Check your network and try again."))
+                is UnknownHostException, is ConnectException ->
+                    Result.failure(Exception("No internet connection. Check your network and try again."))
+                is SocketException ->
+                    Result.failure(Exception("Connection was interrupted. Please try again."))
+                else -> Result.failure(e)
+            }
         } finally {
             connection?.disconnect()
         }

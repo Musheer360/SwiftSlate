@@ -37,12 +37,12 @@ class StatsManager(context: Context) {
         editor.putInt(KEY_MONTHLY, monthly)
 
         // Per-command counts
-        val cmdJson = JSONObject(prefs.getString(KEY_COMMAND_COUNTS, "{}") ?: "{}")
+        val cmdJson = try { JSONObject(prefs.getString(KEY_COMMAND_COUNTS, "{}") ?: "{}") } catch (_: Exception) { JSONObject() }
         cmdJson.put(commandName, cmdJson.optInt(commandName, 0) + 1)
         editor.putString(KEY_COMMAND_COUNTS, cmdJson.toString())
 
         // Daily counts — keep last 7 days
-        val dailyJson = JSONObject(prefs.getString(KEY_DAILY_COUNTS, "{}") ?: "{}")
+        val dailyJson = try { JSONObject(prefs.getString(KEY_DAILY_COUNTS, "{}") ?: "{}") } catch (_: Exception) { JSONObject() }
         val day = today()
         dailyJson.put(day, dailyJson.optInt(day, 0) + 1)
         // Prune old entries
@@ -66,7 +66,7 @@ class StatsManager(context: Context) {
     /** Returns the command name with the highest usage, or null. */
     val favoriteCommand: String?
         get() {
-            val json = JSONObject(prefs.getString(KEY_COMMAND_COUNTS, "{}") ?: "{}")
+            val json = try { JSONObject(prefs.getString(KEY_COMMAND_COUNTS, "{}") ?: "{}") } catch (_: Exception) { return null }
             var best: String? = null
             var bestCount = 0
             json.keys().forEach { key ->
@@ -78,7 +78,7 @@ class StatsManager(context: Context) {
 
     /** Returns daily counts for the last 7 days, ordered oldest-first. Missing days are 0. */
     fun dailyCounts(): List<Pair<String, Int>> {
-        val json = JSONObject(prefs.getString(KEY_DAILY_COUNTS, "{}") ?: "{}")
+        val json = try { JSONObject(prefs.getString(KEY_DAILY_COUNTS, "{}") ?: "{}") } catch (_: Exception) { JSONObject() }
         val dayFmt = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         val cal = java.util.Calendar.getInstance()
         val result = mutableListOf<Pair<String, Int>>()

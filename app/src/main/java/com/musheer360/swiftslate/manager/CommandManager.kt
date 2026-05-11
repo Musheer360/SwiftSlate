@@ -85,7 +85,12 @@ class CommandManager(context: Context) {
         if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
         val prefix = getTriggerPrefix()
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
-        val arr = JSONArray(customStr)
+        val arr = try { JSONArray(customStr) } catch (_: Exception) {
+            // Corrupt prefs — self-heal to empty array
+            prefs.edit().putString("custom_commands", "[]").apply()
+            cachedCommands = null
+            JSONArray()
+        }
         val customCommands = mutableListOf<Command>()
         var needsMigration = false
         for (i in 0 until arr.length()) {
@@ -113,7 +118,7 @@ class CommandManager(context: Context) {
 
     @Synchronized fun addCustomCommand(command: Command) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
-        val arr = JSONArray(customStr)
+        val arr = try { JSONArray(customStr) } catch (_: Exception) { JSONArray() }
         val newArr = JSONArray()
         for (i in 0 until arr.length()) {
             val obj = arr.getJSONObject(i)
@@ -132,7 +137,7 @@ class CommandManager(context: Context) {
 
     @Synchronized fun removeCustomCommand(trigger: String) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
-        val arr = JSONArray(customStr)
+        val arr = try { JSONArray(customStr) } catch (_: Exception) { JSONArray() }
         val newArr = JSONArray()
         for (i in 0 until arr.length()) {
             val obj = arr.getJSONObject(i)
