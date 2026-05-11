@@ -637,8 +637,13 @@ class AssistantService : AccessibilityService() {
                 "Could not reach the API. Check your endpoint URL."
             lower.contains("bad request") ->
                 "Request failed. Check your settings."
-            else -> if (raw.length <= 120 && !raw.contains("{") && !raw.contains("at com.")) raw
-                    else "Something went wrong. Please try again."
+            else -> {
+                // Avoid leaking JSON blobs, stack traces, or very long technical strings
+                val isTechnical = raw.length > 120 ||
+                    raw.trimStart().let { it.startsWith("{") || it.startsWith("[") } ||
+                    raw.contains("\n\tat ")
+                if (isTechnical) "Something went wrong. Please try again." else raw
+            }
         }
     }
 

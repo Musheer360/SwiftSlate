@@ -66,7 +66,7 @@ class StatsManager(context: Context) {
     /** Returns the command name with the highest usage, or null. */
     val favoriteCommand: String?
         get() {
-            val json = try { JSONObject(prefs.getString(KEY_COMMAND_COUNTS, "{}") ?: "{}") } catch (_: Exception) { return null }
+            val json = try { JSONObject(prefs.getString(KEY_COMMAND_COUNTS, "{}") ?: "{}") } catch (_: Exception) { JSONObject() }
             var best: String? = null
             var bestCount = 0
             json.keys().forEach { key ->
