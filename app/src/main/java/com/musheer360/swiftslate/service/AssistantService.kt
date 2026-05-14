@@ -227,6 +227,20 @@ class AssistantService : AccessibilityService() {
             return
         }
 
+        if (command.isBuiltIn && (command.trigger.endsWith("copy") || command.trigger.endsWith("cut") ||
+            command.trigger.endsWith("paste") || command.trigger.endsWith("replace"))) {
+            if (!isProcessing.compareAndSet(false, true)) {
+                source.safeRecycle()
+                return
+            }
+            processingStartedAt = System.currentTimeMillis()
+            startWatchdog()
+            cancelPendingProcessingReset()
+            currentJob?.cancel()
+            handleClipboardCommand(source, precedingText, command)
+            return
+        }
+
         when (command.type) {
             CommandType.TEXT_REPLACER -> {
                 if (!isProcessing.compareAndSet(false, true)) {
@@ -452,6 +466,93 @@ class AssistantService : AccessibilityService() {
                 throw e
             } catch (e: Exception) {
                 showToast("Could not undo")
+            } finally {
+                withContext(NonCancellable + Dispatchers.Main) {
+                    if (currentJob === thisJob) {
+                        cancelWatchdog()
+                        processingStartedAt = 0L
+                        scheduleProcessingReset()
+                    }
+                    recycleIfUnowned(source)
+                }
+            }
+        }
+    }
+
+    private fun handleClipboardCommand(source: AccessibilityNodeInfo, precedingText: String, command: Command) {
+        currentJob = serviceScope.launch {
+            val thisJob = coroutineContext[Job]
+            try {
+                val trigger = command.trigger
+                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                when {
+                    trigger.endsWith("copy") -> {
+                        val textToCopy = precedingText.trim()
+                        if (textToCopy.isEmpty()) {
+                            performHapticFeedback(HapticFeedbackConstants.REJECT)
+                            showToast("Nothing to copy")
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                clipboard.setPrimaryClip(ClipData.newPlainText("SwiftSlate", textToCopy))
+                                replaceText(source, precedingText)
+                            }
+                            performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                            showToast("Copied to clipboard")
+                            statsManager.recordUsage(command.trigger)
+                        }
+                    }
+                    trigger.endsWith("cut") -> {
+                        val textToCut = precedingText.trim()
+                        if (textToCut.isEmpty()) {
+                            performHapticFeedback(HapticFeedbackConstants.REJECT)
+                            showToast("Nothing to cut")
+                        } else {
+                            lastOriginalText = precedingText
+                            lastUndoSourceId = sourceId(source)
+                            withContext(Dispatchers.Main) {
+                                clipboard.setPrimaryClip(ClipData.newPlainText("SwiftSlate", textToCut))
+                                replaceText(source, "")
+                            }
+                            performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                            showToast("Cut to clipboard")
+                            statsManager.recordUsage(command.trigger)
+                        }
+                    }
+                    trigger.endsWith("paste") -> {
+                        val clipText = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
+                        if (clipText.isNullOrEmpty()) {
+                            performHapticFeedback(HapticFeedbackConstants.REJECT)
+                            showToast("Clipboard is empty")
+                        } else {
+                            lastOriginalText = precedingText
+                            lastUndoSourceId = sourceId(source)
+                            withContext(Dispatchers.Main) {
+                                replaceText(source, precedingText + clipText)
+                            }
+                            performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                            statsManager.recordUsage(command.trigger)
+                        }
+                    }
+                    trigger.endsWith("replace") -> {
+                        val clipText = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
+                        if (clipText.isNullOrEmpty()) {
+                            performHapticFeedback(HapticFeedbackConstants.REJECT)
+                            showToast("Clipboard is empty")
+                        } else {
+                            lastOriginalText = precedingText
+                            lastUndoSourceId = sourceId(source)
+                            withContext(Dispatchers.Main) {
+                                replaceText(source, clipText)
+                            }
+                            performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                            statsManager.recordUsage(command.trigger)
+                        }
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                showToast("Clipboard operation failed")
             } finally {
                 withContext(NonCancellable + Dispatchers.Main) {
                     if (currentJob === thisJob) {

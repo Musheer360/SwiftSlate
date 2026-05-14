@@ -33,7 +33,11 @@ class CommandManager(context: Context) {
         "emoji" to "Add relevant emojis throughout.",
         "human" to "Rewrite to sound naturally human, not AI-generated. Never use emdashes or semicolons, use commas or periods instead. Drop AI clichés and filler phrases. Use contractions, everyday words, and varied sentence lengths. Keep all facts, names, and numbers intact.",
         "reply" to "Generate a contextual reply to this message.",
-        "undo" to "Undo the last replacement and restore the original text."
+        "undo" to "Undo the last replacement and restore the original text.",
+        "copy" to "Copy the text to clipboard.",
+        "cut" to "Cut the text to clipboard.",
+        "paste" to "Paste from clipboard.",
+        "replace" to "Replace text with clipboard content."
     )
 
     fun getTriggerPrefix(): String {
