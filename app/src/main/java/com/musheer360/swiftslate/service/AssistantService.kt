@@ -78,6 +78,8 @@ class AssistantService : AccessibilityService() {
     @Volatile
     private var lastUndoSourceId: String? = null
     @Volatile
+    private var lastCopiedText: String? = null
+    @Volatile
     private var lastReplacedText: String? = null
     @Volatile
     private var lastReplacedAt = 0L
@@ -493,6 +495,7 @@ class AssistantService : AccessibilityService() {
                             performHapticFeedback(HapticFeedbackConstants.REJECT)
                             showToast("Nothing to copy")
                         } else {
+                            lastCopiedText = textToCopy
                             withContext(Dispatchers.Main) {
                                 clipboard.setPrimaryClip(ClipData.newPlainText("SwiftSlate", textToCopy))
                                 replaceText(source, precedingText)
@@ -508,6 +511,7 @@ class AssistantService : AccessibilityService() {
                             performHapticFeedback(HapticFeedbackConstants.REJECT)
                             showToast("Nothing to cut")
                         } else {
+                            lastCopiedText = textToCut
                             lastOriginalText = precedingText
                             lastUndoSourceId = sourceId(source)
                             withContext(Dispatchers.Main) {
@@ -520,28 +524,30 @@ class AssistantService : AccessibilityService() {
                         }
                     }
                     trigger.endsWith("paste") -> {
-                        if (clipText.isNullOrEmpty()) {
+                        val pasteText = lastCopiedText ?: clipText
+                        if (pasteText.isNullOrEmpty()) {
                             performHapticFeedback(HapticFeedbackConstants.REJECT)
                             showToast("Clipboard is empty")
                         } else {
                             lastOriginalText = precedingText
                             lastUndoSourceId = sourceId(source)
                             withContext(Dispatchers.Main) {
-                                replaceText(source, precedingText + clipText)
+                                replaceText(source, precedingText + pasteText)
                             }
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                             statsManager.recordUsage(command.trigger)
                         }
                     }
                     trigger.endsWith("replace") -> {
-                        if (clipText.isNullOrEmpty()) {
+                        val pasteText = lastCopiedText ?: clipText
+                        if (pasteText.isNullOrEmpty()) {
                             performHapticFeedback(HapticFeedbackConstants.REJECT)
                             showToast("Clipboard is empty")
                         } else {
                             lastOriginalText = precedingText
                             lastUndoSourceId = sourceId(source)
                             withContext(Dispatchers.Main) {
-                                replaceText(source, clipText)
+                                replaceText(source, pasteText)
                             }
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                             statsManager.recordUsage(command.trigger)
