@@ -30,7 +30,7 @@ import com.musheer360.swiftslate.ui.KeysScreen
 import com.musheer360.swiftslate.ui.SettingsScreen
 import com.musheer360.swiftslate.ui.theme.SwiftSlateTheme
 
-enum class Tab(@StringRes val titleRes: Int, val icon: ImageVector) {
+enum class Tab(@param:StringRes val titleRes: Int, val icon: ImageVector) {
     Dashboard(R.string.dashboard_title, Icons.Default.Home),
     Keys(R.string.keys_title, Icons.Default.Lock),
     Commands(R.string.commands_title, Icons.AutoMirrored.Filled.List),

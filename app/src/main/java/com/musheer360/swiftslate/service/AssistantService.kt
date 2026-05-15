@@ -366,7 +366,7 @@ class AssistantService : AccessibilityService() {
                         }
 
                         if (result.isSuccess) {
-                            spinnerJob?.cancelAndJoin()
+                            spinnerJob.cancelAndJoin()
                             spinnerJob = null
                             lastOriginalText = originalText
                             lastUndoSourceId = sourceId(source)
@@ -480,11 +480,12 @@ class AssistantService : AccessibilityService() {
     }
 
     private fun handleClipboardCommand(source: AccessibilityNodeInfo, precedingText: String, command: Command) {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipText = clipboard.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
         currentJob = serviceScope.launch {
             val thisJob = coroutineContext[Job]
             try {
                 val trigger = command.trigger
-                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 when {
                     trigger.endsWith("copy") -> {
                         val textToCopy = precedingText.trim()
@@ -519,7 +520,6 @@ class AssistantService : AccessibilityService() {
                         }
                     }
                     trigger.endsWith("paste") -> {
-                        val clipText = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
                         if (clipText.isNullOrEmpty()) {
                             performHapticFeedback(HapticFeedbackConstants.REJECT)
                             showToast("Clipboard is empty")
@@ -534,7 +534,6 @@ class AssistantService : AccessibilityService() {
                         }
                     }
                     trigger.endsWith("replace") -> {
-                        val clipText = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
                         if (clipText.isNullOrEmpty()) {
                             performHapticFeedback(HapticFeedbackConstants.REJECT)
                             showToast("Clipboard is empty")

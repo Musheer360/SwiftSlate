@@ -29,7 +29,7 @@ class CommandManagerTest {
         val result = commandManager.findCommand("hello world?fix")
         assertNotNull(result)
         assertEquals("?fix", result!!.trigger)
-        assertTrue(result.isBuiltIn)
+        assertFalse(result.isBuiltIn)
     }
 
     @Test
@@ -93,9 +93,21 @@ class CommandManagerTest {
     }
 
     @Test
-    fun getCommands_builtInsHaveIsBuiltInTrue() {
+    fun getCommands_systemCommandsHaveIsBuiltInTrue() {
         val commands = commandManager.getCommands()
-        assertTrue(commands.all { it.isBuiltIn })
+        val systemTriggers = listOf("?undo", "?copy", "?cut", "?paste", "?replace")
+        val systemCommands = commands.filter { it.trigger in systemTriggers }
+        assertEquals(5, systemCommands.size)
+        assertTrue(systemCommands.all { it.isBuiltIn })
+    }
+
+    @Test
+    fun getCommands_aiCommandsHaveIsBuiltInFalse() {
+        val commands = commandManager.getCommands()
+        val aiTriggers = listOf("?fix", "?improve", "?shorten", "?expand", "?formal", "?casual", "?emoji", "?human", "?reply")
+        val aiCommands = commands.filter { it.trigger in aiTriggers }
+        assertEquals(9, aiCommands.size)
+        assertTrue(aiCommands.all { !it.isBuiltIn })
     }
 
     @Test

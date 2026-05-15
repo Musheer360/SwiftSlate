@@ -15,6 +15,7 @@ class CommandManager(context: Context) {
     private var cachedCommands: List<Command>? = null
     @Volatile
     private var cacheTimestamp = 0L
+    private var aiCommandsSeeded = prefs.getBoolean("ai_commands_seeded", false)
 
     companion object {
         const val DEFAULT_PREFIX = "?"
@@ -22,8 +23,17 @@ class CommandManager(context: Context) {
         private const val CACHE_TTL_MS = 5_000L
     }
 
-    // Built-in command names (without prefix) and their prompts
-    private val builtInDefinitions = listOf(
+    // System commands — local operations that cannot be edited or deleted
+    private val systemDefinitions = listOf(
+        "undo" to "Undo the last replacement and restore the original text.",
+        "copy" to "Copy the text to clipboard.",
+        "cut" to "Cut the text to clipboard.",
+        "paste" to "Paste from clipboard.",
+        "replace" to "Replace text with clipboard content."
+    )
+
+    // Default AI commands — seeded into custom commands on first run so users can edit/delete them
+    private val defaultAiDefinitions = listOf(
         "fix" to "Fix grammar, spelling, and punctuation errors.",
         "improve" to "Rewrite to improve clarity, flow, and coherence.",
         "shorten" to "Rewrite to be more concise while preserving the core meaning.",
@@ -32,12 +42,7 @@ class CommandManager(context: Context) {
         "casual" to "Rewrite in a casual, friendly tone.",
         "emoji" to "Add relevant emojis throughout.",
         "human" to "Rewrite to sound naturally human, not AI-generated. Never use emdashes or semicolons, use commas or periods instead. Drop AI clichés and filler phrases. Use contractions, everyday words, and varied sentence lengths. Keep all facts, names, and numbers intact.",
-        "reply" to "Generate a contextual reply to this message.",
-        "undo" to "Undo the last replacement and restore the original text.",
-        "copy" to "Copy the text to clipboard.",
-        "cut" to "Cut the text to clipboard.",
-        "paste" to "Paste from clipboard.",
-        "replace" to "Replace text with clipboard content."
+        "reply" to "Generate a contextual reply to this message."
     )
 
     fun getTriggerPrefix(): String {
@@ -77,13 +82,42 @@ class CommandManager(context: Context) {
 
     private fun getBuiltInCommands(): List<Command> {
         val prefix = getTriggerPrefix()
-        return builtInDefinitions.map { (name, prompt) -> Command("$prefix$name", prompt, true) }
+        return systemDefinitions.map { (name, prompt) -> Command("$prefix$name", prompt, true) }
+    }
+
+    private fun seedDefaultAiCommands() {
+        val prefix = getTriggerPrefix()
+        val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
+        val arr = try { JSONArray(customStr) } catch (_: Exception) { JSONArray() }
+        val existingTriggers = (0 until arr.length()).map { arr.getJSONObject(it).getString("trigger") }.toSet()
+        var added = false
+        for ((name, prompt) in defaultAiDefinitions) {
+            val trigger = "$prefix$name"
+            if (trigger !in existingTriggers) {
+                val obj = JSONObject()
+                obj.put("trigger", trigger)
+                obj.put("prompt", prompt)
+                obj.put("type", CommandType.AI.name)
+                arr.put(obj)
+                added = true
+            }
+        }
+        val editor = prefs.edit()
+        if (added) {
+            editor.putString("custom_commands", arr.toString())
+            cachedCommands = null
+        }
+        editor.putBoolean("ai_commands_seeded", true).apply()
+        aiCommandsSeeded = true
     }
 
     @Volatile
     private var migrating = false
 
     @Synchronized fun getCommands(): List<Command> {
+        if (!aiCommandsSeeded) {
+            seedDefaultAiCommands()
+        }
         val now = System.currentTimeMillis()
         val cached = cachedCommands
         if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
