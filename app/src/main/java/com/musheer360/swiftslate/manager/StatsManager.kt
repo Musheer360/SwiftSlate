@@ -2,10 +2,12 @@ package com.musheer360.swiftslate.manager
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.runtime.Stable
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@Stable
 class StatsManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("stats", Context.MODE_PRIVATE)
 

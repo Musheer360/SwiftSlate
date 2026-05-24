@@ -1,11 +1,20 @@
 package com.musheer360.swiftslate.ui
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.widget.ImageView
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,9 +23,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,30 +56,27 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.manager.BlocklistManager
 import com.musheer360.swiftslate.model.AppInfo
+import com.musheer360.swiftslate.model.StablePrefs
 import com.musheer360.swiftslate.ui.components.SlateCard
 import com.musheer360.swiftslate.ui.components.SlateItemCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun BlocklistScreen(prefs: SharedPreferences, onBack: () -> Unit) {
+fun BlocklistScreen(prefs: StablePrefs, onBack: () -> Unit) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
 
     var installedApps by remember { mutableStateOf<List<AppInfo>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
-    var blocklist by remember { mutableStateOf(BlocklistManager.getBlocklist(prefs)) }
+    var blocklist by remember { mutableStateOf(BlocklistManager.getBlocklist(prefs.prefs)) }
 
     // Load apps asynchronously on launch
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             val pm = context.packageManager
             val apps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-                .filter { app ->
-                    // Filter to only user-launchable apps to keep list clean and relevant
-                    pm.getLaunchIntentForPackage(app.packageName) != null
-                }
                 .map { app ->
                     AppInfo(
                         name = app.loadLabel(pm).toString(),
@@ -255,11 +274,11 @@ fun BlocklistScreen(prefs: SharedPreferences, onBack: () -> Unit) {
                                 onCheckedChange = { checkState ->
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     if (checkState) {
-                                        BlocklistManager.addApp(prefs, app.packageName)
+                                        BlocklistManager.addApp(prefs.prefs, app.packageName)
                                     } else {
-                                        BlocklistManager.removeApp(prefs, app.packageName)
+                                        BlocklistManager.removeApp(prefs.prefs, app.packageName)
                                     }
-                                    blocklist = BlocklistManager.getBlocklist(prefs)
+                                    blocklist = BlocklistManager.getBlocklist(prefs.prefs)
                                 },
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = MaterialTheme.colorScheme.primary,

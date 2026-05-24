@@ -1,6 +1,5 @@
 package com.musheer360.swiftslate.ui
 
-import android.content.SharedPreferences
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,8 +30,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.model.ProviderType
+import com.musheer360.swiftslate.model.StablePrefs
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
 import com.musheer360.swiftslate.ui.components.SlateDivider
@@ -40,7 +41,7 @@ import com.musheer360.swiftslate.ui.components.SlateTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
+fun SettingsScreen(commandManager: CommandManager, prefs: StablePrefs) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val uriHandler = LocalUriHandler.current
@@ -55,24 +56,24 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     var saveEndpointJob by remember { mutableStateOf<Job?>(null) }
     var saveModelJob by remember { mutableStateOf<Job?>(null) }
 
-    var providerType by remember { mutableStateOf(prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI) }
+    var providerType by remember { mutableStateOf(prefs.prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI) }
     var providerExpanded by remember { mutableStateOf(false) }
 
-    var selectedModel by remember { mutableStateOf(prefs.getString("model", "gemini-2.5-flash-lite") ?: "gemini-2.5-flash-lite") }
+    var selectedModel by remember { mutableStateOf(prefs.prefs.getString("model", "gemini-2.5-flash-lite") ?: "gemini-2.5-flash-lite") }
     var modelExpanded by remember { mutableStateOf(false) }
     val geminiModels = listOf("gemini-2.5-flash-lite", "gemini-3-flash-preview", "gemini-3.1-flash-lite-preview")
 
-    var groqModel by remember { mutableStateOf(prefs.getString("groq_model", "llama-3.3-70b-versatile") ?: "llama-3.3-70b-versatile") }
+    var groqModel by remember { mutableStateOf(prefs.prefs.getString("groq_model", "llama-3.3-70b-versatile") ?: "llama-3.3-70b-versatile") }
     var groqModelExpanded by remember { mutableStateOf(false) }
     val groqModels = listOf("llama-3.3-70b-versatile", "llama-3.1-8b-instant", "openai/gpt-oss-120b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct")
 
-    var customEndpoint by rememberSaveable { mutableStateOf(prefs.getString("custom_endpoint", "") ?: "") }
-    var customModel by rememberSaveable { mutableStateOf(prefs.getString("custom_model", "") ?: "") }
+    var customEndpoint by rememberSaveable { mutableStateOf(prefs.prefs.getString("custom_endpoint", "") ?: "") }
+    var customModel by rememberSaveable { mutableStateOf(prefs.prefs.getString("custom_model", "") ?: "") }
     var endpointError by remember { mutableStateOf<String?>(null) }
 
     var triggerPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
     var prefixError by remember { mutableStateOf<String?>(null) }
-    var temperature by remember { mutableStateOf(prefs.getFloat("temperature", 0.5f)) }
+    var temperature by remember { mutableStateOf(prefs.prefs.getFloat("temperature", 0.5f)) }
 
     val prefixErrorLength = stringResource(R.string.settings_prefix_error_length)
     val prefixErrorWhitespace = stringResource(R.string.settings_prefix_error_whitespace)
@@ -88,9 +89,9 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
         onDispose {
             saveEndpointJob?.cancel()
             saveModelJob?.cancel()
-            val editor = prefs.edit()
+            val editor = prefs.prefs.edit()
             var needsWrite = false
-            if (customEndpoint != (prefs.getString("custom_endpoint", "") ?: "")) {
+            if (customEndpoint != (prefs.prefs.getString("custom_endpoint", "") ?: "")) {
                 val isValid = customEndpoint.isBlank() || customEndpoint.startsWith("https://") ||
                     (customEndpoint.startsWith("http://") && try {
                         val host = java.net.URL(customEndpoint).host
@@ -101,7 +102,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     needsWrite = true
                 }
             }
-            if (customModel != (prefs.getString("custom_model", "") ?: "")) {
+            if (customModel != (prefs.prefs.getString("custom_model", "") ?: "")) {
                 editor.putString("custom_model", customModel)
                 needsWrite = true
             }
@@ -202,7 +203,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = ProviderType.GEMINI
-                            prefs.edit().putString("provider_type", ProviderType.GEMINI).remove("structured_output_disabled_at").apply()
+                            prefs.prefs.edit().putString("provider_type", ProviderType.GEMINI).remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -211,7 +212,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = ProviderType.GROQ
-                            prefs.edit().putString("provider_type", ProviderType.GROQ).remove("structured_output_disabled_at").apply()
+                            prefs.prefs.edit().putString("provider_type", ProviderType.GROQ).remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -220,7 +221,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = ProviderType.CUSTOM
-                            prefs.edit().putString("provider_type", ProviderType.CUSTOM).remove("structured_output_disabled_at").apply()
+                            prefs.prefs.edit().putString("provider_type", ProviderType.CUSTOM).remove("structured_output_disabled_at").apply()
                             providerExpanded = false
                         }
                     )
@@ -257,7 +258,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                                 onClick = {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     selectedModel = model
-                                    prefs.edit().putString("model", model).remove("structured_output_disabled_at").apply()
+                                    prefs.prefs.edit().putString("model", model).remove("structured_output_disabled_at").apply()
                                     modelExpanded = false
                                 }
                             )
@@ -294,7 +295,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                                 onClick = {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     groqModel = model
-                                    prefs.edit().putString("groq_model", model).remove("structured_output_disabled_at").apply()
+                                    prefs.prefs.edit().putString("groq_model", model).remove("structured_output_disabled_at").apply()
                                     groqModelExpanded = false
                                 }
                             )
@@ -327,7 +328,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                             saveEndpointJob?.cancel()
                             saveEndpointJob = scope.launch {
                                 delay(500)
-                                prefs.edit().putString("custom_endpoint", it).remove("structured_output_disabled_at").apply()
+                                prefs.prefs.edit().putString("custom_endpoint", it).remove("structured_output_disabled_at").apply()
                             }
                         }
                     },
@@ -357,7 +358,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         saveModelJob?.cancel()
                         saveModelJob = scope.launch {
                             delay(500)
-                            prefs.edit().putString("custom_model", it).remove("structured_output_disabled_at").apply()
+                            prefs.prefs.edit().putString("custom_model", it).remove("structured_output_disabled_at").apply()
                         }
                     },
                     placeholder = { Text(stringResource(R.string.settings_model_placeholder)) },
@@ -376,7 +377,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = String.format("%.1f", temperature),
+                    text = String.format(Locale.US, "%.1f", temperature),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurface
@@ -393,7 +394,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     }
                 },
                 onValueChangeFinished = {
-                    prefs.edit().putFloat("temperature", temperature).apply()
+                    prefs.prefs.edit().putFloat("temperature", temperature).apply()
                 },
                 valueRange = 0f..2f,
                 steps = 19,
