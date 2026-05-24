@@ -89,4 +89,10 @@
     <string name="settings_temperature_title">तापमान</string>
     <string name="settings_made_by">Musheer Alam द्वारा प्यार से बनाया गया</string>
     <string name="settings_sponsor">GitHub पर प्रायोजित करें</string>
+
+    <!-- Blocklist -->
+    <string name="settings_blocklist_title">ऐप ब्लॉकलिस्ट</string>
+    <string name="settings_blocklist_desc">उन ऐप्स को चुनें जहां SwiftSlate निष्क्रिय होना चाहिए।</string>
+    <string name="blocklist_search_placeholder">ऐप्स खोजें…</string>
+    <string name="blocklist_empty">कोई ऐप नहीं मिला</string>
 </resources>

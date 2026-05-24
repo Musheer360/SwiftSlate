@@ -89,4 +89,10 @@
     <string name="settings_temperature_title">Temperatura</string>
     <string name="settings_made_by">Feito com amor por Musheer Alam</string>
     <string name="settings_sponsor">Patrocinar no GitHub</string>
+
+    <!-- Blocklist -->
+    <string name="settings_blocklist_title">Lista de bloqueio de apps</string>
+    <string name="settings_blocklist_desc">Selecione os aplicativos onde o SwiftSlate deve ser desativado.</string>
+    <string name="blocklist_search_placeholder">Buscar aplicativos…</string>
+    <string name="blocklist_empty">Nenhum aplicativo encontrado</string>
 </resources>

@@ -1,11 +1,14 @@
 package com.musheer360.swiftslate.ui
 
 import android.content.SharedPreferences
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,6 +44,12 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val uriHandler = LocalUriHandler.current
+
+    var showBlocklist by remember { mutableStateOf(false) }
+
+    BackHandler(enabled = showBlocklist) {
+        showBlocklist = false
+    }
 
     val scope = rememberCoroutineScope()
     var saveEndpointJob by remember { mutableStateOf<Job?>(null) }
@@ -148,12 +157,15 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .graphicsLayer { }
-            .padding(horizontal = 20.dp, vertical = 16.dp)
-    ) {
+    if (showBlocklist) {
+        BlocklistScreen(prefs = prefs, onBack = { showBlocklist = false })
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer { }
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+        ) {
         ScreenTitle(stringResource(R.string.settings_title))
 
         // Card 1: Provider + Model
@@ -442,6 +454,43 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // Card 2.5: App Blocklist
+        SlateCard(
+            modifier = Modifier.clickable {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                showBlocklist = true
+            }
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.settings_blocklist_title),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = stringResource(R.string.settings_blocklist_desc),
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         // Card 3: Backup
         SlateCard {
             Text(
@@ -544,5 +593,6 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                 }
             }
         )
+    }
     }
 }
