@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/Musheer360/SwiftSlate/security/policy
+    about: Please report security issues privately via the security policy, not here.
+  - name: General Question
+    url: https://github.com/Musheer360/SwiftSlate/discussions
+    about: Ask questions in Discussions instead of opening an issue.

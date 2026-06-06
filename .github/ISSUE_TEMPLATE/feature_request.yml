@@ -1,0 +1,47 @@
+name: Feature Request
+description: Suggest a new command, provider integration, or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make SwiftSlate better? I'd love to hear it.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - New built-in command
+        - New AI provider integration
+        - Text replacer improvement
+        - UI / UX improvement
+        - New language / translation
+        - Performance / reliability
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+      placeholder: What should it do? How would a user interact with it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      placeholder: Why is this useful? What problem does it solve for you?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Have you tried a workaround? Is there a custom command that partially solves this?
+    validations:
+      required: false

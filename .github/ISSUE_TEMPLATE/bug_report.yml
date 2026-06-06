@@ -1,0 +1,80 @@
+name: Bug Report
+description: Something isn't working as expected in SwiftSlate
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please fill in the details below so I can reproduce and fix the issue.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      options:
+        - Accessibility Service (trigger detection / text replacement)
+        - AI Commands (response quality / API errors)
+        - Text Replacer Commands
+        - API Key Management
+        - Command Management (add / edit / delete)
+        - Backup & Restore
+        - UI / Theme
+        - Settings
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      placeholder: Describe the bug clearly. What did you expect vs what actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open app X
+        2. Type "hello ?fix"
+        3. Observe: spinner never completes
+    validations:
+      required: true
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: AI Provider (if relevant)
+      options:
+        - Google Gemini
+        - Groq
+        - Custom (OpenAI-compatible)
+        - Not applicable
+    validations:
+      required: false
+
+  - type: input
+    id: device
+    attributes:
+      label: Device & Android version
+      placeholder: "e.g., Pixel 8 Pro, Android 15"
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: SwiftSlate version
+      placeholder: "e.g., v1.4.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      placeholder: Screenshots, logcat output, or anything else relevant.
+    validations:
+      required: false
