@@ -30,6 +30,7 @@ import com.musheer360.swiftslate.api.ApiException
 import com.musheer360.swiftslate.api.GeminiClient
 import com.musheer360.swiftslate.api.GenerateResult
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
+import com.musheer360.swiftslate.manager.BlocklistManager
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.manager.StatsManager
@@ -163,8 +164,12 @@ class AssistantService : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event?.eventType != AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) return
-        if (event.packageName?.toString() == packageName) return
+        val eventPackage = event.packageName?.toString() ?: return
+        if (eventPackage == packageName) return
         if (!::keyManager.isInitialized) return
+
+        val prefs = applicationContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        if (BlocklistManager.isBlocked(prefs, eventPackage)) return
 
         if (isProcessing.get()) return
         val source = event.source ?: return

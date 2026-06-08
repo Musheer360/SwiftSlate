@@ -89,4 +89,10 @@
     <string name="settings_temperature_title">温度</string>
     <string name="settings_made_by">由 Musheer Alam 用心制作</string>
     <string name="settings_sponsor">在 GitHub 上赞助</string>
+
+    <!-- Blocklist -->
+    <string name="settings_blocklist_title">应用黑名单</string>
+    <string name="settings_blocklist_desc">选择要停用 SwiftSlate 的应用。</string>
+    <string name="blocklist_search_placeholder">搜索应用…</string>
+    <string name="blocklist_empty">未找到应用</string>
 </resources>

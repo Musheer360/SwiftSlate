@@ -2,11 +2,13 @@ package com.musheer360.swiftslate.manager
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.runtime.Stable
 import com.musheer360.swiftslate.model.Command
 import com.musheer360.swiftslate.model.CommandType
 import org.json.JSONArray
 import org.json.JSONObject
 
+@Stable
 class CommandManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("commands", Context.MODE_PRIVATE)
     private val settingsPrefs: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)

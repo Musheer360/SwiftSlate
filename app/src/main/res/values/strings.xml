@@ -89,4 +89,10 @@
     <string name="delete_confirm_key_title">Delete this API key?</string>
     <string name="delete_confirm_message">This action cannot be undone.</string>
     <string name="delete_confirm_button">Delete</string>
+
+    <!-- Blocklist -->
+    <string name="settings_blocklist_title">App Blocklist</string>
+    <string name="settings_blocklist_desc">Select apps where SwiftSlate should be disabled.</string>
+    <string name="blocklist_search_placeholder">Search apps…</string>
+    <string name="blocklist_empty">No apps found</string>
 </resources>
