@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">مساعد SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">يوفر استبدالات نصية مدعومة بالذكاء الاصطناعي على مستوى النظام عند كتابة أوامر التشغيل.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">لوحة التحكم</string>
+    <string name="service_status_active">نشط</string>
+    <string name="service_status_inactive">غير نشط</string>
+    <string name="service_enable">تمكين</string>
+    <string name="dashboard_api_keys_title">مفاتيح API</string>
+    <string name="dashboard_keys_configured">تم تكوين %1$d مفتاح</string>
+    <string name="dashboard_add_key_hint">أضف مفتاح API للبدء.</string>
+    <string name="dashboard_monthly_requests">هذا الشهر</string>
+    <string name="dashboard_favorite_command">الأمر الأكثر استخداماً</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">آخر 7 أيام</string>
+
+    <!-- Keys -->
+    <string name="keys_title">مفاتيح API</string>
+    <string name="keys_api_key_label">مفتاح API</string>
+    <string name="keys_testing">جاري الاختبار…</string>
+    <string name="keys_add_key">إضافة مفتاح</string>
+    <string name="keys_valid_added">تمت إضافة مفتاح صالح!</string>
+    <string name="keys_already_added">تمت إضافة هذا المفتاح مسبقاً</string>
+    <string name="keys_validation_failed">فشل التحقق</string>
+    <string name="keys_keystore_error">تخزين المفاتيح الآمن غير متوفر على هذا الجهاز. لا يمكن حفظ المفاتيح.</string>
+    <string name="keys_get_api_key">احصل على مفتاح API لـ %1$s ↗</string>
+    <string name="keys_empty">لم تتم إضافة أي مفاتيح API</string>
+
+    <!-- Commands -->
+    <string name="commands_title">الأوامر</string>
+    <string name="commands_add_custom_title">إضافة أمر مخصص</string>
+    <string name="commands_trigger_label">المشغل (مثل %1$scode)</string>
+    <string name="commands_prompt_label">المطلب (مثل أعد كتابتها كقصيدة)</string>
+    <string name="commands_add_command">إضافة أمر</string>
+    <string name="commands_delete_command">حذف</string>
+    <string name="commands_edit_command">تعديل</string>
+    <string name="commands_save_command">حفظ الأمر</string>
+    <string name="commands_cancel">إلغاء</string>
+    <string name="commands_type_ai">ذكاء اصطناعي</string>
+    <string name="commands_type_replacer">محلي</string>
+    <string name="commands_replacement_label">نص الاستبدال (مثل myemail@example.com)</string>
+    <string name="commands_built_in">مدمج</string>
+    <string name="commands_error_prefix">يجب أن يبدأ المشغل بـ \'%1$s\'</string>
+    <string name="commands_error_duplicate">يوجد بالفعل أمر بهذا المشغل</string>
+    <string name="commands_error_conflict">يتعارض مع الأمر الموجود \'%1$s\' — أحد المشغلات هو بادئة للآخر</string>
+    <string name="commands_error_empty_trigger">يجب أن يحتوي المشغل على اسم بعد البادئة</string>
+
+    <!-- Settings -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_provider_title">موفر النموذج</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">مخصص (متوافق مع OpenAI)</string>
+    <string name="settings_model_title">النموذج</string>
+    <string name="settings_temperature_title">درجة الحرارة</string>
+    <string name="settings_endpoint_title">نقطة النهاية</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku، إلخ.</string>
+    <string name="settings_trigger_prefix_desc">الرمز المستخدم قبل أسماء الأوامر (مثل %1$sfix).</string>
+    <string name="settings_prefix_error_length">يجب أن يكون حرفًا واحدًا بالضبط</string>
+    <string name="settings_prefix_error_whitespace">لا يمكن أن يكون مسافة بيضاء</string>
+    <string name="settings_prefix_error_alphanumeric">لا يمكن أن يكون حرفًا أو رقمًا</string>
+    <string name="settings_endpoint_error_scheme">يجب أن يبدأ بـ https://</string>
+    <string name="settings_endpoint_error_spaces">لا يمكن أن يحتوي الرابط على مسافات</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">قم بتصدير أو استيراد أوامرك كملف JSON.</string>
+    <string name="backup_export">تصدير</string>
+    <string name="backup_import">استيراد</string>
+    <string name="backup_export_success">تم تصدير الأوامر بنجاح</string>
+    <string name="backup_export_error">فشل التصدير</string>
+    <string name="backup_import_success">تم استيراد الأوامر بنجاح</string>
+    <string name="backup_import_error">ملف النسخ الاحتياطي غير صالح</string>
+    <string name="backup_import_confirm">سيؤدي هذا إلى استبدال جميع أوامرك المخصصة الحالية. هل ترغب في المتابعة؟</string>
+    <string name="backup_import_cancel">إلغاء</string>
+    <string name="settings_check_updates">التحقق من التحديثات</string>
+    <string name="settings_made_by">صُنع بحب بواسطة Musheer Alam</string>
+    <string name="settings_sponsor">دعم على GitHub</string>
+    <string name="commands_collapse">طي</string>
+    <string name="commands_expand">توسيع</string>
+    <string name="commands_search_hint">البحث عن الأوامر…</string>
+    <string name="commands_search_close">إغلاق البحث</string>
+    <string name="commands_search_empty">لم يتم العثور على أوامر</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">هل تريد حذف هذا الأمر؟</string>
+    <string name="delete_confirm_key_title">هل تريد حذف مفتاح API هذا؟</string>
+    <string name="delete_confirm_message">لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="delete_confirm_button">حذف</string>
+</resources>

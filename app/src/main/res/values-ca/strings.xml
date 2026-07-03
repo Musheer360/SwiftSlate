@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Assistent SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Proporciona substitucions de text amb IA a tot el sistema quan s’escriuen ordres de disparador.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Panell</string>
+    <string name="service_status_active">Actiu</string>
+    <string name="service_status_inactive">Inactiu</string>
+    <string name="service_enable">Activa</string>
+    <string name="dashboard_api_keys_title">Claus API</string>
+    <string name="dashboard_keys_configured">%1$d claus configurades</string>
+    <string name="dashboard_add_key_hint">Afegeix una clau API per començar.</string>
+    <string name="dashboard_monthly_requests">Aquest mes</string>
+    <string name="dashboard_favorite_command">Ordre principal</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Últims 7 dies</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Claus API</string>
+    <string name="keys_api_key_label">Clau API</string>
+    <string name="keys_testing">Provant…</string>
+    <string name="keys_add_key">Afegeix clau</string>
+    <string name="keys_valid_added">S’ha afegit una clau vàlida!</string>
+    <string name="keys_already_added">Aquesta clau ja s’ha afegit</string>
+    <string name="keys_validation_failed">Ha fallat la validació</string>
+    <string name="keys_keystore_error">L’emmagatzematge segur de claus no està disponible en aquest dispositiu. No es poden desar les claus.</string>
+    <string name="keys_get_api_key">Obtén la teva clau API per a %1$s ↗</string>
+    <string name="keys_empty">No s’ha afegit cap clau API</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Ordres</string>
+    <string name="commands_add_custom_title">Afegeix una ordre personalitzada</string>
+    <string name="commands_trigger_label">Disparador (p. ex. %1$scode)</string>
+    <string name="commands_prompt_label">Indicació (p. ex. Reescriu com a poema)</string>
+    <string name="commands_add_command">Afegeix ordre</string>
+    <string name="commands_delete_command">Suprimeix</string>
+    <string name="commands_edit_command">Edita</string>
+    <string name="commands_save_command">Desa l’ordre</string>
+    <string name="commands_cancel">Cancel·la</string>
+    <string name="commands_type_ai">IA</string>
+    <string name="commands_type_replacer">Local</string>
+    <string name="commands_replacement_label">Text de substitució (p. ex. myemail@example.com)</string>
+    <string name="commands_built_in">Integrat</string>
+    <string name="commands_error_prefix">El disparador ha de començar amb \'%1$s\'</string>
+    <string name="commands_error_duplicate">Ja existeix una ordre amb aquest disparador</string>
+    <string name="commands_error_conflict">Conflicte amb l’ordre existent \'%1$s\' — un disparador és prefix de l’altre</string>
+    <string name="commands_error_empty_trigger">El disparador ha de tenir un nom després del prefix</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configuració</string>
+    <string name="settings_provider_title">Proveïdor del model</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Personalitzat (compatible amb OpenAI)</string>
+    <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Temperatura</string>
+    <string name="settings_endpoint_title">Punt final</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, etc.</string>
+    <string name="settings_trigger_prefix_desc">Símbol utilitzat abans dels noms d’ordre (p. ex. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Ha de ser exactament 1 caràcter</string>
+    <string name="settings_prefix_error_whitespace">No pot ser un espai en blanc</string>
+    <string name="settings_prefix_error_alphanumeric">No pot ser una lletra ni un dígit</string>
+    <string name="settings_endpoint_error_scheme">Ha de començar per https://</string>
+    <string name="settings_endpoint_error_spaces">L’URL no pot contenir espais</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Exporta o importa les teves ordres com a fitxer JSON.</string>
+    <string name="backup_export">Exporta</string>
+    <string name="backup_import">Importa</string>
+    <string name="backup_export_success">Ordres exportades correctament</string>
+    <string name="backup_export_error">Ha fallat l’exportació</string>
+    <string name="backup_import_success">Ordres importades correctament</string>
+    <string name="backup_import_error">Fitxer de còpia de seguretat no vàlid</string>
+    <string name="backup_import_confirm">Això substituirà totes les teves ordres personalitzades existents. Continues?</string>
+    <string name="backup_import_cancel">Cancel·la</string>
+    <string name="settings_check_updates">Comprova si hi ha actualitzacions</string>
+    <string name="settings_made_by">Fet amb amor per Musheer Alam</string>
+    <string name="settings_sponsor">Patrocina a GitHub</string>
+    <string name="commands_collapse">Col·lapsa</string>
+    <string name="commands_expand">Expandeix</string>
+    <string name="commands_search_hint">Cerca ordres…</string>
+    <string name="commands_search_close">Tanca la cerca</string>
+    <string name="commands_search_empty">No s’han trobat ordres</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Vols suprimir aquesta ordre?</string>
+    <string name="delete_confirm_key_title">Vols suprimir aquesta clau API?</string>
+    <string name="delete_confirm_message">Aquesta acció no es pot desfer.</string>
+    <string name="delete_confirm_button">Suprimeix</string>
+</resources>

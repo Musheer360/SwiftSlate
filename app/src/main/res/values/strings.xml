@@ -1,92 +1,92 @@
 <resources>
-    <string name="app_name">SwiftSlate</string>
-    <string name="accessibility_service_label">SwiftSlate Assistant</string>
-    <string name="accessibility_service_desc">Provides system-wide AI text replacements when trigger commands are typed.</string>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">SwiftSlate Assistant</string>
+    <string name="accessibility_service_desc" translatable="false">Provides system-wide AI text replacements when trigger commands are typed.</string>
 
     <!-- Dashboard -->
-    <string name="dashboard_title">Dashboard</string>
-    <string name="service_status_active">Active</string>
-    <string name="service_status_inactive">Inactive</string>
-    <string name="service_enable">Enable</string>
-    <string name="dashboard_api_keys_title">API Keys</string>
-    <string name="dashboard_keys_configured">%1$d keys configured</string>
-    <string name="dashboard_add_key_hint">Add an API key to get started.</string>
-    <string name="dashboard_monthly_requests">This Month</string>
-    <string name="dashboard_favorite_command">Top Command</string>
-    <string name="dashboard_no_data">—</string>
-    <string name="dashboard_last_7_days">Last 7 Days</string>
+    <string name="dashboard_title" translatable="false">Dashboard</string>
+    <string name="service_status_active" translatable="false">Active</string>
+    <string name="service_status_inactive" translatable="false">Inactive</string>
+    <string name="service_enable" translatable="false">Enable</string>
+    <string name="dashboard_api_keys_title" translatable="false">API Keys</string>
+    <string name="dashboard_keys_configured" translatable="false">%1$d keys configured</string>
+    <string name="dashboard_add_key_hint" translatable="false">Add an API key to get started.</string>
+    <string name="dashboard_monthly_requests" translatable="false">This Month</string>
+    <string name="dashboard_favorite_command" translatable="false">Top Command</string>
+    <string name="dashboard_no_data" translatable="false">—</string>
+    <string name="dashboard_last_7_days" translatable="false">Last 7 Days</string>
 
     <!-- Keys -->
-    <string name="keys_title">API Keys</string>
-    <string name="keys_api_key_label">API Key</string>
-    <string name="keys_testing">Testing…</string>
-    <string name="keys_add_key">Add Key</string>
-    <string name="keys_valid_added">Valid key added!</string>
-    <string name="keys_already_added">This key has already been added</string>
-    <string name="keys_validation_failed">Validation failed</string>
-    <string name="keys_keystore_error">Secure key storage is unavailable on this device. Keys cannot be saved.</string>
-    <string name="keys_get_api_key">Get your %1$s API key ↗</string>
-    <string name="keys_empty">No API keys added</string>
+    <string name="keys_title" translatable="false">API Keys</string>
+    <string name="keys_api_key_label" translatable="false">API Key</string>
+    <string name="keys_testing" translatable="false">Testing…</string>
+    <string name="keys_add_key" translatable="false">Add Key</string>
+    <string name="keys_valid_added" translatable="false">Valid key added!</string>
+    <string name="keys_already_added" translatable="false">This key has already been added</string>
+    <string name="keys_validation_failed" translatable="false">Validation failed</string>
+    <string name="keys_keystore_error" translatable="false">Secure key storage is unavailable on this device. Keys cannot be saved.</string>
+    <string name="keys_get_api_key" translatable="false">Get your %1$s API key ↗</string>
+    <string name="keys_empty" translatable="false">No API keys added</string>
 
     <!-- Commands -->
-    <string name="commands_title">Commands</string>
-    <string name="commands_add_custom_title">Add Custom Command</string>
-    <string name="commands_trigger_label">Trigger (e.g., %1$scode)</string>
-    <string name="commands_prompt_label">Prompt (e.g., Rewrite as a poem)</string>
-    <string name="commands_add_command">Add Command</string>
-    <string name="commands_delete_command">Delete</string>
-    <string name="commands_edit_command">Edit</string>
-    <string name="commands_save_command">Save Command</string>
-    <string name="commands_cancel">Cancel</string>
-    <string name="commands_type_ai">AI</string>
-    <string name="commands_type_replacer">Local</string>
-    <string name="commands_replacement_label">Replacement Text (e.g., myemail@example.com)</string>
-    <string name="commands_built_in">Built-in</string>
-    <string name="commands_error_prefix">Trigger must start with \'%1$s\'</string>
-    <string name="commands_error_duplicate">A command with this trigger already exists</string>
-    <string name="commands_error_conflict">Conflicts with existing command \'%1$s\' — one trigger is a prefix of the other</string>
-    <string name="commands_error_empty_trigger">Trigger must have a name after the prefix</string>
+    <string name="commands_title" translatable="false">Commands</string>
+    <string name="commands_add_custom_title" translatable="false">Add Custom Command</string>
+    <string name="commands_trigger_label" translatable="false">Trigger (e.g., %1$scode)</string>
+    <string name="commands_prompt_label" translatable="false">Prompt (e.g., Rewrite as a poem)</string>
+    <string name="commands_add_command" translatable="false">Add Command</string>
+    <string name="commands_delete_command" translatable="false">Delete</string>
+    <string name="commands_edit_command" translatable="false">Edit</string>
+    <string name="commands_save_command" translatable="false">Save Command</string>
+    <string name="commands_cancel" translatable="false">Cancel</string>
+    <string name="commands_type_ai" translatable="false">AI</string>
+    <string name="commands_type_replacer" translatable="false">Local</string>
+    <string name="commands_replacement_label" translatable="false">Replacement Text (e.g., myemail@example.com)</string>
+    <string name="commands_built_in" translatable="false">Built-in</string>
+    <string name="commands_error_prefix" translatable="false">Trigger must start with \'%1$s\'</string>
+    <string name="commands_error_duplicate" translatable="false">A command with this trigger already exists</string>
+    <string name="commands_error_conflict" translatable="false">Conflicts with existing command \'%1$s\' — one trigger is a prefix of the other</string>
+    <string name="commands_error_empty_trigger" translatable="false">Trigger must have a name after the prefix</string>
 
     <!-- Settings -->
-    <string name="settings_title">Settings</string>
-    <string name="settings_provider_title">Model Provider</string>
-    <string name="settings_provider_gemini">Google Gemini</string>
-    <string name="settings_provider_groq">Groq</string>
-    <string name="settings_provider_custom">Custom (OpenAI Compatible)</string>
-    <string name="settings_model_title">Model</string>
-    <string name="settings_temperature_title">Temperature</string>
-    <string name="settings_endpoint_title">Endpoint</string>
-    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
-    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, etc.</string>
-    <string name="settings_trigger_prefix_desc">Symbol used before command names (e.g., %1$sfix).</string>
-    <string name="settings_prefix_error_length">Must be exactly 1 character</string>
-    <string name="settings_prefix_error_whitespace">Cannot be whitespace</string>
-    <string name="settings_prefix_error_alphanumeric">Cannot be a letter or digit</string>
-    <string name="settings_endpoint_error_scheme">Must start with https://</string>
-    <string name="settings_endpoint_error_spaces">URL cannot contain spaces</string>
+    <string name="settings_title" translatable="false">Settings</string>
+    <string name="settings_provider_title" translatable="false">Model Provider</string>
+    <string name="settings_provider_gemini" translatable="false">Google Gemini</string>
+    <string name="settings_provider_groq" translatable="false">Groq</string>
+    <string name="settings_provider_custom" translatable="false">Custom (OpenAI Compatible)</string>
+    <string name="settings_model_title" translatable="false">Model</string>
+    <string name="settings_temperature_title" translatable="false">Temperature</string>
+    <string name="settings_endpoint_title" translatable="false">Endpoint</string>
+    <string name="settings_endpoint_placeholder" translatable="false">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder" translatable="false">gpt-4o, claude-3-haiku, etc.</string>
+    <string name="settings_trigger_prefix_desc" translatable="false">Symbol used before command names (e.g., %1$sfix).</string>
+    <string name="settings_prefix_error_length" translatable="false">Must be exactly 1 character</string>
+    <string name="settings_prefix_error_whitespace" translatable="false">Cannot be whitespace</string>
+    <string name="settings_prefix_error_alphanumeric" translatable="false">Cannot be a letter or digit</string>
+    <string name="settings_endpoint_error_scheme" translatable="false">Must start with https://</string>
+    <string name="settings_endpoint_error_spaces" translatable="false">URL cannot contain spaces</string>
 
     <!-- Backup -->
-    <string name="backup_desc">Export or import your commands as a JSON file.</string>
-    <string name="backup_export">Export</string>
-    <string name="backup_import">Import</string>
-    <string name="backup_export_success">Commands exported successfully</string>
-    <string name="backup_export_error">Export failed</string>
-    <string name="backup_import_success">Commands imported successfully</string>
-    <string name="backup_import_error">Invalid backup file</string>
-    <string name="backup_import_confirm">This will replace all your existing custom commands. Continue?</string>
-    <string name="backup_import_cancel">Cancel</string>
-    <string name="settings_check_updates">Check for updates</string>
-    <string name="settings_made_by">Made with love by Musheer Alam</string>
-    <string name="settings_sponsor">Sponsor on GitHub</string>
-    <string name="commands_collapse">Collapse</string>
-    <string name="commands_expand">Expand</string>
-    <string name="commands_search_hint">Search commands…</string>
-    <string name="commands_search_close">Close search</string>
-    <string name="commands_search_empty">No commands found</string>
+    <string name="backup_desc" translatable="false">Export or import your commands as a JSON file.</string>
+    <string name="backup_export" translatable="false">Export</string>
+    <string name="backup_import" translatable="false">Import</string>
+    <string name="backup_export_success" translatable="false">Commands exported successfully</string>
+    <string name="backup_export_error" translatable="false">Export failed</string>
+    <string name="backup_import_success" translatable="false">Commands imported successfully</string>
+    <string name="backup_import_error" translatable="false">Invalid backup file</string>
+    <string name="backup_import_confirm" translatable="false">This will replace all your existing custom commands. Continue?</string>
+    <string name="backup_import_cancel" translatable="false">Cancel</string>
+    <string name="settings_check_updates" translatable="false">Check for updates</string>
+    <string name="settings_made_by" translatable="false">Made with love by Musheer Alam</string>
+    <string name="settings_sponsor" translatable="false">Sponsor on GitHub</string>
+    <string name="commands_collapse" translatable="false">Collapse</string>
+    <string name="commands_expand" translatable="false">Expand</string>
+    <string name="commands_search_hint" translatable="false">Search commands…</string>
+    <string name="commands_search_close" translatable="false">Close search</string>
+    <string name="commands_search_empty" translatable="false">No commands found</string>
 
     <!-- Delete confirmation -->
-    <string name="delete_confirm_command_title">Delete this command?</string>
-    <string name="delete_confirm_key_title">Delete this API key?</string>
-    <string name="delete_confirm_message">This action cannot be undone.</string>
-    <string name="delete_confirm_button">Delete</string>
+    <string name="delete_confirm_command_title" translatable="false">Delete this command?</string>
+    <string name="delete_confirm_key_title" translatable="false">Delete this API key?</string>
+    <string name="delete_confirm_message" translatable="false">This action cannot be undone.</string>
+    <string name="delete_confirm_button" translatable="false">Delete</string>
 </resources>

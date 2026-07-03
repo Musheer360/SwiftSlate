@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Assistant ng SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Nagbibigay ng sistemang AI na pagpapalit ng teksto kapag nag-type ng mga trigger command.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="service_status_active">Aktibo</string>
+    <string name="service_status_inactive">Hindi Aktibo</string>
+    <string name="service_enable">I-enable</string>
+    <string name="dashboard_api_keys_title">Mga API Key</string>
+    <string name="dashboard_keys_configured">%1$d key ang na-configure</string>
+    <string name="dashboard_add_key_hint">Magdagdag ng API key para makapagsimula.</string>
+    <string name="dashboard_monthly_requests">Ngayong Buwan</string>
+    <string name="dashboard_favorite_command">Pinakaginagamit na Command</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Huling 7 Araw</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Mga API Key</string>
+    <string name="keys_api_key_label">API Key</string>
+    <string name="keys_testing">Sinusubukan…</string>
+    <string name="keys_add_key">Magdagdag ng Key</string>
+    <string name="keys_valid_added">Naidagdag ang wastong key!</string>
+    <string name="keys_already_added">Naidagdag na ang key na ito</string>
+    <string name="keys_validation_failed">Nabigo ang pag-validate</string>
+    <string name="keys_keystore_error">Hindi available ang secure na imbakan ng key sa device na ito. Hindi mai-save ang mga key.</string>
+    <string name="keys_get_api_key">Kunin ang iyong %1$s API key ↗</string>
+    <string name="keys_empty">Walang idinagdag na API key</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Mga Command</string>
+    <string name="commands_add_custom_title">Magdagdag ng Custom na Command</string>
+    <string name="commands_trigger_label">Trigger (hal. %1$scode)</string>
+    <string name="commands_prompt_label">Prompt (hal. Isulat muli bilang tula)</string>
+    <string name="commands_add_command">Magdagdag ng Command</string>
+    <string name="commands_delete_command">Burahin</string>
+    <string name="commands_edit_command">I-edit</string>
+    <string name="commands_save_command">I-save ang Command</string>
+    <string name="commands_cancel">Kanselahin</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Lokal</string>
+    <string name="commands_replacement_label">Teksto na papalit (hal. myemail@example.com)</string>
+    <string name="commands_built_in">Built-in</string>
+    <string name="commands_error_prefix">Dapat magsimula ang trigger sa \'%1$s\'</string>
+    <string name="commands_error_duplicate">Mayroon nang command na may ganitong trigger</string>
+    <string name="commands_error_conflict">Salungat sa umiiral na command \'%1$s\' — ang isang trigger ay prefix ng isa</string>
+    <string name="commands_error_empty_trigger">Dapat may pangalan ang trigger pagkatapos ng prefix</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Mga Setting</string>
+    <string name="settings_provider_title">Provider ng Modelo</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Custom (OpenAI Compatible)</string>
+    <string name="settings_model_title">Modelo</string>
+    <string name="settings_temperature_title">Temperatura</string>
+    <string name="settings_endpoint_title">Endpoint</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, atbp.</string>
+    <string name="settings_trigger_prefix_desc">Simbolong ginagamit bago ang mga pangalan ng command (hal. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Dapat eksaktong 1 character</string>
+    <string name="settings_prefix_error_whitespace">Hindi maaaring whitespace</string>
+    <string name="settings_prefix_error_alphanumeric">Hindi maaaring titik o digit</string>
+    <string name="settings_endpoint_error_scheme">Dapat magsimula sa https://</string>
+    <string name="settings_endpoint_error_spaces">Hindi maaaring maglaman ng mga puwang ang URL</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">I-export o i-import ang iyong mga command bilang isang JSON file.</string>
+    <string name="backup_export">I-export</string>
+    <string name="backup_import">I-import</string>
+    <string name="backup_export_success">Matagumpay na na-export ang mga command</string>
+    <string name="backup_export_error">Nabigo ang pag-export</string>
+    <string name="backup_import_success">Matagumpay na na-import ang mga command</string>
+    <string name="backup_import_error">Di-wastong backup file</string>
+    <string name="backup_import_confirm">Papalitan nito ang lahat ng iyong kasalukuyang custom na command. Magpatuloy?</string>
+    <string name="backup_import_cancel">Kanselahin</string>
+    <string name="settings_check_updates">Tingnan ang mga update</string>
+    <string name="settings_made_by">Gawa nang may pagmamahal ni Musheer Alam</string>
+    <string name="settings_sponsor">I-sponsor sa GitHub</string>
+    <string name="commands_collapse">I-collapse</string>
+    <string name="commands_expand">I-expand</string>
+    <string name="commands_search_hint">Maghanap ng mga command…</string>
+    <string name="commands_search_close">Isara ang paghahanap</string>
+    <string name="commands_search_empty">Walang nakitang command</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Burahin ang command na ito?</string>
+    <string name="delete_confirm_key_title">Burahin ang API key na ito?</string>
+    <string name="delete_confirm_message">Hindi na maibabalik ang aksyong ito.</string>
+    <string name="delete_confirm_button">Burahin</string>
+</resources>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Помічник SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Забезпечує загальносистемну заміну тексту за допомогою ШІ при введенні команд-тригерів.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Панель керування</string>
+    <string name="service_status_active">Активний</string>
+    <string name="service_status_inactive">Неактивний</string>
+    <string name="service_enable">Увімкнути</string>
+    <string name="dashboard_api_keys_title">Ключі API</string>
+    <string name="dashboard_keys_configured">Налаштовано %1$d ключів</string>
+    <string name="dashboard_add_key_hint">Додайте ключ API, щоб почати.</string>
+    <string name="dashboard_monthly_requests">Цього місяця</string>
+    <string name="dashboard_favorite_command">Найпопулярніша команда</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Останні 7 днів</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Ключі API</string>
+    <string name="keys_api_key_label">Ключ API</string>
+    <string name="keys_testing">Тестування…</string>
+    <string name="keys_add_key">Додати ключ</string>
+    <string name="keys_valid_added">Додано дійсний ключ!</string>
+    <string name="keys_already_added">Цей ключ вже було додано</string>
+    <string name="keys_validation_failed">Перевірка не вдалася</string>
+    <string name="keys_keystore_error">Безпечне сховище ключів недоступне на цьому пристрої. Ключі не можна зберегти.</string>
+    <string name="keys_get_api_key">Отримайте ключ API для %1$s ↗</string>
+    <string name="keys_empty">Ключі API не додано</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Команди</string>
+    <string name="commands_add_custom_title">Додати користувацьку команду</string>
+    <string name="commands_trigger_label">Тригер (напр. %1$scode)</string>
+    <string name="commands_prompt_label">Підказка (напр. Перепиши як вірш)</string>
+    <string name="commands_add_command">Додати команду</string>
+    <string name="commands_delete_command">Видалити</string>
+    <string name="commands_edit_command">Редагувати</string>
+    <string name="commands_save_command">Зберегти команду</string>
+    <string name="commands_cancel">Скасувати</string>
+    <string name="commands_type_ai">ШІ</string>
+    <string name="commands_type_replacer">Локальний</string>
+    <string name="commands_replacement_label">Текст заміни (напр. myemail@example.com)</string>
+    <string name="commands_built_in">Вбудований</string>
+    <string name="commands_error_prefix">Тригер повинен починатися з \'%1$s\'</string>
+    <string name="commands_error_duplicate">Команда з таким тригером вже існує</string>
+    <string name="commands_error_conflict">Конфлікт з існуючою командою \'%1$s\' — один тригер є префіксом іншого</string>
+    <string name="commands_error_empty_trigger">Тригер повинен мати назву після префікса</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Налаштування</string>
+    <string name="settings_provider_title">Постачальник моделі</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Користувацький (сумісний з OpenAI)</string>
+    <string name="settings_model_title">Модель</string>
+    <string name="settings_temperature_title">Температура</string>
+    <string name="settings_endpoint_title">Кінцева точка</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku тощо.</string>
+    <string name="settings_trigger_prefix_desc">Символ, який використовується перед назвами команд (напр. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Має бути рівно 1 символ</string>
+    <string name="settings_prefix_error_whitespace">Не може бути пробілом</string>
+    <string name="settings_prefix_error_alphanumeric">Не може бути літерою або цифрою</string>
+    <string name="settings_endpoint_error_scheme">Має починатися з https://</string>
+    <string name="settings_endpoint_error_spaces">URL не може містити пробілів</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Експортуйте або імпортуйте свої команди у вигляді JSON-файлу.</string>
+    <string name="backup_export">Експорт</string>
+    <string name="backup_import">Імпорт</string>
+    <string name="backup_export_success">Команди успішно експортовано</string>
+    <string name="backup_export_error">Експорт не вдався</string>
+    <string name="backup_import_success">Команди успішно імпортовано</string>
+    <string name="backup_import_error">Недійсний файл резервної копії</string>
+    <string name="backup_import_confirm">Це замінить усі ваші наявні користувацькі команди. Продовжити?</string>
+    <string name="backup_import_cancel">Скасувати</string>
+    <string name="settings_check_updates">Перевірити оновлення</string>
+    <string name="settings_made_by">Зроблено з любов’ю Musheer Alam</string>
+    <string name="settings_sponsor">Спонсорувати на GitHub</string>
+    <string name="commands_collapse">Згорнути</string>
+    <string name="commands_expand">Розгорнути</string>
+    <string name="commands_search_hint">Пошук команд…</string>
+    <string name="commands_search_close">Закрити пошук</string>
+    <string name="commands_search_empty">Команд не знайдено</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Видалити цю команду?</string>
+    <string name="delete_confirm_key_title">Видалити цей ключ API?</string>
+    <string name="delete_confirm_message">Цю дію не можна скасувати.</string>
+    <string name="delete_confirm_button">Видалити</string>
+</resources>

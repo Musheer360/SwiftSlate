@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Асистент SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Предоставя системни замествания на текст с изкуствен интелект, когато се въвеждат тригерни команди.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Табло</string>
+    <string name="service_status_active">Активен</string>
+    <string name="service_status_inactive">Неактивен</string>
+    <string name="service_enable">Включи</string>
+    <string name="dashboard_api_keys_title">API ключове</string>
+    <string name="dashboard_keys_configured">%1$d конфигурирани ключа</string>
+    <string name="dashboard_add_key_hint">Добавете API ключ, за да започнете.</string>
+    <string name="dashboard_monthly_requests">Този месец</string>
+    <string name="dashboard_favorite_command">Най-използвана команда</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Последните 7 дни</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API ключове</string>
+    <string name="keys_api_key_label">API ключ</string>
+    <string name="keys_testing">Тестване…</string>
+    <string name="keys_add_key">Добави ключ</string>
+    <string name="keys_valid_added">Валиден ключ е добавен!</string>
+    <string name="keys_already_added">Този ключ вече е добавен</string>
+    <string name="keys_validation_failed">Неуспешно валидиране</string>
+    <string name="keys_keystore_error">Сигурното съхранение на ключове не е налично на това устройство. Ключовете не могат да бъдат запазени.</string>
+    <string name="keys_get_api_key">Вземете своя API ключ за %1$s ↗</string>
+    <string name="keys_empty">Няма добавени API ключове</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Команди</string>
+    <string name="commands_add_custom_title">Добавяне на потребителска команда</string>
+    <string name="commands_trigger_label">Тригер (напр. %1$scode)</string>
+    <string name="commands_prompt_label">Заявка (напр. Препиши като стихотворение)</string>
+    <string name="commands_add_command">Добави команда</string>
+    <string name="commands_delete_command">Изтрий</string>
+    <string name="commands_edit_command">Редактирай</string>
+    <string name="commands_save_command">Запази команда</string>
+    <string name="commands_cancel">Отказ</string>
+    <string name="commands_type_ai">ИИ</string>
+    <string name="commands_type_replacer">Локален</string>
+    <string name="commands_replacement_label">Текст за заместване (напр. myemail@example.com)</string>
+    <string name="commands_built_in">Вграден</string>
+    <string name="commands_error_prefix">Тригерът трябва да започва с \'%1$s\'</string>
+    <string name="commands_error_duplicate">Вече съществува команда с този тригер</string>
+    <string name="commands_error_conflict">Конфликт със съществуваща команда \'%1$s\' — единият тригер е префикс на другия</string>
+    <string name="commands_error_empty_trigger">Тригерът трябва да има име след префикса</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_provider_title">Доставчик на модел</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Потребителски (съвместим с OpenAI)</string>
+    <string name="settings_model_title">Модел</string>
+    <string name="settings_temperature_title">Температура</string>
+    <string name="settings_endpoint_title">Крайна точка</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku и др.</string>
+    <string name="settings_trigger_prefix_desc">Символ, използван преди имената на командите (напр. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Трябва да е точно 1 знак</string>
+    <string name="settings_prefix_error_whitespace">Не може да бъде интервал</string>
+    <string name="settings_prefix_error_alphanumeric">Не може да бъде буква или цифра</string>
+    <string name="settings_endpoint_error_scheme">Трябва да започва с https://</string>
+    <string name="settings_endpoint_error_spaces">URL адресът не може да съдържа интервали</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Експортирайте или импортирайте вашите команди като JSON файл.</string>
+    <string name="backup_export">Експорт</string>
+    <string name="backup_import">Импорт</string>
+    <string name="backup_export_success">Командите са експортирани успешно</string>
+    <string name="backup_export_error">Неуспешен експорт</string>
+    <string name="backup_import_success">Командите са импортирани успешно</string>
+    <string name="backup_import_error">Невалиден файл за възстановяване</string>
+    <string name="backup_import_confirm">Това ще замени всичките ви съществуващи потребителски команди. Продължавате ли?</string>
+    <string name="backup_import_cancel">Отказ</string>
+    <string name="settings_check_updates">Проверка за актуализации</string>
+    <string name="settings_made_by">Направено с любов от Musheer Alam</string>
+    <string name="settings_sponsor">Спонсорирайте в GitHub</string>
+    <string name="commands_collapse">Свий</string>
+    <string name="commands_expand">Разгъни</string>
+    <string name="commands_search_hint">Търсене на команди…</string>
+    <string name="commands_search_close">Затваряне на търсенето</string>
+    <string name="commands_search_empty">Няма намерени команди</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Да изтрия ли тази команда?</string>
+    <string name="delete_confirm_key_title">Да изтрия ли този API ключ?</string>
+    <string name="delete_confirm_message">Това действие не може да бъде отменено.</string>
+    <string name="delete_confirm_button">Изтрий</string>
+</resources>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">SwiftSlate-avustin</string>
+    <string name="accessibility_service_desc" translatable="false">Tarjoaa järjestelmänlaajuisia AI-pohjaisia tekstinkorvauksia, kun käynnistyskomennot kirjoitetaan.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Kojelauta</string>
+    <string name="service_status_active">Aktiivinen</string>
+    <string name="service_status_inactive">Epäaktiivinen</string>
+    <string name="service_enable">Ota käyttöön</string>
+    <string name="dashboard_api_keys_title">API-avaimet</string>
+    <string name="dashboard_keys_configured">%1$d avainta määritetty</string>
+    <string name="dashboard_add_key_hint">Lisää API-avain aloittaaksesi.</string>
+    <string name="dashboard_monthly_requests">Tämä kuukausi</string>
+    <string name="dashboard_favorite_command">Suosituin komento</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Viimeiset 7 päivää</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API-avaimet</string>
+    <string name="keys_api_key_label">API-avain</string>
+    <string name="keys_testing">Testataan…</string>
+    <string name="keys_add_key">Lisää avain</string>
+    <string name="keys_valid_added">Kelvollinen avain lisätty!</string>
+    <string name="keys_already_added">Tämä avain on jo lisätty</string>
+    <string name="keys_validation_failed">Vahvistus epäonnistui</string>
+    <string name="keys_keystore_error">Turvallinen avainten tallennus ei ole käytettävissä tällä laitteella. Avaimia ei voida tallentaa.</string>
+    <string name="keys_get_api_key">Hanki %1$s API-avaimesi ↗</string>
+    <string name="keys_empty">API-avaimia ei ole lisätty</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Komennot</string>
+    <string name="commands_add_custom_title">Lisää mukautettu komento</string>
+    <string name="commands_trigger_label">Käynnistin (esim. %1$scode)</string>
+    <string name="commands_prompt_label">Kehote (esim. Kirjoita uudelleen runoksi)</string>
+    <string name="commands_add_command">Lisää komento</string>
+    <string name="commands_delete_command">Poista</string>
+    <string name="commands_edit_command">Muokkaa</string>
+    <string name="commands_save_command">Tallenna komento</string>
+    <string name="commands_cancel">Peruuta</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Paikallinen</string>
+    <string name="commands_replacement_label">Korvaava teksti (esim. myemail@example.com)</string>
+    <string name="commands_built_in">Sisäänrakennettu</string>
+    <string name="commands_error_prefix">Käynnistimen on alettava merkillä \'%1$s\'</string>
+    <string name="commands_error_duplicate">Tällä käynnistimellä oleva komento on jo olemassa</string>
+    <string name="commands_error_conflict">Ristiriita olemassa olevan komennon \'%1$s\' kanssa — toinen käynnistin on toisen etuliite</string>
+    <string name="commands_error_empty_trigger">Käynnistimellä on oltava nimi etuliitteen jälkeen</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Asetukset</string>
+    <string name="settings_provider_title">Mallin tarjoaja</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Mukautettu (OpenAI-yhteensopiva)</string>
+    <string name="settings_model_title">Malli</string>
+    <string name="settings_temperature_title">Lämpötila</string>
+    <string name="settings_endpoint_title">Päätepiste</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku jne.</string>
+    <string name="settings_trigger_prefix_desc">Symboli, jota käytetään komentojen nimien edessä (esim. %1$sfix).</string>
+    <string name="settings_prefix_error_length">On oltava tarkalleen 1 merkki</string>
+    <string name="settings_prefix_error_whitespace">Ei voi olla välilyönti</string>
+    <string name="settings_prefix_error_alphanumeric">Ei voi olla kirjain tai numero</string>
+    <string name="settings_endpoint_error_scheme">On alettava https://</string>
+    <string name="settings_endpoint_error_spaces">URL-osoite ei voi sisältää välilyöntejä</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Vie tai tuo komentosi JSON-tiedostona.</string>
+    <string name="backup_export">Vie</string>
+    <string name="backup_import">Tuo</string>
+    <string name="backup_export_success">Komennot viety onnistuneesti</string>
+    <string name="backup_export_error">Vienti epäonnistui</string>
+    <string name="backup_import_success">Komennot tuotu onnistuneesti</string>
+    <string name="backup_import_error">Virheellinen varmuuskopiotiedosto</string>
+    <string name="backup_import_confirm">Tämä korvaa kaikki olemassa olevat mukautetut komentosi. Jatketaanko?</string>
+    <string name="backup_import_cancel">Peruuta</string>
+    <string name="settings_check_updates">Tarkista päivitykset</string>
+    <string name="settings_made_by">Tehty rakkaudella Musheer Alamin toimesta</string>
+    <string name="settings_sponsor">Sponsoroi GitHubissa</string>
+    <string name="commands_collapse">Sulje</string>
+    <string name="commands_expand">Laajenna</string>
+    <string name="commands_search_hint">Hae komentoja…</string>
+    <string name="commands_search_close">Sulje haku</string>
+    <string name="commands_search_empty">Komentoja ei löytynyt</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Poistetaanko tämä komento?</string>
+    <string name="delete_confirm_key_title">Poistetaanko tämä API-avain?</string>
+    <string name="delete_confirm_message">Tätä toimintoa ei voi peruuttaa.</string>
+    <string name="delete_confirm_button">Poista</string>
+</resources>

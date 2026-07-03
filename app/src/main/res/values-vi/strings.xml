@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Trợ lý SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Cung cấp thay thế văn bản bằng AI trên toàn hệ thống khi nhập lệnh kích hoạt.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Bảng điều khiển</string>
+    <string name="service_status_active">Đang hoạt động</string>
+    <string name="service_status_inactive">Không hoạt động</string>
+    <string name="service_enable">Bật</string>
+    <string name="dashboard_api_keys_title">Khóa API</string>
+    <string name="dashboard_keys_configured">%1$d khóa đã được cấu hình</string>
+    <string name="dashboard_add_key_hint">Thêm khóa API để bắt đầu.</string>
+    <string name="dashboard_monthly_requests">Tháng này</string>
+    <string name="dashboard_favorite_command">Lệnh hàng đầu</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">7 ngày qua</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Khóa API</string>
+    <string name="keys_api_key_label">Khóa API</string>
+    <string name="keys_testing">Đang kiểm tra…</string>
+    <string name="keys_add_key">Thêm khóa</string>
+    <string name="keys_valid_added">Đã thêm khóa hợp lệ!</string>
+    <string name="keys_already_added">Khóa này đã được thêm</string>
+    <string name="keys_validation_failed">Xác thực thất bại</string>
+    <string name="keys_keystore_error">Kho lưu trữ khóa an toàn không có sẵn trên thiết bị này. Không thể lưu khóa.</string>
+    <string name="keys_get_api_key">Nhận khóa API %1$s của bạn ↗</string>
+    <string name="keys_empty">Chưa thêm khóa API nào</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Lệnh</string>
+    <string name="commands_add_custom_title">Thêm lệnh tùy chỉnh</string>
+    <string name="commands_trigger_label">Trình kích hoạt (ví dụ: %1$scode)</string>
+    <string name="commands_prompt_label">Lời nhắc (ví dụ: Viết lại thành bài thơ)</string>
+    <string name="commands_add_command">Thêm lệnh</string>
+    <string name="commands_delete_command">Xóa</string>
+    <string name="commands_edit_command">Chỉnh sửa</string>
+    <string name="commands_save_command">Lưu lệnh</string>
+    <string name="commands_cancel">Hủy</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Cục bộ</string>
+    <string name="commands_replacement_label">Văn bản thay thế (ví dụ: myemail@example.com)</string>
+    <string name="commands_built_in">Tích hợp sẵn</string>
+    <string name="commands_error_prefix">Trình kích hoạt phải bắt đầu bằng \'%1$s\'</string>
+    <string name="commands_error_duplicate">Đã tồn tại lệnh với trình kích hoạt này</string>
+    <string name="commands_error_conflict">Xung đột với lệnh hiện có \'%1$s\' — một trình kích hoạt là tiền tố của trình kích hoạt kia</string>
+    <string name="commands_error_empty_trigger">Trình kích hoạt phải có tên sau tiền tố</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Cài đặt</string>
+    <string name="settings_provider_title">Nhà cung cấp mô hình</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Tùy chỉnh (tương thích OpenAI)</string>
+    <string name="settings_model_title">Mô hình</string>
+    <string name="settings_temperature_title">Nhiệt độ</string>
+    <string name="settings_endpoint_title">Điểm cuối</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, v.v.</string>
+    <string name="settings_trigger_prefix_desc">Ký hiệu được sử dụng trước tên lệnh (ví dụ: %1$sfix).</string>
+    <string name="settings_prefix_error_length">Phải có đúng 1 ký tự</string>
+    <string name="settings_prefix_error_whitespace">Không được là khoảng trắng</string>
+    <string name="settings_prefix_error_alphanumeric">Không được là chữ cái hoặc chữ số</string>
+    <string name="settings_endpoint_error_scheme">Phải bắt đầu bằng https://</string>
+    <string name="settings_endpoint_error_spaces">URL không được chứa khoảng trắng</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Xuất hoặc nhập lệnh của bạn dưới dạng tệp JSON.</string>
+    <string name="backup_export">Xuất</string>
+    <string name="backup_import">Nhập</string>
+    <string name="backup_export_success">Đã xuất lệnh thành công</string>
+    <string name="backup_export_error">Xuất thất bại</string>
+    <string name="backup_import_success">Đã nhập lệnh thành công</string>
+    <string name="backup_import_error">Tệp sao lưu không hợp lệ</string>
+    <string name="backup_import_confirm">Thao tác này sẽ thay thế tất cả lệnh tùy chỉnh hiện có của bạn. Tiếp tục?</string>
+    <string name="backup_import_cancel">Hủy</string>
+    <string name="settings_check_updates">Kiểm tra cập nhật</string>
+    <string name="settings_made_by">Được tạo với tình yêu bởi Musheer Alam</string>
+    <string name="settings_sponsor">Tài trợ trên GitHub</string>
+    <string name="commands_collapse">Thu gọn</string>
+    <string name="commands_expand">Mở rộng</string>
+    <string name="commands_search_hint">Tìm kiếm lệnh…</string>
+    <string name="commands_search_close">Đóng tìm kiếm</string>
+    <string name="commands_search_empty">Không tìm thấy lệnh nào</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Xóa lệnh này?</string>
+    <string name="delete_confirm_key_title">Xóa khóa API này?</string>
+    <string name="delete_confirm_message">Hành động này không thể hoàn tác.</string>
+    <string name="delete_confirm_button">Xóa</string>
+</resources>

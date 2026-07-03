@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Помощник SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Обеспечивает общесистемную замену текста с помощью ИИ при вводе триггерных команд.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Панель управления</string>
+    <string name="service_status_active">Активен</string>
+    <string name="service_status_inactive">Неактивен</string>
+    <string name="service_enable">Включить</string>
+    <string name="dashboard_api_keys_title">Ключи API</string>
+    <string name="dashboard_keys_configured">Настроено %1$d ключей</string>
+    <string name="dashboard_add_key_hint">Добавьте ключ API, чтобы начать.</string>
+    <string name="dashboard_monthly_requests">В этом месяце</string>
+    <string name="dashboard_favorite_command">Самая популярная команда</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Последние 7 дней</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Ключи API</string>
+    <string name="keys_api_key_label">Ключ API</string>
+    <string name="keys_testing">Тестирование…</string>
+    <string name="keys_add_key">Добавить ключ</string>
+    <string name="keys_valid_added">Добавлен действительный ключ!</string>
+    <string name="keys_already_added">Этот ключ уже был добавлен</string>
+    <string name="keys_validation_failed">Проверка не удалась</string>
+    <string name="keys_keystore_error">Безопасное хранилище ключей недоступно на этом устройстве. Ключи не могут быть сохранены.</string>
+    <string name="keys_get_api_key">Получите ключ API для %1$s ↗</string>
+    <string name="keys_empty">Ключи API не добавлены</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Команды</string>
+    <string name="commands_add_custom_title">Добавить пользовательскую команду</string>
+    <string name="commands_trigger_label">Триггер (например, %1$scode)</string>
+    <string name="commands_prompt_label">Подсказка (например, Перепиши как стихотворение)</string>
+    <string name="commands_add_command">Добавить команду</string>
+    <string name="commands_delete_command">Удалить</string>
+    <string name="commands_edit_command">Редактировать</string>
+    <string name="commands_save_command">Сохранить команду</string>
+    <string name="commands_cancel">Отмена</string>
+    <string name="commands_type_ai">ИИ</string>
+    <string name="commands_type_replacer">Локальный</string>
+    <string name="commands_replacement_label">Текст замены (например, myemail@example.com)</string>
+    <string name="commands_built_in">Встроенный</string>
+    <string name="commands_error_prefix">Триггер должен начинаться с \'%1$s\'</string>
+    <string name="commands_error_duplicate">Команда с таким триггером уже существует</string>
+    <string name="commands_error_conflict">Конфликт с существующей командой \'%1$s\' — один триггер является префиксом другого</string>
+    <string name="commands_error_empty_trigger">Триггер должен иметь имя после префикса</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_provider_title">Поставщик модели</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Пользовательский (совместим с OpenAI)</string>
+    <string name="settings_model_title">Модель</string>
+    <string name="settings_temperature_title">Температура</string>
+    <string name="settings_endpoint_title">Конечная точка</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku и т.д.</string>
+    <string name="settings_trigger_prefix_desc">Символ, используемый перед именами команд (например, %1$sfix).</string>
+    <string name="settings_prefix_error_length">Должен быть ровно 1 символ</string>
+    <string name="settings_prefix_error_whitespace">Не может быть пробелом</string>
+    <string name="settings_prefix_error_alphanumeric">Не может быть буквой или цифрой</string>
+    <string name="settings_endpoint_error_scheme">Должен начинаться с https://</string>
+    <string name="settings_endpoint_error_spaces">URL не может содержать пробелы</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Экспортируйте или импортируйте ваши команды в виде JSON-файла.</string>
+    <string name="backup_export">Экспорт</string>
+    <string name="backup_import">Импорт</string>
+    <string name="backup_export_success">Команды успешно экспортированы</string>
+    <string name="backup_export_error">Экспорт не удался</string>
+    <string name="backup_import_success">Команды успешно импортированы</string>
+    <string name="backup_import_error">Неверный файл резервной копии</string>
+    <string name="backup_import_confirm">Это заменит все ваши существующие пользовательские команды. Продолжить?</string>
+    <string name="backup_import_cancel">Отмена</string>
+    <string name="settings_check_updates">Проверить обновления</string>
+    <string name="settings_made_by">Сделано с любовью Musheer Alam</string>
+    <string name="settings_sponsor">Поддержать на GitHub</string>
+    <string name="commands_collapse">Свернуть</string>
+    <string name="commands_expand">Развернуть</string>
+    <string name="commands_search_hint">Поиск команд…</string>
+    <string name="commands_search_close">Закрыть поиск</string>
+    <string name="commands_search_empty">Команды не найдены</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Удалить эту команду?</string>
+    <string name="delete_confirm_key_title">Удалить этот ключ API?</string>
+    <string name="delete_confirm_message">Это действие невозможно отменить.</string>
+    <string name="delete_confirm_button">Удалить</string>
+</resources>

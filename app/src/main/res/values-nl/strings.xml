@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">SwiftSlate-assistent</string>
+    <string name="accessibility_service_desc" translatable="false">Biedt systeembrede AI-tekstvervangingen wanneer triggeropdrachten worden getypt.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="service_status_active">Actief</string>
+    <string name="service_status_inactive">Inactief</string>
+    <string name="service_enable">Inschakelen</string>
+    <string name="dashboard_api_keys_title">API-sleutels</string>
+    <string name="dashboard_keys_configured">%1$d sleutels geconfigureerd</string>
+    <string name="dashboard_add_key_hint">Voeg een API-sleutel toe om te beginnen.</string>
+    <string name="dashboard_monthly_requests">Deze maand</string>
+    <string name="dashboard_favorite_command">Topopdracht</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Laatste 7 dagen</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API-sleutels</string>
+    <string name="keys_api_key_label">API-sleutel</string>
+    <string name="keys_testing">Testen…</string>
+    <string name="keys_add_key">Sleutel toevoegen</string>
+    <string name="keys_valid_added">Geldige sleutel toegevoegd!</string>
+    <string name="keys_already_added">Deze sleutel is al toegevoegd</string>
+    <string name="keys_validation_failed">Validatie mislukt</string>
+    <string name="keys_keystore_error">Veilige sleutelopslag is niet beschikbaar op dit apparaat. Sleutels kunnen niet worden opgeslagen.</string>
+    <string name="keys_get_api_key">Haal uw %1$s API-sleutel op ↗</string>
+    <string name="keys_empty">Geen API-sleutels toegevoegd</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Opdrachten</string>
+    <string name="commands_add_custom_title">Aangepaste opdracht toevoegen</string>
+    <string name="commands_trigger_label">Trigger (bijv. %1$scode)</string>
+    <string name="commands_prompt_label">Prompt (bijv. Herschrijf als gedicht)</string>
+    <string name="commands_add_command">Opdracht toevoegen</string>
+    <string name="commands_delete_command">Verwijderen</string>
+    <string name="commands_edit_command">Bewerken</string>
+    <string name="commands_save_command">Opdracht opslaan</string>
+    <string name="commands_cancel">Annuleren</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Lokaal</string>
+    <string name="commands_replacement_label">Vervangende tekst (bijv. myemail@example.com)</string>
+    <string name="commands_built_in">Ingebouwd</string>
+    <string name="commands_error_prefix">Trigger moet beginnen met \'%1$s\'</string>
+    <string name="commands_error_duplicate">Er bestaat al een opdracht met deze trigger</string>
+    <string name="commands_error_conflict">Conflict met bestaande opdracht \'%1$s\' — de ene trigger is een voorvoegsel van de andere</string>
+    <string name="commands_error_empty_trigger">Trigger moet een naam hebben na het voorvoegsel</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Instellingen</string>
+    <string name="settings_provider_title">Modelaanbieder</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Aangepast (OpenAI-compatibel)</string>
+    <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Temperatuur</string>
+    <string name="settings_endpoint_title">Endpoint</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, enz.</string>
+    <string name="settings_trigger_prefix_desc">Symbool gebruikt vóór opdrachtnamen (bijv. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Moet exact 1 teken zijn</string>
+    <string name="settings_prefix_error_whitespace">Kan geen spatie zijn</string>
+    <string name="settings_prefix_error_alphanumeric">Kan geen letter of cijfer zijn</string>
+    <string name="settings_endpoint_error_scheme">Moet beginnen met https://</string>
+    <string name="settings_endpoint_error_spaces">URL mag geen spaties bevatten</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Exporteer of importeer uw opdrachten als een JSON-bestand.</string>
+    <string name="backup_export">Exporteren</string>
+    <string name="backup_import">Importeren</string>
+    <string name="backup_export_success">Opdrachten succesvol geëxporteerd</string>
+    <string name="backup_export_error">Exporteren mislukt</string>
+    <string name="backup_import_success">Opdrachten succesvol geïmporteerd</string>
+    <string name="backup_import_error">Ongeldig back-upbestand</string>
+    <string name="backup_import_confirm">Dit zal al uw bestaande aangepaste opdrachten vervangen. Doorgaan?</string>
+    <string name="backup_import_cancel">Annuleren</string>
+    <string name="settings_check_updates">Controleren op updates</string>
+    <string name="settings_made_by">Met liefde gemaakt door Musheer Alam</string>
+    <string name="settings_sponsor">Sponsor op GitHub</string>
+    <string name="commands_collapse">Inklappen</string>
+    <string name="commands_expand">Uitklappen</string>
+    <string name="commands_search_hint">Zoek opdrachten…</string>
+    <string name="commands_search_close">Zoeken sluiten</string>
+    <string name="commands_search_empty">Geen opdrachten gevonden</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Deze opdracht verwijderen?</string>
+    <string name="delete_confirm_key_title">Deze API-sleutel verwijderen?</string>
+    <string name="delete_confirm_message">Deze actie kan niet ongedaan worden gemaakt.</string>
+    <string name="delete_confirm_button">Verwijderen</string>
+</resources>

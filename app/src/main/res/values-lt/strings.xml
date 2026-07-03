@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Assistente SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Fornisce sostituzioni di testo basate su IA a livello di sistema quando vengono digitati comandi trigger.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="service_status_active">Attivo</string>
+    <string name="service_status_inactive">Inattivo</string>
+    <string name="service_enable">Abilita</string>
+    <string name="dashboard_api_keys_title">Chiavi API</string>
+    <string name="dashboard_keys_configured">%1$d chiavi configurate</string>
+    <string name="dashboard_add_key_hint">Aggiungi una chiave API per iniziare.</string>
+    <string name="dashboard_monthly_requests">Questo mese</string>
+    <string name="dashboard_favorite_command">Comando più usato</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Ultimi 7 giorni</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Chiavi API</string>
+    <string name="keys_api_key_label">Chiave API</string>
+    <string name="keys_testing">Test in corso…</string>
+    <string name="keys_add_key">Aggiungi chiave</string>
+    <string name="keys_valid_added">Chiave valida aggiunta!</string>
+    <string name="keys_already_added">Questa chiave è già stata aggiunta</string>
+    <string name="keys_validation_failed">Convalida fallita</string>
+    <string name="keys_keystore_error">L\'archiviazione sicura delle chiavi non è disponibile su questo dispositivo. Le chiavi non possono essere salvate.</string>
+    <string name="keys_get_api_key">Ottieni la tua chiave API per %1$s ↗</string>
+    <string name="keys_empty">Nessuna chiave API aggiunta</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Comandi</string>
+    <string name="commands_add_custom_title">Aggiungi comando personalizzato</string>
+    <string name="commands_trigger_label">Trigger (es. %1$scode)</string>
+    <string name="commands_prompt_label">Prompt (es. Riscrivi come poesia)</string>
+    <string name="commands_add_command">Aggiungi comando</string>
+    <string name="commands_delete_command">Elimina</string>
+    <string name="commands_edit_command">Modifica</string>
+    <string name="commands_save_command">Salva comando</string>
+    <string name="commands_cancel">Annulla</string>
+    <string name="commands_type_ai">IA</string>
+    <string name="commands_type_replacer">Locale</string>
+    <string name="commands_replacement_label">Testo di sostituzione (es. myemail@example.com)</string>
+    <string name="commands_built_in">Integrato</string>
+    <string name="commands_error_prefix">Il trigger deve iniziare con \'%1$s\'</string>
+    <string name="commands_error_duplicate">Esiste già un comando con questo trigger</string>
+    <string name="commands_error_conflict">Conflitto con il comando esistente \'%1$s\' — un trigger è prefisso dell\'altro</string>
+    <string name="commands_error_empty_trigger">Il trigger deve avere un nome dopo il prefisso</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_provider_title">Fornitore del modello</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Personalizzato (compatibile con OpenAI)</string>
+    <string name="settings_model_title">Modello</string>
+    <string name="settings_temperature_title">Temperatura</string>
+    <string name="settings_endpoint_title">Endpoint</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, ecc.</string>
+    <string name="settings_trigger_prefix_desc">Simbolo utilizzato prima dei nomi dei comandi (es. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Deve essere esattamente 1 carattere</string>
+    <string name="settings_prefix_error_whitespace">Non può essere uno spazio</string>
+    <string name="settings_prefix_error_alphanumeric">Non può essere una lettera o una cifra</string>
+    <string name="settings_endpoint_error_scheme">Deve iniziare con https://</string>
+    <string name="settings_endpoint_error_spaces">L\'URL non può contenere spazi</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Esporta o importa i tuoi comandi come file JSON.</string>
+    <string name="backup_export">Esporta</string>
+    <string name="backup_import">Importa</string>
+    <string name="backup_export_success">Comandi esportati con successo</string>
+    <string name="backup_export_error">Esportazione fallita</string>
+    <string name="backup_import_success">Comandi importati con successo</string>
+    <string name="backup_import_error">File di backup non valido</string>
+    <string name="backup_import_confirm">Questo sostituirà tutti i tuoi comandi personalizzati esistenti. Continuare?</string>
+    <string name="backup_import_cancel">Annulla</string>
+    <string name="settings_check_updates">Verifica aggiornamenti</string>
+    <string name="settings_made_by">Fatto con amore da Musheer Alam</string>
+    <string name="settings_sponsor">Sponsorizza su GitHub</string>
+    <string name="commands_collapse">Comprimi</string>
+    <string name="commands_expand">Espandi</string>
+    <string name="commands_search_hint">Cerca comandi…</string>
+    <string name="commands_search_close">Chiudi ricerca</string>
+    <string name="commands_search_empty">Nessun comando trovato</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Eliminare questo comando?</string>
+    <string name="delete_confirm_key_title">Eliminare questa chiave API?</string>
+    <string name="delete_confirm_message">Questa azione non può essere annullata.</string>
+    <string name="delete_confirm_button">Elimina</string>
+</resources>

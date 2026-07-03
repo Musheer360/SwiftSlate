@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Βοηθός SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Παρέχει αντικαταστάσεις κειμένου με AI σε όλο το σύστημα όταν πληκτρολογούνται εντολές ενεργοποίησης.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Πίνακας ελέγχου</string>
+    <string name="service_status_active">Ενεργό</string>
+    <string name="service_status_inactive">Ανενεργό</string>
+    <string name="service_enable">Ενεργοποίηση</string>
+    <string name="dashboard_api_keys_title">Κλειδιά API</string>
+    <string name="dashboard_keys_configured">%1$d διαμορφωμένα κλειδιά</string>
+    <string name="dashboard_add_key_hint">Προσθέστε ένα κλειδί API για να ξεκινήσετε.</string>
+    <string name="dashboard_monthly_requests">Αυτόν τον μήνα</string>
+    <string name="dashboard_favorite_command">Κορυφαία εντολή</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Τελευταίες 7 ημέρες</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Κλειδιά API</string>
+    <string name="keys_api_key_label">Κλειδί API</string>
+    <string name="keys_testing">Δοκιμή…</string>
+    <string name="keys_add_key">Προσθήκη κλειδιού</string>
+    <string name="keys_valid_added">Προστέθηκε έγκυρο κλειδί!</string>
+    <string name="keys_already_added">Αυτό το κλειδί έχει ήδη προστεθεί</string>
+    <string name="keys_validation_failed">Η επικύρωση απέτυχε</string>
+    <string name="keys_keystore_error">Η ασφαλής αποθήκευση κλειδιών δεν είναι διαθέσιμη σε αυτήν τη συσκευή. Τα κλειδιά δεν μπορούν να αποθηκευτούν.</string>
+    <string name="keys_get_api_key">Αποκτήστε το κλειδί API σας για %1$s ↗</string>
+    <string name="keys_empty">Δεν προστέθηκαν κλειδιά API</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Εντολές</string>
+    <string name="commands_add_custom_title">Προσθήκη προσαρμοσμένης εντολής</string>
+    <string name="commands_trigger_label">Ενεργοποιητής (π.χ. %1$scode)</string>
+    <string name="commands_prompt_label">Προτροπή (π.χ. Ξαναγράψε το ως ποίημα)</string>
+    <string name="commands_add_command">Προσθήκη εντολής</string>
+    <string name="commands_delete_command">Διαγραφή</string>
+    <string name="commands_edit_command">Επεξεργασία</string>
+    <string name="commands_save_command">Αποθήκευση εντολής</string>
+    <string name="commands_cancel">Ακύρωση</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Τοπικό</string>
+    <string name="commands_replacement_label">Κείμενο αντικατάστασης (π.χ. myemail@example.com)</string>
+    <string name="commands_built_in">Ενσωματωμένο</string>
+    <string name="commands_error_prefix">Ο ενεργοποιητής πρέπει να ξεκινά με \'%1$s\'</string>
+    <string name="commands_error_duplicate">Υπάρχει ήδη εντολή με αυτόν τον ενεργοποιητή</string>
+    <string name="commands_error_conflict">Σύγκρουση με υπάρχουσα εντολή \'%1$s\' — ο ένας ενεργοποιητής είναι πρόθεμα του άλλου</string>
+    <string name="commands_error_empty_trigger">Ο ενεργοποιητής πρέπει να έχει όνομα μετά το πρόθεμα</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ρυθμίσεις</string>
+    <string name="settings_provider_title">Πάροχος μοντέλου</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Προσαρμοσμένο (συμβατό με OpenAI)</string>
+    <string name="settings_model_title">Μοντέλο</string>
+    <string name="settings_temperature_title">Θερμοκρασία</string>
+    <string name="settings_endpoint_title">Τελικό σημείο</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, κ.λπ.</string>
+    <string name="settings_trigger_prefix_desc">Σύμβολο που χρησιμοποιείται πριν από τα ονόματα εντολών (π.χ. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Πρέπει να είναι ακριβώς 1 χαρακτήρας</string>
+    <string name="settings_prefix_error_whitespace">Δεν μπορεί να είναι κενός χαρακτήρας</string>
+    <string name="settings_prefix_error_alphanumeric">Δεν μπορεί να είναι γράμμα ή ψηφίο</string>
+    <string name="settings_endpoint_error_scheme">Πρέπει να ξεκινά με https://</string>
+    <string name="settings_endpoint_error_spaces">Η διεύθυνση URL δεν μπορεί να περιέχει κενά</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Εξαγωγή ή εισαγωγή των εντολών σας ως αρχείο JSON.</string>
+    <string name="backup_export">Εξαγωγή</string>
+    <string name="backup_import">Εισαγωγή</string>
+    <string name="backup_export_success">Οι εντολές εξήχθησαν με επιτυχία</string>
+    <string name="backup_export_error">Η εξαγωγή απέτυχε</string>
+    <string name="backup_import_success">Οι εντολές εισήχθησαν με επιτυχία</string>
+    <string name="backup_import_error">Μη έγκυρο αρχείο αντιγράφου ασφαλείας</string>
+    <string name="backup_import_confirm">Αυτό θα αντικαταστήσει όλες τις υπάρχουσες προσαρμοσμένες εντολές σας. Θέλετε να συνεχίσετε;</string>
+    <string name="backup_import_cancel">Ακύρωση</string>
+    <string name="settings_check_updates">Έλεγχος για ενημερώσεις</string>
+    <string name="settings_made_by">Φτιαγμένο με αγάπη από τον Musheer Alam</string>
+    <string name="settings_sponsor">Υποστήριξη στο GitHub</string>
+    <string name="commands_collapse">Σύμπτυξη</string>
+    <string name="commands_expand">Επέκταση</string>
+    <string name="commands_search_hint">Αναζήτηση εντολών…</string>
+    <string name="commands_search_close">Κλείσιμο αναζήτησης</string>
+    <string name="commands_search_empty">Δεν βρέθηκαν εντολές</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Να διαγραφεί αυτή η εντολή;</string>
+    <string name="delete_confirm_key_title">Να διαγραφεί αυτό το κλειδί API;</string>
+    <string name="delete_confirm_message">Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
+    <string name="delete_confirm_button">Διαγραφή</string>
+</resources>

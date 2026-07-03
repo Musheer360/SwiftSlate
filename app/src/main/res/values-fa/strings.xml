@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">دستیار SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">هنگام تایپ دستورات محرک، جایگزینی متن مبتنی بر هوش مصنوعی را در سطح سیستم فراهم می‌کند.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">داشبورد</string>
+    <string name="service_status_active">فعال</string>
+    <string name="service_status_inactive">غیرفعال</string>
+    <string name="service_enable">فعال‌سازی</string>
+    <string name="dashboard_api_keys_title">کلیدهای API</string>
+    <string name="dashboard_keys_configured">%1$d کلید پیکربندی شده</string>
+    <string name="dashboard_add_key_hint">برای شروع یک کلید API اضافه کنید.</string>
+    <string name="dashboard_monthly_requests">این ماه</string>
+    <string name="dashboard_favorite_command">دستور برتر</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">۷ روز اخیر</string>
+
+    <!-- Keys -->
+    <string name="keys_title">کلیدهای API</string>
+    <string name="keys_api_key_label">کلید API</string>
+    <string name="keys_testing">در حال آزمایش…</string>
+    <string name="keys_add_key">اضافه کردن کلید</string>
+    <string name="keys_valid_added">کلید معتبر اضافه شد!</string>
+    <string name="keys_already_added">این کلید قبلاً اضافه شده است</string>
+    <string name="keys_validation_failed">اعتبارسنجی ناموفق</string>
+    <string name="keys_keystore_error">ذخیره‌سازی امن کلید در این دستگاه در دسترس نیست. کلیدها قابل ذخیره نیستند.</string>
+    <string name="keys_get_api_key">کلید API خود را برای %1$s دریافت کنید ↗</string>
+    <string name="keys_empty">هیچ کلید API اضافه نشده است</string>
+
+    <!-- Commands -->
+    <string name="commands_title">دستورات</string>
+    <string name="commands_add_custom_title">افزودن دستور سفارشی</string>
+    <string name="commands_trigger_label">محرک (مثلاً %1$scode)</string>
+    <string name="commands_prompt_label">پرامپت (مثلاً بازنویسی به عنوان شعر)</string>
+    <string name="commands_add_command">افزودن دستور</string>
+    <string name="commands_delete_command">حذف</string>
+    <string name="commands_edit_command">ویرایش</string>
+    <string name="commands_save_command">ذخیره دستور</string>
+    <string name="commands_cancel">لغو</string>
+    <string name="commands_type_ai">هوش مصنوعی</string>
+    <string name="commands_type_replacer">محلی</string>
+    <string name="commands_replacement_label">متن جایگزین (مثلاً myemail@example.com)</string>
+    <string name="commands_built_in">ساخته‌شده</string>
+    <string name="commands_error_prefix">محرک باید با \'%1$s\' شروع شود</string>
+    <string name="commands_error_duplicate">دستوری با این محرک از قبل وجود دارد</string>
+    <string name="commands_error_conflict">تداخل با دستور موجود \'%1$s\' — یک محرک پیشوند دیگری است</string>
+    <string name="commands_error_empty_trigger">محرک باید پس از پیشوند یک نام داشته باشد</string>
+
+    <!-- Settings -->
+    <string name="settings_title">تنظیمات</string>
+    <string name="settings_provider_title">ارائه‌دهنده مدل</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">سفارشی (سازگار با OpenAI)</string>
+    <string name="settings_model_title">مدل</string>
+    <string name="settings_temperature_title">دما</string>
+    <string name="settings_endpoint_title">نقطه پایانی</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o، claude-3-haiku و غیره</string>
+    <string name="settings_trigger_prefix_desc">نماد استفاده شده قبل از نام دستورات (مثلاً %1$sfix).</string>
+    <string name="settings_prefix_error_length">باید دقیقاً ۱ کاراکتر باشد</string>
+    <string name="settings_prefix_error_whitespace">نمی‌تواند فاصله باشد</string>
+    <string name="settings_prefix_error_alphanumeric">نمی‌تواند حرف یا رقم باشد</string>
+    <string name="settings_endpoint_error_scheme">باید با https:// شروع شود</string>
+    <string name="settings_endpoint_error_spaces">آدرس URL نمی‌تواند حاوی فاصله باشد</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">دستورات خود را به عنوان فایل JSON صادر یا وارد کنید.</string>
+    <string name="backup_export">صادرات</string>
+    <string name="backup_import">واردات</string>
+    <string name="backup_export_success">دستورات با موفقیت صادر شدند</string>
+    <string name="backup_export_error">صادرات ناموفق</string>
+    <string name="backup_import_success">دستورات با موفقیت وارد شدند</string>
+    <string name="backup_import_error">فایل پشتیبان نامعتبر</string>
+    <string name="backup_import_confirm">این کار تمام دستورات سفارشی موجود شما را جایگزین می‌کند. ادامه می‌دهید؟</string>
+    <string name="backup_import_cancel">لغو</string>
+    <string name="settings_check_updates">بررسی به‌روزرسانی</string>
+    <string name="settings_made_by">ساخته شده با عشق توسط Musheer Alam</string>
+    <string name="settings_sponsor">حمایت در GitHub</string>
+    <string name="commands_collapse">جمع کردن</string>
+    <string name="commands_expand">باز کردن</string>
+    <string name="commands_search_hint">جستجوی دستورات…</string>
+    <string name="commands_search_close">بستن جستجو</string>
+    <string name="commands_search_empty">هیچ دستوری یافت نشد</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">آیا این دستور حذف شود؟</string>
+    <string name="delete_confirm_key_title">آیا این کلید API حذف شود؟</string>
+    <string name="delete_confirm_message">این عمل قابل بازگشت نیست.</string>
+    <string name="delete_confirm_button">حذف</string>
+</resources>

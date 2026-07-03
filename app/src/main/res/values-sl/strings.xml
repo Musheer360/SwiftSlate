@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">Pomočnik SwiftSlate</string>
+    <string name="accessibility_service_desc" translatable="false">Zagotavlja sistemske zamenjave besedila z umetno inteligenco, ko vnesete sprožilne ukaze.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Nadzorna plošča</string>
+    <string name="service_status_active">Aktiven</string>
+    <string name="service_status_inactive">Neaktiven</string>
+    <string name="service_enable">Omogoči</string>
+    <string name="dashboard_api_keys_title">Ključi API</string>
+    <string name="dashboard_keys_configured">%1$d konfiguriranih ključev</string>
+    <string name="dashboard_add_key_hint">Dodajte ključ API za začetek.</string>
+    <string name="dashboard_monthly_requests">Ta mesec</string>
+    <string name="dashboard_favorite_command">Najpogostejši ukaz</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Zadnjih 7 dni</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Ključi API</string>
+    <string name="keys_api_key_label">Ključ API</string>
+    <string name="keys_testing">Preizkušanje…</string>
+    <string name="keys_add_key">Dodaj ključ</string>
+    <string name="keys_valid_added">Dodan je veljaven ključ!</string>
+    <string name="keys_already_added">Ta ključ je že bil dodan</string>
+    <string name="keys_validation_failed">Preverjanje ni uspelo</string>
+    <string name="keys_keystore_error">Varna hramba ključev na tej napravi ni na voljo. Ključev ni mogoče shraniti.</string>
+    <string name="keys_get_api_key">Pridobite svoj ključ API za %1$s ↗</string>
+    <string name="keys_empty">Ni dodanih ključev API</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Ukazi</string>
+    <string name="commands_add_custom_title">Dodaj poljuben ukaz</string>
+    <string name="commands_trigger_label">Sprožilec (npr. %1$scode)</string>
+    <string name="commands_prompt_label">Poziv (npr. Prepiši kot pesem)</string>
+    <string name="commands_add_command">Dodaj ukaz</string>
+    <string name="commands_delete_command">Izbriši</string>
+    <string name="commands_edit_command">Uredi</string>
+    <string name="commands_save_command">Shrani ukaz</string>
+    <string name="commands_cancel">Prekliči</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Lokalno</string>
+    <string name="commands_replacement_label">Nadomestno besedilo (npr. myemail@example.com)</string>
+    <string name="commands_built_in">Vgrajeno</string>
+    <string name="commands_error_prefix">Sprožilec se mora začeti z \'%1$s\'</string>
+    <string name="commands_error_duplicate">Ukaz s tem sprožilcem že obstaja</string>
+    <string name="commands_error_conflict">Konflikt z obstoječim ukazom \'%1$s\' — en sprožilec je predpona drugega</string>
+    <string name="commands_error_empty_trigger">Sprožilec mora imeti ime za predpono</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Nastavitve</string>
+    <string name="settings_provider_title">Ponudnik modela</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Poljubno (združljivo z OpenAI)</string>
+    <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Temperatura</string>
+    <string name="settings_endpoint_title">Končna točka</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, itd.</string>
+    <string name="settings_trigger_prefix_desc">Simbol, uporabljen pred imeni ukazov (npr. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Mora biti natanko 1 znak</string>
+    <string name="settings_prefix_error_whitespace">Ne sme biti presledek</string>
+    <string name="settings_prefix_error_alphanumeric">Ne sme biti črka ali številka</string>
+    <string name="settings_endpoint_error_scheme">Mora se začeti z https://</string>
+    <string name="settings_endpoint_error_spaces">URL ne sme vsebovati presledkov</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Izvozi ali uvozi svoje ukaze kot datoteko JSON.</string>
+    <string name="backup_export">Izvozi</string>
+    <string name="backup_import">Uvozi</string>
+    <string name="backup_export_success">Ukazi so bili uspešno izvoženi</string>
+    <string name="backup_export_error">Izvoz ni uspel</string>
+    <string name="backup_import_success">Ukazi so bili uspešno uvoženi</string>
+    <string name="backup_import_error">Neveljavna varnostna kopija</string>
+    <string name="backup_import_confirm">To bo nadomestilo vse vaše obstoječe poljubne ukaze. Nadaljujem?</string>
+    <string name="backup_import_cancel">Prekliči</string>
+    <string name="settings_check_updates">Preveri posodobitve</string>
+    <string name="settings_made_by">Narejeno z ljubeznijo Musheer Alam</string>
+    <string name="settings_sponsor">Sponzoriraj na GitHubu</string>
+    <string name="commands_collapse">Strni</string>
+    <string name="commands_expand">Razširi</string>
+    <string name="commands_search_hint">Išči ukaze…</string>
+    <string name="commands_search_close">Zapri iskanje</string>
+    <string name="commands_search_empty">Ni najdenih ukazov</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Izbrišem ta ukaz?</string>
+    <string name="delete_confirm_key_title">Izbrišem ta ključ API?</string>
+    <string name="delete_confirm_message">Tega dejanja ni mogoče razveljaviti.</string>
+    <string name="delete_confirm_button">Izbriši</string>
+</resources>

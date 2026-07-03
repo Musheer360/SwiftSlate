@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">SwiftSlate\'i abiline</string>
+    <string name="accessibility_service_desc" translatable="false">Pakub süsteemisiseseid AI-põhiseid tekstiasendusi, kui sisestatakse päästikkäske.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Armatuurlaud</string>
+    <string name="service_status_active">Aktiivne</string>
+    <string name="service_status_inactive">Mitteaktiivne</string>
+    <string name="service_enable">Luba</string>
+    <string name="dashboard_api_keys_title">API võtmed</string>
+    <string name="dashboard_keys_configured">%1$d võtit on seadistatud</string>
+    <string name="dashboard_add_key_hint">Alustamiseks lisa API võti.</string>
+    <string name="dashboard_monthly_requests">See kuu</string>
+    <string name="dashboard_favorite_command">Populaarseim käsk</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Viimased 7 päeva</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API võtmed</string>
+    <string name="keys_api_key_label">API võti</string>
+    <string name="keys_testing">Testimine…</string>
+    <string name="keys_add_key">Lisa võti</string>
+    <string name="keys_valid_added">Kehtiv võti on lisatud!</string>
+    <string name="keys_already_added">See võti on juba lisatud</string>
+    <string name="keys_validation_failed">Kinnitamine ebaõnnestus</string>
+    <string name="keys_keystore_error">Turvaline võtmehoidla pole sellel seadmel saadaval. Võtmeid ei saa salvestada.</string>
+    <string name="keys_get_api_key">Hankige oma %1$s API võti ↗</string>
+    <string name="keys_empty">API võtmeid pole lisatud</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Käsud</string>
+    <string name="commands_add_custom_title">Lisa kohandatud käsk</string>
+    <string name="commands_trigger_label">Päästik (nt %1$scode)</string>
+    <string name="commands_prompt_label">Päring (nt Kirjuta ümber luuletusena)</string>
+    <string name="commands_add_command">Lisa käsk</string>
+    <string name="commands_delete_command">Kustuta</string>
+    <string name="commands_edit_command">Muuda</string>
+    <string name="commands_save_command">Salvesta käsk</string>
+    <string name="commands_cancel">Tühista</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Kohalik</string>
+    <string name="commands_replacement_label">Asendustekst (nt myemail@example.com)</string>
+    <string name="commands_built_in">Sisseehitatud</string>
+    <string name="commands_error_prefix">Päästik peab algama \'%1$s\'</string>
+    <string name="commands_error_duplicate">Selle päästikuga käsk on juba olemas</string>
+    <string name="commands_error_conflict">Konflikt olemasoleva käsuga \'%1$s\' — üks päästik on teise eesliide</string>
+    <string name="commands_error_empty_trigger">Päästikul peab pärast eesliidet olema nimi</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Seaded</string>
+    <string name="settings_provider_title">Mudeli pakkuja</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Kohandatud (OpenAI-ga ühilduv)</string>
+    <string name="settings_model_title">Mudel</string>
+    <string name="settings_temperature_title">Temperatuur</string>
+    <string name="settings_endpoint_title">Lõpp-punkt</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku jne.</string>
+    <string name="settings_trigger_prefix_desc">Sümbol, mida kasutatakse käskude nimede ees (nt %1$sfix).</string>
+    <string name="settings_prefix_error_length">Peab olema täpselt 1 tähemärk</string>
+    <string name="settings_prefix_error_whitespace">Ei tohi olla tühik</string>
+    <string name="settings_prefix_error_alphanumeric">Ei tohi olla täht ega number</string>
+    <string name="settings_endpoint_error_scheme">Peab algama https://</string>
+    <string name="settings_endpoint_error_spaces">URL ei tohi sisaldada tühikuid</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Eksportige või importige oma käsud JSON-failina.</string>
+    <string name="backup_export">Ekspordi</string>
+    <string name="backup_import">Impordi</string>
+    <string name="backup_export_success">Käsud eksporditi edukalt</string>
+    <string name="backup_export_error">Eksportimine ebaõnnestus</string>
+    <string name="backup_import_success">Käsud imporditi edukalt</string>
+    <string name="backup_import_error">Vigane varukoopiafail</string>
+    <string name="backup_import_confirm">See asendab kõik teie olemasolevad kohandatud käsud. Kas jätkate?</string>
+    <string name="backup_import_cancel">Tühista</string>
+    <string name="settings_check_updates">Kontrolli uuendusi</string>
+    <string name="settings_made_by">Valmistatud armastusega Musheer Alam\'i poolt</string>
+    <string name="settings_sponsor">Toeta GitHubis</string>
+    <string name="commands_collapse">Ahenda</string>
+    <string name="commands_expand">Laienda</string>
+    <string name="commands_search_hint">Otsi käske…</string>
+    <string name="commands_search_close">Sulge otsing</string>
+    <string name="commands_search_empty">Käske ei leitud</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Kas kustutada see käsk?</string>
+    <string name="delete_confirm_key_title">Kas kustutada see API võti?</string>
+    <string name="delete_confirm_message">Seda toimingut ei saa tagasi võtta.</string>
+    <string name="delete_confirm_button">Kustuta</string>
+</resources>

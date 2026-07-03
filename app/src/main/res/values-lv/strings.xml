@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">SwiftSlate palīgs</string>
+    <string name="accessibility_service_desc" translatable="false">Nodrošina sistēmas mēroga AI teksta aizstāšanu, kad tiek ierakstītas aktivizējošās komandas.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Informācijas panelis</string>
+    <string name="service_status_active">Aktīvs</string>
+    <string name="service_status_inactive">Neaktīvs</string>
+    <string name="service_enable">Iespējot</string>
+    <string name="dashboard_api_keys_title">API atslēgas</string>
+    <string name="dashboard_keys_configured">Konfigurētas %1$d atslēgas</string>
+    <string name="dashboard_add_key_hint">Pievienojiet API atslēgu, lai sāktu.</string>
+    <string name="dashboard_monthly_requests">Šomēnes</string>
+    <string name="dashboard_favorite_command">Populārākā komanda</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Pēdējās 7 dienas</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API atslēgas</string>
+    <string name="keys_api_key_label">API atslēga</string>
+    <string name="keys_testing">Testē…</string>
+    <string name="keys_add_key">Pievienot atslēgu</string>
+    <string name="keys_valid_added">Pievienota derīga atslēga!</string>
+    <string name="keys_already_added">Šī atslēga jau ir pievienota</string>
+    <string name="keys_validation_failed">Validācija neizdevās</string>
+    <string name="keys_keystore_error">Droša atslēgu glabātuve šajā ierīcē nav pieejama. Atslēgas nevar saglabāt.</string>
+    <string name="keys_get_api_key">Iegūstiet savu %1$s API atslēgu ↗</string>
+    <string name="keys_empty">Nav pievienota neviena API atslēga</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Komandas</string>
+    <string name="commands_add_custom_title">Pievienot pielāgotu komandu</string>
+    <string name="commands_trigger_label">Aktivizētājs (piem., %1$scode)</string>
+    <string name="commands_prompt_label">Uzvedne (piem., Pārrakstīt kā dzejoli)</string>
+    <string name="commands_add_command">Pievienot komandu</string>
+    <string name="commands_delete_command">Dzēst</string>
+    <string name="commands_edit_command">Rediģēt</string>
+    <string name="commands_save_command">Saglabāt komandu</string>
+    <string name="commands_cancel">Atcelt</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Lokāls</string>
+    <string name="commands_replacement_label">Aizstāšanas teksts (piem., myemail@example.com)</string>
+    <string name="commands_built_in">Iebūvēts</string>
+    <string name="commands_error_prefix">Aktivizētājam jāsākas ar \'%1$s\'</string>
+    <string name="commands_error_duplicate">Komanda ar šo aktivizētāju jau pastāv</string>
+    <string name="commands_error_conflict">Konflikts ar esošo komandu \'%1$s\' — viens aktivizētājs ir otra priedēklis</string>
+    <string name="commands_error_empty_trigger">Aktivizētājam pēc priedēkļa ir jābūt nosaukumam</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Iestatījumi</string>
+    <string name="settings_provider_title">Modeļa nodrošinātājs</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Pielāgots (saderīgs ar OpenAI)</string>
+    <string name="settings_model_title">Modelis</string>
+    <string name="settings_temperature_title">Temperatūra</string>
+    <string name="settings_endpoint_title">Galapunkts</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku u.c.</string>
+    <string name="settings_trigger_prefix_desc">Simbols, ko lieto pirms komandu nosaukumiem (piem., %1$sfix).</string>
+    <string name="settings_prefix_error_length">Jābūt tieši 1 rakstzīmei</string>
+    <string name="settings_prefix_error_whitespace">Nevar būt atstarpe</string>
+    <string name="settings_prefix_error_alphanumeric">Nevar būt burts vai cipars</string>
+    <string name="settings_endpoint_error_scheme">Jāsākas ar https://</string>
+    <string name="settings_endpoint_error_spaces">URL nedrīkst saturēt atstarpes</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Eksportējiet vai importējiet savas komandas kā JSON failu.</string>
+    <string name="backup_export">Eksportēt</string>
+    <string name="backup_import">Importēt</string>
+    <string name="backup_export_success">Komandas veiksmīgi eksportētas</string>
+    <string name="backup_export_error">Eksportēšana neizdevās</string>
+    <string name="backup_import_success">Komandas veiksmīgi importētas</string>
+    <string name="backup_import_error">Nederīgs dublējuma fails</string>
+    <string name="backup_import_confirm">Tas aizstās visas jūsu esošās pielāgotās komandas. Turpināt?</string>
+    <string name="backup_import_cancel">Atcelt</string>
+    <string name="settings_check_updates">Pārbaudīt atjauninājumus</string>
+    <string name="settings_made_by">Izgatavots ar mīlestību Musheer Alam</string>
+    <string name="settings_sponsor">Atbalstīt GitHub</string>
+    <string name="commands_collapse">Sakļaut</string>
+    <string name="commands_expand">Izvērst</string>
+    <string name="commands_search_hint">Meklēt komandas…</string>
+    <string name="commands_search_close">Aizvērt meklēšanu</string>
+    <string name="commands_search_empty">Nav atrasta neviena komanda</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Dzēst šo komandu?</string>
+    <string name="delete_confirm_key_title">Dzēst šo API atslēgu?</string>
+    <string name="delete_confirm_message">Šo darbību nevar atsaukt.</string>
+    <string name="delete_confirm_button">Dzēst</string>
+</resources>

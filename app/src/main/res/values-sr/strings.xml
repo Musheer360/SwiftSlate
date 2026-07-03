@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwiftSlate</string>
+    <string name="accessibility_service_label" translatable="false">SwiftSlate асистент</string>
+    <string name="accessibility_service_desc" translatable="false">Омогућава системске замене текста помоћу вештачке интелигенције када се укуцају окидачке наредбе.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Контролна табла</string>
+    <string name="service_status_active">Активан</string>
+    <string name="service_status_inactive">Неактиван</string>
+    <string name="service_enable">Омогући</string>
+    <string name="dashboard_api_keys_title">API кључеви</string>
+    <string name="dashboard_keys_configured">%1$d конфигурисаних кључева</string>
+    <string name="dashboard_add_key_hint">Додајте API кључ да бисте започели.</string>
+    <string name="dashboard_monthly_requests">Овог месеца</string>
+    <string name="dashboard_favorite_command">Најкоришћенија наредба</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Последњих 7 дана</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API кључеви</string>
+    <string name="keys_api_key_label">API кључ</string>
+    <string name="keys_testing">Тестирање…</string>
+    <string name="keys_add_key">Додај кључ</string>
+    <string name="keys_valid_added">Додат је важећи кључ!</string>
+    <string name="keys_already_added">Овај кључ је већ додат</string>
+    <string name="keys_validation_failed">Провера ваљаности није успела</string>
+    <string name="keys_keystore_error">Сигурно складиште кључева није доступно на овом уређају. Кључеви се не могу сачувати.</string>
+    <string name="keys_get_api_key">Набавите свој API кључ за %1$s ↗</string>
+    <string name="keys_empty">Нема додатих API кључева</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Наредбе</string>
+    <string name="commands_add_custom_title">Додај прилагођену наредбу</string>
+    <string name="commands_trigger_label">Окидач (нпр. %1$scode)</string>
+    <string name="commands_prompt_label">Упит (нпр. Препиши као песму)</string>
+    <string name="commands_add_command">Додај наредбу</string>
+    <string name="commands_delete_command">Обриши</string>
+    <string name="commands_edit_command">Уреди</string>
+    <string name="commands_save_command">Сачувај наредбу</string>
+    <string name="commands_cancel">Откажи</string>
+    <string name="commands_type_ai">ВИ</string>
+    <string name="commands_type_replacer">Локално</string>
+    <string name="commands_replacement_label">Текст замене (нпр. myemail@example.com)</string>
+    <string name="commands_built_in">Уграђено</string>
+    <string name="commands_error_prefix">Окидач мора почети са \'%1$s\'</string>
+    <string name="commands_error_duplicate">Наредба са овим окидачем већ постоји</string>
+    <string name="commands_error_conflict">Сукоб са постојећом наредбом \'%1$s\' — један окидач је префикс другог</string>
+    <string name="commands_error_empty_trigger">Окидач мора имати назив након префикса</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Подешавања</string>
+    <string name="settings_provider_title">Провајдер модела</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Прилагођено (компатибилно са OpenAI)</string>
+    <string name="settings_model_title">Модел</string>
+    <string name="settings_temperature_title">Температура</string>
+    <string name="settings_endpoint_title">Крајња тачка</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, итд.</string>
+    <string name="settings_trigger_prefix_desc">Симбол који се користи испред назива наредби (нпр. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Мора бити тачно 1 знак</string>
+    <string name="settings_prefix_error_whitespace">Не сме бити размак</string>
+    <string name="settings_prefix_error_alphanumeric">Не сме бити слово или цифра</string>
+    <string name="settings_endpoint_error_scheme">Мора почети са https://</string>
+    <string name="settings_endpoint_error_spaces">URL не сме да садржи размаке</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Извезите или увезите своје наредбе као JSON датотеку.</string>
+    <string name="backup_export">Извоз</string>
+    <string name="backup_import">Увоз</string>
+    <string name="backup_export_success">Наредбе су успешно извезене</string>
+    <string name="backup_export_error">Извоз није успео</string>
+    <string name="backup_import_success">Наредбе су успешно увезене</string>
+    <string name="backup_import_error">Неисправна резервна датотека</string>
+    <string name="backup_import_confirm">Ово ће заменити све ваше постојеће прилагођене наредбе. Наставити?</string>
+    <string name="backup_import_cancel">Откажи</string>
+    <string name="settings_check_updates">Провери ажурирања</string>
+    <string name="settings_made_by">Направљено са љубављу од Musheer Alam</string>
+    <string name="settings_sponsor">Спонзориши на GitHub-у</string>
+    <string name="commands_collapse">Скупи</string>
+    <string name="commands_expand">Прошири</string>
+    <string name="commands_search_hint">Претражи наредбе…</string>
+    <string name="commands_search_close">Затвори претрагу</string>
+    <string name="commands_search_empty">Нема пронађених наредби</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Обрисати ову наредбу?</string>
+    <string name="delete_confirm_key_title">Обрисати овај API кључ?</string>
+    <string name="delete_confirm_message">Ова радња се не може опозвати.</string>
+    <string name="delete_confirm_button">Обриши</string>
+</resources>
