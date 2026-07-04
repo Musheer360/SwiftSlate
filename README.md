@@ -28,6 +28,12 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 
 <br>
 
+<a href="https://trendshift.io/repositories/25274?utm_source=repository-badge&utm_medium=badge&utm_campaign=badge-repository-25274" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/25274" alt="Musheer360/SwiftSlate | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/25274?utm_source=trendshift-badge&utm_medium=badge&utm_campaign=badge-trendshift-25274" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/25274/daily?language=Kotlin" alt="Musheer360/SwiftSlate | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/25274?utm_source=trendshift-badge&utm_medium=badge&utm_campaign=badge-trendshift-25274" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/25274/weekly?language=Kotlin" alt="Musheer360/SwiftSlate | Trendshift" width="250" height="55"/></a>
+
+<br>
+
 [<img src="https://img.shields.io/badge/⬇_Download_APK-282828?style=for-the-badge" alt="Download APK" height="36">](https://github.com/Musheer360/SwiftSlate/releases/latest)
 &nbsp;&nbsp;
 [<img src="https://img.shields.io/badge/🐛_Report_Bug-282828?style=for-the-badge" alt="Report Bug" height="36">](https://github.com/Musheer360/SwiftSlate/issues)
