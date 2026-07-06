@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate உதவியாளர்</string>
-    <string name="accessibility_service_desc" translatable="false">தூண்டல் கட்டளைகளை தட்டச்சு செய்யும்போது அமைப்பு முழுவதும் AI அடிப்படையிலான உரை மாற்றீடுகளை வழங்குகிறது.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate உதவியாளர்</string>
+    <string name="accessibility_service_desc" >தூண்டல் கட்டளைகளை தட்டச்சு செய்யும்போது அமைப்பு முழுவதும் AI அடிப்படையிலான உரை மாற்றீடுகளை வழங்குகிறது.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">டாஷ்போர்டு</string>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate asszisztens</string>
-    <string name="accessibility_service_desc" translatable="false">Rendszerszintű AI-alapú szöveghelyettesítéseket biztosít, amikor triggerparancsokat gépel be.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate asszisztens</string>
+    <string name="accessibility_service_desc" >Rendszerszintű AI-alapú szöveghelyettesítéseket biztosít, amikor triggerparancsokat gépel be.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Irányítópult</string>

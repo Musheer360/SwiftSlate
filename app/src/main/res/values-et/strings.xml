@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate\'i abiline</string>
-    <string name="accessibility_service_desc" translatable="false">Pakub süsteemisiseseid AI-põhiseid tekstiasendusi, kui sisestatakse päästikkäske.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate\'i abiline</string>
+    <string name="accessibility_service_desc" >Pakub süsteemisiseseid AI-põhiseid tekstiasendusi, kui sisestatakse päästikkäske.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Armatuurlaud</string>

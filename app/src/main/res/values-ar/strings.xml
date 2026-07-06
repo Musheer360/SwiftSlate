@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">مساعد SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">يوفر استبدالات نصية مدعومة بالذكاء الاصطناعي على مستوى النظام عند كتابة أوامر التشغيل.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >مساعد SwiftSlate</string>
+    <string name="accessibility_service_desc" >يوفر استبدالات نصية مدعومة بالذكاء الاصطناعي على مستوى النظام عند كتابة أوامر التشغيل.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">لوحة التحكم</string>

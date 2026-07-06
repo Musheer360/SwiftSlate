@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Trợ lý SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Cung cấp thay thế văn bản bằng AI trên toàn hệ thống khi nhập lệnh kích hoạt.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Trợ lý SwiftSlate</string>
+    <string name="accessibility_service_desc" >Cung cấp thay thế văn bản bằng AI trên toàn hệ thống khi nhập lệnh kích hoạt.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Bảng điều khiển</string>

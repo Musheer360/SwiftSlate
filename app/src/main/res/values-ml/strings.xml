@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate അസിസ്റ്റന്റ്</string>
-    <string name="accessibility_service_desc" translatable="false">ട്രിഗർ കമാൻഡുകൾ ടൈപ്പ് ചെയ്യുമ്പോൾ സിസ്റ്റംവ്യാപകമായ AI അടിസ്ഥാനമാക്കിയുള്ള ടെക്സ്റ്റ് മാറ്റിസ്ഥാപിക്കൽ നൽകുന്നു.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate അസിസ്റ്റന്റ്</string>
+    <string name="accessibility_service_desc" >ട്രിഗർ കമാൻഡുകൾ ടൈപ്പ് ചെയ്യുമ്പോൾ സിസ്റ്റംവ്യാപകമായ AI അടിസ്ഥാനമാക്കിയുള്ള ടെക്സ്റ്റ് മാറ്റിസ്ഥാപിക്കൽ നൽകുന്നു.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">ഡാഷ്ബോർഡ്</string>

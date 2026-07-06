@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Βοηθός SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Παρέχει αντικαταστάσεις κειμένου με AI σε όλο το σύστημα όταν πληκτρολογούνται εντολές ενεργοποίησης.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Βοηθός SwiftSlate</string>
+    <string name="accessibility_service_desc" >Παρέχει αντικαταστάσεις κειμένου με AI σε όλο το σύστημα όταν πληκτρολογούνται εντολές ενεργοποίησης.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Πίνακας ελέγχου</string>

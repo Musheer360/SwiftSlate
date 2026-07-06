@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate 어시스턴트</string>
-    <string name="accessibility_service_desc" translatable="false">트리거 명령어를 입력하면 시스템 전체에서 AI 기반 텍스트 대체를 제공합니다.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate 어시스턴트</string>
+    <string name="accessibility_service_desc" >트리거 명령어를 입력하면 시스템 전체에서 AI 기반 텍스트 대체를 제공합니다.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">대시보드</string>

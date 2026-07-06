@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate-avustin</string>
-    <string name="accessibility_service_desc" translatable="false">Tarjoaa järjestelmänlaajuisia AI-pohjaisia tekstinkorvauksia, kun käynnistyskomennot kirjoitetaan.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate-avustin</string>
+    <string name="accessibility_service_desc" >Tarjoaa järjestelmänlaajuisia AI-pohjaisia tekstinkorvauksia, kun käynnistyskomennot kirjoitetaan.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Kojelauta</string>

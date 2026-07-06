@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">ผู้ช่วย SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">ให้การแทนที่ข้อความด้วย AI ทั่วทั้งระบบเมื่อพิมพ์คำสั่งทริกเกอร์</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >ผู้ช่วย SwiftSlate</string>
+    <string name="accessibility_service_desc" >ให้การแทนที่ข้อความด้วย AI ทั่วทั้งระบบเมื่อพิมพ์คำสั่งทริกเกอร์</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">แดชบอร์ด</string>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Assistente SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Fornece substituições de texto baseadas em IA em todo o sistema quando comandos de acionamento são digitados.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Assistente SwiftSlate</string>
+    <string name="accessibility_service_desc" >Fornece substituições de texto baseadas em IA em todo o sistema quando comandos de acionamento são digitados.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Painel</string>

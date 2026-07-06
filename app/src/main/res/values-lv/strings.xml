@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate palīgs</string>
-    <string name="accessibility_service_desc" translatable="false">Nodrošina sistēmas mēroga AI teksta aizstāšanu, kad tiek ierakstītas aktivizējošās komandas.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate palīgs</string>
+    <string name="accessibility_service_desc" >Nodrošina sistēmas mēroga AI teksta aizstāšanu, kad tiek ierakstītas aktivizējošās komandas.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Informācijas panelis</string>

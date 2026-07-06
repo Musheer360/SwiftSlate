@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate ਸਹਾਇਕ</string>
-    <string name="accessibility_service_desc" translatable="false">ਟਰਿਗਰ ਕਮਾਂਡ ਟਾਈਪ ਕਰਨ \'ਤੇ ਸਿਸਟਮ-ਵਿਆਪੀ AI-ਆਧਾਰਿਤ ਟੈਕਸਟ ਤਬਦੀਲੀਆਂ ਪ੍ਰਦਾਨ ਕਰਦਾ ਹੈ।</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate ਸਹਾਇਕ</string>
+    <string name="accessibility_service_desc" >ਟਰਿਗਰ ਕਮਾਂਡ ਟਾਈਪ ਕਰਨ \'ਤੇ ਸਿਸਟਮ-ਵਿਆਪੀ AI-ਆਧਾਰਿਤ ਟੈਕਸਟ ਤਬਦੀਲੀਆਂ ਪ੍ਰਦਾਨ ਕਰਦਾ ਹੈ।</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">ਡੈਸ਼ਬੋਰਡ</string>

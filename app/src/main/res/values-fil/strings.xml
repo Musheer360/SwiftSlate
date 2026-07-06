@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Assistant ng SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Nagbibigay ng sistemang AI na pagpapalit ng teksto kapag nag-type ng mga trigger command.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Assistant ng SwiftSlate</string>
+    <string name="accessibility_service_desc" >Nagbibigay ng sistemang AI na pagpapalit ng teksto kapag nag-type ng mga trigger command.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Dashboard</string>

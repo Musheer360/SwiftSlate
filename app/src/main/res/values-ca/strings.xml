@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Assistent SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Proporciona substitucions de text amb IA a tot el sistema quan s’escriuen ordres de disparador.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Assistent SwiftSlate</string>
+    <string name="accessibility_service_desc" >Proporciona substitucions de text amb IA a tot el sistema quan s’escriuen ordres de disparador.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Panell</string>

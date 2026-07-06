@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate اسسٹنٹ</string>
-    <string name="accessibility_service_desc" translatable="false">جب ٹرگر کمانڈز ٹائپ کی جائیں تو پورے نظام میں AI پر مبنی متن کی تبدیلی فراہم کرتا ہے۔</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate اسسٹنٹ</string>
+    <string name="accessibility_service_desc" >جب ٹرگر کمانڈز ٹائپ کی جائیں تو پورے نظام میں AI پر مبنی متن کی تبدیلی فراہم کرتا ہے۔</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">ڈیش بورڈ</string>

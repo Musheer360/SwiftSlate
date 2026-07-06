@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate-assistent</string>
-    <string name="accessibility_service_desc" translatable="false">Gir systemdekkende AI-teksterstatninger når utløserkommandoer skrives.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate-assistent</string>
+    <string name="accessibility_service_desc" >Gir systemdekkende AI-teksterstatninger når utløserkommandoer skrives.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Dashbord</string>

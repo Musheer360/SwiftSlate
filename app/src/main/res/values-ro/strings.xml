@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Asistent SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Oferă înlocuiri de text bazate pe IA la nivel de sistem atunci când sunt tastate comenzi de declanșare.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Asistent SwiftSlate</string>
+    <string name="accessibility_service_desc" >Oferă înlocuiri de text bazate pe IA la nivel de sistem atunci când sunt tastate comenzi de declanșare.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Tablou de bord</string>

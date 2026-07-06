@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Asisten SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Menyediakan penggantian teks berbasis AI di seluruh sistem saat perintah pemicu diketik.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Asisten SwiftSlate</string>
+    <string name="accessibility_service_desc" >Menyediakan penggantian teks berbasis AI di seluruh sistem saat perintah pemicu diketik.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Dasbor</string>

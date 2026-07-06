@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Pomočnik SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Zagotavlja sistemske zamenjave besedila z umetno inteligenco, ko vnesete sprožilne ukaze.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Pomočnik SwiftSlate</string>
+    <string name="accessibility_service_desc" >Zagotavlja sistemske zamenjave besedila z umetno inteligenco, ko vnesete sprožilne ukaze.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Nadzorna plošča</string>

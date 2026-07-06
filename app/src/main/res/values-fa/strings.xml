@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">دستیار SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">هنگام تایپ دستورات محرک، جایگزینی متن مبتنی بر هوش مصنوعی را در سطح سیستم فراهم می‌کند.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >دستیار SwiftSlate</string>
+    <string name="accessibility_service_desc" >هنگام تایپ دستورات محرک، جایگزینی متن مبتنی بر هوش مصنوعی را در سطح سیستم فراهم می‌کند.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">داشبورد</string>

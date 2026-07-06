@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate సహాయకుడు</string>
-    <string name="accessibility_service_desc" translatable="false">ట్రిగ్గర్ ఆదేశాలను టైప్ చేసినప్పుడు సిస్టమ్-వ్యాప్త AI ఆధారిత టెక్స్ట్ భర్తీలను అందిస్తుంది.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate సహాయకుడు</string>
+    <string name="accessibility_service_desc" >ట్రిగ్గర్ ఆదేశాలను టైప్ చేసినప్పుడు సిస్టమ్-వ్యాప్త AI ఆధారిత టెక్స్ట్ భర్తీలను అందిస్తుంది.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">డాష్బోర్డ్</string>

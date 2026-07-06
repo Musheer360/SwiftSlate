@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Помічник SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Забезпечує загальносистемну заміну тексту за допомогою ШІ при введенні команд-тригерів.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Помічник SwiftSlate</string>
+    <string name="accessibility_service_desc" >Забезпечує загальносистемну заміну тексту за допомогою ШІ при введенні команд-тригерів.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Панель керування</string>

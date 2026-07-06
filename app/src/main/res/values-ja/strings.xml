@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate アシスタント</string>
-    <string name="accessibility_service_desc" translatable="false">トリガーコマンドを入力すると、システム全体で AI によるテキスト置換を提供します。</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate アシスタント</string>
+    <string name="accessibility_service_desc" >トリガーコマンドを入力すると、システム全体で AI によるテキスト置換を提供します。</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">ダッシュボード</string>

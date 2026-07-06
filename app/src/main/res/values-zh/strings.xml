@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">SwiftSlate 助手</string>
-    <string name="accessibility_service_desc" translatable="false">在输入触发命令时，提供系统级 AI 文本替换功能。</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >SwiftSlate 助手</string>
+    <string name="accessibility_service_desc" >在输入触发命令时，提供系统级 AI 文本替换功能。</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">仪表板</string>

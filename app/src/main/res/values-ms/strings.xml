@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">SwiftSlate</string>
-    <string name="accessibility_service_label" translatable="false">Pembantu SwiftSlate</string>
-    <string name="accessibility_service_desc" translatable="false">Menyediakan penggantian teks berasaskan AI di seluruh sistem apabila arahan pencetus ditaip.</string>
+    <string name="app_name" >SwiftSlate</string>
+    <string name="accessibility_service_label" >Pembantu SwiftSlate</string>
+    <string name="accessibility_service_desc" >Menyediakan penggantian teks berasaskan AI di seluruh sistem apabila arahan pencetus ditaip.</string>
 
     <!-- Dashboard -->
     <string name="dashboard_title">Papan Pemuka</string>
