@@ -20,6 +20,7 @@
     <string name="keys_valid_added">¡Clave válida añadida!</string>
     <string name="keys_already_added">Esta clave ya fue añadida</string>
     <string name="keys_validation_failed">Error de validación</string>
+    <string name="keys_custom_endpoint_required">Configura la URL del endpoint en Ajustes antes de añadir una clave para el proveedor personalizado</string>
     <string name="keys_get_api_key">Obtén tu clave API de %1$s ↗</string>
 
     <!-- Commands -->

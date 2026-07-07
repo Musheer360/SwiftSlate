@@ -20,6 +20,7 @@
     <string name="keys_valid_added">Gültiger Schlüssel hinzugefügt!</string>
     <string name="keys_already_added">Dieser Schlüssel wurde bereits hinzugefügt</string>
     <string name="keys_validation_failed">Validierung fehlgeschlagen</string>
+    <string name="keys_custom_endpoint_required">Konfiguriere die Endpunkt-URL in den Einstellungen, bevor du einen Schlüssel für den benutzerdefinierten Anbieter hinzufügst</string>
     <string name="keys_get_api_key">Hol dir deinen %1$s API-Schlüssel ↗</string>
 
     <!-- Commands -->

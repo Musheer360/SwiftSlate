@@ -20,6 +20,7 @@
     <string name="keys_valid_added">मान्य कुंजी जोड़ी गई!</string>
     <string name="keys_already_added">यह कुंजी पहले से जोड़ी जा चुकी है</string>
     <string name="keys_validation_failed">सत्यापन विफल</string>
+    <string name="keys_custom_endpoint_required">कस्टम प्रदाता के लिए कुंजी जोड़ने से पहले सेटिंग्स में एंडपॉइंट URL कॉन्फ़िगर करें</string>
     <string name="keys_get_api_key">अपनी %1$s API कुंजी प्राप्त करें ↗</string>
 
     <!-- Commands -->

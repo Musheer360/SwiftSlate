@@ -11,5 +11,6 @@ class SwiftSlateApp : Application() {
         getSharedPreferences("settings", Context.MODE_PRIVATE)
         getSharedPreferences("commands", Context.MODE_PRIVATE)
         getSharedPreferences("secure_keys_prefs", Context.MODE_PRIVATE)
+        getSharedPreferences("stats", Context.MODE_PRIVATE)
     }
 }

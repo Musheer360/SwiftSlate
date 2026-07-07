@@ -55,6 +55,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
     val alreadyAddedMsg = stringResource(R.string.keys_already_added)
     val validationFailedMsg = stringResource(R.string.keys_validation_failed)
     val keystoreErrorMsg = stringResource(R.string.keys_keystore_error)
+    val customEndpointRequiredMsg = stringResource(R.string.keys_custom_endpoint_required)
 
     Column(
         modifier = Modifier
@@ -99,12 +100,18 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                                 return@launch
                             }
                             val result = run {
-                                val providerType = prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI
-                                val customEndpoint = prefs.getString("custom_endpoint", "") ?: ""
+                                val providerType = ProviderType.sanitize(prefs.getString("provider_type", null))
+                                val customEndpoint = (prefs.getString("custom_endpoint", "") ?: "").trim()
                                 when {
+                                    providerType == ProviderType.CUSTOM && customEndpoint.isBlank() -> {
+                                        isTesting = false
+                                        testResult = customEndpointRequiredMsg
+                                        testSuccess = false
+                                        return@launch
+                                    }
                                     providerType == ProviderType.GROQ ->
                                         openAIClient.validateKey(trimmedKey, "https://api.groq.com/openai/v1")
-                                    providerType == ProviderType.CUSTOM && customEndpoint.isNotBlank() ->
+                                    providerType == ProviderType.CUSTOM ->
                                         openAIClient.validateKey(trimmedKey, customEndpoint)
                                     else ->
                                         geminiClient.validateKey(trimmedKey)

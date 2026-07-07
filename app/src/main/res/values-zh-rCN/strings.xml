@@ -20,6 +20,7 @@
     <string name="keys_valid_added">有效密钥已添加！</string>
     <string name="keys_already_added">此密钥已添加过</string>
     <string name="keys_validation_failed">验证失败</string>
+    <string name="keys_custom_endpoint_required">在添加自定义提供商的密钥之前，请先在设置中配置端点 URL</string>
     <string name="keys_get_api_key">获取您的 %1$s API 密钥 ↗</string>
 
     <!-- Commands -->
