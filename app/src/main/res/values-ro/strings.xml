@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">Asistent SwiftSlate</string>
+    <string name="accessibility_service_desc">Oferă înlocuiri de text bazate pe IA la nivel de sistem atunci când sunt tastate comenzi de declanșare.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Tablou de bord</string>
+    <string name="service_status_active">Activ</string>
+    <string name="service_status_inactive">Inactiv</string>
+    <string name="service_enable">Activează</string>
+    <string name="dashboard_api_keys_title">Chei API</string>
+    <string name="dashboard_keys_configured">%1$d chei configurate</string>
+    <string name="dashboard_add_key_hint">Adaugă o cheie API pentru a începe.</string>
+    <string name="dashboard_monthly_requests">Luna aceasta</string>
+    <string name="dashboard_favorite_command">Comandă preferată</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Ultimele 7 zile</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Chei API</string>
+    <string name="keys_api_key_label">Cheie API</string>
+    <string name="keys_testing">Testare…</string>
+    <string name="keys_add_key">Adaugă cheie</string>
+    <string name="keys_valid_added">Cheie validă adăugată!</string>
+    <string name="keys_already_added">Această cheie a fost deja adăugată</string>
+    <string name="keys_validation_failed">Validarea a eșuat</string>
+    <string name="keys_keystore_error">Stocarea securizată a cheilor nu este disponibilă pe acest dispozitiv. Cheile nu pot fi salvate.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">Obține cheia API pentru %1$s ↗</string>
+    <string name="keys_empty">Nu au fost adăugate chei API</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Comenzi</string>
+    <string name="commands_add_custom_title">Adaugă comandă personalizată</string>
+    <string name="commands_trigger_label">Declanșator (ex. %1$scode)</string>
+    <string name="commands_prompt_label">Prompt (ex. Rescrie ca poezie)</string>
+    <string name="commands_add_command">Adaugă comandă</string>
+    <string name="commands_delete_command">Șterge</string>
+    <string name="commands_edit_command">Editează</string>
+    <string name="commands_save_command">Salvează comanda</string>
+    <string name="commands_cancel">Anulează</string>
+    <string name="commands_type_ai">IA</string>
+    <string name="commands_type_replacer">Local</string>
+    <string name="commands_replacement_label">Text de înlocuire (ex. myemail@example.com)</string>
+    <string name="commands_built_in">Încorporat</string>
+    <string name="commands_error_prefix">Declanșatorul trebuie să înceapă cu \'%1$s\'</string>
+    <string name="commands_error_duplicate">Există deja o comandă cu acest declanșator</string>
+    <string name="commands_error_conflict">Conflict cu comanda existentă \'%1$s\' — un declanșator este prefixul celuilalt</string>
+    <string name="commands_error_empty_trigger">Declanșatorul trebuie să aibă un nume după prefix</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Setări</string>
+    <string name="settings_provider_title">Furnizor de model</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Personalizat (compatibil OpenAI)</string>
+    <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Temperatură</string>
+    <string name="settings_endpoint_title">Endpoint</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, etc.</string>
+    <string name="settings_trigger_prefix_desc">Simbol folosit înaintea numelor de comenzi (ex. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Trebuie să fie exact 1 caracter</string>
+    <string name="settings_prefix_error_whitespace">Nu poate fi spațiu</string>
+    <string name="settings_prefix_error_alphanumeric">Nu poate fi literă sau cifră</string>
+    <string name="settings_endpoint_error_scheme">Trebuie să înceapă cu https://</string>
+    <string name="settings_endpoint_error_spaces">URL-ul nu poate conține spații</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Exportă sau importă comenzile tale ca fișier JSON.</string>
+    <string name="backup_export">Exportă</string>
+    <string name="backup_import">Importă</string>
+    <string name="backup_export_success">Comenzile au fost exportate cu succes</string>
+    <string name="backup_export_error">Exportul a eșuat</string>
+    <string name="backup_import_success">Comenzile au fost importate cu succes</string>
+    <string name="backup_import_error">Fișier de rezervă invalid</string>
+    <string name="backup_import_confirm">Aceasta va înlocui toate comenzile personalizate existente. Continui?</string>
+    <string name="backup_import_cancel">Anulează</string>
+    <string name="settings_check_updates">Verifică actualizări</string>
+    <string name="settings_made_by">Făcut cu dragoste de Musheer Alam</string>
+    <string name="settings_sponsor">Sponsorizează pe GitHub</string>
+    <string name="commands_collapse">Restrânge</string>
+    <string name="commands_expand">Extinde</string>
+    <string name="commands_search_hint">Caută comenzi…</string>
+    <string name="commands_search_close">Închide căutarea</string>
+    <string name="commands_search_empty">Nu s-au găsit comenzi</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Ștergi această comandă?</string>
+    <string name="delete_confirm_key_title">Ștergi această cheie API?</string>
+    <string name="delete_confirm_message">Această acțiune nu poate fi anulată.</string>
+    <string name="delete_confirm_button">Șterge</string>
+</resources>

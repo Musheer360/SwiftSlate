@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">Pembantu SwiftSlate</string>
+    <string name="accessibility_service_desc">Menyediakan penggantian teks berasaskan AI di seluruh sistem apabila arahan pencetus ditaip.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Papan Pemuka</string>
+    <string name="service_status_active">Aktif</string>
+    <string name="service_status_inactive">Tidak Aktif</string>
+    <string name="service_enable">Dayakan</string>
+    <string name="dashboard_api_keys_title">Kunci API</string>
+    <string name="dashboard_keys_configured">%1$d kunci dikonfigurasi</string>
+    <string name="dashboard_add_key_hint">Tambahkan kunci API untuk memulakan.</string>
+    <string name="dashboard_monthly_requests">Bulan Ini</string>
+    <string name="dashboard_favorite_command">Arahan Teratas</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">7 Hari Terakhir</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Kunci API</string>
+    <string name="keys_api_key_label">Kunci API</string>
+    <string name="keys_testing">Menguji…</string>
+    <string name="keys_add_key">Tambah Kunci</string>
+    <string name="keys_valid_added">Kunci sah ditambahkan!</string>
+    <string name="keys_already_added">Kunci ini telah ditambahkan</string>
+    <string name="keys_validation_failed">Pengesahan gagal</string>
+    <string name="keys_keystore_error">Penyimpanan kunci selamat tidak tersedia pada peranti ini. Kunci tidak boleh disimpan.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">Dapatkan kunci API %1$s anda ↗</string>
+    <string name="keys_empty">Tiada kunci API ditambahkan</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Arahan</string>
+    <string name="commands_add_custom_title">Tambah Arahan Tersuai</string>
+    <string name="commands_trigger_label">Pencetus (contoh: %1$scode)</string>
+    <string name="commands_prompt_label">Promp (contoh: Tulis semula sebagai puisi)</string>
+    <string name="commands_add_command">Tambah Arahan</string>
+    <string name="commands_delete_command">Padam</string>
+    <string name="commands_edit_command">Sunting</string>
+    <string name="commands_save_command">Simpan Arahan</string>
+    <string name="commands_cancel">Batal</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Tempatan</string>
+    <string name="commands_replacement_label">Teks Pengganti (contoh: myemail@example.com)</string>
+    <string name="commands_built_in">Binaan</string>
+    <string name="commands_error_prefix">Pencetus mesti bermula dengan \'%1$s\'</string>
+    <string name="commands_error_duplicate">Arahan dengan pencetus ini sudah wujud</string>
+    <string name="commands_error_conflict">Konflik dengan arahan sedia ada \'%1$s\' — satu pencetus adalah awalan yang lain</string>
+    <string name="commands_error_empty_trigger">Pencetus mesti mempunyai nama selepas awalan</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Tetapan</string>
+    <string name="settings_provider_title">Penyedia Model</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Tersuai (Serasi OpenAI)</string>
+    <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Suhu</string>
+    <string name="settings_endpoint_title">Titik Akhir</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, dsb.</string>
+    <string name="settings_trigger_prefix_desc">Simbol yang digunakan sebelum nama arahan (contoh: %1$sfix).</string>
+    <string name="settings_prefix_error_length">Mestilah tepat 1 aksara</string>
+    <string name="settings_prefix_error_whitespace">Tidak boleh berupa ruang kosong</string>
+    <string name="settings_prefix_error_alphanumeric">Tidak boleh berupa huruf atau digit</string>
+    <string name="settings_endpoint_error_scheme">Mesti bermula dengan https://</string>
+    <string name="settings_endpoint_error_spaces">URL tidak boleh mengandungi ruang</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Eksport atau import arahan anda sebagai fail JSON.</string>
+    <string name="backup_export">Eksport</string>
+    <string name="backup_import">Import</string>
+    <string name="backup_export_success">Arahan berjaya dieksport</string>
+    <string name="backup_export_error">Eksport gagal</string>
+    <string name="backup_import_success">Arahan berjaya diimport</string>
+    <string name="backup_import_error">Fail sandaran tidak sah</string>
+    <string name="backup_import_confirm">Ini akan menggantikan semua arahan tersuai sedia ada anda. Teruskan?</string>
+    <string name="backup_import_cancel">Batal</string>
+    <string name="settings_check_updates">Semak kemas kini</string>
+    <string name="settings_made_by">Dibuat dengan kasih sayang oleh Musheer Alam</string>
+    <string name="settings_sponsor">Taja di GitHub</string>
+    <string name="commands_collapse">Runtuhkan</string>
+    <string name="commands_expand">Kembangkan</string>
+    <string name="commands_search_hint">Cari arahan…</string>
+    <string name="commands_search_close">Tutup carian</string>
+    <string name="commands_search_empty">Tiada arahan ditemui</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Padam arahan ini?</string>
+    <string name="delete_confirm_key_title">Padam kunci API ini?</string>
+    <string name="delete_confirm_message">Tindakan ini tidak boleh dibatalkan.</string>
+    <string name="delete_confirm_button">Padam</string>
+</resources>

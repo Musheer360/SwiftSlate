@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate asszisztens</string>
+    <string name="accessibility_service_desc">Rendszerszintű AI-alapú szöveghelyettesítéseket biztosít, amikor triggerparancsokat gépel be.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Irányítópult</string>
+    <string name="service_status_active">Aktív</string>
+    <string name="service_status_inactive">Inaktív</string>
+    <string name="service_enable">Engedélyezés</string>
+    <string name="dashboard_api_keys_title">API-kulcsok</string>
+    <string name="dashboard_keys_configured">%1$d kulcs konfigurálva</string>
+    <string name="dashboard_add_key_hint">Adjon hozzá egy API-kulcsot a kezdéshez.</string>
+    <string name="dashboard_monthly_requests">Ebben a hónapban</string>
+    <string name="dashboard_favorite_command">Legnépszerűbb parancs</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Az elmúlt 7 nap</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API-kulcsok</string>
+    <string name="keys_api_key_label">API-kulcs</string>
+    <string name="keys_testing">Tesztelés…</string>
+    <string name="keys_add_key">Kulcs hozzáadása</string>
+    <string name="keys_valid_added">Érvényes kulcs hozzáadva!</string>
+    <string name="keys_already_added">Ez a kulcs már hozzá lett adva</string>
+    <string name="keys_validation_failed">Az érvényesítés sikertelen</string>
+    <string name="keys_keystore_error">A biztonságos kulcstároló nem érhető el ezen az eszközön. A kulcsok nem menthetők.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">Szerezze be %1$s API-kulcsát ↗</string>
+    <string name="keys_empty">Nincsenek API-kulcsok hozzáadva</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Parancsok</string>
+    <string name="commands_add_custom_title">Egyéni parancs hozzáadása</string>
+    <string name="commands_trigger_label">Trigger (pl. %1$scode)</string>
+    <string name="commands_prompt_label">Prompt (pl. Írd át versként)</string>
+    <string name="commands_add_command">Parancs hozzáadása</string>
+    <string name="commands_delete_command">Törlés</string>
+    <string name="commands_edit_command">Szerkesztés</string>
+    <string name="commands_save_command">Parancs mentése</string>
+    <string name="commands_cancel">Mégse</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Helyi</string>
+    <string name="commands_replacement_label">Helyettesítő szöveg (pl. myemail@example.com)</string>
+    <string name="commands_built_in">Beépített</string>
+    <string name="commands_error_prefix">A triggernek \'%1$s\' karakterrel kell kezdődnie</string>
+    <string name="commands_error_duplicate">Már létezik parancs ezzel a triggerrel</string>
+    <string name="commands_error_conflict">Ütközés a meglévő \'%1$s\' paranccsal — az egyik trigger előtagja a másiknak</string>
+    <string name="commands_error_empty_trigger">A triggernek az előtag után nevet kell tartalmaznia</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Beállítások</string>
+    <string name="settings_provider_title">Modellszolgáltató</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Egyéni (OpenAI-kompatibilis)</string>
+    <string name="settings_model_title">Modell</string>
+    <string name="settings_temperature_title">Hőmérséklet</string>
+    <string name="settings_endpoint_title">Végpont</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, stb.</string>
+    <string name="settings_trigger_prefix_desc">A parancsnevek előtt használt szimbólum (pl. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Pontosan 1 karakter hosszúnak kell lennie</string>
+    <string name="settings_prefix_error_whitespace">Nem lehet szóköz</string>
+    <string name="settings_prefix_error_alphanumeric">Nem lehet betű vagy számjegy</string>
+    <string name="settings_endpoint_error_scheme">https:// kezdetű kell legyen</string>
+    <string name="settings_endpoint_error_spaces">Az URL nem tartalmazhat szóközt</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Exportálja vagy importálja parancsait JSON-fájlként.</string>
+    <string name="backup_export">Exportálás</string>
+    <string name="backup_import">Importálás</string>
+    <string name="backup_export_success">A parancsok sikeresen exportálva</string>
+    <string name="backup_export_error">Az exportálás sikertelen</string>
+    <string name="backup_import_success">A parancsok sikeresen importálva</string>
+    <string name="backup_import_error">Érvénytelen biztonsági mentés</string>
+    <string name="backup_import_confirm">Ez az összes meglévő egyéni parancsot lecseréli. Folytatja?</string>
+    <string name="backup_import_cancel">Mégse</string>
+    <string name="settings_check_updates">Frissítések keresése</string>
+    <string name="settings_made_by">Szeretettel készítette Musheer Alam</string>
+    <string name="settings_sponsor">Támogatás a GitHubon</string>
+    <string name="commands_collapse">Összecsuk</string>
+    <string name="commands_expand">Kibont</string>
+    <string name="commands_search_hint">Parancsok keresése…</string>
+    <string name="commands_search_close">Keresés bezárása</string>
+    <string name="commands_search_empty">Nem található parancs</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Törli ezt a parancsot?</string>
+    <string name="delete_confirm_key_title">Törli ezt az API-kulcsot?</string>
+    <string name="delete_confirm_message">Ez a művelet nem vonható vissza.</string>
+    <string name="delete_confirm_button">Törlés</string>
+</resources>

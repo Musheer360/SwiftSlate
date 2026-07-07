@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate ਸਹਾਇਕ</string>
+    <string name="accessibility_service_desc">ਟਰਿਗਰ ਕਮਾਂਡ ਟਾਈਪ ਕਰਨ \'ਤੇ ਸਿਸਟਮ-ਵਿਆਪੀ AI-ਆਧਾਰਿਤ ਟੈਕਸਟ ਤਬਦੀਲੀਆਂ ਪ੍ਰਦਾਨ ਕਰਦਾ ਹੈ।</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">ਡੈਸ਼ਬੋਰਡ</string>
+    <string name="service_status_active">ਸਰਗਰਮ</string>
+    <string name="service_status_inactive">ਅਕਿਰਿਆਸ਼ੀਲ</string>
+    <string name="service_enable">ਯੋਗ ਕਰੋ</string>
+    <string name="dashboard_api_keys_title">API ਕੁੰਜੀਆਂ</string>
+    <string name="dashboard_keys_configured">%1$d ਕੁੰਜੀਆਂ ਕੌਂਫਿਗਰ ਕੀਤੀਆਂ</string>
+    <string name="dashboard_add_key_hint">ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਕ API ਕੁੰਜੀ ਸ਼ਾਮਲ ਕਰੋ।</string>
+    <string name="dashboard_monthly_requests">ਇਸ ਮਹੀਨੇ</string>
+    <string name="dashboard_favorite_command">ਟਾਪ ਕਮਾਂਡ</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">ਪਿਛਲੇ 7 ਦਿਨ</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API ਕੁੰਜੀਆਂ</string>
+    <string name="keys_api_key_label">API ਕੁੰਜੀ</string>
+    <string name="keys_testing">ਜਾਂਚ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ…</string>
+    <string name="keys_add_key">ਕੁੰਜੀ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="keys_valid_added">ਵੈਧ ਕੁੰਜੀ ਸ਼ਾਮਲ ਕੀਤੀ ਗਈ!</string>
+    <string name="keys_already_added">ਇਹ ਕੁੰਜੀ ਪਹਿਲਾਂ ਹੀ ਸ਼ਾਮਲ ਕੀਤੀ ਜਾ ਚੁੱਕੀ ਹੈ</string>
+    <string name="keys_validation_failed">ਪ੍ਰਮਾਣੀਕਰਨ ਅਸਫਲ</string>
+    <string name="keys_keystore_error">ਇਸ ਡਿਵਾਈਸ \'ਤੇ ਸੁਰੱਖਿਅਤ ਕੁੰਜੀ ਸਟੋਰੇਜ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਕੁੰਜੀਆਂ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤੀਆਂ ਜਾ ਸਕਦੀਆਂ।</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s ਲਈ ਆਪਣੀ API ਕੁੰਜੀ ਪ੍ਰਾਪਤ ਕਰੋ ↗</string>
+    <string name="keys_empty">ਕੋਈ API ਕੁੰਜੀ ਸ਼ਾਮਲ ਨਹੀਂ ਕੀਤੀ ਗਈ</string>
+
+    <!-- Commands -->
+    <string name="commands_title">ਕਮਾਂਡਾਂ</string>
+    <string name="commands_add_custom_title">ਕਸਟਮ ਕਮਾਂਡ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="commands_trigger_label">ਟਰਿਗਰ (ਜਿਵੇਂ %1$scode)</string>
+    <string name="commands_prompt_label">ਪ੍ਰੋਂਪਟ (ਜਿਵੇਂ ਕਵਿਤਾ ਵਜੋਂ ਮੁੜ ਲਿਖੋ)</string>
+    <string name="commands_add_command">ਕਮਾਂਡ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="commands_delete_command">ਮਿਟਾਓ</string>
+    <string name="commands_edit_command">ਸੋਧੋ</string>
+    <string name="commands_save_command">ਕਮਾਂਡ ਸੁਰੱਖਿਅਤ ਕਰੋ</string>
+    <string name="commands_cancel">ਰੱਦ ਕਰੋ</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">ਸਥਾਨਕ</string>
+    <string name="commands_replacement_label">ਬਦਲ ਟੈਕਸਟ (ਜਿਵੇਂ myemail@example.com)</string>
+    <string name="commands_built_in">ਬਿਲਟ-ਇਨ</string>
+    <string name="commands_error_prefix">ਟਰਿਗਰ \'%1$s\' ਨਾਲ ਸ਼ੁਰੂ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ</string>
+    <string name="commands_error_duplicate">ਇਸ ਟਰਿਗਰ ਵਾਲੀ ਕਮਾਂਡ ਪਹਿਲਾਂ ਤੋਂ ਮੌਜੂਦ ਹੈ</string>
+    <string name="commands_error_conflict">ਮੌਜੂਦਾ ਕਮਾਂਡ \'%1$s\' ਨਾਲ ਟਕਰਾਅ — ਇੱਕ ਟਰਿਗਰ ਦੂਜੇ ਦਾ ਉਪਸਰਗ ਹੈ</string>
+    <string name="commands_error_empty_trigger">ਟਰਿਗਰ ਦਾ ਉਪਸਰਗ ਤੋਂ ਬਾਅਦ ਇੱਕ ਨਾਮ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ਸੈਟਿੰਗਾਂ</string>
+    <string name="settings_provider_title">ਮਾਡਲ ਪ੍ਰਦਾਤਾ</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">ਕਸਟਮ (OpenAI ਅਨੁਕੂਲ)</string>
+    <string name="settings_model_title">ਮਾਡਲ</string>
+    <string name="settings_temperature_title">ਤਾਪਮਾਨ</string>
+    <string name="settings_endpoint_title">ਐਂਡਪਾਇੰਟ</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, ਆਦਿ</string>
+    <string name="settings_trigger_prefix_desc">ਕਮਾਂਡ ਨਾਮਾਂ ਤੋਂ ਪਹਿਲਾਂ ਵਰਤਿਆ ਜਾਣ ਵਾਲਾ ਚਿੰਨ੍ਹ (ਜਿਵੇਂ %1$sfix)।</string>
+    <string name="settings_prefix_error_length">ਬਿਲਕੁਲ 1 ਅੱਖਰ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ</string>
+    <string name="settings_prefix_error_whitespace">ਵ੍ਹਾਈਟਸਪੇਸ ਨਹੀਂ ਹੋ ਸਕਦਾ</string>
+    <string name="settings_prefix_error_alphanumeric">ਅੱਖਰ ਜਾਂ ਅੰਕ ਨਹੀਂ ਹੋ ਸਕਦਾ</string>
+    <string name="settings_endpoint_error_scheme">https:// ਨਾਲ ਸ਼ੁਰੂ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ</string>
+    <string name="settings_endpoint_error_spaces">URL ਵਿੱਚ ਸਪੇਸ ਨਹੀਂ ਹੋ ਸਕਦੀ</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">ਆਪਣੀਆਂ ਕਮਾਂਡਾਂ ਨੂੰ JSON ਫਾਈਲ ਵਜੋਂ ਐਕਸਪੋਰਟ ਜਾਂ ਇੰਪੋਰਟ ਕਰੋ।</string>
+    <string name="backup_export">ਐਕਸਪੋਰਟ</string>
+    <string name="backup_import">ਇੰਪੋਰਟ</string>
+    <string name="backup_export_success">ਕਮਾਂਡਾਂ ਸਫਲਤਾਪੂਰਵਕ ਐਕਸਪੋਰਟ ਕੀਤੀਆਂ ਗਈਆਂ</string>
+    <string name="backup_export_error">ਐਕਸਪੋਰਟ ਅਸਫਲ</string>
+    <string name="backup_import_success">ਕਮਾਂਡਾਂ ਸਫਲਤਾਪੂਰਵਕ ਇੰਪੋਰਟ ਕੀਤੀਆਂ ਗਈਆਂ</string>
+    <string name="backup_import_error">ਅਵੈਧ ਬੈਕਅੱਪ ਫਾਈਲ</string>
+    <string name="backup_import_confirm">ਇਹ ਤੁਹਾਡੀਆਂ ਸਾਰੀਆਂ ਮੌਜੂਦਾ ਕਸਟਮ ਕਮਾਂਡਾਂ ਨੂੰ ਬਦਲ ਦੇਵੇਗਾ। ਜਾਰੀ ਰੱਖਣਾ ਹੈ?</string>
+    <string name="backup_import_cancel">ਰੱਦ ਕਰੋ</string>
+    <string name="settings_check_updates">ਅਪਡੇਟਾਂ ਲਈ ਜਾਂਚ ਕਰੋ</string>
+    <string name="settings_made_by">Musheer Alam ਵੱਲੋਂ ਪਿਆਰ ਨਾਲ ਬਣਾਇਆ ਗਿਆ</string>
+    <string name="settings_sponsor">GitHub \'ਤੇ ਸਪਾਂਸਰ ਕਰੋ</string>
+    <string name="commands_collapse">ਸੰਕੁਚਿਤ ਕਰੋ</string>
+    <string name="commands_expand">ਵਿਸਤਾਰ ਕਰੋ</string>
+    <string name="commands_search_hint">ਕਮਾਂਡਾਂ ਖੋਜੋ…</string>
+    <string name="commands_search_close">ਖੋਜ ਬੰਦ ਕਰੋ</string>
+    <string name="commands_search_empty">ਕੋਈ ਕਮਾਂਡ ਨਹੀਂ ਮਿਲੀ</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">ਇਸ ਕਮਾਂਡ ਨੂੰ ਮਿਟਾਉਣਾ ਹੈ?</string>
+    <string name="delete_confirm_key_title">ਇਸ API ਕੁੰਜੀ ਨੂੰ ਮਿਟਾਉਣਾ ਹੈ?</string>
+    <string name="delete_confirm_message">ਇਸ ਕਾਰਵਾਈ ਨੂੰ ਵਾਪਸ ਨਹੀਂ ਲਿਆ ਜਾ ਸਕਦਾ।</string>
+    <string name="delete_confirm_button">ਮਿਟਾਓ</string>
+</resources>

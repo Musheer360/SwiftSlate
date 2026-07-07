@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate 어시스턴트</string>
+    <string name="accessibility_service_desc">트리거 명령어를 입력하면 시스템 전체에서 AI 기반 텍스트 대체를 제공합니다.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">대시보드</string>
+    <string name="service_status_active">활성</string>
+    <string name="service_status_inactive">비활성</string>
+    <string name="service_enable">사용</string>
+    <string name="dashboard_api_keys_title">API 키</string>
+    <string name="dashboard_keys_configured">%1$d개 키 구성됨</string>
+    <string name="dashboard_add_key_hint">시작하려면 API 키를 추가하세요.</string>
+    <string name="dashboard_monthly_requests">이번 달</string>
+    <string name="dashboard_favorite_command">최상위 명령어</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">최근 7일</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API 키</string>
+    <string name="keys_api_key_label">API 키</string>
+    <string name="keys_testing">테스트 중…</string>
+    <string name="keys_add_key">키 추가</string>
+    <string name="keys_valid_added">유효한 키가 추가되었습니다!</string>
+    <string name="keys_already_added">이 키는 이미 추가되었습니다</string>
+    <string name="keys_validation_failed">유효성 검사 실패</string>
+    <string name="keys_keystore_error">이 기기에서 보안 키 저장소를 사용할 수 없습니다. 키를 저장할 수 없습니다.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s API 키 받기 ↗</string>
+    <string name="keys_empty">추가된 API 키가 없습니다</string>
+
+    <!-- Commands -->
+    <string name="commands_title">명령어</string>
+    <string name="commands_add_custom_title">사용자 지정 명령어 추가</string>
+    <string name="commands_trigger_label">트리거 (예: %1$scode)</string>
+    <string name="commands_prompt_label">프롬프트 (예: 시로 다시 쓰기)</string>
+    <string name="commands_add_command">명령어 추가</string>
+    <string name="commands_delete_command">삭제</string>
+    <string name="commands_edit_command">편집</string>
+    <string name="commands_save_command">명령어 저장</string>
+    <string name="commands_cancel">취소</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">로컬</string>
+    <string name="commands_replacement_label">대체 텍스트 (예: myemail@example.com)</string>
+    <string name="commands_built_in">내장</string>
+    <string name="commands_error_prefix">트리거는 \'%1$s\'(으)로 시작해야 합니다</string>
+    <string name="commands_error_duplicate">이 트리거를 가진 명령어가 이미 존재합니다</string>
+    <string name="commands_error_conflict">기존 명령어 \'%1$s\'와 충돌 — 한 트리거가 다른 트리거의 접두사입니다</string>
+    <string name="commands_error_empty_trigger">트리거는 접두사 뒤에 이름이 있어야 합니다</string>
+
+    <!-- Settings -->
+    <string name="settings_title">설정</string>
+    <string name="settings_provider_title">모델 제공자</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">사용자 지정 (OpenAI 호환)</string>
+    <string name="settings_model_title">모델</string>
+    <string name="settings_temperature_title">온도</string>
+    <string name="settings_endpoint_title">엔드포인트</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku 등</string>
+    <string name="settings_trigger_prefix_desc">명령어 이름 앞에 사용되는 기호 (예: %1$sfix).</string>
+    <string name="settings_prefix_error_length">정확히 1자여야 합니다</string>
+    <string name="settings_prefix_error_whitespace">공백일 수 없습니다</string>
+    <string name="settings_prefix_error_alphanumeric">문자 또는 숫자일 수 없습니다</string>
+    <string name="settings_endpoint_error_scheme">https://로 시작해야 합니다</string>
+    <string name="settings_endpoint_error_spaces">URL에 공백을 포함할 수 없습니다</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">명령어를 JSON 파일로 내보내거나 가져옵니다.</string>
+    <string name="backup_export">내보내기</string>
+    <string name="backup_import">가져오기</string>
+    <string name="backup_export_success">명령어를 성공적으로 내보냈습니다</string>
+    <string name="backup_export_error">내보내기 실패</string>
+    <string name="backup_import_success">명령어를 성공적으로 가져왔습니다</string>
+    <string name="backup_import_error">잘못된 백업 파일</string>
+    <string name="backup_import_confirm">이 작업은 기존 사용자 지정 명령어를 모두 대체합니다. 계속하시겠습니까?</string>
+    <string name="backup_import_cancel">취소</string>
+    <string name="settings_check_updates">업데이트 확인</string>
+    <string name="settings_made_by">Musheer Alam이 사랑을 담아 제작</string>
+    <string name="settings_sponsor">GitHub에서 후원</string>
+    <string name="commands_collapse">접기</string>
+    <string name="commands_expand">펼치기</string>
+    <string name="commands_search_hint">명령어 검색…</string>
+    <string name="commands_search_close">검색 닫기</string>
+    <string name="commands_search_empty">명령어를 찾을 수 없음</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">이 명령어를 삭제하시겠습니까?</string>
+    <string name="delete_confirm_key_title">이 API 키를 삭제하시겠습니까?</string>
+    <string name="delete_confirm_message">이 작업은 되돌릴 수 없습니다.</string>
+    <string name="delete_confirm_button">삭제</string>
+</resources>

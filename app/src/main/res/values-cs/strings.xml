@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">Asistent SwiftSlate</string>
+    <string name="accessibility_service_desc">Poskytuje systémové náhrady textu pomocí AI, když zadáte spouštěcí příkazy.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Přehled</string>
+    <string name="service_status_active">Aktivní</string>
+    <string name="service_status_inactive">Neaktivní</string>
+    <string name="service_enable">Povolit</string>
+    <string name="dashboard_api_keys_title">API klíče</string>
+    <string name="dashboard_keys_configured">%1$d nakonfigurovaných klíčů</string>
+    <string name="dashboard_add_key_hint">Pro začátek přidejte API klíč.</string>
+    <string name="dashboard_monthly_requests">Tento měsíc</string>
+    <string name="dashboard_favorite_command">Nejpoužívanější příkaz</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Posledních 7 dní</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API klíče</string>
+    <string name="keys_api_key_label">API klíč</string>
+    <string name="keys_testing">Testování…</string>
+    <string name="keys_add_key">Přidat klíč</string>
+    <string name="keys_valid_added">Platný klíč byl přidán!</string>
+    <string name="keys_already_added">Tento klíč již byl přidán</string>
+    <string name="keys_validation_failed">Ověření selhalo</string>
+    <string name="keys_keystore_error">Bezpečné úložiště klíčů není na tomto zařízení k dispozici. Klíče nelze uložit.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">Získejte svůj API klíč pro %1$s ↗</string>
+    <string name="keys_empty">Nebyly přidány žádné API klíče</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Příkazy</string>
+    <string name="commands_add_custom_title">Přidat vlastní příkaz</string>
+    <string name="commands_trigger_label">Spouštěč (např. %1$scode)</string>
+    <string name="commands_prompt_label">Výzva (např. Přepiš jako báseň)</string>
+    <string name="commands_add_command">Přidat příkaz</string>
+    <string name="commands_delete_command">Smazat</string>
+    <string name="commands_edit_command">Upravit</string>
+    <string name="commands_save_command">Uložit příkaz</string>
+    <string name="commands_cancel">Zrušit</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Lokální</string>
+    <string name="commands_replacement_label">Nahrazující text (např. myemail@example.com)</string>
+    <string name="commands_built_in">Vestavěný</string>
+    <string name="commands_error_prefix">Spouštěč musí začínat \'%1$s\'</string>
+    <string name="commands_error_duplicate">Příkaz s tímto spouštěčem již existuje</string>
+    <string name="commands_error_conflict">Konflikt s existujícím příkazem \'%1$s\' — jeden spouštěč je předponou druhého</string>
+    <string name="commands_error_empty_trigger">Spouštěč musí mít název za předponou</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Nastavení</string>
+    <string name="settings_provider_title">Poskytovatel modelu</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Vlastní (kompatibilní s OpenAI)</string>
+    <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Teplota</string>
+    <string name="settings_endpoint_title">Koncový bod</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, atd.</string>
+    <string name="settings_trigger_prefix_desc">Symbol použitý před názvy příkazů (např. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Musí být přesně 1 znak</string>
+    <string name="settings_prefix_error_whitespace">Nemůže být mezera</string>
+    <string name="settings_prefix_error_alphanumeric">Nemůže být písmeno ani číslice</string>
+    <string name="settings_endpoint_error_scheme">Musí začínat https://</string>
+    <string name="settings_endpoint_error_spaces">URL nesmí obsahovat mezery</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Exportujte nebo importujte své příkazy jako soubor JSON.</string>
+    <string name="backup_export">Export</string>
+    <string name="backup_import">Import</string>
+    <string name="backup_export_success">Příkazy byly úspěšně exportovány</string>
+    <string name="backup_export_error">Export selhal</string>
+    <string name="backup_import_success">Příkazy byly úspěšně importovány</string>
+    <string name="backup_import_error">Neplatný záložní soubor</string>
+    <string name="backup_import_confirm">Tím nahradíte všechny své stávající vlastní příkazy. Pokračovat?</string>
+    <string name="backup_import_cancel">Zrušit</string>
+    <string name="settings_check_updates">Zkontrolovat aktualizace</string>
+    <string name="settings_made_by">Vyrobeno s láskou Musheerem Alamem</string>
+    <string name="settings_sponsor">Sponzorujte na GitHubu</string>
+    <string name="commands_collapse">Sbalit</string>
+    <string name="commands_expand">Rozbalit</string>
+    <string name="commands_search_hint">Hledat příkazy…</string>
+    <string name="commands_search_close">Zavřít vyhledávání</string>
+    <string name="commands_search_empty">Nebyly nalezeny žádné příkazy</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Smazat tento příkaz?</string>
+    <string name="delete_confirm_key_title">Smazat tento API klíč?</string>
+    <string name="delete_confirm_message">Tuto akci nelze vrátit zpět.</string>
+    <string name="delete_confirm_button">Smazat</string>
+</resources>

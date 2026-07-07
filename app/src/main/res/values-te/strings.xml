@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate సహాయకుడు</string>
+    <string name="accessibility_service_desc">ట్రిగ్గర్ ఆదేశాలను టైప్ చేసినప్పుడు సిస్టమ్-వ్యాప్త AI ఆధారిత టెక్స్ట్ భర్తీలను అందిస్తుంది.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">డాష్బోర్డ్</string>
+    <string name="service_status_active">క్రియాశీలం</string>
+    <string name="service_status_inactive">నిష్క్రియం</string>
+    <string name="service_enable">ప్రారంభించు</string>
+    <string name="dashboard_api_keys_title">API కీలు</string>
+    <string name="dashboard_keys_configured">%1$d కీలు కాన్ఫిగర్ చేయబడ్డాయి</string>
+    <string name="dashboard_add_key_hint">ప్రారంభించడానికి API కీని జోడించండి.</string>
+    <string name="dashboard_monthly_requests">ఈ నెల</string>
+    <string name="dashboard_favorite_command">టాప్ ఆదేశం</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">గత 7 రోజులు</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API కీలు</string>
+    <string name="keys_api_key_label">API కీ</string>
+    <string name="keys_testing">పరీక్షిస్తోంది…</string>
+    <string name="keys_add_key">కీని జోడించు</string>
+    <string name="keys_valid_added">చెల్లుబాటు అయ్యే కీ జోడించబడింది!</string>
+    <string name="keys_already_added">ఈ కీ ఇప్పటికే జోడించబడింది</string>
+    <string name="keys_validation_failed">ధృవీకరణ విఫలమైంది</string>
+    <string name="keys_keystore_error">ఈ పరికరంలో సురక్షిత కీ నిల్వ అందుబాటులో లేదు. కీలను సేవ్ చేయలేము.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s కోసం మీ API కీని పొందండి ↗</string>
+    <string name="keys_empty">API కీలు ఏవీ జోడించబడలేదు</string>
+
+    <!-- Commands -->
+    <string name="commands_title">ఆదేశాలు</string>
+    <string name="commands_add_custom_title">అనుకూల ఆదేశాన్ని జోడించు</string>
+    <string name="commands_trigger_label">ట్రిగ్గర్ (ఉదా. %1$scode)</string>
+    <string name="commands_prompt_label">ప్రాంప్ట్ (ఉదా. కవితగా తిరిగి రాయండి)</string>
+    <string name="commands_add_command">ఆదేశాన్ని జోడించు</string>
+    <string name="commands_delete_command">తొలగించు</string>
+    <string name="commands_edit_command">సవరించు</string>
+    <string name="commands_save_command">ఆదేశాన్ని సేవ్ చేయి</string>
+    <string name="commands_cancel">రద్దు చేయి</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">స్థానిక</string>
+    <string name="commands_replacement_label">భర్తీ టెక్స్ట్ (ఉదా. myemail@example.com)</string>
+    <string name="commands_built_in">బిల్ట్-ఇన్</string>
+    <string name="commands_error_prefix">ట్రిగ్గర్ \'%1$s\' తో ప్రారంభం కావాలి</string>
+    <string name="commands_error_duplicate">ఈ ట్రిగ్గర్ తో ఆదేశం ఇప్పటికే ఉంది</string>
+    <string name="commands_error_conflict">ఇప్పటికే ఉన్న ఆదేశం \'%1$s\' తో విభేదం — ఒక ట్రిగ్గర్ మరొకదాని ఉపసర్గ</string>
+    <string name="commands_error_empty_trigger">ట్రిగ్గర్ ఉపసర్గ తర్వాత పేరును కలిగి ఉండాలి</string>
+
+    <!-- Settings -->
+    <string name="settings_title">సెట్టింగ్లు</string>
+    <string name="settings_provider_title">మోడల్ ప్రొవైడర్</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">అనుకూల (OpenAI అనుకూలత)</string>
+    <string name="settings_model_title">మోడల్</string>
+    <string name="settings_temperature_title">ఉష్ణోగ్రత</string>
+    <string name="settings_endpoint_title">ఎండ్ పాయింట్</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, మొదలైనవి</string>
+    <string name="settings_trigger_prefix_desc">ఆదేశ పేర్ల ముందు ఉపయోగించే చిహ్నం (ఉదా. %1$sfix).</string>
+    <string name="settings_prefix_error_length">సరిగ్గా 1 అక్షరం ఉండాలి</string>
+    <string name="settings_prefix_error_whitespace">ఖాళీ అక్షరం కాకూడదు</string>
+    <string name="settings_prefix_error_alphanumeric">అక్షరం లేదా సంఖ్య కాకూడదు</string>
+    <string name="settings_endpoint_error_scheme">https:// తో ప్రారంభం కావాలి</string>
+    <string name="settings_endpoint_error_spaces">URL ఖాళీలను కలిగి ఉండకూడదు</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">మీ ఆదేశాలను JSON ఫైల్గా ఎగుమతి లేదా దిగుమతి చేయండి.</string>
+    <string name="backup_export">ఎగుమతి</string>
+    <string name="backup_import">దిగుమతి</string>
+    <string name="backup_export_success">ఆదేశాలు విజయవంతంగా ఎగుమతి చేయబడ్డాయి</string>
+    <string name="backup_export_error">ఎగుమతి విఫలమైంది</string>
+    <string name="backup_import_success">ఆదేశాలు విజయవంతంగా దిగుమతి చేయబడ్డాయి</string>
+    <string name="backup_import_error">చెల్లని బ్యాకప్ ఫైల్</string>
+    <string name="backup_import_confirm">ఇది మీ ఇప్పటికే ఉన్న అన్ని అనుకూల ఆదేశాలను భర్తీ చేస్తుంది. కొనసాగించాలా?</string>
+    <string name="backup_import_cancel">రద్దు చేయి</string>
+    <string name="settings_check_updates">నవీకరణల కోసం తనిఖీ చేయండి</string>
+    <string name="settings_made_by">Musheer Alam ప్రేమతో తయారు చేశారు</string>
+    <string name="settings_sponsor">GitHub లో స్పాన్సర్ చేయండి</string>
+    <string name="commands_collapse">కుదించు</string>
+    <string name="commands_expand">విస్తరించు</string>
+    <string name="commands_search_hint">ఆదేశాలను శోధించు…</string>
+    <string name="commands_search_close">శోధనను మూసివేయి</string>
+    <string name="commands_search_empty">ఆదేశాలు ఏవీ కనుగొనబడలేదు</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">ఈ ఆదేశాన్ని తొలగించాలా?</string>
+    <string name="delete_confirm_key_title">ఈ API కీని తొలగించాలా?</string>
+    <string name="delete_confirm_message">ఈ చర్యను తిరిగి పొందలేము.</string>
+    <string name="delete_confirm_button">తొలగించు</string>
+</resources>

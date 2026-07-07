@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate ಸಹಾಯಕ</string>
+    <string name="accessibility_service_desc">ಟ್ರಿಗರ್ ಆಜ್ಞೆಗಳನ್ನು ಟೈಪ್ ಮಾಡಿದಾಗ ವ್ಯವಸ್ಥೆಯಾದ್ಯಂತ AI-ಚಾಲಿತ ಪಠ್ಯ ಬದಲಾವಣೆಗಳನ್ನು ಒದಗಿಸುತ್ತದೆ.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">ಡ್ಯಾಶ್ಬೋರ್ಡ್</string>
+    <string name="service_status_active">ಸಕ್ರಿಯ</string>
+    <string name="service_status_inactive">ನಿಷ್ಕ್ರಿಯ</string>
+    <string name="service_enable">ಸಕ್ರಿಯಗೊಳಿಸು</string>
+    <string name="dashboard_api_keys_title">API ಕೀಗಳು</string>
+    <string name="dashboard_keys_configured">%1$d ಕೀಗಳನ್ನು ಸಂರಚಿಸಲಾಗಿದೆ</string>
+    <string name="dashboard_add_key_hint">ಪ್ರಾರಂಭಿಸಲು API ಕೀ ಸೇರಿಸಿ.</string>
+    <string name="dashboard_monthly_requests">ಈ ತಿಂಗಳು</string>
+    <string name="dashboard_favorite_command">ಅಗ್ರ ಆಜ್ಞೆ</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">ಕಳೆದ 7 ದಿನಗಳು</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API ಕೀಗಳು</string>
+    <string name="keys_api_key_label">API ಕೀ</string>
+    <string name="keys_testing">ಪರೀಕ್ಷಿಸಲಾಗುತ್ತಿದೆ…</string>
+    <string name="keys_add_key">ಕೀ ಸೇರಿಸಿ</string>
+    <string name="keys_valid_added">ಮಾನ್ಯ ಕೀ ಸೇರಿಸಲಾಗಿದೆ!</string>
+    <string name="keys_already_added">ಈ ಕೀ ಈಗಾಗಲೇ ಸೇರಿಸಲಾಗಿದೆ</string>
+    <string name="keys_validation_failed">ಮೌಲ್ಯೀಕರಣ ವಿಫಲವಾಗಿದೆ</string>
+    <string name="keys_keystore_error">ಈ ಸಾಧನದಲ್ಲಿ ಸುರಕ್ಷಿತ ಕೀ ಸಂಗ್ರಹ ಲಭ್ಯವಿಲ್ಲ. ಕೀಗಳನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s ಗಾಗಿ ನಿಮ್ಮ API ಕೀ ಪಡೆಯಿರಿ ↗</string>
+    <string name="keys_empty">ಯಾವುದೇ API ಕೀಗಳನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ</string>
+
+    <!-- Commands -->
+    <string name="commands_title">ಆಜ್ಞೆಗಳು</string>
+    <string name="commands_add_custom_title">ಕಸ್ಟಮ್ ಆಜ್ಞೆಯನ್ನು ಸೇರಿಸಿ</string>
+    <string name="commands_trigger_label">ಟ್ರಿಗರ್ (ಉದಾ %1$scode)</string>
+    <string name="commands_prompt_label">ಪ್ರಾಂಪ್ಟ್ (ಉದಾ ಕವಿತೆಯಾಗಿ ಪುನಃ ಬರೆಯಿರಿ)</string>
+    <string name="commands_add_command">ಆಜ್ಞೆಯನ್ನು ಸೇರಿಸಿ</string>
+    <string name="commands_delete_command">ಅಳಿಸು</string>
+    <string name="commands_edit_command">ಸಂಪಾದಿಸು</string>
+    <string name="commands_save_command">ಆಜ್ಞೆಯನ್ನು ಉಳಿಸು</string>
+    <string name="commands_cancel">ರದ್ದುಮಾಡು</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">ಸ್ಥಳೀಯ</string>
+    <string name="commands_replacement_label">ಬದಲಿ ಪಠ್ಯ (ಉದಾ myemail@example.com)</string>
+    <string name="commands_built_in">ಅಂತರ್ನಿರ್ಮಿತ</string>
+    <string name="commands_error_prefix">ಟ್ರಿಗರ್ \'%1$s\' ನೊಂದಿಗೆ ಪ್ರಾರಂಭವಾಗಬೇಕು</string>
+    <string name="commands_error_duplicate">ಈ ಟ್ರಿಗರ್ ಹೊಂದಿರುವ ಆಜ್ಞೆ ಈಗಾಗಲೇ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ</string>
+    <string name="commands_error_conflict">ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಆಜ್ಞೆ \'%1$s\' ನೊಂದಿಗೆ ಸಂಘರ್ಷ — ಒಂದು ಟ್ರಿಗರ್ ಇನ್ನೊಂದರ ಉಪಸರ್ಗವಾಗಿದೆ</string>
+    <string name="commands_error_empty_trigger">ಟ್ರಿಗರ್ ಉಪಸರ್ಗದ ನಂತರ ಹೆಸರನ್ನು ಹೊಂದಿರಬೇಕು</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ಸೆಟ್ಟಿಂಗ್ಗಳು</string>
+    <string name="settings_provider_title">ಮಾದರಿ ಒದಗಿಸುವವರು</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">ಕಸ್ಟಮ್ (OpenAI ಹೊಂದಾಣಿಕೆ)</string>
+    <string name="settings_model_title">ಮಾದರಿ</string>
+    <string name="settings_temperature_title">ತಾಪಮಾನ</string>
+    <string name="settings_endpoint_title">ಎಂಡ್ಪಾಯಿಂಟ್</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, ಇತ್ಯಾದಿ.</string>
+    <string name="settings_trigger_prefix_desc">ಆಜ್ಞೆಯ ಹೆಸರುಗಳ ಮೊದಲು ಬಳಸುವ ಚಿಹ್ನೆ (ಉದಾ %1$sfix).</string>
+    <string name="settings_prefix_error_length">ನಿಖರವಾಗಿ 1 ಅಕ್ಷರವಾಗಿರಬೇಕು</string>
+    <string name="settings_prefix_error_whitespace">ಖಾಲಿ ಅಕ್ಷರವಾಗಿರಬಾರದು</string>
+    <string name="settings_prefix_error_alphanumeric">ಅಕ್ಷರ ಅಥವಾ ಅಂಕೆಯಾಗಿರಬಾರದು</string>
+    <string name="settings_endpoint_error_scheme">https:// ನಿಂದ ಪ್ರಾರಂಭವಾಗಬೇಕು</string>
+    <string name="settings_endpoint_error_spaces">URL ಖಾಲಿ ಸ್ಥಳಗಳನ್ನು ಹೊಂದಿರಬಾರದು</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">ನಿಮ್ಮ ಆಜ್ಞೆಗಳನ್ನು JSON ಫೈಲ್ ಆಗಿ ರಫ್ತು ಅಥವಾ ಆಮದು ಮಾಡಿ.</string>
+    <string name="backup_export">ರಫ್ತು</string>
+    <string name="backup_import">ಆಮದು</string>
+    <string name="backup_export_success">ಆಜ್ಞೆಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಫ್ತು ಮಾಡಲಾಗಿದೆ</string>
+    <string name="backup_export_error">ರಫ್ತು ವಿಫಲವಾಗಿದೆ</string>
+    <string name="backup_import_success">ಆಜ್ಞೆಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಆಮದು ಮಾಡಲಾಗಿದೆ</string>
+    <string name="backup_import_error">ಅಮಾನ್ಯ ಬ್ಯಾಕಪ್ ಫೈಲ್</string>
+    <string name="backup_import_confirm">ಇದು ನಿಮ್ಮ ಎಲ್ಲಾ ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಕಸ್ಟಮ್ ಆಜ್ಞೆಗಳನ್ನು ಬದಲಾಯಿಸುತ್ತದೆ. ಮುಂದುವರೆಯುವುದೇ?</string>
+    <string name="backup_import_cancel">ರದ್ದುಮಾಡು</string>
+    <string name="settings_check_updates">ನವೀಕರಣಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ</string>
+    <string name="settings_made_by">Musheer Alam ರವರಿಂದ ಪ್ರೀತಿಯಿಂದ ತಯಾರಿಸಲಾಗಿದೆ</string>
+    <string name="settings_sponsor">GitHub ನಲ್ಲಿ ಪ್ರಾಯೋಜಿಸಿ</string>
+    <string name="commands_collapse">ಕುಗ್ಗಿಸು</string>
+    <string name="commands_expand">ವಿಸ್ತರಿಸು</string>
+    <string name="commands_search_hint">ಆಜ್ಞೆಗಳನ್ನು ಹುಡುಕಿ…</string>
+    <string name="commands_search_close">ಹುಡುಕಾಟವನ್ನು ಮುಚ್ಚಿ</string>
+    <string name="commands_search_empty">ಯಾವುದೇ ಆಜ್ಞೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">ಈ ಆಜ್ಞೆಯನ್ನು ಅಳಿಸುವುದೇ?</string>
+    <string name="delete_confirm_key_title">ಈ API ಕೀಯನ್ನು ಅಳಿಸುವುದೇ?</string>
+    <string name="delete_confirm_message">ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="delete_confirm_button">ಅಳಿಸು</string>
+</resources>

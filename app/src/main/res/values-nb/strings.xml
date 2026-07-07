@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate-assistent</string>
+    <string name="accessibility_service_desc">Gir systemdekkende AI-teksterstatninger når utløserkommandoer skrives.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashbord</string>
+    <string name="service_status_active">Aktiv</string>
+    <string name="service_status_inactive">Inaktiv</string>
+    <string name="service_enable">Aktiver</string>
+    <string name="dashboard_api_keys_title">API-nøkler</string>
+    <string name="dashboard_keys_configured">%1$d nøkler konfigurert</string>
+    <string name="dashboard_add_key_hint">Legg til en API-nøkkel for å komme i gang.</string>
+    <string name="dashboard_monthly_requests">Denne måneden</string>
+    <string name="dashboard_favorite_command">Toppkommando</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Siste 7 dager</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API-nøkler</string>
+    <string name="keys_api_key_label">API-nøkkel</string>
+    <string name="keys_testing">Tester…</string>
+    <string name="keys_add_key">Legg til nøkkel</string>
+    <string name="keys_valid_added">Gyldig nøkkel lagt til!</string>
+    <string name="keys_already_added">Denne nøkkelen er allerede lagt til</string>
+    <string name="keys_validation_failed">Validering mislyktes</string>
+    <string name="keys_keystore_error">Sikker nøkkellagring er ikke tilgjengelig på denne enheten. Nøkler kan ikke lagres.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">Få din %1$s API-nøkkel ↗</string>
+    <string name="keys_empty">Ingen API-nøkler lagt til</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Kommandoer</string>
+    <string name="commands_add_custom_title">Legg til egendefinert kommando</string>
+    <string name="commands_trigger_label">Utløser (f.eks. %1$scode)</string>
+    <string name="commands_prompt_label">Prompt (f.eks. Omskriv som dikt)</string>
+    <string name="commands_add_command">Legg til kommando</string>
+    <string name="commands_delete_command">Slett</string>
+    <string name="commands_edit_command">Rediger</string>
+    <string name="commands_save_command">Lagre kommando</string>
+    <string name="commands_cancel">Avbryt</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Lokal</string>
+    <string name="commands_replacement_label">Erstatningstekst (f.eks. myemail@example.com)</string>
+    <string name="commands_built_in">Innebygd</string>
+    <string name="commands_error_prefix">Utløser må starte med \'%1$s\'</string>
+    <string name="commands_error_duplicate">En kommando med denne utløseren finnes allerede</string>
+    <string name="commands_error_conflict">Konflikt med eksisterende kommando \'%1$s\' — en utløser er prefiks for den andre</string>
+    <string name="commands_error_empty_trigger">Utløser må ha et navn etter prefikset</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Innstillinger</string>
+    <string name="settings_provider_title">Modellleverandør</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Egendefinert (OpenAI-kompatibel)</string>
+    <string name="settings_model_title">Modell</string>
+    <string name="settings_temperature_title">Temperatur</string>
+    <string name="settings_endpoint_title">Endepunkt</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, osv.</string>
+    <string name="settings_trigger_prefix_desc">Symbol brukt før kommandonavn (f.eks. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Må være nøyaktig 1 tegn</string>
+    <string name="settings_prefix_error_whitespace">Kan ikke være mellomrom</string>
+    <string name="settings_prefix_error_alphanumeric">Kan ikke være en bokstav eller et siffer</string>
+    <string name="settings_endpoint_error_scheme">Må starte med https://</string>
+    <string name="settings_endpoint_error_spaces">URL kan ikke inneholde mellomrom</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Eksporter eller importer kommandoene dine som en JSON-fil.</string>
+    <string name="backup_export">Eksporter</string>
+    <string name="backup_import">Importer</string>
+    <string name="backup_export_success">Kommandoer eksportert vellykket</string>
+    <string name="backup_export_error">Eksportering mislyktes</string>
+    <string name="backup_import_success">Kommandoer importert vellykket</string>
+    <string name="backup_import_error">Ugyldig sikkerhetskopifil</string>
+    <string name="backup_import_confirm">Dette vil erstatte alle dine eksisterende egendefinerte kommandoer. Fortsette?</string>
+    <string name="backup_import_cancel">Avbryt</string>
+    <string name="settings_check_updates">Se etter oppdateringer</string>
+    <string name="settings_made_by">Laget med kjærlighet av Musheer Alam</string>
+    <string name="settings_sponsor">Sponsor på GitHub</string>
+    <string name="commands_collapse">Skjul</string>
+    <string name="commands_expand">Vis</string>
+    <string name="commands_search_hint">Søk etter kommandoer…</string>
+    <string name="commands_search_close">Lukk søk</string>
+    <string name="commands_search_empty">Ingen kommandoer funnet</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Slette denne kommandoen?</string>
+    <string name="delete_confirm_key_title">Slette denne API-nøkkelen?</string>
+    <string name="delete_confirm_message">Denne handlingen kan ikke angres.</string>
+    <string name="delete_confirm_button">Slett</string>
+</resources>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate അസിസ്റ്റന്റ്</string>
+    <string name="accessibility_service_desc">ട്രിഗർ കമാൻഡുകൾ ടൈപ്പ് ചെയ്യുമ്പോൾ സിസ്റ്റംവ്യാപകമായ AI അടിസ്ഥാനമാക്കിയുള്ള ടെക്സ്റ്റ് മാറ്റിസ്ഥാപിക്കൽ നൽകുന്നു.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">ഡാഷ്ബോർഡ്</string>
+    <string name="service_status_active">സജീവം</string>
+    <string name="service_status_inactive">നിഷ്ക്രിയം</string>
+    <string name="service_enable">പ്രവർത്തനക്ഷമമാക്കുക</string>
+    <string name="dashboard_api_keys_title">API കീകൾ</string>
+    <string name="dashboard_keys_configured">%1$d കീകൾ കോൺഫിഗർ ചെയ്തു</string>
+    <string name="dashboard_add_key_hint">ആരംഭിക്കാൻ ഒരു API കീ ചേർക്കുക.</string>
+    <string name="dashboard_monthly_requests">ഈ മാസം</string>
+    <string name="dashboard_favorite_command">മികച്ച കമാൻഡ്</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">അവസാന 7 ദിവസങ്ങൾ</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API കീകൾ</string>
+    <string name="keys_api_key_label">API കീ</string>
+    <string name="keys_testing">പരിശോധിക്കുന്നു…</string>
+    <string name="keys_add_key">കീ ചേർക്കുക</string>
+    <string name="keys_valid_added">സാധുവായ കീ ചേർത്തു!</string>
+    <string name="keys_already_added">ഈ കീ ഇതിനകം ചേർത്തിട്ടുണ്ട്</string>
+    <string name="keys_validation_failed">സാധൂകരണം പരാജയപ്പെട്ടു</string>
+    <string name="keys_keystore_error">ഈ ഉപകരണത്തിൽ സുരക്ഷിത കീ സംഭരണം ലഭ്യമല്ല. കീകൾ സംരക്ഷിക്കാനാവില്ല.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s-നുള്ള നിങ്ങളുടെ API കീ നേടുക ↗</string>
+    <string name="keys_empty">ഒരു API കീയും ചേർത്തിട്ടില്ല</string>
+
+    <!-- Commands -->
+    <string name="commands_title">കമാൻഡുകൾ</string>
+    <string name="commands_add_custom_title">ഇഷ്ടാനുസൃത കമാൻഡ് ചേർക്കുക</string>
+    <string name="commands_trigger_label">ട്രിഗർ (ഉദാ. %1$scode)</string>
+    <string name="commands_prompt_label">പ്രോംപ്റ്റ് (ഉദാ. ഒരു കവിതയായി വീണ്ടും എഴുതുക)</string>
+    <string name="commands_add_command">കമാൻഡ് ചേർക്കുക</string>
+    <string name="commands_delete_command">ഇല്ലാതാക്കുക</string>
+    <string name="commands_edit_command">തിരുത്തുക</string>
+    <string name="commands_save_command">കമാൻഡ് സംരക്ഷിക്കുക</string>
+    <string name="commands_cancel">റദ്ദാക്കുക</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">പ്രാദേശികം</string>
+    <string name="commands_replacement_label">മാറ്റിസ്ഥാപിക്കുന്ന ടെക്സ്റ്റ് (ഉദാ. myemail@example.com)</string>
+    <string name="commands_built_in">ബിൽറ്റ്-ഇൻ</string>
+    <string name="commands_error_prefix">ട്രിഗർ \'%1$s\' എന്നതിൽ ആരംഭിക്കണം</string>
+    <string name="commands_error_duplicate">ഈ ട്രിഗറുള്ള ഒരു കമാൻഡ് ഇതിനകം നിലവിലുണ്ട്</string>
+    <string name="commands_error_conflict">നിലവിലുള്ള കമാൻഡ് \'%1$s\' ഉമായി പൊരുത്തക്കേട് — ഒരു ട്രിഗർ മറ്റൊന്നിന്റെ ഉപസർഗമാണ്</string>
+    <string name="commands_error_empty_trigger">ട്രിഗറിന് ഉപസർഗത്തിന് ശേഷം ഒരു പേര് ഉണ്ടായിരിക്കണം</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ക്രമീകരണങ്ങൾ</string>
+    <string name="settings_provider_title">മോഡൽ ദാതാവ്</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">ഇഷ്ടാനുസൃതം (OpenAI അനുയോജ്യം)</string>
+    <string name="settings_model_title">മോഡൽ</string>
+    <string name="settings_temperature_title">താപനില</string>
+    <string name="settings_endpoint_title">എൻഡ്പോയിന്റ്</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, മുതലായവ</string>
+    <string name="settings_trigger_prefix_desc">കമാൻഡ് പേരുകൾക്ക് മുമ്പ് ഉപയോഗിക്കുന്ന ചിഹ്നം (ഉദാ. %1$sfix).</string>
+    <string name="settings_prefix_error_length">കൃത്യമായി 1 പ്രതീകം ആയിരിക്കണം</string>
+    <string name="settings_prefix_error_whitespace">ശൂന്യമാക്കാനാവില്ല</string>
+    <string name="settings_prefix_error_alphanumeric">അക്ഷരമോ അക്കമോ ആകാനാവില്ല</string>
+    <string name="settings_endpoint_error_scheme">https:// എന്നതിൽ ആരംഭിക്കണം</string>
+    <string name="settings_endpoint_error_spaces">URL-ന് ഇടങ്ങൾ ഉൾപ്പെടുത്താനാവില്ല</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">നിങ്ങളുടെ കമാൻഡുകൾ JSON ഫയലായി കയറ്റുമതി ചെയ്യുകയോ ഇറക്കുമതി ചെയ്യുകയോ ചെയ്യുക.</string>
+    <string name="backup_export">കയറ്റുമതി</string>
+    <string name="backup_import">ഇറക്കുമതി</string>
+    <string name="backup_export_success">കമാൻഡുകൾ വിജയകരമായി കയറ്റുമതി ചെയ്തു</string>
+    <string name="backup_export_error">കയറ്റുമതി പരാജയപ്പെട്ടു</string>
+    <string name="backup_import_success">കമാൻഡുകൾ വിജയകരമായി ഇറക്കുമതി ചെയ്തു</string>
+    <string name="backup_import_error">അസാധുവായ ബാക്കപ്പ് ഫയൽ</string>
+    <string name="backup_import_confirm">ഇത് നിങ്ങളുടെ നിലവിലുള്ള എല്ലാ ഇഷ്ടാനുസൃത കമാൻഡുകളും മാറ്റിസ്ഥാപിക്കും. തുടരണോ?</string>
+    <string name="backup_import_cancel">റദ്ദാക്കുക</string>
+    <string name="settings_check_updates">അപ്ഡേറ്റുകൾ പരിശോധിക്കുക</string>
+    <string name="settings_made_by">Musheer Alam സ്നേഹത്തോടെ നിർമ്മിച്ചത്</string>
+    <string name="settings_sponsor">GitHub-ൽ സ്പോൺസർ ചെയ്യുക</string>
+    <string name="commands_collapse">ചുരുക്കുക</string>
+    <string name="commands_expand">വികസിപ്പിക്കുക</string>
+    <string name="commands_search_hint">കമാൻഡുകൾ തിരയുക…</string>
+    <string name="commands_search_close">തിരയൽ അടയ്ക്കുക</string>
+    <string name="commands_search_empty">കമാൻഡുകളൊന്നും കണ്ടെത്തിയില്ല</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">ഈ കമാൻഡ് ഇല്ലാതാക്കണോ?</string>
+    <string name="delete_confirm_key_title">ഈ API കീ ഇല്ലാതാക്കണോ?</string>
+    <string name="delete_confirm_message">ഈ പ്രവർത്തനം പഴയപടിയാക്കാനാവില്ല.</string>
+    <string name="delete_confirm_button">ഇല്ലാതാക്കുക</string>
+</resources>

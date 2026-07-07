@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate اسسٹنٹ</string>
+    <string name="accessibility_service_desc">جب ٹرگر کمانڈز ٹائپ کی جائیں تو پورے نظام میں AI پر مبنی متن کی تبدیلی فراہم کرتا ہے۔</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">ڈیش بورڈ</string>
+    <string name="service_status_active">فعال</string>
+    <string name="service_status_inactive">غیر فعال</string>
+    <string name="service_enable">فعال کریں</string>
+    <string name="dashboard_api_keys_title">API کلیدیاں</string>
+    <string name="dashboard_keys_configured">%1$d کلیدیاں ترتیب دی گئیں</string>
+    <string name="dashboard_add_key_hint">شروع کرنے کے لیے API کلید شامل کریں۔</string>
+    <string name="dashboard_monthly_requests">اس مہینے</string>
+    <string name="dashboard_favorite_command">سب سے زیادہ استعمال ہونے والی کمانڈ</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">گزشتہ 7 دن</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API کلیدیاں</string>
+    <string name="keys_api_key_label">API کلید</string>
+    <string name="keys_testing">جانچ ہو رہی ہے…</string>
+    <string name="keys_add_key">کلید شامل کریں</string>
+    <string name="keys_valid_added">درست کلید شامل کر دی گئی!</string>
+    <string name="keys_already_added">یہ کلید پہلے ہی شامل کی جا چکی ہے</string>
+    <string name="keys_validation_failed">توثیق ناکام ہوئی</string>
+    <string name="keys_keystore_error">اس ڈیوائس پر محفوظ کلید ذخیرہ دستیاب نہیں ہے۔ کلیدیاں محفوظ نہیں کی جا سکتیں۔</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s کے لیے اپنی API کلید حاصل کریں ↗</string>
+    <string name="keys_empty">کوئی API کلید شامل نہیں کی گئی</string>
+
+    <!-- Commands -->
+    <string name="commands_title">کمانڈز</string>
+    <string name="commands_add_custom_title">اپنی مرضی کی کمانڈ شامل کریں</string>
+    <string name="commands_trigger_label">ٹرگر (مثال کے طور پر %1$scode)</string>
+    <string name="commands_prompt_label">پرامپٹ (مثال کے طور پر نظم کے طور پر دوبارہ لکھیں)</string>
+    <string name="commands_add_command">کمانڈ شامل کریں</string>
+    <string name="commands_delete_command">حذف کریں</string>
+    <string name="commands_edit_command">ترمیم کریں</string>
+    <string name="commands_save_command">کمانڈ محفوظ کریں</string>
+    <string name="commands_cancel">منسوخ کریں</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">مقامی</string>
+    <string name="commands_replacement_label">متبادل متن (مثال کے طور پر myemail@example.com)</string>
+    <string name="commands_built_in">بلٹ ان</string>
+    <string name="commands_error_prefix">ٹرگر کو \'%1$s\' سے شروع ہونا چاہیے</string>
+    <string name="commands_error_duplicate">اس ٹرگر والی کمانڈ پہلے سے موجود ہے</string>
+    <string name="commands_error_conflict">موجودہ کمانڈ \'%1$s\' سے تصادم — ایک ٹرگر دوسرے کا سابقہ ہے</string>
+    <string name="commands_error_empty_trigger">ٹرگر کا سابقہ کے بعد ایک نام ہونا چاہیے</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ترتیبات</string>
+    <string name="settings_provider_title">ماڈل فراہم کنندہ</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">اپنی مرضی (OpenAI مطابقت)</string>
+    <string name="settings_model_title">ماڈل</string>
+    <string name="settings_temperature_title">درجہ حرارت</string>
+    <string name="settings_endpoint_title">اینڈ پوائنٹ</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o، claude-3-haiku، وغیرہ</string>
+    <string name="settings_trigger_prefix_desc">کمانڈ کے ناموں سے پہلے استعمال ہونے والی علامت (مثال کے طور پر %1$sfix)۔</string>
+    <string name="settings_prefix_error_length">بالکل 1 حرف ہونا چاہیے</string>
+    <string name="settings_prefix_error_whitespace">خالی جگہ نہیں ہو سکتی</string>
+    <string name="settings_prefix_error_alphanumeric">حرف یا عدد نہیں ہو سکتا</string>
+    <string name="settings_endpoint_error_scheme">https:// سے شروع ہونا چاہیے</string>
+    <string name="settings_endpoint_error_spaces">URL میں خالی جگہیں نہیں ہو سکتیں</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">اپنی کمانڈز کو JSON فائل کے طور پر برآمد یا درآمد کریں۔</string>
+    <string name="backup_export">برآمد</string>
+    <string name="backup_import">درآمد</string>
+    <string name="backup_export_success">کمانڈز کامیابی سے برآمد ہو گئیں</string>
+    <string name="backup_export_error">برآمد ناکام</string>
+    <string name="backup_import_success">کمانڈز کامیابی سے درآمد ہو گئیں</string>
+    <string name="backup_import_error">غلط بیک اپ فائل</string>
+    <string name="backup_import_confirm">اس سے آپ کی تمام موجودہ اپنی مرضی کی کمانڈز بدل جائیں گی۔ جاری رکھیں؟</string>
+    <string name="backup_import_cancel">منسوخ کریں</string>
+    <string name="settings_check_updates">اپ ڈیٹس کی جانچ کریں</string>
+    <string name="settings_made_by">Musheer Alam کی طرف سے محبت کے ساتھ بنایا گیا</string>
+    <string name="settings_sponsor">GitHub پر سپانسر کریں</string>
+    <string name="commands_collapse">سکیڑیں</string>
+    <string name="commands_expand">پھیلائیں</string>
+    <string name="commands_search_hint">کمانڈز تلاش کریں…</string>
+    <string name="commands_search_close">تلاش بند کریں</string>
+    <string name="commands_search_empty">کوئی کمانڈ نہیں ملی</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">کیا یہ کمانڈ حذف کی جائے؟</string>
+    <string name="delete_confirm_key_title">کیا یہ API کلید حذف کی جائے؟</string>
+    <string name="delete_confirm_message">اس عمل کو واپس نہیں لیا جا سکتا۔</string>
+    <string name="delete_confirm_button">حذف کریں</string>
+</resources>

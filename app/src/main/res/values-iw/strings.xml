@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">העוזר של SwiftSlate</string>
+    <string name="accessibility_service_desc">מספק החלפות טקסט מבוססות בינה מלאכותית ברמת המערכת בעת הקלדת פקודות הפעלה.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">לוח בקרה</string>
+    <string name="service_status_active">פעיל</string>
+    <string name="service_status_inactive">לא פעיל</string>
+    <string name="service_enable">הפעל</string>
+    <string name="dashboard_api_keys_title">מפתחות API</string>
+    <string name="dashboard_keys_configured">%1$d מפתחות הוגדרו</string>
+    <string name="dashboard_add_key_hint">הוסף מפתח API כדי להתחיל.</string>
+    <string name="dashboard_monthly_requests">החודש</string>
+    <string name="dashboard_favorite_command">הפקודה המובילה</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">7 הימים האחרונים</string>
+
+    <!-- Keys -->
+    <string name="keys_title">מפתחות API</string>
+    <string name="keys_api_key_label">מפתח API</string>
+    <string name="keys_testing">בודק…</string>
+    <string name="keys_add_key">הוסף מפתח</string>
+    <string name="keys_valid_added">התווסף מפתח תקין!</string>
+    <string name="keys_already_added">מפתח זה כבר התווסף</string>
+    <string name="keys_validation_failed">האימות נכשל</string>
+    <string name="keys_keystore_error">אחסון מפתחות מאובטח אינו זמין במכשיר זה. לא ניתן לשמור מפתחות.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">קבל את מפתח ה-API שלך עבור %1$s ↗</string>
+    <string name="keys_empty">לא התווספו מפתחות API</string>
+
+    <!-- Commands -->
+    <string name="commands_title">פקודות</string>
+    <string name="commands_add_custom_title">הוסף פקודה מותאמת אישית</string>
+    <string name="commands_trigger_label">הדק (לדוגמה %1$scode)</string>
+    <string name="commands_prompt_label">הנחיה (לדוגמה כתוב מחדש כשיר)</string>
+    <string name="commands_add_command">הוסף פקודה</string>
+    <string name="commands_delete_command">מחק</string>
+    <string name="commands_edit_command">ערוך</string>
+    <string name="commands_save_command">שמור פקודה</string>
+    <string name="commands_cancel">בטל</string>
+    <string name="commands_type_ai">בינה מלאכותית</string>
+    <string name="commands_type_replacer">מקומי</string>
+    <string name="commands_replacement_label">טקסט להחלפה (לדוגמה myemail@example.com)</string>
+    <string name="commands_built_in">מובנה</string>
+    <string name="commands_error_prefix">על ההדק להתחיל ב-\'%1$s\'</string>
+    <string name="commands_error_duplicate">כבר קיימת פקודה עם הדק זה</string>
+    <string name="commands_error_conflict">התנגשות עם הפקודה הקיימת \'%1$s\' — הדק אחד הוא קידומת של השני</string>
+    <string name="commands_error_empty_trigger">להדק חייב להיות שם לאחר הקידומת</string>
+
+    <!-- Settings -->
+    <string name="settings_title">הגדרות</string>
+    <string name="settings_provider_title">ספק המודל</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">מותאם אישית (תואם ל-OpenAI)</string>
+    <string name="settings_model_title">מודל</string>
+    <string name="settings_temperature_title">טמפרטורה</string>
+    <string name="settings_endpoint_title">נקודת קצה</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, וכו\'</string>
+    <string name="settings_trigger_prefix_desc">סמל המשמש לפני שמות הפקודות (לדוגמה %1$sfix).</string>
+    <string name="settings_prefix_error_length">חייב להיות תו אחד בדיוק</string>
+    <string name="settings_prefix_error_whitespace">לא יכול להיות רווח</string>
+    <string name="settings_prefix_error_alphanumeric">לא יכול להיות אות או ספרה</string>
+    <string name="settings_endpoint_error_scheme">חייב להתחיל ב-https://</string>
+    <string name="settings_endpoint_error_spaces">כתובת ה-URL לא יכולה להכיל רווחים</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">ייצא או ייבא את הפקודות שלך כקובץ JSON.</string>
+    <string name="backup_export">ייצא</string>
+    <string name="backup_import">ייבא</string>
+    <string name="backup_export_success">הפקודות יוצאו בהצלחה</string>
+    <string name="backup_export_error">הייצוא נכשל</string>
+    <string name="backup_import_success">הפקודות יובאו בהצלחה</string>
+    <string name="backup_import_error">קובץ גיבוי לא תקין</string>
+    <string name="backup_import_confirm">פעולה זו תחליף את כל הפקודות המותאמות אישית הקיימות שלך. להמשיך?</string>
+    <string name="backup_import_cancel">בטל</string>
+    <string name="settings_check_updates">בדוק עדכונים</string>
+    <string name="settings_made_by">נעשה באהבה על ידי Musheer Alam</string>
+    <string name="settings_sponsor">תמיכה ב-GitHub</string>
+    <string name="commands_collapse">כווץ</string>
+    <string name="commands_expand">הרחב</string>
+    <string name="commands_search_hint">חיפוש פקודות…</string>
+    <string name="commands_search_close">סגור חיפוש</string>
+    <string name="commands_search_empty">לא נמצאו פקודות</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">למחוק פקודה זו?</string>
+    <string name="delete_confirm_key_title">למחוק מפתח API זה?</string>
+    <string name="delete_confirm_message">לא ניתן לבטל פעולה זו.</string>
+    <string name="delete_confirm_button">מחק</string>
+</resources>

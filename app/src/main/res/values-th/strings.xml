@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">ผู้ช่วย SwiftSlate</string>
+    <string name="accessibility_service_desc">ให้การแทนที่ข้อความด้วย AI ทั่วทั้งระบบเมื่อพิมพ์คำสั่งทริกเกอร์</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">แดชบอร์ด</string>
+    <string name="service_status_active">ทำงาน</string>
+    <string name="service_status_inactive">ไม่ทำงาน</string>
+    <string name="service_enable">เปิดใช้งาน</string>
+    <string name="dashboard_api_keys_title">คีย์ API</string>
+    <string name="dashboard_keys_configured">กำหนดค่า %1$d คีย์</string>
+    <string name="dashboard_add_key_hint">เพิ่มคีย์ API เพื่อเริ่มต้น</string>
+    <string name="dashboard_monthly_requests">เดือนนี้</string>
+    <string name="dashboard_favorite_command">คำสั่งยอดนิยม</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">7 วันที่ผ่านมา</string>
+
+    <!-- Keys -->
+    <string name="keys_title">คีย์ API</string>
+    <string name="keys_api_key_label">คีย์ API</string>
+    <string name="keys_testing">กำลังทดสอบ…</string>
+    <string name="keys_add_key">เพิ่มคีย์</string>
+    <string name="keys_valid_added">เพิ่มคีย์ที่ถูกต้องแล้ว!</string>
+    <string name="keys_already_added">คีย์นี้ถูกเพิ่มไปแล้ว</string>
+    <string name="keys_validation_failed">การตรวจสอบล้มเหลว</string>
+    <string name="keys_keystore_error">ที่เก็บคีย์แบบปลอดภัยไม่พร้อมใช้งานบนอุปกรณ์นี้ ไม่สามารถบันทึกคีย์ได้</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">รับคีย์ API ของคุณสำหรับ %1$s ↗</string>
+    <string name="keys_empty">ไม่มีการเพิ่มคีย์ API</string>
+
+    <!-- Commands -->
+    <string name="commands_title">คำสั่ง</string>
+    <string name="commands_add_custom_title">เพิ่มคำสั่งที่กำหนดเอง</string>
+    <string name="commands_trigger_label">ทริกเกอร์ (เช่น %1$scode)</string>
+    <string name="commands_prompt_label">พรอมต์ (เช่น เขียนใหม่เป็นบทกวี)</string>
+    <string name="commands_add_command">เพิ่มคำสั่ง</string>
+    <string name="commands_delete_command">ลบ</string>
+    <string name="commands_edit_command">แก้ไข</string>
+    <string name="commands_save_command">บันทึกคำสั่ง</string>
+    <string name="commands_cancel">ยกเลิก</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">ภายในเครื่อง</string>
+    <string name="commands_replacement_label">ข้อความแทนที่ (เช่น myemail@example.com)</string>
+    <string name="commands_built_in">ในตัว</string>
+    <string name="commands_error_prefix">ทริกเกอร์ต้องขึ้นต้นด้วย \'%1$s\'</string>
+    <string name="commands_error_duplicate">มีคำสั่งที่มีทริกเกอร์นี้อยู่แล้ว</string>
+    <string name="commands_error_conflict">ขัดแย้งกับคำสั่งที่มีอยู่ \'%1$s\' — ทริกเกอร์หนึ่งเป็นคำนำหน้าของอีกอัน</string>
+    <string name="commands_error_empty_trigger">ทริกเกอร์ต้องมีชื่อหลังคำนำหน้า</string>
+
+    <!-- Settings -->
+    <string name="settings_title">การตั้งค่า</string>
+    <string name="settings_provider_title">ผู้ให้บริการโมเดล</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">กำหนดเอง (เข้ากันได้กับ OpenAI)</string>
+    <string name="settings_model_title">โมเดล</string>
+    <string name="settings_temperature_title">อุณหภูมิ</string>
+    <string name="settings_endpoint_title">เอนด์พอยต์</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, ฯลฯ</string>
+    <string name="settings_trigger_prefix_desc">สัญลักษณ์ที่ใช้ก่อนชื่อคำสั่ง (เช่น %1$sfix)</string>
+    <string name="settings_prefix_error_length">ต้องมีอักขระ 1 ตัวพอดี</string>
+    <string name="settings_prefix_error_whitespace">ต้องไม่เป็นช่องว่าง</string>
+    <string name="settings_prefix_error_alphanumeric">ต้องไม่เป็นตัวอักษรหรือตัวเลข</string>
+    <string name="settings_endpoint_error_scheme">ต้องขึ้นต้นด้วย https://</string>
+    <string name="settings_endpoint_error_spaces">URL ต้องไม่มีช่องว่าง</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">ส่งออกหรือนำเข้าคำสั่งของคุณเป็นไฟล์ JSON</string>
+    <string name="backup_export">ส่งออก</string>
+    <string name="backup_import">นำเข้า</string>
+    <string name="backup_export_success">ส่งออกคำสั่งสำเร็จแล้ว</string>
+    <string name="backup_export_error">การส่งออกล้มเหลว</string>
+    <string name="backup_import_success">นำเข้าคำสั่งสำเร็จแล้ว</string>
+    <string name="backup_import_error">ไฟล์สำรองไม่ถูกต้อง</string>
+    <string name="backup_import_confirm">การดำเนินการนี้จะแทนที่คำสั่งที่กำหนดเองที่มีอยู่ทั้งหมดของคุณ ดำเนินการต่อ?</string>
+    <string name="backup_import_cancel">ยกเลิก</string>
+    <string name="settings_check_updates">ตรวจสอบอัปเดต</string>
+    <string name="settings_made_by">สร้างด้วยความรักโดย Musheer Alam</string>
+    <string name="settings_sponsor">สนับสนุนบน GitHub</string>
+    <string name="commands_collapse">ยุบ</string>
+    <string name="commands_expand">ขยาย</string>
+    <string name="commands_search_hint">ค้นหาคำสั่ง…</string>
+    <string name="commands_search_close">ปิดการค้นหา</string>
+    <string name="commands_search_empty">ไม่พบคำสั่ง</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">ลบคำสั่งนี้?</string>
+    <string name="delete_confirm_key_title">ลบคีย์ API นี้?</string>
+    <string name="delete_confirm_message">ไม่สามารถเลิกทำการดำเนินการนี้ได้</string>
+    <string name="delete_confirm_button">ลบ</string>
+</resources>

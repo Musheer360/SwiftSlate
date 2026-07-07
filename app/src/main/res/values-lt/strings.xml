@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate asistentas</string>
+    <string name="accessibility_service_desc">Teikia visos sistemos dirbtinio intelekto teksto pakeitimus, kai įvedamos aktyvinimo komandos.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Valdymo skydelis</string>
+    <string name="service_status_active">Aktyvus</string>
+    <string name="service_status_inactive">Neaktyvus</string>
+    <string name="service_enable">Įjungti</string>
+    <string name="dashboard_api_keys_title">API raktai</string>
+    <string name="dashboard_keys_configured">Sukonfigūruota raktų: %1$d</string>
+    <string name="dashboard_add_key_hint">Norėdami pradėti, pridėkite API raktą.</string>
+    <string name="dashboard_monthly_requests">Šį mėnesį</string>
+    <string name="dashboard_favorite_command">Populiariausia komanda</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Paskutinės 7 dienos</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API raktai</string>
+    <string name="keys_api_key_label">API raktas</string>
+    <string name="keys_testing">Tikrinama…</string>
+    <string name="keys_add_key">Pridėti raktą</string>
+    <string name="keys_valid_added">Galiojantis raktas pridėtas!</string>
+    <string name="keys_already_added">Šis raktas jau pridėtas</string>
+    <string name="keys_validation_failed">Patvirtinimas nepavyko</string>
+    <string name="keys_keystore_error">Saugus raktų saugojimas šiame įrenginyje negalimas. Raktų išsaugoti nepavyko.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">Gaukite savo %1$s API raktą ↗</string>
+    <string name="keys_empty">API raktų nėra</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Komandos</string>
+    <string name="commands_add_custom_title">Pridėti pasirinktinę komandą</string>
+    <string name="commands_trigger_label">Aktyviklis (pvz., %1$scode)</string>
+    <string name="commands_prompt_label">Užklausa (pvz., Perrašyti kaip eilėraštį)</string>
+    <string name="commands_add_command">Pridėti komandą</string>
+    <string name="commands_delete_command">Ištrinti</string>
+    <string name="commands_edit_command">Redaguoti</string>
+    <string name="commands_save_command">Išsaugoti komandą</string>
+    <string name="commands_cancel">Atšaukti</string>
+    <string name="commands_type_ai">DI</string>
+    <string name="commands_type_replacer">Vietinis</string>
+    <string name="commands_replacement_label">Pakeitimo tekstas (pvz., myemail@example.com)</string>
+    <string name="commands_built_in">Integruota</string>
+    <string name="commands_error_prefix">Aktyviklis turi prasidėti simboliu \'%1$s\'</string>
+    <string name="commands_error_duplicate">Komanda su tokiu aktyvikliu jau yra</string>
+    <string name="commands_error_conflict">Konfliktuoja su esama komanda \'%1$s\' — vienas aktyviklis yra kito priešdėlis</string>
+    <string name="commands_error_empty_trigger">Po priešdėlio turi būti komandos pavadinimas</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Nustatymai</string>
+    <string name="settings_provider_title">Modelio tiekėjas</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Pasirinktinis (suderinamas su OpenAI)</string>
+    <string name="settings_model_title">Modelis</string>
+    <string name="settings_temperature_title">Temperatūra</string>
+    <string name="settings_endpoint_title">Galinis taškas</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku ir kt.</string>
+    <string name="settings_trigger_prefix_desc">Simbolis prieš komandų pavadinimus (pvz., %1$sfix).</string>
+    <string name="settings_prefix_error_length">Turi būti tik 1 simbolis</string>
+    <string name="settings_prefix_error_whitespace">Negali būti tarpas</string>
+    <string name="settings_prefix_error_alphanumeric">Negali būti raidė ar skaitmuo</string>
+    <string name="settings_endpoint_error_scheme">Turi prasidėti https://</string>
+    <string name="settings_endpoint_error_spaces">URL negali turėti tarpų</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Eksportuokite arba importuokite komandas kaip JSON failą.</string>
+    <string name="backup_export">Eksportuoti</string>
+    <string name="backup_import">Importuoti</string>
+    <string name="backup_export_success">Komandos sėkmingai eksportuotos</string>
+    <string name="backup_export_error">Eksportuoti nepavyko</string>
+    <string name="backup_import_success">Komandos sėkmingai importuotos</string>
+    <string name="backup_import_error">Neteisingas atsarginės kopijos failas</string>
+    <string name="backup_import_confirm">Tai pakeis visas esamas pasirinktines komandas. Tęsti?</string>
+    <string name="backup_import_cancel">Atšaukti</string>
+    <string name="settings_check_updates">Tikrinti naujinimus</string>
+    <string name="settings_made_by">Sukurta su meile – Musheer Alam</string>
+    <string name="settings_sponsor">Remti GitHub platformoje</string>
+    <string name="commands_collapse">Suskleisti</string>
+    <string name="commands_expand">Išskleisti</string>
+    <string name="commands_search_hint">Ieškoti komandų…</string>
+    <string name="commands_search_close">Uždaryti paiešką</string>
+    <string name="commands_search_empty">Komandų nerasta</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Ištrinti šią komandą?</string>
+    <string name="delete_confirm_key_title">Ištrinti šį API raktą?</string>
+    <string name="delete_confirm_message">Šio veiksmo anuliuoti negalima.</string>
+    <string name="delete_confirm_button">Ištrinti</string>
+</resources>

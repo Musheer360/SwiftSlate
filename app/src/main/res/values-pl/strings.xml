@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">Asystent SwiftSlate</string>
+    <string name="accessibility_service_desc">Zapewnia ogólnosystemowe zastępowanie tekstu za pomocą AI po wpisaniu poleceń wyzwalających.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Panel</string>
+    <string name="service_status_active">Aktywny</string>
+    <string name="service_status_inactive">Nieaktywny</string>
+    <string name="service_enable">Włącz</string>
+    <string name="dashboard_api_keys_title">Klucze API</string>
+    <string name="dashboard_keys_configured">Skonfigurowano %1$d kluczy</string>
+    <string name="dashboard_add_key_hint">Dodaj klucz API, aby rozpocząć.</string>
+    <string name="dashboard_monthly_requests">Ten miesiąc</string>
+    <string name="dashboard_favorite_command">Najczęściej używane polecenie</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Ostatnie 7 dni</string>
+
+    <!-- Keys -->
+    <string name="keys_title">Klucze API</string>
+    <string name="keys_api_key_label">Klucz API</string>
+    <string name="keys_testing">Testowanie…</string>
+    <string name="keys_add_key">Dodaj klucz</string>
+    <string name="keys_valid_added">Dodano poprawny klucz!</string>
+    <string name="keys_already_added">Ten klucz został już dodany</string>
+    <string name="keys_validation_failed">Weryfikacja nie powiodła się</string>
+    <string name="keys_keystore_error">Bezpieczne przechowywanie kluczy jest niedostępne na tym urządzeniu. Klucze nie mogą być zapisane.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">Uzyskaj swój klucz API dla %1$s ↗</string>
+    <string name="keys_empty">Nie dodano żadnych kluczy API</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Polecenia</string>
+    <string name="commands_add_custom_title">Dodaj polecenie niestandardowe</string>
+    <string name="commands_trigger_label">Wyzwalacz (np. %1$scode)</string>
+    <string name="commands_prompt_label">Prompt (np. Przepisz jako wiersz)</string>
+    <string name="commands_add_command">Dodaj polecenie</string>
+    <string name="commands_delete_command">Usuń</string>
+    <string name="commands_edit_command">Edytuj</string>
+    <string name="commands_save_command">Zapisz polecenie</string>
+    <string name="commands_cancel">Anuluj</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Lokalny</string>
+    <string name="commands_replacement_label">Tekst zastępczy (np. myemail@example.com)</string>
+    <string name="commands_built_in">Wbudowane</string>
+    <string name="commands_error_prefix">Wyzwalacz musi zaczynać się od \'%1$s\'</string>
+    <string name="commands_error_duplicate">Polecenie z tym wyzwalaczem już istnieje</string>
+    <string name="commands_error_conflict">Konflikt z istniejącym poleceniem \'%1$s\' — jeden wyzwalacz jest prefiksem drugiego</string>
+    <string name="commands_error_empty_trigger">Wyzwalacz musi mieć nazwę po prefiksie</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ustawienia</string>
+    <string name="settings_provider_title">Dostawca modelu</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Niestandardowy (zgodny z OpenAI)</string>
+    <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Temperatura</string>
+    <string name="settings_endpoint_title">Endpoint</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, itp.</string>
+    <string name="settings_trigger_prefix_desc">Symbol używany przed nazwami poleceń (np. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Musi mieć dokładnie 1 znak</string>
+    <string name="settings_prefix_error_whitespace">Nie może być spacją</string>
+    <string name="settings_prefix_error_alphanumeric">Nie może być literą ani cyfrą</string>
+    <string name="settings_endpoint_error_scheme">Musi zaczynać się od https://</string>
+    <string name="settings_endpoint_error_spaces">Adres URL nie może zawierać spacji</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Eksportuj lub importuj swoje polecenia jako plik JSON.</string>
+    <string name="backup_export">Eksportuj</string>
+    <string name="backup_import">Importuj</string>
+    <string name="backup_export_success">Polecenia wyeksportowane pomyślnie</string>
+    <string name="backup_export_error">Eksport nie powiódł się</string>
+    <string name="backup_import_success">Polecenia zaimportowane pomyślnie</string>
+    <string name="backup_import_error">Nieprawidłowy plik kopii zapasowej</string>
+    <string name="backup_import_confirm">Spowoduje to zastąpienie wszystkich istniejących poleceń niestandardowych. Kontynuować?</string>
+    <string name="backup_import_cancel">Anuluj</string>
+    <string name="settings_check_updates">Sprawdź aktualizacje</string>
+    <string name="settings_made_by">Wykonane z miłością przez Musheer Alam</string>
+    <string name="settings_sponsor">Sponsoruj na GitHub</string>
+    <string name="commands_collapse">Zwiń</string>
+    <string name="commands_expand">Rozwiń</string>
+    <string name="commands_search_hint">Szukaj poleceń…</string>
+    <string name="commands_search_close">Zamknij wyszukiwanie</string>
+    <string name="commands_search_empty">Nie znaleziono poleceń</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Usunąć to polecenie?</string>
+    <string name="delete_confirm_key_title">Usunąć ten klucz API?</string>
+    <string name="delete_confirm_message">Tej czynności nie można cofnąć.</string>
+    <string name="delete_confirm_button">Usuń</string>
+</resources>

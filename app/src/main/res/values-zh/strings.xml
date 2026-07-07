@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate 助手</string>
+    <string name="accessibility_service_desc">在输入触发命令时，提供系统级 AI 文本替换功能。</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">仪表板</string>
+    <string name="service_status_active">已启用</string>
+    <string name="service_status_inactive">未启用</string>
+    <string name="service_enable">启用</string>
+    <string name="dashboard_api_keys_title">API 密钥</string>
+    <string name="dashboard_keys_configured">已配置 %1$d 个密钥</string>
+    <string name="dashboard_add_key_hint">添加 API 密钥以开始使用。</string>
+    <string name="dashboard_monthly_requests">本月</string>
+    <string name="dashboard_favorite_command">最常用命令</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">过去 7 天</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API 密钥</string>
+    <string name="keys_api_key_label">API 密钥</string>
+    <string name="keys_testing">正在测试…</string>
+    <string name="keys_add_key">添加密钥</string>
+    <string name="keys_valid_added">已添加有效密钥！</string>
+    <string name="keys_already_added">此密钥已添加</string>
+    <string name="keys_validation_failed">验证失败</string>
+    <string name="keys_keystore_error">此设备上无法使用安全密钥存储。无法保存密钥。</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">获取 %1$s 的 API 密钥 ↗</string>
+    <string name="keys_empty">未添加 API 密钥</string>
+
+    <!-- Commands -->
+    <string name="commands_title">命令</string>
+    <string name="commands_add_custom_title">添加自定义命令</string>
+    <string name="commands_trigger_label">触发器（例如 %1$scode）</string>
+    <string name="commands_prompt_label">提示语（例如 重写为诗歌）</string>
+    <string name="commands_add_command">添加命令</string>
+    <string name="commands_delete_command">删除</string>
+    <string name="commands_edit_command">编辑</string>
+    <string name="commands_save_command">保存命令</string>
+    <string name="commands_cancel">取消</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">本地</string>
+    <string name="commands_replacement_label">替换文本（例如 myemail@example.com）</string>
+    <string name="commands_built_in">内置</string>
+    <string name="commands_error_prefix">触发器必须以 \'%1$s\' 开头</string>
+    <string name="commands_error_duplicate">已存在使用此触发器的命令</string>
+    <string name="commands_error_conflict">与现有命令 \'%1$s\' 冲突 — 一个触发器是另一个的前缀</string>
+    <string name="commands_error_empty_trigger">触发器在前缀后面必须有一个名称</string>
+
+    <!-- Settings -->
+    <string name="settings_title">设置</string>
+    <string name="settings_provider_title">模型提供商</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">自定义（兼容 OpenAI）</string>
+    <string name="settings_model_title">模型</string>
+    <string name="settings_temperature_title">温度</string>
+    <string name="settings_endpoint_title">端点</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o、claude-3-haiku 等</string>
+    <string name="settings_trigger_prefix_desc">命令名称前使用的符号（例如 %1$sfix）。</string>
+    <string name="settings_prefix_error_length">必须恰好为 1 个字符</string>
+    <string name="settings_prefix_error_whitespace">不能为空白字符</string>
+    <string name="settings_prefix_error_alphanumeric">不能是字母或数字</string>
+    <string name="settings_endpoint_error_scheme">必须以 https:// 开头</string>
+    <string name="settings_endpoint_error_spaces">URL 不能包含空格</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">将命令导出或导入为 JSON 文件。</string>
+    <string name="backup_export">导出</string>
+    <string name="backup_import">导入</string>
+    <string name="backup_export_success">命令导出成功</string>
+    <string name="backup_export_error">导出失败</string>
+    <string name="backup_import_success">命令导入成功</string>
+    <string name="backup_import_error">无效的备份文件</string>
+    <string name="backup_import_confirm">这将替换您所有现有的自定义命令。是否继续？</string>
+    <string name="backup_import_cancel">取消</string>
+    <string name="settings_check_updates">检查更新</string>
+    <string name="settings_made_by">由 Musheer Alam 用心制作</string>
+    <string name="settings_sponsor">在 GitHub 上赞助</string>
+    <string name="commands_collapse">收起</string>
+    <string name="commands_expand">展开</string>
+    <string name="commands_search_hint">搜索命令…</string>
+    <string name="commands_search_close">关闭搜索</string>
+    <string name="commands_search_empty">未找到命令</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">删除此命令？</string>
+    <string name="delete_confirm_key_title">删除此 API 密钥？</string>
+    <string name="delete_confirm_message">此操作无法撤销。</string>
+    <string name="delete_confirm_button">删除</string>
+</resources>

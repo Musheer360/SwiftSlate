@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate アシスタント</string>
+    <string name="accessibility_service_desc">トリガーコマンドを入力すると、システム全体で AI によるテキスト置換を提供します。</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">ダッシュボード</string>
+    <string name="service_status_active">アクティブ</string>
+    <string name="service_status_inactive">非アクティブ</string>
+    <string name="service_enable">有効にする</string>
+    <string name="dashboard_api_keys_title">API キー</string>
+    <string name="dashboard_keys_configured">%1$d 個のキーが設定済み</string>
+    <string name="dashboard_add_key_hint">開始するには API キーを追加してください。</string>
+    <string name="dashboard_monthly_requests">今月</string>
+    <string name="dashboard_favorite_command">トップコマンド</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">過去7日間</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API キー</string>
+    <string name="keys_api_key_label">API キー</string>
+    <string name="keys_testing">テスト中…</string>
+    <string name="keys_add_key">キーを追加</string>
+    <string name="keys_valid_added">有効なキーが追加されました！</string>
+    <string name="keys_already_added">このキーはすでに追加されています</string>
+    <string name="keys_validation_failed">検証に失敗しました</string>
+    <string name="keys_keystore_error">このデバイスではセキュアなキーストアが利用できません。キーを保存できません。</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s の API キーを取得 ↗</string>
+    <string name="keys_empty">API キーが追加されていません</string>
+
+    <!-- Commands -->
+    <string name="commands_title">コマンド</string>
+    <string name="commands_add_custom_title">カスタムコマンドを追加</string>
+    <string name="commands_trigger_label">トリガー（例：%1$scode）</string>
+    <string name="commands_prompt_label">プロンプト（例：詩として書き直す）</string>
+    <string name="commands_add_command">コマンドを追加</string>
+    <string name="commands_delete_command">削除</string>
+    <string name="commands_edit_command">編集</string>
+    <string name="commands_save_command">コマンドを保存</string>
+    <string name="commands_cancel">キャンセル</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">ローカル</string>
+    <string name="commands_replacement_label">置換テキスト（例：myemail@example.com）</string>
+    <string name="commands_built_in">ビルトイン</string>
+    <string name="commands_error_prefix">トリガーは \'%1$s\' で始まる必要があります</string>
+    <string name="commands_error_duplicate">このトリガーを持つコマンドはすでに存在します</string>
+    <string name="commands_error_conflict">既存のコマンド \'%1$s\' と競合 — 一方のトリガーが他方のプレフィックスです</string>
+    <string name="commands_error_empty_trigger">トリガーはプレフィックスの後に名前が必要です</string>
+
+    <!-- Settings -->
+    <string name="settings_title">設定</string>
+    <string name="settings_provider_title">モデルプロバイダー</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">カスタム（OpenAI 互換）</string>
+    <string name="settings_model_title">モデル</string>
+    <string name="settings_temperature_title">温度</string>
+    <string name="settings_endpoint_title">エンドポイント</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o、claude-3-haiku など</string>
+    <string name="settings_trigger_prefix_desc">コマンド名の前に付ける記号（例：%1$sfix）。</string>
+    <string name="settings_prefix_error_length">正確に1文字である必要があります</string>
+    <string name="settings_prefix_error_whitespace">空白文字は使用できません</string>
+    <string name="settings_prefix_error_alphanumeric">文字または数字は使用できません</string>
+    <string name="settings_endpoint_error_scheme">https:// で始まる必要があります</string>
+    <string name="settings_endpoint_error_spaces">URL にスペースを含めることはできません</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">コマンドを JSON ファイルとしてエクスポートまたはインポートします。</string>
+    <string name="backup_export">エクスポート</string>
+    <string name="backup_import">インポート</string>
+    <string name="backup_export_success">コマンドのエクスポートに成功しました</string>
+    <string name="backup_export_error">エクスポートに失敗しました</string>
+    <string name="backup_import_success">コマンドのインポートに成功しました</string>
+    <string name="backup_import_error">無効なバックアップファイル</string>
+    <string name="backup_import_confirm">これにより、既存のカスタムコマンドがすべて置き換えられます。続行しますか？</string>
+    <string name="backup_import_cancel">キャンセル</string>
+    <string name="settings_check_updates">アップデートを確認</string>
+    <string name="settings_made_by">Musheer Alam によって愛情を込めて作られました</string>
+    <string name="settings_sponsor">GitHub でスポンサーになる</string>
+    <string name="commands_collapse">折りたたむ</string>
+    <string name="commands_expand">展開する</string>
+    <string name="commands_search_hint">コマンドを検索…</string>
+    <string name="commands_search_close">検索を閉じる</string>
+    <string name="commands_search_empty">コマンドが見つかりません</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">このコマンドを削除しますか？</string>
+    <string name="delete_confirm_key_title">この API キーを削除しますか？</string>
+    <string name="delete_confirm_message">この操作は元に戻せません。</string>
+    <string name="delete_confirm_button">削除</string>
+</resources>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate உதவியாளர்</string>
+    <string name="accessibility_service_desc">தூண்டல் கட்டளைகளை தட்டச்சு செய்யும்போது அமைப்பு முழுவதும் AI அடிப்படையிலான உரை மாற்றீடுகளை வழங்குகிறது.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">டாஷ்போர்டு</string>
+    <string name="service_status_active">செயலில்</string>
+    <string name="service_status_inactive">செயலற்றது</string>
+    <string name="service_enable">இயக்கு</string>
+    <string name="dashboard_api_keys_title">API விசைகள்</string>
+    <string name="dashboard_keys_configured">%1$d விசைகள் கட்டமைக்கப்பட்டன</string>
+    <string name="dashboard_add_key_hint">தொடங்க ஒரு API விசையைச் சேர்க்கவும்.</string>
+    <string name="dashboard_monthly_requests">இந்த மாதம்</string>
+    <string name="dashboard_favorite_command">முதன்மை கட்டளை</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">கடந்த 7 நாட்கள்</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API விசைகள்</string>
+    <string name="keys_api_key_label">API விசை</string>
+    <string name="keys_testing">சோதிக்கிறது…</string>
+    <string name="keys_add_key">விசையைச் சேர்க்கவும்</string>
+    <string name="keys_valid_added">செல்லுபடியாகும் விசை சேர்க்கப்பட்டது!</string>
+    <string name="keys_already_added">இந்த விசை ஏற்கனவே சேர்க்கப்பட்டுள்ளது</string>
+    <string name="keys_validation_failed">சரிபார்ப்பு தோல்வியடைந்தது</string>
+    <string name="keys_keystore_error">இந்த சாதனத்தில் பாதுகாப்பான விசை சேமிப்பு கிடைக்கவில்லை. விசைகளைச் சேமிக்க முடியாது.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s க்கான உங்கள் API விசையைப் பெறவும் ↗</string>
+    <string name="keys_empty">API விசைகள் எதுவும் சேர்க்கப்படவில்லை</string>
+
+    <!-- Commands -->
+    <string name="commands_title">கட்டளைகள்</string>
+    <string name="commands_add_custom_title">தனிப்பயன் கட்டளை சேர்க்கவும்</string>
+    <string name="commands_trigger_label">தூண்டல் (எ.கா. %1$scode)</string>
+    <string name="commands_prompt_label">வினையூக்கம் (எ.கா. கவிதையாக மீண்டும் எழுது)</string>
+    <string name="commands_add_command">கட்டளை சேர்க்கவும்</string>
+    <string name="commands_delete_command">நீக்கு</string>
+    <string name="commands_edit_command">திருத்து</string>
+    <string name="commands_save_command">கட்டளையைச் சேமி</string>
+    <string name="commands_cancel">ரத்துசெய்</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">உள்ளூர்</string>
+    <string name="commands_replacement_label">மாற்று உரை (எ.கா. myemail@example.com)</string>
+    <string name="commands_built_in">உள்ளமைக்கப்பட்டது</string>
+    <string name="commands_error_prefix">தூண்டல் \'%1$s\' உடன் தொடங்க வேண்டும்</string>
+    <string name="commands_error_duplicate">இந்த தூண்டலுடன் ஒரு கட்டளை ஏற்கனவே உள்ளது</string>
+    <string name="commands_error_conflict">ஏற்கனவே உள்ள கட்டளை \'%1$s\' உடன் முரண் — ஒரு தூண்டல் மற்றொன்றின் முன்னொட்டு</string>
+    <string name="commands_error_empty_trigger">தூண்டல் முன்னொட்டுக்கு பிறகு ஒரு பெயரைக் கொண்டிருக்க வேண்டும்</string>
+
+    <!-- Settings -->
+    <string name="settings_title">அமைப்புகள்</string>
+    <string name="settings_provider_title">மாதிரி வழங்குநர்</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">தனிப்பயன் (OpenAI இணக்கமானது)</string>
+    <string name="settings_model_title">மாதிரி</string>
+    <string name="settings_temperature_title">வெப்பநிலை</string>
+    <string name="settings_endpoint_title">இறுதிப் புள்ளி</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, போன்றவை.</string>
+    <string name="settings_trigger_prefix_desc">கட்டளை பெயர்களுக்கு முன் பயன்படுத்தப்படும் குறியீடு (எ.கா. %1$sfix).</string>
+    <string name="settings_prefix_error_length">சரியாக 1 எழுத்து இருக்க வேண்டும்</string>
+    <string name="settings_prefix_error_whitespace">வெற்று இடமாக இருக்கக்கூடாது</string>
+    <string name="settings_prefix_error_alphanumeric">எழுத்து அல்லது இலக்கமாக இருக்கக்கூடாது</string>
+    <string name="settings_endpoint_error_scheme">https:// உடன் தொடங்க வேண்டும்</string>
+    <string name="settings_endpoint_error_spaces">URL இடைவெளிகளைக் கொண்டிருக்கக்கூடாது</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">உங்கள் கட்டளைகளை JSON கோப்பாக ஏற்றுமதி அல்லது இறக்குமதி செய்யவும்.</string>
+    <string name="backup_export">ஏற்றுமதி</string>
+    <string name="backup_import">இறக்குமதி</string>
+    <string name="backup_export_success">கட்டளைகள் வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டன</string>
+    <string name="backup_export_error">ஏற்றுமதி தோல்வியடைந்தது</string>
+    <string name="backup_import_success">கட்டளைகள் வெற்றிகரமாக இறக்குமதி செய்யப்பட்டன</string>
+    <string name="backup_import_error">தவறான காப்பு கோப்பு</string>
+    <string name="backup_import_confirm">இது உங்கள் இருக்கும் அனைத்து தனிப்பயன் கட்டளைகளையும் மாற்றும். தொடரவா?</string>
+    <string name="backup_import_cancel">ரத்துசெய்</string>
+    <string name="settings_check_updates">புதுப்பிப்புகளை சரிபார்க்கவும்</string>
+    <string name="settings_made_by">Musheer Alam அவர்களால் அன்புடன் உருவாக்கப்பட்டது</string>
+    <string name="settings_sponsor">GitHub இல் ஸ்பான்சர் செய்யவும்</string>
+    <string name="commands_collapse">சுருக்கு</string>
+    <string name="commands_expand">விரிவாக்கு</string>
+    <string name="commands_search_hint">கட்டளைகளைத் தேடு…</string>
+    <string name="commands_search_close">தேடலை மூடு</string>
+    <string name="commands_search_empty">கட்டளைகள் எதுவும் கண்டுபிடிக்கப்படவில்லை</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">இந்த கட்டளையை நீக்கவா?</string>
+    <string name="delete_confirm_key_title">இந்த API விசையை நீக்கவா?</string>
+    <string name="delete_confirm_message">இந்த செயலை மீண்டும் செய்ய முடியாது.</string>
+    <string name="delete_confirm_button">நீக்கு</string>
+</resources>

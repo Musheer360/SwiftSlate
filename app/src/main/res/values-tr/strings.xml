@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftSlate</string>
+    <string name="accessibility_service_label">SwiftSlate Asistanı</string>
+    <string name="accessibility_service_desc">Tetikleyici komutlar yazıldığında sistem genelinde AI tabanlı metin değiştirmeleri sağlar.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Panel</string>
+    <string name="service_status_active">Aktif</string>
+    <string name="service_status_inactive">Pasif</string>
+    <string name="service_enable">Etkinleştir</string>
+    <string name="dashboard_api_keys_title">API Anahtarları</string>
+    <string name="dashboard_keys_configured">%1$d anahtar yapılandırıldı</string>
+    <string name="dashboard_add_key_hint">Başlamak için bir API anahtarı ekleyin.</string>
+    <string name="dashboard_monthly_requests">Bu Ay</string>
+    <string name="dashboard_favorite_command">En Çok Kullanılan Komut</string>
+    <string name="dashboard_no_data">—</string>
+    <string name="dashboard_last_7_days">Son 7 Gün</string>
+
+    <!-- Keys -->
+    <string name="keys_title">API Anahtarları</string>
+    <string name="keys_api_key_label">API Anahtarı</string>
+    <string name="keys_testing">Test ediliyor…</string>
+    <string name="keys_add_key">Anahtar Ekle</string>
+    <string name="keys_valid_added">Geçerli anahtar eklendi!</string>
+    <string name="keys_already_added">Bu anahtar zaten eklenmiş</string>
+    <string name="keys_validation_failed">Doğrulama başarısız</string>
+    <string name="keys_keystore_error">Bu cihazda güvenli anahtar depolama mevcut değil. Anahtarlar kaydedilemiyor.</string>
+    <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
+    <string name="keys_get_api_key">%1$s için API anahtarınızı alın ↗</string>
+    <string name="keys_empty">Hiç API anahtarı eklenmemiş</string>
+
+    <!-- Commands -->
+    <string name="commands_title">Komutlar</string>
+    <string name="commands_add_custom_title">Özel Komut Ekle</string>
+    <string name="commands_trigger_label">Tetikleyici (örn. %1$scode)</string>
+    <string name="commands_prompt_label">İstem (örn. Şiir olarak yeniden yaz)</string>
+    <string name="commands_add_command">Komut Ekle</string>
+    <string name="commands_delete_command">Sil</string>
+    <string name="commands_edit_command">Düzenle</string>
+    <string name="commands_save_command">Komutu Kaydet</string>
+    <string name="commands_cancel">İptal</string>
+    <string name="commands_type_ai">AI</string>
+    <string name="commands_type_replacer">Yerel</string>
+    <string name="commands_replacement_label">Değiştirme Metni (örn. myemail@example.com)</string>
+    <string name="commands_built_in">Yerleşik</string>
+    <string name="commands_error_prefix">Tetikleyici \'%1$s\' ile başlamalıdır</string>
+    <string name="commands_error_duplicate">Bu tetikleyiciye sahip bir komut zaten var</string>
+    <string name="commands_error_conflict">Mevcut komut \'%1$s\' ile çakışma — bir tetikleyici diğerinin ön eki</string>
+    <string name="commands_error_empty_trigger">Tetikleyici, ön ekinden sonra bir isme sahip olmalıdır</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_provider_title">Model Sağlayıcısı</string>
+    <string name="settings_provider_gemini">Google Gemini</string>
+    <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_custom">Özel (OpenAI Uyumlu)</string>
+    <string name="settings_model_title">Model</string>
+    <string name="settings_temperature_title">Sıcaklık</string>
+    <string name="settings_endpoint_title">Uç Nokta</string>
+    <string name="settings_endpoint_placeholder">https://api.example.com/v1</string>
+    <string name="settings_model_placeholder">gpt-4o, claude-3-haiku, vb.</string>
+    <string name="settings_trigger_prefix_desc">Komut adlarından önce kullanılan sembol (örn. %1$sfix).</string>
+    <string name="settings_prefix_error_length">Tam olarak 1 karakter olmalıdır</string>
+    <string name="settings_prefix_error_whitespace">Boşluk olamaz</string>
+    <string name="settings_prefix_error_alphanumeric">Harf veya rakam olamaz</string>
+    <string name="settings_endpoint_error_scheme">https:// ile başlamalıdır</string>
+    <string name="settings_endpoint_error_spaces">URL boşluk içeremez</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Komutlarınızı JSON dosyası olarak dışa veya içe aktarın.</string>
+    <string name="backup_export">Dışa Aktar</string>
+    <string name="backup_import">İçe Aktar</string>
+    <string name="backup_export_success">Komutlar başarıyla dışa aktarıldı</string>
+    <string name="backup_export_error">Dışa aktarma başarısız</string>
+    <string name="backup_import_success">Komutlar başarıyla içe aktarıldı</string>
+    <string name="backup_import_error">Geçersiz yedek dosyası</string>
+    <string name="backup_import_confirm">Bu, mevcut tüm özel komutlarınızı değiştirecektir. Devam etmek istiyor musunuz?</string>
+    <string name="backup_import_cancel">İptal</string>
+    <string name="settings_check_updates">Güncellemeleri kontrol et</string>
+    <string name="settings_made_by">Musheer Alam tarafından sevgiyle yapıldı</string>
+    <string name="settings_sponsor">GitHub\'da destekle</string>
+    <string name="commands_collapse">Daralt</string>
+    <string name="commands_expand">Genişlet</string>
+    <string name="commands_search_hint">Komutları ara…</string>
+    <string name="commands_search_close">Aramayı kapat</string>
+    <string name="commands_search_empty">Komut bulunamadı</string>
+
+    <!-- Delete confirmation -->
+    <string name="delete_confirm_command_title">Bu komut silinsin mi?</string>
+    <string name="delete_confirm_key_title">Bu API anahtarı silinsin mi?</string>
+    <string name="delete_confirm_message">Bu işlem geri alınamaz.</string>
+    <string name="delete_confirm_button">Sil</string>
+</resources>
