@@ -22,7 +22,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 [![Latest Release](https://img.shields.io/github/v/release/Musheer360/SwiftSlate?style=flat-square&label=Latest&color=brightgreen)](https://github.com/Musheer360/SwiftSlate/releases/latest)
 [![F-Droid](https://img.shields.io/f-droid/v/com.musheer360.swiftslate?style=flat-square)](https://f-droid.org/en/packages/com.musheer360.swiftslate/)
 [![GitHub Stars](https://img.shields.io/github/stars/Musheer360/SwiftSlate?style=flat-square&color=yellow)](https://github.com/Musheer360/SwiftSlate/stargazers)
-[![APK Size](https://img.shields.io/badge/APK_Size-~1.2_MB-blue?style=flat-square)](#)
+[![APK Size](https://img.shields.io/badge/APK_Size-~1.4_MB-blue?style=flat-square)](#)
 [![API 23+](https://img.shields.io/badge/Min_SDK-API_23-orange?style=flat-square)](#)
 [![Build](https://img.shields.io/github/actions/workflow/status/Musheer360/SwiftSlate/build.yml?branch=master&style=flat-square&label=CI)](https://github.com/Musheer360/SwiftSlate/actions/workflows/build.yml)
 
@@ -231,7 +231,7 @@ Beyond AI, you can create **text replacer commands** that run **entirely offline
 ### Installation
 
 > [!TIP]
-> The APK is only ~1.2 MB — lightweight with zero external dependencies for networking or JSON.
+> The APK is only ~1.4 MB — lightweight with zero external dependencies for networking or JSON.
 
 **Option 1 — F-Droid:**
 
@@ -494,7 +494,7 @@ The app automatically uses your device's language. Contributions for additional 
 | 🔐 | **Key Storage** | API keys are encrypted with AES-256-GCM using the Android Keystore system. Encryption failures throw rather than falling back to plaintext. |
 | 📊 | **Analytics** | **None.** Zero telemetry, zero tracking, zero crash reporting. |
 | 📖 | **Open Source** | The entire codebase is open for inspection under the MIT License. |
-| 🔑 | **Permissions** | Only requires the Accessibility Service permission — nothing else. |
+| 🔑 | **Permissions** | Requires Accessibility Service and notification permissions only. |
 | 💾 | **Backups** | API keys and settings are excluded from Android cloud backups and device transfers. |
 
 <br>
@@ -508,6 +508,7 @@ The app automatically uses your device's language. Contributions for additional 
 <tr><td><strong>HTTP</strong></td><td><code>HttpURLConnection</code> (zero external dependencies)</td></tr>
 <tr><td><strong>JSON</strong></td><td><code>org.json</code> (Android built-in)</td></tr>
 <tr><td><strong>Storage</strong></td><td>SharedPreferences (encrypted via Android Keystore)</td></tr>
+<tr><td><strong>Background Work</strong></td><td>WorkManager (daily update checks)</td></tr>
 <tr><td><strong>Core Service</strong></td><td>Android Accessibility Service</td></tr>
 <tr><td><strong>Build System</strong></td><td>Gradle with Kotlin DSL</td></tr>
 <tr><td><strong>Java Target</strong></td><td>JDK 17</td></tr>
@@ -548,7 +549,10 @@ com.musheer360.swiftslate/
 │   └── theme/Theme.kt           # AMOLED dark + light Material 3 color schemes
 ├── MainActivity.kt              # AnimatedContent tab navigation (4 tabs)
 ├── SwiftSlateViewModel.kt       # Shared ViewModel exposing managers + prefs
-└── SwiftSlateApp.kt             # Application class — SharedPreferences pre-warming
+├── SwiftSlateApp.kt             # Application class — SharedPreferences pre-warming,
+│                                 # WorkManager update check scheduling
+└── worker/
+    └── UpdateCheckWorker.kt     # Daily background check for new GitHub releases
 ```
 
 <br>
