@@ -47,6 +47,9 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 > [!NOTE]
 > **SwiftSlate works in most apps** — WhatsApp, Gmail, Twitter/X, Messages, Notes, and more. No copy-pasting. No app switching. Just type and go. Some apps with custom input fields may not be supported ([see limitations](#%EF%B8%8F-known-limitations)).
 
+> [!TIP]
+> **Looking for the Windows version?** Check out [**SwiftSlate Desktop**](https://github.com/Musheer360/SwiftSlate-Desktop) — same concept, works system-wide on Windows 10/11.
+
 <br>
 
 ## 📋 Table of Contents
@@ -108,7 +111,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 Integrates at the system level via Android's Accessibility Service. Works in **most apps** — messaging, email, social media, notes, browsers, and more. Some apps with custom input fields may not be supported ([see limitations](#%EF%B8%8F-known-limitations)).
 
 ### ⚡ Instant Inline Replacement
-Type, trigger, done. The AI response replaces your text directly in the same field — no copy-pasting, no app switching. A spinner (`◐ ◓ ◑ ◒`) shows progress for AI commands; text replacer commands execute instantly.
+Type, trigger, done. The AI response replaces your text directly in the same field — no copy-pasting, no app switching. While processing, an animated spinner appends to your text (e.g., `how r u ◐`) so you always see progress. Text replacer commands execute instantly.
 
 ### 🔑 Multi-Key Rotation
 Add multiple API keys for automatic round-robin rotation. If one key hits a rate limit, SwiftSlate seamlessly switches to the next.
@@ -289,7 +292,7 @@ flowchart TD
     B -- "Text Replacer" --> C["⚡ Instant local replacement\n(no network call)"]
     B -- "AI Command" --> D["🔑 Selects next API key\n(round-robin)"]
     D --> E["🤖 Sends text + prompt\nto AI provider"]
-    E --> F["⏳ Shows inline spinner\n◐ ◓ ◑ ◒"]
+    E --> F["⏳ Spinner appended to text\nhow r u ◐ ◓ ◑ ◒"]
     F --> G["✅ Replaces text in-place"]
     C --> G
 
@@ -312,7 +315,7 @@ flowchart TD
 3. **Longest Match** — When a potential match is found, it searches for the longest matching trigger at the end of the text
 4. **Command Routing** — Text replacer commands execute immediately on-device. AI commands proceed to the API call path
 5. **API Call** — The text + prompt is sent to the configured AI provider using the next available key in the round-robin rotation
-6. **Inline Spinner** — While waiting for the AI response, a spinner animation (`◐ ◓ ◑ ◒`) replaces the text to provide visual feedback
+6. **Inline Spinner** — While waiting for the AI response, the trigger is replaced with an animated spinner appended to your original text (e.g., `how r u ◐`) to show progress
 7. **Watchdog Timer** — A 120-second safety timer auto-cancels stuck processing jobs to prevent the service from becoming unresponsive
 8. **Text Replacement** — The response replaces the original text using `ACTION_SET_TEXT`
 9. **Fallback Strategy** — If `ACTION_SET_TEXT` fails (some apps don't support it), SwiftSlate falls back to a clipboard-based select-all + paste approach
