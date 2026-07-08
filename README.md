@@ -83,19 +83,19 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 
 ```
 📝  You type       →  "i dont no whats hapening ?fix"
-⏳  SwiftSlate      →  ◐ ◓ ◑ ◒  (processing...)
+⏳  You see        →  "i dont no whats hapening ◐"  (spinner animates)
 ✅  Result         →  "I don't know what's happening."
 ```
 
 ```
 📝  You type       →  "hey can u send me that file ?formal"
-⏳  SwiftSlate      →  ◐ ◓ ◑ ◒  (processing...)
+⏳  You see        →  "hey can u send me that file ◐"  (spinner animates)
 ✅  Result         →  "Could you please share the file at your earliest convenience?"
 ```
 
 ```
 📝  You type       →  "Hello, how are you? ?translate:es"
-⏳  SwiftSlate      →  ◐ ◓ ◑ ◒  (processing...)
+⏳  You see        →  "Hello, how are you? ◐"  (spinner animates)
 ✅  Result         →  "Hola, ¿cómo estás?"
 ```
 
