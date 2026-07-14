@@ -1,9 +1,14 @@
 package com.musheer360.swiftslate
 
+import android.Manifest
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -20,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -51,8 +57,27 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SwiftSlateMainScreen(vm: SwiftSlateViewModel = viewModel()) {
+    val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     var selectedTab by rememberSaveable { mutableStateOf(Tab.Dashboard) }
+
+    // Request notification permission on first launch (Android 13+)
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { _ -> // Result not needed — we just need to prompt once
+        context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            .edit().putBoolean("notification_permission_requested", true).apply()
+    }
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            val alreadyRequested = prefs.getBoolean("notification_permission_requested", false)
+            if (!alreadyRequested) {
+                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
