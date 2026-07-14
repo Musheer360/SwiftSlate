@@ -214,8 +214,16 @@ class GeminiClient {
             } else if (responseCode == 400 || responseCode == 422) {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
-                val detail = if (apiMessage.isNotEmpty()) apiMessage else "Bad request"
-                Result.failure(Exception("HTTP_${responseCode}: $detail"))
+                // Gemini reports invalid API keys as HTTP 400 (reason: API_KEY_INVALID).
+                // Classify as InvalidKey so the caller marks the key and rotates to the next one.
+                if (errorBody.contains("API_KEY_INVALID") ||
+                    apiMessage.contains("API key not valid", ignoreCase = true)) {
+                    val detail = if (apiMessage.isNotEmpty()) apiMessage else "Invalid API key"
+                    Result.failure(ApiException(ApiError.InvalidKey(detail), detail))
+                } else {
+                    val detail = if (apiMessage.isNotEmpty()) apiMessage else "Bad request"
+                    Result.failure(Exception("HTTP_${responseCode}: $detail"))
+                }
             } else if (responseCode == 401 || responseCode == 403) {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)

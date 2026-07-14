@@ -62,16 +62,18 @@ class CommandManager(context: Context) {
         }
         val newArr = JSONArray()
         for (i in 0 until arr.length()) {
-            val obj = arr.getJSONObject(i)
-            val oldTrigger = obj.getString("trigger")
+            val obj = arr.optJSONObject(i) ?: continue
+            val oldTrigger = obj.optString("trigger", "")
+            val prompt = obj.optString("prompt", "")
+            if (oldTrigger.isEmpty() || prompt.isEmpty()) continue
             val migrated = if (!oldTrigger.startsWith(newPrefix)) {
                 // Strip any single-char non-alphanumeric prefix, then apply new prefix
-                val stripped = if (oldTrigger.isNotEmpty() && !oldTrigger[0].isLetterOrDigit()) oldTrigger.substring(1) else oldTrigger
+                val stripped = if (!oldTrigger[0].isLetterOrDigit()) oldTrigger.substring(1) else oldTrigger
                 newPrefix + stripped
             } else oldTrigger
             val newObj = JSONObject()
             newObj.put("trigger", migrated)
-            newObj.put("prompt", obj.getString("prompt"))
+            newObj.put("prompt", prompt)
             newObj.put("type", obj.optString("type", CommandType.AI.name))
             newArr.put(newObj)
         }
@@ -89,7 +91,9 @@ class CommandManager(context: Context) {
         val prefix = getTriggerPrefix()
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = try { JSONArray(customStr) } catch (_: Exception) { JSONArray() }
-        val existingTriggers = (0 until arr.length()).map { arr.getJSONObject(it).getString("trigger") }.toSet()
+        val existingTriggers = (0 until arr.length())
+            .mapNotNull { arr.optJSONObject(it)?.optString("trigger")?.takeIf { t -> t.isNotEmpty() } }
+            .toSet()
         var added = false
         for ((name, prompt) in defaultAiDefinitions) {
             val trigger = "$prefix$name"
@@ -123,14 +127,21 @@ class CommandManager(context: Context) {
         if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
         val prefix = getTriggerPrefix()
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
-        val arr = JSONArray(customStr)
+        // Guard against a corrupted store — an unhandled JSONException here would
+        // crash the accessibility service on every text-change event with no recovery.
+        val arr = try { JSONArray(customStr) } catch (_: Exception) {
+            prefs.edit().putString("custom_commands", "[]").apply()
+            JSONArray()
+        }
         val customCommands = mutableListOf<Command>()
         var needsMigration = false
         for (i in 0 until arr.length()) {
-            val obj = arr.getJSONObject(i)
-            val trigger = obj.getString("trigger")
+            val obj = arr.optJSONObject(i) ?: continue
+            val trigger = obj.optString("trigger", "")
+            val prompt = obj.optString("prompt", "")
+            if (trigger.isEmpty() || prompt.isEmpty()) continue
             if (!trigger.startsWith(prefix)) needsMigration = true
-            customCommands.add(Command(trigger, obj.getString("prompt"), false,
+            customCommands.add(Command(trigger, prompt, false,
                 try { CommandType.valueOf(obj.optString("type", CommandType.AI.name)) } catch (_: Exception) { CommandType.AI }))
         }
         // Self-heal prefix mismatch (e.g. crash between two apply() calls in setTriggerPrefix)
@@ -151,11 +162,11 @@ class CommandManager(context: Context) {
 
     @Synchronized fun addCustomCommand(command: Command) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
-        val arr = JSONArray(customStr)
+        val arr = try { JSONArray(customStr) } catch (_: Exception) { JSONArray() }
         val newArr = JSONArray()
         for (i in 0 until arr.length()) {
-            val obj = arr.getJSONObject(i)
-            if (obj.getString("trigger") != command.trigger) {
+            val obj = arr.optJSONObject(i) ?: continue
+            if (obj.optString("trigger") != command.trigger) {
                 newArr.put(obj)
             }
         }
@@ -170,11 +181,11 @@ class CommandManager(context: Context) {
 
     @Synchronized fun removeCustomCommand(trigger: String) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
-        val arr = JSONArray(customStr)
+        val arr = try { JSONArray(customStr) } catch (_: Exception) { JSONArray() }
         val newArr = JSONArray()
         for (i in 0 until arr.length()) {
-            val obj = arr.getJSONObject(i)
-            if (obj.getString("trigger") != trigger) {
+            val obj = arr.optJSONObject(i) ?: continue
+            if (obj.optString("trigger") != trigger) {
                 newArr.put(obj)
             }
         }

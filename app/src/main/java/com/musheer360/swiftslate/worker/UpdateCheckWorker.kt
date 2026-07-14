@@ -26,6 +26,7 @@ class UpdateCheckWorker(
     companion object {
         const val CHANNEL_ID = "update_channel"
         private const val NOTIFICATION_ID = 9001
+        private const val MAX_RESPONSE_CHARS = 1_048_576
         private const val PREFS_NAME = "update_check"
         private const val KEY_LAST_NOTIFIED_VERSION = "last_notified_version"
         private const val GITHUB_API_URL =
@@ -48,8 +49,10 @@ class UpdateCheckWorker(
             }
 
             Result.success()
-        } catch (_: Exception) {
-            Result.retry()
+        } catch (e: Exception) {
+            // Retry only transient I/O failures. Non-I/O errors (e.g. malformed JSON)
+            // would otherwise retry indefinitely — skip and let the next periodic run try.
+            if (e is java.io.IOException) Result.retry() else Result.success()
         }
     }
 
@@ -64,7 +67,17 @@ class UpdateCheckWorker(
 
             if (connection.responseCode != 200) return null
 
-            val body = connection.inputStream.bufferedReader().use { it.readText() }
+            // Bounded read — avoids unbounded memory usage on unexpectedly large responses
+            val body = connection.inputStream.bufferedReader().use { reader ->
+                val sb = StringBuilder()
+                val buf = CharArray(8192)
+                var n: Int
+                while (reader.read(buf).also { n = it } != -1) {
+                    if (sb.length + n > MAX_RESPONSE_CHARS) return null
+                    sb.append(buf, 0, n)
+                }
+                sb.toString()
+            }
             JSONObject(body)
         } finally {
             connection.disconnect()
