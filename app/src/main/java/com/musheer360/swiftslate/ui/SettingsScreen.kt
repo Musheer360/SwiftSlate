@@ -29,6 +29,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.musheer360.swiftslate.manager.CommandManager
+import com.musheer360.swiftslate.model.GeminiModels
+import com.musheer360.swiftslate.model.GroqModels
+import com.musheer360.swiftslate.model.PrefKeys
 import com.musheer360.swiftslate.model.ProviderType
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
@@ -46,24 +49,24 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     var saveEndpointJob by remember { mutableStateOf<Job?>(null) }
     var saveModelJob by remember { mutableStateOf<Job?>(null) }
 
-    var providerType by remember { mutableStateOf(prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI) }
+    var providerType by remember { mutableStateOf(prefs.getString(PrefKeys.PROVIDER_TYPE, ProviderType.GEMINI) ?: ProviderType.GEMINI) }
     var providerExpanded by remember { mutableStateOf(false) }
 
-    var selectedModel by remember { mutableStateOf(prefs.getString("model", "gemini-2.5-flash-lite") ?: "gemini-2.5-flash-lite") }
+    var selectedModel by remember { mutableStateOf(GeminiModels.sanitize(prefs.getString(PrefKeys.GEMINI_MODEL, GeminiModels.DEFAULT))) }
     var modelExpanded by remember { mutableStateOf(false) }
-    val geminiModels = listOf("gemini-2.5-flash-lite", "gemini-3-flash-preview", "gemini-3.1-flash-lite-preview")
+    val geminiModels = GeminiModels.OPTIONS
 
-    var groqModel by remember { mutableStateOf(prefs.getString("groq_model", "llama-3.3-70b-versatile") ?: "llama-3.3-70b-versatile") }
+    var groqModel by remember { mutableStateOf(GroqModels.sanitize(prefs.getString(PrefKeys.GROQ_MODEL, GroqModels.DEFAULT))) }
     var groqModelExpanded by remember { mutableStateOf(false) }
-    val groqModels = listOf("llama-3.3-70b-versatile", "llama-3.1-8b-instant", "openai/gpt-oss-120b", "openai/gpt-oss-20b", "meta-llama/llama-4-scout-17b-16e-instruct")
+    val groqModels = GroqModels.OPTIONS
 
-    var customEndpoint by rememberSaveable { mutableStateOf(prefs.getString("custom_endpoint", "") ?: "") }
-    var customModel by rememberSaveable { mutableStateOf(prefs.getString("custom_model", "") ?: "") }
+    var customEndpoint by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "") }
+    var customModel by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_MODEL, "") ?: "") }
     var endpointError by remember { mutableStateOf<String?>(null) }
 
     var triggerPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
     var prefixError by remember { mutableStateOf<String?>(null) }
-    var temperature by remember { mutableStateOf(prefs.getFloat("temperature", 0.5f)) }
+    var temperature by remember { mutableStateOf(prefs.getFloat(PrefKeys.TEMPERATURE, 0.5f)) }
 
     val prefixErrorLength = stringResource(R.string.settings_prefix_error_length)
     val prefixErrorWhitespace = stringResource(R.string.settings_prefix_error_whitespace)
@@ -81,19 +84,19 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
             saveModelJob?.cancel()
             val editor = prefs.edit()
             var needsWrite = false
-            if (customEndpoint != (prefs.getString("custom_endpoint", "") ?: "")) {
+            if (customEndpoint != (prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "")) {
                 val isValid = customEndpoint.isBlank() || customEndpoint.startsWith("https://") ||
                     (customEndpoint.startsWith("http://") && try {
                         val host = java.net.URL(customEndpoint).host
                         host == "localhost" || host == "127.0.0.1" || host == "10.0.2.2"
                     } catch (_: Exception) { false })
                 if (isValid) {
-                    editor.putString("custom_endpoint", customEndpoint)
+                    editor.putString(PrefKeys.CUSTOM_ENDPOINT, customEndpoint)
                     needsWrite = true
                 }
             }
-            if (customModel != (prefs.getString("custom_model", "") ?: "")) {
-                editor.putString("custom_model", customModel)
+            if (customModel != (prefs.getString(PrefKeys.CUSTOM_MODEL, "") ?: "")) {
+                editor.putString(PrefKeys.CUSTOM_MODEL, customModel)
                 needsWrite = true
             }
             if (needsWrite) editor.apply()
@@ -190,7 +193,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = ProviderType.GEMINI
-                            prefs.edit().putString("provider_type", ProviderType.GEMINI).remove("structured_output_disabled_at").apply()
+                            prefs.edit().putString(PrefKeys.PROVIDER_TYPE, ProviderType.GEMINI).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
                             providerExpanded = false
                         }
                     )
@@ -199,7 +202,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = ProviderType.GROQ
-                            prefs.edit().putString("provider_type", ProviderType.GROQ).remove("structured_output_disabled_at").apply()
+                            prefs.edit().putString(PrefKeys.PROVIDER_TYPE, ProviderType.GROQ).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
                             providerExpanded = false
                         }
                     )
@@ -208,7 +211,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             providerType = ProviderType.CUSTOM
-                            prefs.edit().putString("provider_type", ProviderType.CUSTOM).remove("structured_output_disabled_at").apply()
+                            prefs.edit().putString(PrefKeys.PROVIDER_TYPE, ProviderType.CUSTOM).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
                             providerExpanded = false
                         }
                     )
@@ -227,7 +230,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     onExpandedChange = { modelExpanded = !modelExpanded }
                 ) {
                     SlateTextField(
-                        value = selectedModel,
+                        value = GeminiModels.label(selectedModel),
                         onValueChange = {},
                         readOnly = true,
                         
@@ -239,13 +242,13 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         expanded = modelExpanded,
                         onDismissRequest = { modelExpanded = false }
                     ) {
-                        geminiModels.forEach { model ->
+                        geminiModels.forEach { (id, label) ->
                             DropdownMenuItem(
-                                text = { Text(model) },
+                                text = { Text(label) },
                                 onClick = {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    selectedModel = model
-                                    prefs.edit().putString("model", model).remove("structured_output_disabled_at").apply()
+                                    selectedModel = id
+                                    prefs.edit().putString(PrefKeys.GEMINI_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
                                     modelExpanded = false
                                 }
                             )
@@ -264,7 +267,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     onExpandedChange = { groqModelExpanded = !groqModelExpanded }
                 ) {
                     SlateTextField(
-                        value = groqModel,
+                        value = GroqModels.label(groqModel),
                         onValueChange = {},
                         readOnly = true,
                         
@@ -276,13 +279,13 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         expanded = groqModelExpanded,
                         onDismissRequest = { groqModelExpanded = false }
                     ) {
-                        groqModels.forEach { model ->
+                        groqModels.forEach { (id, label) ->
                             DropdownMenuItem(
-                                text = { Text(model) },
+                                text = { Text(label) },
                                 onClick = {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    groqModel = model
-                                    prefs.edit().putString("groq_model", model).remove("structured_output_disabled_at").apply()
+                                    groqModel = id
+                                    prefs.edit().putString(PrefKeys.GROQ_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
                                     groqModelExpanded = false
                                 }
                             )
@@ -315,7 +318,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                             saveEndpointJob?.cancel()
                             saveEndpointJob = scope.launch {
                                 delay(500)
-                                prefs.edit().putString("custom_endpoint", it).remove("structured_output_disabled_at").apply()
+                                prefs.edit().putString(PrefKeys.CUSTOM_ENDPOINT, it).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
                             }
                         }
                     },
@@ -345,7 +348,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         saveModelJob?.cancel()
                         saveModelJob = scope.launch {
                             delay(500)
-                            prefs.edit().putString("custom_model", it).remove("structured_output_disabled_at").apply()
+                            prefs.edit().putString(PrefKeys.CUSTOM_MODEL, it).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
                         }
                     },
                     placeholder = { Text(stringResource(R.string.settings_model_placeholder)) },
@@ -381,7 +384,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     }
                 },
                 onValueChangeFinished = {
-                    prefs.edit().putFloat("temperature", temperature).apply()
+                    prefs.edit().putFloat(PrefKeys.TEMPERATURE, temperature).apply()
                 },
                 valueRange = 0f..2f,
                 steps = 19,

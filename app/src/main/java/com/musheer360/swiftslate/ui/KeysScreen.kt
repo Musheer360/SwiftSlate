@@ -29,7 +29,9 @@ import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.api.GeminiClient
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import com.musheer360.swiftslate.manager.KeyManager
+import com.musheer360.swiftslate.model.PrefKeys
 import com.musheer360.swiftslate.model.ProviderType
+import com.musheer360.swiftslate.provider.GroqConfig
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
 import com.musheer360.swiftslate.ui.components.SlateItemCard
@@ -100,8 +102,8 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                                 return@launch
                             }
                             val result = run {
-                                val providerType = ProviderType.sanitize(prefs.getString("provider_type", null))
-                                val customEndpoint = (prefs.getString("custom_endpoint", "") ?: "").trim()
+                                val providerType = ProviderType.sanitize(prefs.getString(PrefKeys.PROVIDER_TYPE, null))
+                                val customEndpoint = (prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "").trim()
                                 when {
                                     providerType == ProviderType.CUSTOM && customEndpoint.isBlank() -> {
                                         isTesting = false
@@ -110,7 +112,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                                         return@launch
                                     }
                                     providerType == ProviderType.GROQ ->
-                                        openAIClient.validateKey(trimmedKey, "https://api.groq.com/openai/v1")
+                                        openAIClient.validateKey(trimmedKey, GroqConfig.ENDPOINT)
                                     providerType == ProviderType.CUSTOM ->
                                         openAIClient.validateKey(trimmedKey, customEndpoint)
                                     else ->
@@ -152,7 +154,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
-            val (apiKeyUrl, providerName) = when (prefs.getString("provider_type", ProviderType.GEMINI) ?: ProviderType.GEMINI) {
+            val (apiKeyUrl, providerName) = when (prefs.getString(PrefKeys.PROVIDER_TYPE, ProviderType.GEMINI) ?: ProviderType.GEMINI) {
                 ProviderType.GROQ -> "https://console.groq.com/keys" to "Groq"
                 ProviderType.CUSTOM -> null to null
                 else -> "https://aistudio.google.com/api-keys" to "Gemini"
