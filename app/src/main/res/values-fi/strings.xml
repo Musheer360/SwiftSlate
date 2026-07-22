@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Poistetaanko tämä API-avain?</string>
     <string name="delete_confirm_message">Tätä toimintoa ei voi peruuttaa.</string>
     <string name="delete_confirm_button">Poista</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Tekstin korvaaminen epäonnistui</string>
+    <string name="toast_custom_not_configured">Mukautettua tarjoajaa ei ole määritetty. Määritä päätepiste ja malli Asetuksissa.</string>
+    <string name="toast_model_setting_rejected">Tarjoaja hylkäsi malliasetuksen ja se ohitettiin — tekstisi käsiteltiin silti. Ilmoita tästä SwiftSlate-projektin GitHubissa, jotta voimme korjata sen.</string>
+    <string name="toast_key_rate_limited">API-avaimen käyttöraja saavutettu. Yritä uudelleen %1$d s kuluttua</string>
+    <string name="toast_no_keys">API-avaimia ei ole määritetty</string>
+    <string name="toast_all_keys_invalid">Kaikki API-avaimet ovat virheellisiä. Tarkista avaimesi</string>
+    <string name="toast_request_timed_out">Pyyntö aikakatkaistiin</string>
+    <string name="toast_restore_failed">Alkuperäisen tekstin palauttaminen epäonnistui</string>
+    <string name="toast_nothing_to_undo">Ei mitään kumottavaa</string>
+    <string name="toast_undo_failed">Kumoaminen epäonnistui</string>
+    <string name="toast_nothing_to_copy">Ei mitään kopioitavaa</string>
+    <string name="toast_copied">Kopioitu leikepöydälle</string>
+    <string name="toast_nothing_to_cut">Ei mitään leikattavaa</string>
+    <string name="toast_cut">Leikattu leikepöydälle</string>
+    <string name="toast_clipboard_empty">Leikepöytä on tyhjä</string>
+    <string name="toast_clipboard_failed">Leikepöytätoiminto epäonnistui</string>
+    <string name="toast_keystore_unavailable">Turvallinen avainten tallennus ei ole käytettävissä. Asenna sovellus uudelleen.</string>
+    <string name="error_no_model_access">API-avaimellasi ei ole pääsyä tähän malliin.</string>
+    <string name="error_invalid_key">Virheellinen API-avain. Tarkista avaimesi Asetuksissa.</string>
+    <string name="error_rate_limited">Käyttöraja saavutettu. Yritä pian uudelleen.</string>
+    <string name="error_model_not_found">Mallia ei löytynyt. Tarkista mallin valinta Asetuksissa.</string>
+    <string name="error_safety_blocked">Vastaus estettiin turvasuodattimilla. Yritä muotoilla uudelleen.</string>
+    <string name="error_empty_response">Malli palautti tyhjän vastauksen. Yritä uudelleen.</string>
+    <string name="error_timeout_connection">Pyyntö aikakatkaistiin. Tarkista yhteytesi.</string>
+    <string name="error_no_internet">Ei internetyhteyttä.</string>
+    <string name="error_endpoint_unreachable">API:in ei saatu yhteyttä. Tarkista päätepisteen URL-osoite.</string>
+    <string name="error_bad_request">Pyyntö epäonnistui. Tarkista asetuksesi.</string>
+
+    <!-- Updates and command descriptions -->
+    <string name="update_channel_name">Sovelluspäivitykset</string>
+    <string name="update_channel_desc">Ilmoittaa, kun uusi SwiftSlate-versio on saatavilla</string>
+    <string name="update_available_title">SwiftSlate-päivitys saatavilla</string>
+    <string name="update_available_text">Napauta nähdäksesi uusimman version</string>
 </resources>

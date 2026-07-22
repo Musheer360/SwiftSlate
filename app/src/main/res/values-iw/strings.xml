@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">למחוק מפתח API זה?</string>
     <string name="delete_confirm_message">לא ניתן לבטל פעולה זו.</string>
     <string name="delete_confirm_button">מחק</string>
+
+    <!-- Toasts & errors -->
+    <string name="toast_replace_failed">לא ניתן להחליף את הטקסט</string>
+    <string name="toast_custom_not_configured">ספק מותאם אישית לא הוגדר. הגדר נקודת קצה ומודל בהגדרות.</string>
+    <string name="toast_model_setting_rejected">הגדרת מודל נדחתה על ידי הספק ודולגה — הטקסט שלך עדיין עובד. אנא דווח על כך ב-GitHub של SwiftSlate כדי שנוכל לתקן זאת.</string>
+    <string name="toast_key_rate_limited">מפתח ה-API הוגבל בקצב. נסה שוב בעוד %1$d שנ׳</string>
+    <string name="toast_no_keys">לא הוגדרו מפתחות API</string>
+    <string name="toast_all_keys_invalid">כל מפתחות ה-API אינם תקינים. אנא בדוק את המפתחות שלך</string>
+    <string name="toast_request_timed_out">תם הזמן הקצוב לבקשה</string>
+    <string name="toast_restore_failed">לא ניתן לשחזר את הטקסט המקורי</string>
+    <string name="toast_nothing_to_undo">אין מה לבטל</string>
+    <string name="toast_undo_failed">לא ניתן לבטל</string>
+    <string name="toast_nothing_to_copy">אין מה להעתיק</string>
+    <string name="toast_copied">הועתק ללוח</string>
+    <string name="toast_nothing_to_cut">אין מה לגזור</string>
+    <string name="toast_cut">נגזר ללוח</string>
+    <string name="toast_clipboard_empty">הלוח ריק</string>
+    <string name="toast_clipboard_failed">פעולת הלוח נכשלה</string>
+    <string name="toast_keystore_unavailable">אחסון מפתחות מאובטח אינו זמין. אנא התקן מחדש את האפליקציה.</string>
+    <string name="error_no_model_access">למפתח ה-API שלך אין גישה למודל זה.</string>
+    <string name="error_invalid_key">מפתח API לא תקין. אנא בדוק את המפתח שלך בהגדרות.</string>
+    <string name="error_rate_limited">הקצב הוגבל. נסה שוב בקרוב.</string>
+    <string name="error_model_not_found">המודל לא נמצא. בדוק את בחירת המודל שלך בהגדרות.</string>
+    <string name="error_safety_blocked">התגובה נחסמה על ידי מסנני בטיחות. נסה לנסח מחדש.</string>
+    <string name="error_empty_response">המודל החזיר תגובה ריקה. נסה שוב.</string>
+    <string name="error_timeout_connection">תם הזמן הקצוב לבקשה. בדוק את החיבור שלך.</string>
+    <string name="error_no_internet">אין חיבור לאינטרנט.</string>
+    <string name="error_endpoint_unreachable">לא ניתן להגיע ל-API. בדוק את כתובת ה-URL של נקודת הקצה.</string>
+    <string name="error_bad_request">הבקשה נכשלה. בדוק את ההגדרות שלך.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">עדכוני אפליקציה</string>
+    <string name="update_channel_desc">מודיע כאשר גרסה חדשה של SwiftSlate זמינה</string>
+    <string name="update_available_title">עדכון של SwiftSlate זמין</string>
+    <string name="update_available_text">הקש כדי להציג את המהדורה האחרונה</string>
 </resources>

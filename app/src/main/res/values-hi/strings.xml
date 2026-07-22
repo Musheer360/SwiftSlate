@@ -90,4 +90,39 @@
     <string name="settings_temperature_title">तापमान</string>
     <string name="settings_made_by">Musheer Alam द्वारा प्यार से बनाया गया</string>
     <string name="settings_sponsor">GitHub पर प्रायोजित करें</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">टेक्स्ट प्रतिस्थापित नहीं किया जा सका</string>
+    <string name="toast_custom_not_configured">कस्टम प्रदाता कॉन्फ़िगर नहीं है। सेटिंग्स में एंडपॉइंट और मॉडल सेट करें।</string>
+    <string name="toast_model_setting_rejected">प्रदाता ने एक मॉडल सेटिंग अस्वीकार कर दी और छोड़ दी — आपका टेक्स्ट फिर भी प्रोसेस हुआ। कृपया इसकी रिपोर्ट SwiftSlate के GitHub पर करें ताकि हम इसे ठीक कर सकें।</string>
+    <string name="toast_key_rate_limited">API कुंजी की दर सीमित है। %1$d सेकंड में पुनः प्रयास करें</string>
+    <string name="toast_no_keys">कोई API कुंजी कॉन्फ़िगर नहीं है</string>
+    <string name="toast_all_keys_invalid">सभी API कुंजियाँ अमान्य हैं। कृपया अपनी कुंजियाँ जाँचें</string>
+    <string name="toast_request_timed_out">अनुरोध का समय समाप्त हो गया</string>
+    <string name="toast_restore_failed">मूल टेक्स्ट पुनर्स्थापित नहीं किया जा सका</string>
+    <string name="toast_nothing_to_undo">पूर्ववत करने के लिए कुछ नहीं है</string>
+    <string name="toast_undo_failed">पूर्ववत नहीं किया जा सका</string>
+    <string name="toast_nothing_to_copy">कॉपी करने के लिए कुछ नहीं है</string>
+    <string name="toast_copied">क्लिपबोर्ड पर कॉपी किया गया</string>
+    <string name="toast_nothing_to_cut">कट करने के लिए कुछ नहीं है</string>
+    <string name="toast_cut">क्लिपबोर्ड पर कट किया गया</string>
+    <string name="toast_clipboard_empty">क्लिपबोर्ड खाली है</string>
+    <string name="toast_clipboard_failed">क्लिपबोर्ड ऑपरेशन विफल</string>
+    <string name="toast_keystore_unavailable">सुरक्षित कुंजी संग्रहण उपलब्ध नहीं है। कृपया ऐप को फिर से इंस्टॉल करें।</string>
+    <string name="error_no_model_access">आपकी API कुंजी को इस मॉडल तक पहुँच नहीं है।</string>
+    <string name="error_invalid_key">अमान्य API कुंजी। कृपया सेटिंग्स में अपनी कुंजी जाँचें।</string>
+    <string name="error_rate_limited">दर सीमित। कृपया कुछ देर में पुनः प्रयास करें।</string>
+    <string name="error_model_not_found">मॉडल नहीं मिला। सेटिंग्स में अपने मॉडल चयन की जाँच करें।</string>
+    <string name="error_safety_blocked">सुरक्षा फ़िल्टर द्वारा प्रतिक्रिया अवरुद्ध। पुनः शब्दों में कहने का प्रयास करें।</string>
+    <string name="error_empty_response">मॉडल ने खाली प्रतिक्रिया दी। पुनः प्रयास करें।</string>
+    <string name="error_timeout_connection">अनुरोध का समय समाप्त हो गया। अपना कनेक्शन जाँचें।</string>
+    <string name="error_no_internet">कोई इंटरनेट कनेक्शन नहीं।</string>
+    <string name="error_endpoint_unreachable">API तक नहीं पहुँचा जा सका। अपना एंडपॉइंट URL जाँचें।</string>
+    <string name="error_bad_request">अनुरोध विफल। अपनी सेटिंग्स जाँचें।</string>
+
+    <!-- Updates and command descriptions -->
+    <string name="update_channel_name">ऐप अपडेट</string>
+    <string name="update_channel_desc">SwiftSlate का नया संस्करण उपलब्ध होने पर सूचित करता है</string>
+    <string name="update_available_title">SwiftSlate अपडेट उपलब्ध है</string>
+    <string name="update_available_text">नवीनतम रिलीज़ देखने के लिए टैप करें</string>
 </resources>

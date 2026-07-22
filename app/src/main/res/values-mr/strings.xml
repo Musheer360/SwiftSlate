@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">ही API की हटवायची?</string>
     <string name="delete_confirm_message">ही क्रिया पूर्ववत करता येत नाही.</string>
     <string name="delete_confirm_button">हटवा</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">मजकूर बदलता आला नाही</string>
+    <string name="toast_custom_not_configured">कस्टम प्रदाता कॉन्फिगर केलेला नाही. सेटिंग्जमध्ये एंडपॉइंट आणि मॉडेल सेट करा.</string>
+    <string name="toast_model_setting_rejected">प्रदात्याने मॉडेल सेटिंग नाकारली आणि ती वगळली — तुमचा मजकूर तरीही प्रक्रिया केला गेला. कृपया आम्ही हे दुरुस्त करू शकू यासाठी SwiftSlate GitHub वर याची तक्रार करा.</string>
+    <string name="toast_key_rate_limited">API की दर मर्यादित. %1$d सेकंदांनी पुन्हा प्रयत्न करा</string>
+    <string name="toast_no_keys">कोणतीही API की कॉन्फिगर केलेली नाही</string>
+    <string name="toast_all_keys_invalid">सर्व API की अवैध आहेत. कृपया तुमच्या की तपासा</string>
+    <string name="toast_request_timed_out">विनंतीची वेळ संपली</string>
+    <string name="toast_restore_failed">मूळ मजकूर पुनर्संचयित करता आला नाही</string>
+    <string name="toast_nothing_to_undo">पूर्ववत करण्यासाठी काहीही नाही</string>
+    <string name="toast_undo_failed">पूर्ववत करता आले नाही</string>
+    <string name="toast_nothing_to_copy">कॉपी करण्यासाठी काहीही नाही</string>
+    <string name="toast_copied">क्लिपबोर्डवर कॉपी केले</string>
+    <string name="toast_nothing_to_cut">कट करण्यासाठी काहीही नाही</string>
+    <string name="toast_cut">क्लिपबोर्डवर कट केले</string>
+    <string name="toast_clipboard_empty">क्लिपबोर्ड रिकामे आहे</string>
+    <string name="toast_clipboard_failed">क्लिपबोर्ड क्रिया अयशस्वी</string>
+    <string name="toast_keystore_unavailable">सुरक्षित की स्टोरेज उपलब्ध नाही. कृपया अ‍ॅप पुन्हा इंस्टॉल करा.</string>
+    <string name="error_no_model_access">तुमच्या API कीला या मॉडेलचा प्रवेश नाही.</string>
+    <string name="error_invalid_key">अवैध API की. कृपया सेटिंग्जमध्ये तुमची की तपासा.</string>
+    <string name="error_rate_limited">दर मर्यादित. लवकरच पुन्हा प्रयत्न करा.</string>
+    <string name="error_model_not_found">मॉडेल सापडले नाही. सेटिंग्जमध्ये तुमची मॉडेल निवड तपासा.</string>
+    <string name="error_safety_blocked">सुरक्षा फिल्टरने प्रतिसाद अवरोधित केला. पुन्हा शब्दांकन करून पहा.</string>
+    <string name="error_empty_response">मॉडेलने रिकामा प्रतिसाद दिला. पुन्हा प्रयत्न करा.</string>
+    <string name="error_timeout_connection">विनंतीची वेळ संपली. तुमचे कनेक्शन तपासा.</string>
+    <string name="error_no_internet">इंटरनेट कनेक्शन नाही.</string>
+    <string name="error_endpoint_unreachable">API पर्यंत पोहोचता आले नाही. तुमचा एंडपॉइंट URL तपासा.</string>
+    <string name="error_bad_request">विनंती अयशस्वी. तुमच्या सेटिंग्ज तपासा.</string>
+
+    <!-- Update notifications -->
+    <string name="update_channel_name">अ‍ॅप अपडेट्स</string>
+    <string name="update_channel_desc">SwiftSlate ची नवीन आवृत्ती उपलब्ध असल्यास सूचित करते</string>
+    <string name="update_available_title">SwiftSlate अपडेट उपलब्ध</string>
+    <string name="update_available_text">नवीनतम रिलीझ पाहण्यासाठी टॅप करा</string>
 </resources>

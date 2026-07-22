@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">ਇਸ API ਕੁੰਜੀ ਨੂੰ ਮਿਟਾਉਣਾ ਹੈ?</string>
     <string name="delete_confirm_message">ਇਸ ਕਾਰਵਾਈ ਨੂੰ ਵਾਪਸ ਨਹੀਂ ਲਿਆ ਜਾ ਸਕਦਾ।</string>
     <string name="delete_confirm_button">ਮਿਟਾਓ</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">ਟੈਕਸਟ ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ</string>
+    <string name="toast_custom_not_configured">ਕਸਟਮ ਪ੍ਰਦਾਤਾ ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤਾ ਗਿਆ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਐਂਡਪਾਇੰਟ ਅਤੇ ਮਾਡਲ ਸੈੱਟ ਕਰੋ।</string>
+    <string name="toast_model_setting_rejected">ਪ੍ਰਦਾਤਾ ਵੱਲੋਂ ਇੱਕ ਮਾਡਲ ਸੈਟਿੰਗ ਰੱਦ ਕੀਤੀ ਗਈ ਅਤੇ ਛੱਡ ਦਿੱਤੀ ਗਈ — ਤੁਹਾਡਾ ਟੈਕਸਟ ਫਿਰ ਵੀ ਪ੍ਰੋਸੈਸ ਕੀਤਾ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ SwiftSlate GitHub \'ਤੇ ਇਸ ਦੀ ਰਿਪੋਰਟ ਕਰੋ ਤਾਂ ਜੋ ਅਸੀਂ ਇਸਨੂੰ ਠੀਕ ਕਰ ਸਕੀਏ।</string>
+    <string name="toast_key_rate_limited">API ਕੁੰਜੀ ਦਰ ਸੀਮਿਤ। %1$d ਸਕਿੰਟ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ</string>
+    <string name="toast_no_keys">ਕੋਈ API ਕੁੰਜੀ ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤੀ ਗਈ</string>
+    <string name="toast_all_keys_invalid">ਸਾਰੀਆਂ API ਕੁੰਜੀਆਂ ਅਵੈਧ ਹਨ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀਆਂ ਕੁੰਜੀਆਂ ਦੀ ਜਾਂਚ ਕਰੋ</string>
+    <string name="toast_request_timed_out">ਬੇਨਤੀ ਦਾ ਸਮਾਂ ਸਮਾਪਤ ਹੋ ਗਿਆ</string>
+    <string name="toast_restore_failed">ਮੂਲ ਟੈਕਸਟ ਬਹਾਲ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ</string>
+    <string name="toast_nothing_to_undo">ਵਾਪਸ ਕਰਨ ਲਈ ਕੁਝ ਨਹੀਂ</string>
+    <string name="toast_undo_failed">ਵਾਪਸ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ</string>
+    <string name="toast_nothing_to_copy">ਕਾਪੀ ਕਰਨ ਲਈ ਕੁਝ ਨਹੀਂ</string>
+    <string name="toast_copied">ਕਲਿੱਪਬੋਰਡ \'ਤੇ ਕਾਪੀ ਕੀਤਾ ਗਿਆ</string>
+    <string name="toast_nothing_to_cut">ਕੱਟ ਕਰਨ ਲਈ ਕੁਝ ਨਹੀਂ</string>
+    <string name="toast_cut">ਕਲਿੱਪਬੋਰਡ \'ਤੇ ਕੱਟ ਕੀਤਾ ਗਿਆ</string>
+    <string name="toast_clipboard_empty">ਕਲਿੱਪਬੋਰਡ ਖਾਲੀ ਹੈ</string>
+    <string name="toast_clipboard_failed">ਕਲਿੱਪਬੋਰਡ ਕਾਰਵਾਈ ਅਸਫਲ</string>
+    <string name="toast_keystore_unavailable">ਸੁਰੱਖਿਅਤ ਕੁੰਜੀ ਸਟੋਰੇਜ ਉਪਲਬਧ ਨਹੀਂ। ਕਿਰਪਾ ਕਰਕੇ ਐਪ ਨੂੰ ਦੁਬਾਰਾ ਇੰਸਟਾਲ ਕਰੋ।</string>
+    <string name="error_no_model_access">ਤੁਹਾਡੀ API ਕੁੰਜੀ ਕੋਲ ਇਸ ਮਾਡਲ ਤੱਕ ਪਹੁੰਚ ਨਹੀਂ ਹੈ।</string>
+    <string name="error_invalid_key">ਅਵੈਧ API ਕੁੰਜੀ। ਕਿਰਪਾ ਕਰਕੇ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਆਪਣੀ ਕੁੰਜੀ ਦੀ ਜਾਂਚ ਕਰੋ।</string>
+    <string name="error_rate_limited">ਦਰ ਸੀਮਿਤ। ਜਲਦੀ ਹੀ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="error_model_not_found">ਮਾਡਲ ਨਹੀਂ ਮਿਲਿਆ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਆਪਣੀ ਮਾਡਲ ਚੋਣ ਦੀ ਜਾਂਚ ਕਰੋ।</string>
+    <string name="error_safety_blocked">ਸੁਰੱਖਿਆ ਫਿਲਟਰਾਂ ਨੇ ਜਵਾਬ ਬਲੌਕ ਕੀਤਾ। ਦੁਬਾਰਾ ਸ਼ਬਦਾਂ ਵਿੱਚ ਲਿਖਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="error_empty_response">ਮਾਡਲ ਨੇ ਖਾਲੀ ਜਵਾਬ ਵਾਪਸ ਕੀਤਾ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="error_timeout_connection">ਬੇਨਤੀ ਦਾ ਸਮਾਂ ਸਮਾਪਤ ਹੋ ਗਿਆ। ਆਪਣੇ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ।</string>
+    <string name="error_no_internet">ਕੋਈ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਹੀਂ।</string>
+    <string name="error_endpoint_unreachable">API ਤੱਕ ਪਹੁੰਚ ਨਹੀਂ ਸਕਿਆ। ਆਪਣੇ ਐਂਡਪਾਇੰਟ URL ਦੀ ਜਾਂਚ ਕਰੋ।</string>
+    <string name="error_bad_request">ਬੇਨਤੀ ਅਸਫਲ। ਆਪਣੀਆਂ ਸੈਟਿੰਗਾਂ ਦੀ ਜਾਂਚ ਕਰੋ।</string>
+
+    <!-- Update notifications -->
+    <string name="update_channel_name">ਐਪ ਅਪਡੇਟਾਂ</string>
+    <string name="update_channel_desc">ਜਦੋਂ SwiftSlate ਦਾ ਨਵਾਂ ਸੰਸਕਰਣ ਉਪਲਬਧ ਹੁੰਦਾ ਹੈ ਤਾਂ ਸੂਚਿਤ ਕਰਦਾ ਹੈ</string>
+    <string name="update_available_title">SwiftSlate ਅਪਡੇਟ ਉਪਲਬਧ</string>
+    <string name="update_available_text">ਨਵੀਨਤਮ ਰਿਲੀਜ਼ ਦੇਖਣ ਲਈ ਟੈਪ ਕਰੋ</string>
 </resources>

@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">ഈ API കീ ഇല്ലാതാക്കണോ?</string>
     <string name="delete_confirm_message">ഈ പ്രവർത്തനം പഴയപടിയാക്കാനാവില്ല.</string>
     <string name="delete_confirm_button">ഇല്ലാതാക്കുക</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">ടെക്സ്റ്റ് മാറ്റിസ്ഥാപിക്കാനായില്ല</string>
+    <string name="toast_custom_not_configured">ഇഷ്ടാനുസൃത ദാതാവ് കോൺഫിഗർ ചെയ്തിട്ടില്ല. ക്രമീകരണങ്ങളിൽ എൻഡ്പോയിന്റും മോഡലും സജ്ജമാക്കുക.</string>
+    <string name="toast_model_setting_rejected">ഒരു മോഡൽ ക്രമീകരണം ദാതാവ് നിരസിക്കുകയും ഒഴിവാക്കുകയും ചെയ്തു — നിങ്ങളുടെ ടെക്സ്റ്റ് അപ്പോഴും പ്രോസസ്സ് ചെയ്തു. ഇത് പരിഹരിക്കാൻ SwiftSlate GitHub-ൽ റിപ്പോർട്ട് ചെയ്യുക.</string>
+    <string name="toast_key_rate_limited">API കീ നിരക്ക് പരിമിതപ്പെടുത്തി. %1$d സെക്കൻഡിനുള്ളിൽ വീണ്ടും ശ്രമിക്കുക</string>
+    <string name="toast_no_keys">API കീകളൊന്നും കോൺഫിഗർ ചെയ്തിട്ടില്ല</string>
+    <string name="toast_all_keys_invalid">എല്ലാ API കീകളും അസാധുവാണ്. നിങ്ങളുടെ കീകൾ പരിശോധിക്കുക</string>
+    <string name="toast_request_timed_out">അഭ്യർത്ഥന സമയപരിധി കഴിഞ്ഞു</string>
+    <string name="toast_restore_failed">യഥാർത്ഥ ടെക്സ്റ്റ് പുനഃസ്ഥാപിക്കാനായില്ല</string>
+    <string name="toast_nothing_to_undo">പഴയപടിയാക്കാൻ ഒന്നുമില്ല</string>
+    <string name="toast_undo_failed">പഴയപടിയാക്കാനായില്ല</string>
+    <string name="toast_nothing_to_copy">പകർത്താൻ ഒന്നുമില്ല</string>
+    <string name="toast_copied">ക്ലിപ്ബോർഡിലേക്ക് പകർത്തി</string>
+    <string name="toast_nothing_to_cut">മുറിക്കാൻ ഒന്നുമില്ല</string>
+    <string name="toast_cut">ക്ലിപ്ബോർഡിലേക്ക് മുറിച്ചു</string>
+    <string name="toast_clipboard_empty">ക്ലിപ്ബോർഡ് ശൂന്യമാണ്</string>
+    <string name="toast_clipboard_failed">ക്ലിപ്ബോർഡ് പ്രവർത്തനം പരാജയപ്പെട്ടു</string>
+    <string name="toast_keystore_unavailable">സുരക്ഷിത കീ സംഭരണം ലഭ്യമല്ല. ദയവായി ആപ്പ് വീണ്ടും ഇൻസ്റ്റാൾ ചെയ്യുക.</string>
+    <string name="error_no_model_access">നിങ്ങളുടെ API കീയ്ക്ക് ഈ മോഡലിലേക്ക് ആക്‌സസ് ഇല്ല.</string>
+    <string name="error_invalid_key">അസാധുവായ API കീ. ക്രമീകരണങ്ങളിൽ നിങ്ങളുടെ കീ പരിശോധിക്കുക.</string>
+    <string name="error_rate_limited">നിരക്ക് പരിമിതപ്പെടുത്തി. ഉടൻ വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="error_model_not_found">മോഡൽ കണ്ടെത്തിയില്ല. ക്രമീകരണങ്ങളിൽ നിങ്ങളുടെ മോഡൽ തിരഞ്ഞെടുപ്പ് പരിശോധിക്കുക.</string>
+    <string name="error_safety_blocked">സുരക്ഷാ ഫിൽട്ടറുകൾ പ്രതികരണം തടഞ്ഞു. വീണ്ടും പദപ്രയോഗം ചെയ്യാൻ ശ്രമിക്കുക.</string>
+    <string name="error_empty_response">മോഡൽ ശൂന്യമായ പ്രതികരണം നൽകി. വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="error_timeout_connection">അഭ്യർത്ഥന സമയപരിധി കഴിഞ്ഞു. നിങ്ങളുടെ കണക്ഷൻ പരിശോധിക്കുക.</string>
+    <string name="error_no_internet">ഇന്റർനെറ്റ് കണക്ഷൻ ഇല്ല.</string>
+    <string name="error_endpoint_unreachable">API-യിൽ എത്താനായില്ല. നിങ്ങളുടെ എൻഡ്പോയിന്റ് URL പരിശോധിക്കുക.</string>
+    <string name="error_bad_request">അഭ്യർത്ഥന പരാജയപ്പെട്ടു. നിങ്ങളുടെ ക്രമീകരണങ്ങൾ പരിശോധിക്കുക.</string>
+
+    <!-- Update notifications -->
+    <string name="update_channel_name">ആപ്പ് അപ്ഡേറ്റുകൾ</string>
+    <string name="update_channel_desc">SwiftSlate-ന്റെ പുതിയ പതിപ്പ് ലഭ്യമാകുമ്പോൾ അറിയിക്കുന്നു</string>
+    <string name="update_available_title">SwiftSlate അപ്ഡേറ്റ് ലഭ്യമാണ്</string>
+    <string name="update_available_text">ഏറ്റവും പുതിയ റിലീസ് കാണാൻ ടാപ്പ് ചെയ്യുക</string>
 </resources>

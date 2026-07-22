@@ -90,4 +90,42 @@
     <string name="delete_confirm_key_title">Delete this API key?</string>
     <string name="delete_confirm_message">This action cannot be undone.</string>
     <string name="delete_confirm_button">Delete</string>
+
+    <!-- Runtime toasts (accessibility service) -->
+    <string name="toast_replace_failed">Could not replace text</string>
+    <string name="toast_custom_not_configured">Custom provider not configured. Set endpoint and model in Settings.</string>
+    <string name="toast_model_setting_rejected">A model setting was rejected by the provider and skipped — your text was still processed. Please report this on the SwiftSlate GitHub so we can fix it.</string>
+    <string name="toast_key_rate_limited">API key rate limited. Try again in %1$ds</string>
+    <string name="toast_no_keys">No API keys configured</string>
+    <string name="toast_all_keys_invalid">All API keys are invalid. Please check your keys</string>
+    <string name="toast_request_timed_out">Request timed out</string>
+    <string name="toast_restore_failed">Could not restore original text</string>
+    <string name="toast_nothing_to_undo">Nothing to undo</string>
+    <string name="toast_undo_failed">Could not undo</string>
+    <string name="toast_nothing_to_copy">Nothing to copy</string>
+    <string name="toast_copied">Copied to clipboard</string>
+    <string name="toast_nothing_to_cut">Nothing to cut</string>
+    <string name="toast_cut">Cut to clipboard</string>
+    <string name="toast_clipboard_empty">Clipboard is empty</string>
+    <string name="toast_clipboard_failed">Clipboard operation failed</string>
+    <string name="toast_keystore_unavailable">Secure key storage unavailable. Please reinstall the app.</string>
+
+    <!-- Runtime error messages (accessibility service) -->
+    <string name="error_no_model_access">Your API key doesn\'t have access to this model.</string>
+    <string name="error_invalid_key">Invalid API key. Please check your key in Settings.</string>
+    <string name="error_rate_limited">Rate limited. Try again shortly.</string>
+    <string name="error_model_not_found">Model not found. Check your model selection in Settings.</string>
+    <string name="error_safety_blocked">Response blocked by safety filters. Try rephrasing.</string>
+    <string name="error_empty_response">Model returned an empty response. Try again.</string>
+    <string name="error_timeout_connection">Request timed out. Check your connection.</string>
+    <string name="error_no_internet">No internet connection.</string>
+    <string name="error_endpoint_unreachable">Could not reach the API. Check your endpoint URL.</string>
+    <string name="error_bad_request">Request failed. Check your settings.</string>
+
+    <!-- Update notification (worker) -->
+    <string name="update_channel_name">App Updates</string>
+    <string name="update_channel_desc">Notifies when a new version of SwiftSlate is available</string>
+    <string name="update_available_title">SwiftSlate update available</string>
+    <string name="update_available_text">Tap to view the latest release</string>
+
 </resources>

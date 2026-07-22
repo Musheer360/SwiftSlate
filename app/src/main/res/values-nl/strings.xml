@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Deze API-sleutel verwijderen?</string>
     <string name="delete_confirm_message">Deze actie kan niet ongedaan worden gemaakt.</string>
     <string name="delete_confirm_button">Verwijderen</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Kon tekst niet vervangen</string>
+    <string name="toast_custom_not_configured">Aangepaste aanbieder niet geconfigureerd. Stel endpoint en model in bij Instellingen.</string>
+    <string name="toast_model_setting_rejected">Een modelinstelling is door de aanbieder geweigerd en overgeslagen — uw tekst is toch verwerkt. Meld dit op de SwiftSlate GitHub zodat we het kunnen oplossen.</string>
+    <string name="toast_key_rate_limited">API-sleutel snelheidsbeperkt. Probeer het over %1$d s opnieuw</string>
+    <string name="toast_no_keys">Geen API-sleutels geconfigureerd</string>
+    <string name="toast_all_keys_invalid">Alle API-sleutels zijn ongeldig. Controleer uw sleutels</string>
+    <string name="toast_request_timed_out">Aanvraag verlopen</string>
+    <string name="toast_restore_failed">Kon oorspronkelijke tekst niet herstellen</string>
+    <string name="toast_nothing_to_undo">Niets om ongedaan te maken</string>
+    <string name="toast_undo_failed">Kon niet ongedaan maken</string>
+    <string name="toast_nothing_to_copy">Niets om te kopiëren</string>
+    <string name="toast_copied">Gekopieerd naar klembord</string>
+    <string name="toast_nothing_to_cut">Niets om te knippen</string>
+    <string name="toast_cut">Geknipt naar klembord</string>
+    <string name="toast_clipboard_empty">Klembord is leeg</string>
+    <string name="toast_clipboard_failed">Klembordbewerking mislukt</string>
+    <string name="toast_keystore_unavailable">Veilige sleutelopslag niet beschikbaar. Installeer de app opnieuw.</string>
+    <string name="error_no_model_access">Uw API-sleutel heeft geen toegang tot dit model.</string>
+    <string name="error_invalid_key">Ongeldige API-sleutel. Controleer uw sleutel bij Instellingen.</string>
+    <string name="error_rate_limited">Snelheidsbeperkt. Probeer het zo opnieuw.</string>
+    <string name="error_model_not_found">Model niet gevonden. Controleer uw modelselectie bij Instellingen.</string>
+    <string name="error_safety_blocked">Reactie geblokkeerd door veiligheidsfilters. Probeer het te herformuleren.</string>
+    <string name="error_empty_response">Model gaf een lege reactie terug. Probeer het opnieuw.</string>
+    <string name="error_timeout_connection">Aanvraag verlopen. Controleer uw verbinding.</string>
+    <string name="error_no_internet">Geen internetverbinding.</string>
+    <string name="error_endpoint_unreachable">Kon de API niet bereiken. Controleer uw endpoint-URL.</string>
+    <string name="error_bad_request">Aanvraag mislukt. Controleer uw instellingen.</string>
+
+    <!-- Update notifications -->
+    <string name="update_channel_name">App-updates</string>
+    <string name="update_channel_desc">Geeft een melding wanneer een nieuwe versie van SwiftSlate beschikbaar is</string>
+    <string name="update_available_title">SwiftSlate-update beschikbaar</string>
+    <string name="update_available_text">Tik om de nieuwste release te bekijken</string>
 </resources>

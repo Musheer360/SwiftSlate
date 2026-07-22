@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">کیا یہ API کلید حذف کی جائے؟</string>
     <string name="delete_confirm_message">اس عمل کو واپس نہیں لیا جا سکتا۔</string>
     <string name="delete_confirm_button">حذف کریں</string>
+
+    <!-- Toasts &amp; errors -->
+    <string name="toast_replace_failed">متن تبدیل نہیں کیا جا سکا</string>
+    <string name="toast_custom_not_configured">اپنی مرضی کا فراہم کنندہ ترتیب نہیں دیا گیا۔ ترتیبات میں اینڈ پوائنٹ اور ماڈل سیٹ کریں۔</string>
+    <string name="toast_model_setting_rejected">ایک ماڈل ترتیب فراہم کنندہ نے مسترد کر دی اور چھوڑ دی گئی — آپ کا متن پھر بھی پروسیس ہو گیا۔ براہ کرم اسے SwiftSlate GitHub پر رپورٹ کریں تاکہ ہم اسے ٹھیک کر سکیں۔</string>
+    <string name="toast_key_rate_limited">API کلید کی شرح محدود ہے۔ %1$d سیکنڈ میں دوبارہ کوشش کریں</string>
+    <string name="toast_no_keys">کوئی API کلید ترتیب نہیں دی گئی</string>
+    <string name="toast_all_keys_invalid">تمام API کلیدیاں غلط ہیں۔ براہ کرم اپنی کلیدیں جانچیں</string>
+    <string name="toast_request_timed_out">درخواست کا وقت ختم ہو گیا</string>
+    <string name="toast_restore_failed">اصل متن بحال نہیں کیا جا سکا</string>
+    <string name="toast_nothing_to_undo">کالعدم کرنے کے لیے کچھ نہیں</string>
+    <string name="toast_undo_failed">کالعدم نہیں کیا جا سکا</string>
+    <string name="toast_nothing_to_copy">کاپی کرنے کے لیے کچھ نہیں</string>
+    <string name="toast_copied">کلپ بورڈ پر کاپی ہو گیا</string>
+    <string name="toast_nothing_to_cut">کاٹنے کے لیے کچھ نہیں</string>
+    <string name="toast_cut">کلپ بورڈ پر کاٹ دیا گیا</string>
+    <string name="toast_clipboard_empty">کلپ بورڈ خالی ہے</string>
+    <string name="toast_clipboard_failed">کلپ بورڈ کارروائی ناکام ہوئی</string>
+    <string name="toast_keystore_unavailable">محفوظ کلید ذخیرہ دستیاب نہیں ہے۔ براہ کرم ایپ دوبارہ انسٹال کریں۔</string>
+    <string name="error_no_model_access">آپ کی API کلید کو اس ماڈل تک رسائی نہیں ہے۔</string>
+    <string name="error_invalid_key">غلط API کلید۔ براہ کرم ترتیبات میں اپنی کلید جانچیں۔</string>
+    <string name="error_rate_limited">شرح محدود ہے۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔</string>
+    <string name="error_model_not_found">ماڈل نہیں ملا۔ ترتیبات میں اپنے ماڈل کے انتخاب کو جانچیں۔</string>
+    <string name="error_safety_blocked">حفاظتی فلٹرز نے جواب کو روک دیا۔ دوبارہ الفاظ بدل کر کوشش کریں۔</string>
+    <string name="error_empty_response">ماڈل نے خالی جواب واپس کیا۔ دوبارہ کوشش کریں۔</string>
+    <string name="error_timeout_connection">درخواست کا وقت ختم ہو گیا۔ اپنا کنکشن جانچیں۔</string>
+    <string name="error_no_internet">انٹرنیٹ کنکشن نہیں ہے۔</string>
+    <string name="error_endpoint_unreachable">API تک نہیں پہنچا جا سکا۔ اپنا اینڈ پوائنٹ URL جانچیں۔</string>
+    <string name="error_bad_request">درخواست ناکام ہوئی۔ اپنی ترتیبات جانچیں۔</string>
+
+    <!-- Updates &amp; command descriptions -->
+    <string name="update_channel_name">ایپ اپ ڈیٹس</string>
+    <string name="update_channel_desc">جب SwiftSlate کا نیا ورژن دستیاب ہو تو مطلع کرتا ہے</string>
+    <string name="update_available_title">SwiftSlate اپ ڈیٹ دستیاب ہے</string>
+    <string name="update_available_text">تازہ ترین ریلیز دیکھنے کے لیے تھپتھپائیں</string>
 </resources>

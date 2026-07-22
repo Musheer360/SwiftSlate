@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Kas kustutada see API võti?</string>
     <string name="delete_confirm_message">Seda toimingut ei saa tagasi võtta.</string>
     <string name="delete_confirm_button">Kustuta</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Teksti ei õnnestunud asendada</string>
+    <string name="toast_custom_not_configured">Kohandatud pakkuja pole seadistatud. Määra lõpp-punkt ja mudel Seadetes.</string>
+    <string name="toast_model_setting_rejected">Pakkuja lükkas mudeli sätte tagasi ja jättis selle vahele — sinu tekst töödeldi siiski. Palun teata sellest SwiftSlate\'i GitHubis, et saaksime selle parandada.</string>
+    <string name="toast_key_rate_limited">API võtme päringulimiit on täis. Proovi uuesti %1$d s pärast</string>
+    <string name="toast_no_keys">API võtmeid pole seadistatud</string>
+    <string name="toast_all_keys_invalid">Kõik API võtmed on kehtetud. Palun kontrolli oma võtmeid</string>
+    <string name="toast_request_timed_out">Päring aegus</string>
+    <string name="toast_restore_failed">Algset teksti ei õnnestunud taastada</string>
+    <string name="toast_nothing_to_undo">Pole midagi tagasi võtta</string>
+    <string name="toast_undo_failed">Tagasivõtmine ebaõnnestus</string>
+    <string name="toast_nothing_to_copy">Pole midagi kopeerida</string>
+    <string name="toast_copied">Kopeeritud lõikelauale</string>
+    <string name="toast_nothing_to_cut">Pole midagi lõigata</string>
+    <string name="toast_cut">Lõigatud lõikelauale</string>
+    <string name="toast_clipboard_empty">Lõikelaud on tühi</string>
+    <string name="toast_clipboard_failed">Lõikelaua toiming ebaõnnestus</string>
+    <string name="toast_keystore_unavailable">Turvaline võtmehoidla pole saadaval. Palun installi rakendus uuesti.</string>
+    <string name="error_no_model_access">Sinu API võtmel puudub juurdepääs sellele mudelile.</string>
+    <string name="error_invalid_key">Kehtetu API võti. Palun kontrolli oma võtit Seadetes.</string>
+    <string name="error_rate_limited">Päringulimiit on täis. Proovi peagi uuesti.</string>
+    <string name="error_model_not_found">Mudelit ei leitud. Kontrolli mudeli valikut Seadetes.</string>
+    <string name="error_safety_blocked">Vastus blokeeriti turvafiltrite poolt. Proovi ümber sõnastada.</string>
+    <string name="error_empty_response">Mudel tagastas tühja vastuse. Proovi uuesti.</string>
+    <string name="error_timeout_connection">Päring aegus. Kontrolli oma ühendust.</string>
+    <string name="error_no_internet">Interneti-ühendus puudub.</string>
+    <string name="error_endpoint_unreachable">API-ga ei õnnestunud ühendust luua. Kontrolli oma lõpp-punkti URL-i.</string>
+    <string name="error_bad_request">Päring ebaõnnestus. Kontrolli oma seadeid.</string>
+
+    <!-- Updates and command descriptions -->
+    <string name="update_channel_name">Rakenduse uuendused</string>
+    <string name="update_channel_desc">Teavitab, kui SwiftSlate\'i uus versioon on saadaval</string>
+    <string name="update_available_title">SwiftSlate\'i uuendus on saadaval</string>
+    <string name="update_available_text">Puuduta uusima versiooni vaatamiseks</string>
 </resources>

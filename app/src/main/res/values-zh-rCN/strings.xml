@@ -90,4 +90,39 @@
     <string name="settings_temperature_title">温度</string>
     <string name="settings_made_by">由 Musheer Alam 用心制作</string>
     <string name="settings_sponsor">在 GitHub 上赞助</string>
+
+    <!-- Toasts &amp; errors -->
+    <string name="toast_replace_failed">无法替换文本</string>
+    <string name="toast_custom_not_configured">尚未配置自定义提供商。请在设置中设置接入点和模型。</string>
+    <string name="toast_model_setting_rejected">某个模型设置被提供商拒绝并已跳过——您的文本仍已处理。请在 SwiftSlate GitHub 上报告此问题，以便我们修复。</string>
+    <string name="toast_key_rate_limited">API 密钥受到速率限制。请在 %1$d 秒后重试</string>
+    <string name="toast_no_keys">未配置 API 密钥</string>
+    <string name="toast_all_keys_invalid">所有 API 密钥均无效。请检查您的密钥</string>
+    <string name="toast_request_timed_out">请求超时</string>
+    <string name="toast_restore_failed">无法恢复原始文本</string>
+    <string name="toast_nothing_to_undo">没有可撤销的内容</string>
+    <string name="toast_undo_failed">无法撤销</string>
+    <string name="toast_nothing_to_copy">没有可复制的内容</string>
+    <string name="toast_copied">已复制到剪贴板</string>
+    <string name="toast_nothing_to_cut">没有可剪切的内容</string>
+    <string name="toast_cut">已剪切到剪贴板</string>
+    <string name="toast_clipboard_empty">剪贴板为空</string>
+    <string name="toast_clipboard_failed">剪贴板操作失败</string>
+    <string name="toast_keystore_unavailable">安全密钥存储不可用。请重新安装应用。</string>
+    <string name="error_no_model_access">您的 API 密钥无权访问此模型。</string>
+    <string name="error_invalid_key">API 密钥无效。请在设置中检查您的密钥。</string>
+    <string name="error_rate_limited">受到速率限制。请稍后重试。</string>
+    <string name="error_model_not_found">未找到模型。请在设置中检查您的模型选择。</string>
+    <string name="error_safety_blocked">响应被安全过滤器拦截。请尝试重新表述。</string>
+    <string name="error_empty_response">模型返回了空响应。请重试。</string>
+    <string name="error_timeout_connection">请求超时。请检查您的网络连接。</string>
+    <string name="error_no_internet">无网络连接。</string>
+    <string name="error_endpoint_unreachable">无法连接到 API。请检查您的接入点 URL。</string>
+    <string name="error_bad_request">请求失败。请检查您的设置。</string>
+
+    <!-- Updates &amp; command descriptions -->
+    <string name="update_channel_name">应用更新</string>
+    <string name="update_channel_desc">当 SwiftSlate 有新版本时通知</string>
+    <string name="update_available_title">SwiftSlate 更新可用</string>
+    <string name="update_available_text">点按以查看最新版本</string>
 </resources>

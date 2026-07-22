@@ -90,4 +90,39 @@
     <string name="settings_temperature_title">Température</string>
     <string name="settings_made_by">Fait avec amour par Musheer Alam</string>
     <string name="settings_sponsor">Sponsoriser sur GitHub</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Impossible de remplacer le texte</string>
+    <string name="toast_custom_not_configured">Fournisseur personnalisé non configuré. Définissez l\'endpoint et le modèle dans les Paramètres.</string>
+    <string name="toast_model_setting_rejected">Un paramètre du modèle a été rejeté par le fournisseur et ignoré — votre texte a tout de même été traité. Veuillez le signaler sur le GitHub de SwiftSlate afin que nous puissions le corriger.</string>
+    <string name="toast_key_rate_limited">Débit de la clé API limité. Réessayez dans %1$d s</string>
+    <string name="toast_no_keys">Aucune clé API configurée</string>
+    <string name="toast_all_keys_invalid">Toutes les clés API sont invalides. Veuillez vérifier vos clés</string>
+    <string name="toast_request_timed_out">La requête a expiré</string>
+    <string name="toast_restore_failed">Impossible de restaurer le texte d\'origine</string>
+    <string name="toast_nothing_to_undo">Rien à annuler</string>
+    <string name="toast_undo_failed">Impossible d\'annuler</string>
+    <string name="toast_nothing_to_copy">Rien à copier</string>
+    <string name="toast_copied">Copié dans le presse-papiers</string>
+    <string name="toast_nothing_to_cut">Rien à couper</string>
+    <string name="toast_cut">Coupé dans le presse-papiers</string>
+    <string name="toast_clipboard_empty">Le presse-papiers est vide</string>
+    <string name="toast_clipboard_failed">Échec de l\'opération du presse-papiers</string>
+    <string name="toast_keystore_unavailable">Stockage sécurisé des clés indisponible. Veuillez réinstaller l\'application.</string>
+    <string name="error_no_model_access">Votre clé API n\'a pas accès à ce modèle.</string>
+    <string name="error_invalid_key">Clé API invalide. Veuillez vérifier votre clé dans les Paramètres.</string>
+    <string name="error_rate_limited">Débit limité. Réessayez sous peu.</string>
+    <string name="error_model_not_found">Modèle introuvable. Vérifiez la sélection du modèle dans les Paramètres.</string>
+    <string name="error_safety_blocked">Réponse bloquée par les filtres de sécurité. Essayez de reformuler.</string>
+    <string name="error_empty_response">Le modèle a renvoyé une réponse vide. Réessayez.</string>
+    <string name="error_timeout_connection">La requête a expiré. Vérifiez votre connexion.</string>
+    <string name="error_no_internet">Aucune connexion internet.</string>
+    <string name="error_endpoint_unreachable">Impossible de joindre l\'API. Vérifiez l\'URL de votre endpoint.</string>
+    <string name="error_bad_request">Échec de la requête. Vérifiez vos paramètres.</string>
+
+    <!-- Updates and command descriptions -->
+    <string name="update_channel_name">Mises à jour de l\'app</string>
+    <string name="update_channel_desc">Avertit lorsqu\'une nouvelle version de SwiftSlate est disponible</string>
+    <string name="update_available_title">Mise à jour SwiftSlate disponible</string>
+    <string name="update_available_text">Appuyez pour voir la dernière version</string>
 </resources>

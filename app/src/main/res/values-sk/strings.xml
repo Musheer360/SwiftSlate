@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Odstrániť tento kľúč API?</string>
     <string name="delete_confirm_message">Túto akciu nemožno vrátiť späť.</string>
     <string name="delete_confirm_button">Odstrániť</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Text sa nepodarilo nahradiť</string>
+    <string name="toast_custom_not_configured">Vlastný poskytovateľ nie je nakonfigurovaný. Nastavte koncový bod a model v Nastaveniach.</string>
+    <string name="toast_model_setting_rejected">Nastavenie modelu bolo poskytovateľom odmietnuté a preskočené — váš text bol napriek tomu spracovaný. Nahláste to na GitHub SwiftSlate, aby sme to mohli opraviť.</string>
+    <string name="toast_key_rate_limited">Prekročený limit požiadaviek kľúča API. Skúste to znova o %1$d s</string>
+    <string name="toast_no_keys">Nie sú nakonfigurované žiadne kľúče API</string>
+    <string name="toast_all_keys_invalid">Všetky kľúče API sú neplatné. Skontrolujte svoje kľúče</string>
+    <string name="toast_request_timed_out">Vypršal časový limit požiadavky</string>
+    <string name="toast_restore_failed">Pôvodný text sa nepodarilo obnoviť</string>
+    <string name="toast_nothing_to_undo">Nie je čo vrátiť späť</string>
+    <string name="toast_undo_failed">Nepodarilo sa vrátiť späť</string>
+    <string name="toast_nothing_to_copy">Nie je čo kopírovať</string>
+    <string name="toast_copied">Skopírované do schránky</string>
+    <string name="toast_nothing_to_cut">Nie je čo vystrihnúť</string>
+    <string name="toast_cut">Vystrihnuté do schránky</string>
+    <string name="toast_clipboard_empty">Schránka je prázdna</string>
+    <string name="toast_clipboard_failed">Operácia so schránkou zlyhala</string>
+    <string name="toast_keystore_unavailable">Bezpečné úložisko kľúčov nie je k dispozícii. Preinštalujte aplikáciu.</string>
+    <string name="error_no_model_access">Váš kľúč API nemá prístup k tomuto modelu.</string>
+    <string name="error_invalid_key">Neplatný kľúč API. Skontrolujte svoj kľúč v Nastaveniach.</string>
+    <string name="error_rate_limited">Prekročený limit požiadaviek. Skúste to znova o chvíľu.</string>
+    <string name="error_model_not_found">Model sa nenašiel. Skontrolujte výber modelu v Nastaveniach.</string>
+    <string name="error_safety_blocked">Odpoveď bola zablokovaná bezpečnostnými filtrami. Skúste to preformulovať.</string>
+    <string name="error_empty_response">Model vrátil prázdnu odpoveď. Skúste to znova.</string>
+    <string name="error_timeout_connection">Vypršal časový limit požiadavky. Skontrolujte pripojenie.</string>
+    <string name="error_no_internet">Žiadne pripojenie na internet.</string>
+    <string name="error_endpoint_unreachable">Nepodarilo sa spojiť s API. Skontrolujte URL koncového bodu.</string>
+    <string name="error_bad_request">Požiadavka zlyhala. Skontrolujte svoje nastavenia.</string>
+
+    <!-- Updates & command descriptions -->
+    <string name="update_channel_name">Aktualizácie aplikácie</string>
+    <string name="update_channel_desc">Upozorní, keď je k dispozícii nová verzia SwiftSlate</string>
+    <string name="update_available_title">Dostupná aktualizácia SwiftSlate</string>
+    <string name="update_available_text">Ťuknutím zobrazíte najnovšiu verziu</string>
 </resources>

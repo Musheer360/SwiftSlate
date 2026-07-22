@@ -91,4 +91,41 @@
     <string name="delete_confirm_key_title">Да изтрия ли този API ключ?</string>
     <string name="delete_confirm_message">Това действие не може да бъде отменено.</string>
     <string name="delete_confirm_button">Изтрий</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Текстът не можа да бъде заменен</string>
+    <string name="toast_custom_not_configured">Потребителският доставчик не е конфигуриран. Задайте крайна точка и модел в Настройки.</string>
+    <string name="toast_model_setting_rejected">Настройка на модела беше отхвърлена от доставчика и пропусната — текстът ви все пак беше обработен. Моля, докладвайте това в GitHub на SwiftSlate, за да можем да го поправим.</string>
+    <string name="toast_key_rate_limited">API ключът е с ограничена честота. Опитайте отново след %1$d сек</string>
+    <string name="toast_no_keys">Няма конфигурирани API ключове</string>
+    <string name="toast_all_keys_invalid">Всички API ключове са невалидни. Моля, проверете ключовете си</string>
+    <string name="toast_request_timed_out">Времето за заявката изтече</string>
+    <string name="toast_restore_failed">Оригиналният текст не можа да бъде възстановен</string>
+    <string name="toast_nothing_to_undo">Няма нищо за отмяна</string>
+    <string name="toast_undo_failed">Отмяната беше неуспешна</string>
+    <string name="toast_nothing_to_copy">Няма нищо за копиране</string>
+    <string name="toast_copied">Копирано в клипборда</string>
+    <string name="toast_nothing_to_cut">Няма нищо за изрязване</string>
+    <string name="toast_cut">Изрязано в клипборда</string>
+    <string name="toast_clipboard_empty">Клипбордът е празен</string>
+    <string name="toast_clipboard_failed">Операцията с клипборда беше неуспешна</string>
+    <string name="toast_keystore_unavailable">Сигурното съхранение на ключове не е налично. Моля, преинсталирайте приложението.</string>
+    <string name="error_no_model_access">Вашият API ключ няма достъп до този модел.</string>
+    <string name="error_invalid_key">Невалиден API ключ. Моля, проверете ключа си в Настройки.</string>
+    <string name="error_rate_limited">Ограничена честота. Опитайте отново скоро.</string>
+    <string name="error_model_not_found">Моделът не е намерен. Проверете избора на модел в Настройки.</string>
+    <string name="error_safety_blocked">Отговорът е блокиран от филтрите за безопасност. Опитайте да префразирате.</string>
+    <string name="error_empty_response">Моделът върна празен отговор. Опитайте отново.</string>
+    <string name="error_timeout_connection">Времето за заявката изтече. Проверете връзката си.</string>
+    <string name="error_no_internet">Няма интернет връзка.</string>
+    <string name="error_endpoint_unreachable">API не можа да бъде достигнат. Проверете URL адреса на крайната точка.</string>
+    <string name="error_bad_request">Заявката е неуспешна. Проверете настройките си.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">Актуализации на приложението</string>
+    <string name="update_channel_desc">Известява, когато е налична нова версия на SwiftSlate</string>
+    <string name="update_available_title">Налична е актуализация на SwiftSlate</string>
+    <string name="update_available_text">Докоснете, за да видите последната версия</string>
+
+    <!-- Command descriptions -->
 </resources>

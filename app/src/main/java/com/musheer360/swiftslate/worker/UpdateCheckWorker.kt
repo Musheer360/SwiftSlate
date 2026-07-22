@@ -119,10 +119,10 @@ class UpdateCheckWorker(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "App Updates",
+                applicationContext.getString(R.string.update_channel_name),
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Notifies when a new version of SwiftSlate is available"
+                description = applicationContext.getString(R.string.update_channel_desc)
             }
             notificationManager.createNotificationChannel(channel)
         }
@@ -137,8 +137,8 @@ class UpdateCheckWorker(
 
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("SwiftSlate update available")
-            .setContentText("Tap to view the latest release")
+            .setContentTitle(applicationContext.getString(R.string.update_available_title))
+            .setContentText(applicationContext.getString(R.string.update_available_text))
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)

@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Ștergi această cheie API?</string>
     <string name="delete_confirm_message">Această acțiune nu poate fi anulată.</string>
     <string name="delete_confirm_button">Șterge</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Textul nu a putut fi înlocuit</string>
+    <string name="toast_custom_not_configured">Furnizorul personalizat nu este configurat. Setează endpoint-ul și modelul în Setări.</string>
+    <string name="toast_model_setting_rejected">O setare a modelului a fost respinsă de furnizor și omisă — textul tău a fost totuși procesat. Te rugăm să raportezi acest lucru pe GitHub-ul SwiftSlate ca să putem remedia.</string>
+    <string name="toast_key_rate_limited">Limită de solicitări atinsă pentru cheia API. Încearcă din nou în %1$ds</string>
+    <string name="toast_no_keys">Nicio cheie API configurată</string>
+    <string name="toast_all_keys_invalid">Toate cheile API sunt invalide. Verifică-ți cheile</string>
+    <string name="toast_request_timed_out">Solicitarea a expirat</string>
+    <string name="toast_restore_failed">Textul original nu a putut fi restaurat</string>
+    <string name="toast_nothing_to_undo">Nimic de anulat</string>
+    <string name="toast_undo_failed">Anularea nu a reușit</string>
+    <string name="toast_nothing_to_copy">Nimic de copiat</string>
+    <string name="toast_copied">Copiat în clipboard</string>
+    <string name="toast_nothing_to_cut">Nimic de decupat</string>
+    <string name="toast_cut">Decupat în clipboard</string>
+    <string name="toast_clipboard_empty">Clipboard-ul este gol</string>
+    <string name="toast_clipboard_failed">Operațiunea din clipboard a eșuat</string>
+    <string name="toast_keystore_unavailable">Stocarea securizată a cheilor este indisponibilă. Te rugăm să reinstalezi aplicația.</string>
+    <string name="error_no_model_access">Cheia ta API nu are acces la acest model.</string>
+    <string name="error_invalid_key">Cheie API invalidă. Verifică-ți cheia în Setări.</string>
+    <string name="error_rate_limited">Limită de solicitări atinsă. Încearcă din nou în scurt timp.</string>
+    <string name="error_model_not_found">Modelul nu a fost găsit. Verifică selecția modelului în Setări.</string>
+    <string name="error_safety_blocked">Răspuns blocat de filtrele de siguranță. Încearcă să reformulezi.</string>
+    <string name="error_empty_response">Modelul a returnat un răspuns gol. Încearcă din nou.</string>
+    <string name="error_timeout_connection">Solicitarea a expirat. Verifică-ți conexiunea.</string>
+    <string name="error_no_internet">Fără conexiune la internet.</string>
+    <string name="error_endpoint_unreachable">Nu s-a putut contacta API-ul. Verifică URL-ul endpoint-ului.</string>
+    <string name="error_bad_request">Solicitarea a eșuat. Verifică-ți setările.</string>
+
+    <!-- Updates & command descriptions -->
+    <string name="update_channel_name">Actualizări ale aplicației</string>
+    <string name="update_channel_desc">Notifică atunci când este disponibilă o versiune nouă a SwiftSlate</string>
+    <string name="update_available_title">Actualizare SwiftSlate disponibilă</string>
+    <string name="update_available_text">Atinge pentru a vedea cea mai recentă versiune</string>
 </resources>

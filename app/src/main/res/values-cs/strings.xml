@@ -91,4 +91,41 @@
     <string name="delete_confirm_key_title">Smazat tento API klíč?</string>
     <string name="delete_confirm_message">Tuto akci nelze vrátit zpět.</string>
     <string name="delete_confirm_button">Smazat</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Text se nepodařilo nahradit</string>
+    <string name="toast_custom_not_configured">Vlastní poskytovatel není nakonfigurován. Nastavte koncový bod a model v Nastavení.</string>
+    <string name="toast_model_setting_rejected">Poskytovatel odmítl nastavení modelu a přeskočil je — váš text byl přesto zpracován. Nahlaste to prosím na GitHubu SwiftSlate, abychom to mohli opravit.</string>
+    <string name="toast_key_rate_limited">API klíč má omezenou frekvenci. Zkuste to znovu za %1$d s</string>
+    <string name="toast_no_keys">Nejsou nakonfigurovány žádné API klíče</string>
+    <string name="toast_all_keys_invalid">Všechny API klíče jsou neplatné. Zkontrolujte prosím své klíče</string>
+    <string name="toast_request_timed_out">Časový limit požadavku vypršel</string>
+    <string name="toast_restore_failed">Původní text se nepodařilo obnovit</string>
+    <string name="toast_nothing_to_undo">Není co vrátit zpět</string>
+    <string name="toast_undo_failed">Nepodařilo se vrátit zpět</string>
+    <string name="toast_nothing_to_copy">Není co kopírovat</string>
+    <string name="toast_copied">Zkopírováno do schránky</string>
+    <string name="toast_nothing_to_cut">Není co vyjmout</string>
+    <string name="toast_cut">Vyjmuto do schránky</string>
+    <string name="toast_clipboard_empty">Schránka je prázdná</string>
+    <string name="toast_clipboard_failed">Operace se schránkou selhala</string>
+    <string name="toast_keystore_unavailable">Bezpečné úložiště klíčů není k dispozici. Přeinstalujte prosím aplikaci.</string>
+    <string name="error_no_model_access">Váš API klíč nemá přístup k tomuto modelu.</string>
+    <string name="error_invalid_key">Neplatný API klíč. Zkontrolujte svůj klíč v Nastavení.</string>
+    <string name="error_rate_limited">Omezená frekvence. Zkuste to brzy znovu.</string>
+    <string name="error_model_not_found">Model nenalezen. Zkontrolujte výběr modelu v Nastavení.</string>
+    <string name="error_safety_blocked">Odpověď byla zablokována bezpečnostními filtry. Zkuste to přeformulovat.</string>
+    <string name="error_empty_response">Model vrátil prázdnou odpověď. Zkuste to znovu.</string>
+    <string name="error_timeout_connection">Časový limit požadavku vypršel. Zkontrolujte připojení.</string>
+    <string name="error_no_internet">Žádné připojení k internetu.</string>
+    <string name="error_endpoint_unreachable">Nepodařilo se dosáhnout API. Zkontrolujte URL koncového bodu.</string>
+    <string name="error_bad_request">Požadavek selhal. Zkontrolujte nastavení.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">Aktualizace aplikace</string>
+    <string name="update_channel_desc">Upozorní, když je k dispozici nová verze SwiftSlate</string>
+    <string name="update_available_title">K dispozici je aktualizace SwiftSlate</string>
+    <string name="update_available_text">Klepnutím zobrazíte nejnovější verzi</string>
+
+    <!-- Command descriptions -->
 </resources>

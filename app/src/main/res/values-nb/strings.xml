@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Slette denne API-nøkkelen?</string>
     <string name="delete_confirm_message">Denne handlingen kan ikke angres.</string>
     <string name="delete_confirm_button">Slett</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Kunne ikke erstatte tekst</string>
+    <string name="toast_custom_not_configured">Egendefinert leverandør er ikke konfigurert. Angi endepunkt og modell i Innstillinger.</string>
+    <string name="toast_model_setting_rejected">En modellinnstilling ble avvist av leverandøren og hoppet over — teksten din ble likevel behandlet. Rapporter dette på SwiftSlate GitHub slik at vi kan fikse det.</string>
+    <string name="toast_key_rate_limited">API-nøkkel begrenset. Prøv igjen om %1$d s</string>
+    <string name="toast_no_keys">Ingen API-nøkler konfigurert</string>
+    <string name="toast_all_keys_invalid">Alle API-nøkler er ugyldige. Kontroller nøklene dine</string>
+    <string name="toast_request_timed_out">Forespørselen fikk tidsavbrudd</string>
+    <string name="toast_restore_failed">Kunne ikke gjenopprette den opprinnelige teksten</string>
+    <string name="toast_nothing_to_undo">Ingenting å angre</string>
+    <string name="toast_undo_failed">Kunne ikke angre</string>
+    <string name="toast_nothing_to_copy">Ingenting å kopiere</string>
+    <string name="toast_copied">Kopiert til utklippstavlen</string>
+    <string name="toast_nothing_to_cut">Ingenting å klippe ut</string>
+    <string name="toast_cut">Klippet ut til utklippstavlen</string>
+    <string name="toast_clipboard_empty">Utklippstavlen er tom</string>
+    <string name="toast_clipboard_failed">Utklippstavleoperasjonen mislyktes</string>
+    <string name="toast_keystore_unavailable">Sikker nøkkellagring er ikke tilgjengelig. Installer appen på nytt.</string>
+    <string name="error_no_model_access">API-nøkkelen din har ikke tilgang til denne modellen.</string>
+    <string name="error_invalid_key">Ugyldig API-nøkkel. Kontroller nøkkelen din i Innstillinger.</string>
+    <string name="error_rate_limited">Begrenset. Prøv igjen snart.</string>
+    <string name="error_model_not_found">Modell ikke funnet. Kontroller modellvalget ditt i Innstillinger.</string>
+    <string name="error_safety_blocked">Svaret ble blokkert av sikkerhetsfiltre. Prøv å omformulere.</string>
+    <string name="error_empty_response">Modellen returnerte et tomt svar. Prøv igjen.</string>
+    <string name="error_timeout_connection">Forespørselen fikk tidsavbrudd. Kontroller tilkoblingen din.</string>
+    <string name="error_no_internet">Ingen internettforbindelse.</string>
+    <string name="error_endpoint_unreachable">Kunne ikke nå API-et. Kontroller endepunkt-URL-en din.</string>
+    <string name="error_bad_request">Forespørselen mislyktes. Kontroller innstillingene dine.</string>
+
+    <!-- Update notifications -->
+    <string name="update_channel_name">App-oppdateringer</string>
+    <string name="update_channel_desc">Varsler når en ny versjon av SwiftSlate er tilgjengelig</string>
+    <string name="update_available_title">SwiftSlate-oppdatering tilgjengelig</string>
+    <string name="update_available_text">Trykk for å se den nyeste utgivelsen</string>
 </resources>

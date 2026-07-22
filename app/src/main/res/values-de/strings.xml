@@ -90,4 +90,41 @@
     <string name="settings_temperature_title">Temperatur</string>
     <string name="settings_made_by">Mit Liebe gemacht von Musheer Alam</string>
     <string name="settings_sponsor">Auf GitHub sponsern</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Text konnte nicht ersetzt werden</string>
+    <string name="toast_custom_not_configured">Benutzerdefinierter Anbieter nicht konfiguriert. Lege Endpoint und Modell in den Einstellungen fest.</string>
+    <string name="toast_model_setting_rejected">Eine Modelleinstellung wurde vom Anbieter abgelehnt und übersprungen — dein Text wurde dennoch verarbeitet. Bitte melde dies auf dem SwiftSlate GitHub, damit wir es beheben können.</string>
+    <string name="toast_key_rate_limited">API-Schlüssel ratenbegrenzt. Versuche es in %1$d s erneut</string>
+    <string name="toast_no_keys">Keine API-Schlüssel konfiguriert</string>
+    <string name="toast_all_keys_invalid">Alle API-Schlüssel sind ungültig. Bitte überprüfe deine Schlüssel</string>
+    <string name="toast_request_timed_out">Zeitüberschreitung der Anfrage</string>
+    <string name="toast_restore_failed">Ursprünglicher Text konnte nicht wiederhergestellt werden</string>
+    <string name="toast_nothing_to_undo">Nichts zum Rückgängigmachen</string>
+    <string name="toast_undo_failed">Rückgängigmachen fehlgeschlagen</string>
+    <string name="toast_nothing_to_copy">Nichts zum Kopieren</string>
+    <string name="toast_copied">In die Zwischenablage kopiert</string>
+    <string name="toast_nothing_to_cut">Nichts zum Ausschneiden</string>
+    <string name="toast_cut">In die Zwischenablage ausgeschnitten</string>
+    <string name="toast_clipboard_empty">Zwischenablage ist leer</string>
+    <string name="toast_clipboard_failed">Zwischenablage-Vorgang fehlgeschlagen</string>
+    <string name="toast_keystore_unavailable">Sicherer Schlüsselspeicher nicht verfügbar. Bitte installiere die App neu.</string>
+    <string name="error_no_model_access">Dein API-Schlüssel hat keinen Zugriff auf dieses Modell.</string>
+    <string name="error_invalid_key">Ungültiger API-Schlüssel. Bitte überprüfe deinen Schlüssel in den Einstellungen.</string>
+    <string name="error_rate_limited">Ratenbegrenzt. Versuche es in Kürze erneut.</string>
+    <string name="error_model_not_found">Modell nicht gefunden. Überprüfe deine Modellauswahl in den Einstellungen.</string>
+    <string name="error_safety_blocked">Antwort durch Sicherheitsfilter blockiert. Versuche, es umzuformulieren.</string>
+    <string name="error_empty_response">Das Modell hat eine leere Antwort zurückgegeben. Versuche es erneut.</string>
+    <string name="error_timeout_connection">Zeitüberschreitung der Anfrage. Überprüfe deine Verbindung.</string>
+    <string name="error_no_internet">Keine Internetverbindung.</string>
+    <string name="error_endpoint_unreachable">Die API konnte nicht erreicht werden. Überprüfe deine Endpoint-URL.</string>
+    <string name="error_bad_request">Anfrage fehlgeschlagen. Überprüfe deine Einstellungen.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">App-Updates</string>
+    <string name="update_channel_desc">Benachrichtigt, wenn eine neue Version von SwiftSlate verfügbar ist</string>
+    <string name="update_available_title">SwiftSlate-Update verfügbar</string>
+    <string name="update_available_text">Tippe, um die neueste Version anzuzeigen</string>
+
+    <!-- Command descriptions -->
 </resources>

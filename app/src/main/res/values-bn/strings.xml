@@ -91,4 +91,41 @@
     <string name="delete_confirm_key_title">এই API কীটি মুছে ফেলবেন?</string>
     <string name="delete_confirm_message">এই পদক্ষেপ পূর্বাবস্থায় ফেরানো যাবে না।</string>
     <string name="delete_confirm_button">মুছে ফেলুন</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">টেক্সট প্রতিস্থাপন করা যায়নি</string>
+    <string name="toast_custom_not_configured">কাস্টম প্রদানকারী কনফিগার করা হয়নি। সেটিংসে এন্ডপয়েন্ট এবং মডেল সেট করুন।</string>
+    <string name="toast_model_setting_rejected">একটি মডেল সেটিং প্রদানকারী দ্বারা প্রত্যাখ্যাত হয়েছে এবং এড়িয়ে যাওয়া হয়েছে — আপনার টেক্সট তবুও প্রক্রিয়া করা হয়েছে। অনুগ্রহ করে SwiftSlate GitHub-এ এটি রিপোর্ট করুন যাতে আমরা এটি ঠিক করতে পারি।</string>
+    <string name="toast_key_rate_limited">API কী রেট সীমিত। %1$d সেকেন্ড পরে আবার চেষ্টা করুন</string>
+    <string name="toast_no_keys">কোনো API কী কনফিগার করা হয়নি</string>
+    <string name="toast_all_keys_invalid">সমস্ত API কী অবৈধ। অনুগ্রহ করে আপনার কী পরীক্ষা করুন</string>
+    <string name="toast_request_timed_out">অনুরোধের সময় শেষ হয়েছে</string>
+    <string name="toast_restore_failed">মূল টেক্সট পুনরুদ্ধার করা যায়নি</string>
+    <string name="toast_nothing_to_undo">পূর্বাবস্থায় ফেরানোর কিছু নেই</string>
+    <string name="toast_undo_failed">পূর্বাবস্থায় ফেরানো যায়নি</string>
+    <string name="toast_nothing_to_copy">অনুলিপি করার কিছু নেই</string>
+    <string name="toast_copied">ক্লিপবোর্ডে অনুলিপি করা হয়েছে</string>
+    <string name="toast_nothing_to_cut">কাটার কিছু নেই</string>
+    <string name="toast_cut">ক্লিপবোর্ডে কাটা হয়েছে</string>
+    <string name="toast_clipboard_empty">ক্লিপবোর্ড খালি</string>
+    <string name="toast_clipboard_failed">ক্লিপবোর্ড অপারেশন ব্যর্থ হয়েছে</string>
+    <string name="toast_keystore_unavailable">নিরাপদ কী সংরক্ষণ উপলব্ধ নয়। অনুগ্রহ করে অ্যাপটি পুনরায় ইনস্টল করুন।</string>
+    <string name="error_no_model_access">আপনার API কী এই মডেলে অ্যাক্সেস নেই।</string>
+    <string name="error_invalid_key">অবৈধ API কী। অনুগ্রহ করে সেটিংসে আপনার কী পরীক্ষা করুন।</string>
+    <string name="error_rate_limited">রেট সীমিত। শীঘ্রই আবার চেষ্টা করুন।</string>
+    <string name="error_model_not_found">মডেল পাওয়া যায়নি। সেটিংসে আপনার মডেল নির্বাচন পরীক্ষা করুন।</string>
+    <string name="error_safety_blocked">নিরাপত্তা ফিল্টার দ্বারা প্রতিক্রিয়া ব্লক করা হয়েছে। পুনরায় বাক্য গঠন করে দেখুন।</string>
+    <string name="error_empty_response">মডেল একটি খালি প্রতিক্রিয়া ফিরিয়েছে। আবার চেষ্টা করুন।</string>
+    <string name="error_timeout_connection">অনুরোধের সময় শেষ হয়েছে। আপনার সংযোগ পরীক্ষা করুন।</string>
+    <string name="error_no_internet">কোনো ইন্টারনেট সংযোগ নেই।</string>
+    <string name="error_endpoint_unreachable">API-তে পৌঁছানো যায়নি। আপনার এন্ডপয়েন্ট URL পরীক্ষা করুন।</string>
+    <string name="error_bad_request">অনুরোধ ব্যর্থ হয়েছে। আপনার সেটিংস পরীক্ষা করুন।</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">অ্যাপ আপডেট</string>
+    <string name="update_channel_desc">SwiftSlate-এর নতুন সংস্করণ উপলব্ধ হলে জানায়</string>
+    <string name="update_available_title">SwiftSlate আপডেট উপলব্ধ</string>
+    <string name="update_available_text">সর্বশেষ রিলিজ দেখতে ট্যাপ করুন</string>
+
+    <!-- Command descriptions -->
 </resources>

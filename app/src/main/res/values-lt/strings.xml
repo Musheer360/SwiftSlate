@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Ištrinti šį API raktą?</string>
     <string name="delete_confirm_message">Šio veiksmo anuliuoti negalima.</string>
     <string name="delete_confirm_button">Ištrinti</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Nepavyko pakeisti teksto</string>
+    <string name="toast_custom_not_configured">Pasirinktinis tiekėjas nesukonfigūruotas. Nustatymuose nurodykite galinį tašką ir modelį.</string>
+    <string name="toast_model_setting_rejected">Tiekėjas atmetė modelio nustatymą ir jis buvo praleistas — jūsų tekstas vis tiek buvo apdorotas. Praneškite apie tai SwiftSlate GitHub, kad galėtume tai pataisyti.</string>
+    <string name="toast_key_rate_limited">API rakto užklausų dažnis apribotas. Bandykite dar kartą po %1$d s</string>
+    <string name="toast_no_keys">Nesukonfigūruota jokių API raktų</string>
+    <string name="toast_all_keys_invalid">Visi API raktai negalioja. Patikrinkite savo raktus</string>
+    <string name="toast_request_timed_out">Baigėsi užklausos laikas</string>
+    <string name="toast_restore_failed">Nepavyko atkurti pradinio teksto</string>
+    <string name="toast_nothing_to_undo">Nėra ką anuliuoti</string>
+    <string name="toast_undo_failed">Nepavyko anuliuoti</string>
+    <string name="toast_nothing_to_copy">Nėra ką kopijuoti</string>
+    <string name="toast_copied">Nukopijuota į iškarpinę</string>
+    <string name="toast_nothing_to_cut">Nėra ko iškirpti</string>
+    <string name="toast_cut">Iškirpta į iškarpinę</string>
+    <string name="toast_clipboard_empty">Iškarpinė tuščia</string>
+    <string name="toast_clipboard_failed">Iškarpinės operacija nepavyko</string>
+    <string name="toast_keystore_unavailable">Saugus raktų saugojimas negalimas. Iš naujo įdiekite programą.</string>
+    <string name="error_no_model_access">Jūsų API raktas neturi prieigos prie šio modelio.</string>
+    <string name="error_invalid_key">Netinkamas API raktas. Patikrinkite savo raktą Nustatymuose.</string>
+    <string name="error_rate_limited">Užklausų dažnis apribotas. Netrukus bandykite dar kartą.</string>
+    <string name="error_model_not_found">Modelis nerastas. Patikrinkite modelio pasirinkimą Nustatymuose.</string>
+    <string name="error_safety_blocked">Atsakymą užblokavo saugumo filtrai. Pabandykite performuluoti.</string>
+    <string name="error_empty_response">Modelis grąžino tuščią atsakymą. Bandykite dar kartą.</string>
+    <string name="error_timeout_connection">Baigėsi užklausos laikas. Patikrinkite ryšį.</string>
+    <string name="error_no_internet">Nėra interneto ryšio.</string>
+    <string name="error_endpoint_unreachable">Nepavyko pasiekti API. Patikrinkite galinio taško URL.</string>
+    <string name="error_bad_request">Užklausa nepavyko. Patikrinkite nustatymus.</string>
+
+    <!-- Update notifications -->
+    <string name="update_channel_name">Programos naujiniai</string>
+    <string name="update_channel_desc">Praneša, kai yra nauja SwiftSlate versija</string>
+    <string name="update_available_title">Yra SwiftSlate naujinys</string>
+    <string name="update_available_text">Palieskite, kad peržiūrėtumėte naujausią leidimą</string>
 </resources>

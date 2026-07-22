@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">ಈ API ಕೀಯನ್ನು ಅಳಿಸುವುದೇ?</string>
     <string name="delete_confirm_message">ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
     <string name="delete_confirm_button">ಅಳಿಸು</string>
+
+    <!-- Toasts & errors -->
+    <string name="toast_replace_failed">ಪಠ್ಯವನ್ನು ಬದಲಾಯಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
+    <string name="toast_custom_not_configured">ಕಸ್ಟಮ್ ಒದಗಿಸುವವರನ್ನು ಸಂರಚಿಸಲಾಗಿಲ್ಲ. ಸೆಟ್ಟಿಂಗ್ಗಳಲ್ಲಿ ಎಂಡ್ಪಾಯಿಂಟ್ ಮತ್ತು ಮಾದರಿಯನ್ನು ಹೊಂದಿಸಿ.</string>
+    <string name="toast_model_setting_rejected">ಮಾದರಿ ಸೆಟ್ಟಿಂಗ್ ಅನ್ನು ಒದಗಿಸುವವರು ತಿರಸ್ಕರಿಸಿ ಬಿಟ್ಟುಬಿಟ್ಟರು — ನಿಮ್ಮ ಪಠ್ಯವನ್ನು ಇನ್ನೂ ಸಂಸ್ಕರಿಸಲಾಗಿದೆ. ನಾವು ಇದನ್ನು ಸರಿಪಡಿಸಲು ಸಾಧ್ಯವಾಗುವಂತೆ SwiftSlate GitHub ನಲ್ಲಿ ವರದಿ ಮಾಡಿ.</string>
+    <string name="toast_key_rate_limited">API ಕೀ ದರ ಸೀಮಿತಗೊಳಿಸಲಾಗಿದೆ. %1$d ಸೆಕೆಂಡ್‌ಗಳಲ್ಲಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ</string>
+    <string name="toast_no_keys">ಯಾವುದೇ API ಕೀಗಳನ್ನು ಸಂರಚಿಸಲಾಗಿಲ್ಲ</string>
+    <string name="toast_all_keys_invalid">ಎಲ್ಲಾ API ಕೀಗಳು ಅಮಾನ್ಯವಾಗಿವೆ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ಕೀಗಳನ್ನು ಪರಿಶೀಲಿಸಿ</string>
+    <string name="toast_request_timed_out">ವಿನಂತಿಯ ಸಮಯ ಮೀರಿದೆ</string>
+    <string name="toast_restore_failed">ಮೂಲ ಪಠ್ಯವನ್ನು ಮರುಸ್ಥಾಪಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
+    <string name="toast_nothing_to_undo">ರದ್ದುಗೊಳಿಸಲು ಏನೂ ಇಲ್ಲ</string>
+    <string name="toast_undo_failed">ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
+    <string name="toast_nothing_to_copy">ನಕಲಿಸಲು ಏನೂ ಇಲ್ಲ</string>
+    <string name="toast_copied">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಿದೆ</string>
+    <string name="toast_nothing_to_cut">ಕತ್ತರಿಸಲು ಏನೂ ಇಲ್ಲ</string>
+    <string name="toast_cut">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ಕತ್ತರಿಸಲಾಗಿದೆ</string>
+    <string name="toast_clipboard_empty">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಖಾಲಿಯಾಗಿದೆ</string>
+    <string name="toast_clipboard_failed">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಕಾರ್ಯಾಚರಣೆ ವಿಫಲವಾಗಿದೆ</string>
+    <string name="toast_keystore_unavailable">ಸುರಕ್ಷಿತ ಕೀ ಸಂಗ್ರಹ ಲಭ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಮರುಸ್ಥಾಪಿಸಿ.</string>
+    <string name="error_no_model_access">ನಿಮ್ಮ API ಕೀಗೆ ಈ ಮಾದರಿಗೆ ಪ್ರವೇಶವಿಲ್ಲ.</string>
+    <string name="error_invalid_key">ಅಮಾನ್ಯ API ಕೀ. ಸೆಟ್ಟಿಂಗ್ಗಳಲ್ಲಿ ನಿಮ್ಮ ಕೀ ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="error_rate_limited">ದರ ಸೀಮಿತಗೊಳಿಸಲಾಗಿದೆ. ಶೀಘ್ರದಲ್ಲೇ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="error_model_not_found">ಮಾದರಿ ಕಂಡುಬಂದಿಲ್ಲ. ಸೆಟ್ಟಿಂಗ್ಗಳಲ್ಲಿ ನಿಮ್ಮ ಮಾದರಿ ಆಯ್ಕೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="error_safety_blocked">ಸುರಕ್ಷತಾ ಫಿಲ್ಟರ್‌ಗಳಿಂದ ಪ್ರತಿಕ್ರಿಯೆ ನಿರ್ಬಂಧಿಸಲಾಗಿದೆ. ಮರುರೂಪಿಸಲು ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="error_empty_response">ಮಾದರಿ ಖಾಲಿ ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಿದೆ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="error_timeout_connection">ವಿನಂತಿಯ ಸಮಯ ಮೀರಿದೆ. ನಿಮ್ಮ ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="error_no_internet">ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವಿಲ್ಲ.</string>
+    <string name="error_endpoint_unreachable">API ಅನ್ನು ತಲುಪಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ನಿಮ್ಮ ಎಂಡ್ಪಾಯಿಂಟ್ URL ಅನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="error_bad_request">ವಿನಂತಿ ವಿಫಲವಾಗಿದೆ. ನಿಮ್ಮ ಸೆಟ್ಟಿಂಗ್ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">ಅಪ್ಲಿಕೇಶನ್ ನವೀಕರಣಗಳು</string>
+    <string name="update_channel_desc">SwiftSlate ನ ಹೊಸ ಆವೃತ್ತಿ ಲಭ್ಯವಾದಾಗ ಸೂಚಿಸುತ್ತದೆ</string>
+    <string name="update_available_title">SwiftSlate ನವೀಕರಣ ಲಭ್ಯವಿದೆ</string>
+    <string name="update_available_text">ಇತ್ತೀಚಿನ ಬಿಡುಗಡೆಯನ್ನು ವೀಕ್ಷಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
 </resources>

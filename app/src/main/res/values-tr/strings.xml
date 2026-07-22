@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Bu API anahtarı silinsin mi?</string>
     <string name="delete_confirm_message">Bu işlem geri alınamaz.</string>
     <string name="delete_confirm_button">Sil</string>
+
+    <!-- Toasts &amp; errors -->
+    <string name="toast_replace_failed">Metin değiştirilemedi</string>
+    <string name="toast_custom_not_configured">Özel sağlayıcı yapılandırılmadı. Ayarlar\'da uç nokta ve modeli belirleyin.</string>
+    <string name="toast_model_setting_rejected">Bir model ayarı sağlayıcı tarafından reddedildi ve atlandı — metniniz yine de işlendi. Düzeltebilmemiz için lütfen bunu SwiftSlate GitHub\'da bildirin.</string>
+    <string name="toast_key_rate_limited">API anahtarı hız sınırına ulaştı. %1$d saniye içinde tekrar deneyin</string>
+    <string name="toast_no_keys">Yapılandırılmış API anahtarı yok</string>
+    <string name="toast_all_keys_invalid">Tüm API anahtarları geçersiz. Lütfen anahtarlarınızı kontrol edin</string>
+    <string name="toast_request_timed_out">İstek zaman aşımına uğradı</string>
+    <string name="toast_restore_failed">Orijinal metin geri yüklenemedi</string>
+    <string name="toast_nothing_to_undo">Geri alınacak bir şey yok</string>
+    <string name="toast_undo_failed">Geri alınamadı</string>
+    <string name="toast_nothing_to_copy">Kopyalanacak bir şey yok</string>
+    <string name="toast_copied">Panoya kopyalandı</string>
+    <string name="toast_nothing_to_cut">Kesilecek bir şey yok</string>
+    <string name="toast_cut">Panoya kesildi</string>
+    <string name="toast_clipboard_empty">Pano boş</string>
+    <string name="toast_clipboard_failed">Pano işlemi başarısız oldu</string>
+    <string name="toast_keystore_unavailable">Güvenli anahtar depolama kullanılamıyor. Lütfen uygulamayı yeniden yükleyin.</string>
+    <string name="error_no_model_access">API anahtarınızın bu modele erişimi yok.</string>
+    <string name="error_invalid_key">Geçersiz API anahtarı. Lütfen anahtarınızı Ayarlar\'da kontrol edin.</string>
+    <string name="error_rate_limited">Hız sınırına ulaşıldı. Kısa süre içinde tekrar deneyin.</string>
+    <string name="error_model_not_found">Model bulunamadı. Ayarlar\'da model seçiminizi kontrol edin.</string>
+    <string name="error_safety_blocked">Yanıt güvenlik filtreleri tarafından engellendi. Yeniden ifade etmeyi deneyin.</string>
+    <string name="error_empty_response">Model boş bir yanıt döndürdü. Tekrar deneyin.</string>
+    <string name="error_timeout_connection">İstek zaman aşımına uğradı. Bağlantınızı kontrol edin.</string>
+    <string name="error_no_internet">İnternet bağlantısı yok.</string>
+    <string name="error_endpoint_unreachable">API\'ye ulaşılamadı. Uç nokta URL\'nizi kontrol edin.</string>
+    <string name="error_bad_request">İstek başarısız oldu. Ayarlarınızı kontrol edin.</string>
+
+    <!-- Updates &amp; command descriptions -->
+    <string name="update_channel_name">Uygulama Güncellemeleri</string>
+    <string name="update_channel_desc">SwiftSlate\'in yeni bir sürümü kullanıma sunulduğunda bildirir</string>
+    <string name="update_available_title">SwiftSlate güncellemesi mevcut</string>
+    <string name="update_available_text">En son sürümü görüntülemek için dokunun</string>
 </resources>

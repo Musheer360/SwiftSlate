@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Eliminar esta chave API?</string>
     <string name="delete_confirm_message">Esta ação não pode ser desfeita.</string>
     <string name="delete_confirm_button">Eliminar</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Não foi possível substituir o texto</string>
+    <string name="toast_custom_not_configured">Fornecedor personalizado não configurado. Defina o endpoint e o modelo nas Definições.</string>
+    <string name="toast_model_setting_rejected">Uma definição do modelo foi rejeitada pelo fornecedor e ignorada — o seu texto foi mesmo assim processado. Reporte isto no GitHub do SwiftSlate para que possamos corrigir.</string>
+    <string name="toast_key_rate_limited">Limite de pedidos da chave API atingido. Tente novamente em %1$ds</string>
+    <string name="toast_no_keys">Nenhuma chave API configurada</string>
+    <string name="toast_all_keys_invalid">Todas as chaves API são inválidas. Verifique as suas chaves</string>
+    <string name="toast_request_timed_out">O pedido excedeu o tempo limite</string>
+    <string name="toast_restore_failed">Não foi possível restaurar o texto original</string>
+    <string name="toast_nothing_to_undo">Nada para desfazer</string>
+    <string name="toast_undo_failed">Não foi possível desfazer</string>
+    <string name="toast_nothing_to_copy">Nada para copiar</string>
+    <string name="toast_copied">Copiado para a área de transferência</string>
+    <string name="toast_nothing_to_cut">Nada para cortar</string>
+    <string name="toast_cut">Cortado para a área de transferência</string>
+    <string name="toast_clipboard_empty">A área de transferência está vazia</string>
+    <string name="toast_clipboard_failed">A operação da área de transferência falhou</string>
+    <string name="toast_keystore_unavailable">Armazenamento seguro de chaves indisponível. Reinstale a aplicação.</string>
+    <string name="error_no_model_access">A sua chave API não tem acesso a este modelo.</string>
+    <string name="error_invalid_key">Chave API inválida. Verifique a sua chave nas Definições.</string>
+    <string name="error_rate_limited">Limite de pedidos atingido. Tente novamente em breve.</string>
+    <string name="error_model_not_found">Modelo não encontrado. Verifique a seleção do modelo nas Definições.</string>
+    <string name="error_safety_blocked">Resposta bloqueada por filtros de segurança. Tente reformular.</string>
+    <string name="error_empty_response">O modelo devolveu uma resposta vazia. Tente novamente.</string>
+    <string name="error_timeout_connection">O pedido excedeu o tempo limite. Verifique a sua ligação.</string>
+    <string name="error_no_internet">Sem ligação à internet.</string>
+    <string name="error_endpoint_unreachable">Não foi possível contactar a API. Verifique o URL do endpoint.</string>
+    <string name="error_bad_request">O pedido falhou. Verifique as suas definições.</string>
+
+    <!-- Updates & command descriptions -->
+    <string name="update_channel_name">Atualizações da aplicação</string>
+    <string name="update_channel_desc">Notifica quando está disponível uma nova versão do SwiftSlate</string>
+    <string name="update_available_title">Atualização do SwiftSlate disponível</string>
+    <string name="update_available_text">Toque para ver a versão mais recente</string>
 </resources>

@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Видалити цей ключ API?</string>
     <string name="delete_confirm_message">Цю дію не можна скасувати.</string>
     <string name="delete_confirm_button">Видалити</string>
+
+    <!-- Toasts &amp; errors -->
+    <string name="toast_replace_failed">Не вдалося замінити текст</string>
+    <string name="toast_custom_not_configured">Користувацький постачальник не налаштований. Вкажіть кінцеву точку та модель у налаштуваннях.</string>
+    <string name="toast_model_setting_rejected">Одне з налаштувань моделі було відхилено постачальником і пропущено — ваш текст усе одно оброблено. Будь ласка, повідомте про це на SwiftSlate GitHub, щоб ми могли це виправити.</string>
+    <string name="toast_key_rate_limited">Перевищено ліміт запитів для ключа API. Повторіть спробу через %1$d с</string>
+    <string name="toast_no_keys">Ключі API не налаштовано</string>
+    <string name="toast_all_keys_invalid">Усі ключі API недійсні. Будь ласка, перевірте свої ключі</string>
+    <string name="toast_request_timed_out">Час очікування запиту вичерпано</string>
+    <string name="toast_restore_failed">Не вдалося відновити оригінальний текст</string>
+    <string name="toast_nothing_to_undo">Немає чого скасовувати</string>
+    <string name="toast_undo_failed">Не вдалося скасувати</string>
+    <string name="toast_nothing_to_copy">Немає чого копіювати</string>
+    <string name="toast_copied">Скопійовано в буфер обміну</string>
+    <string name="toast_nothing_to_cut">Немає чого вирізати</string>
+    <string name="toast_cut">Вирізано в буфер обміну</string>
+    <string name="toast_clipboard_empty">Буфер обміну порожній</string>
+    <string name="toast_clipboard_failed">Операція з буфером обміну не вдалася</string>
+    <string name="toast_keystore_unavailable">Безпечне сховище ключів недоступне. Будь ласка, перевстановіть застосунок.</string>
+    <string name="error_no_model_access">Ваш ключ API не має доступу до цієї моделі.</string>
+    <string name="error_invalid_key">Недійсний ключ API. Будь ласка, перевірте свій ключ у налаштуваннях.</string>
+    <string name="error_rate_limited">Перевищено ліміт запитів. Повторіть спробу незабаром.</string>
+    <string name="error_model_not_found">Модель не знайдено. Перевірте вибір моделі у налаштуваннях.</string>
+    <string name="error_safety_blocked">Відповідь заблоковано фільтрами безпеки. Спробуйте перефразувати.</string>
+    <string name="error_empty_response">Модель повернула порожню відповідь. Спробуйте ще раз.</string>
+    <string name="error_timeout_connection">Час очікування запиту вичерпано. Перевірте з’єднання.</string>
+    <string name="error_no_internet">Немає підключення до Інтернету.</string>
+    <string name="error_endpoint_unreachable">Не вдалося зв’язатися з API. Перевірте URL кінцевої точки.</string>
+    <string name="error_bad_request">Запит не вдався. Перевірте свої налаштування.</string>
+
+    <!-- Updates &amp; command descriptions -->
+    <string name="update_channel_name">Оновлення застосунку</string>
+    <string name="update_channel_desc">Сповіщає, коли доступна нова версія SwiftSlate</string>
+    <string name="update_available_title">Доступне оновлення SwiftSlate</string>
+    <string name="update_available_text">Торкніться, щоб переглянути останній випуск</string>
 </resources>

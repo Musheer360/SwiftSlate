@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">શું આ API કી કાઢી નાખવી?</string>
     <string name="delete_confirm_message">આ ક્રિયા પૂર્વવત્ કરી શકાતી નથી.</string>
     <string name="delete_confirm_button">કાઢી નાખો</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">ટેક્સ્ટ બદલી શકાયું નહીં</string>
+    <string name="toast_custom_not_configured">કસ્ટમ પ્રદાતા કોન્ફિગર કરેલ નથી. સેટિંગ્સમાં એન્ડપોઇન્ટ અને મોડેલ સેટ કરો.</string>
+    <string name="toast_model_setting_rejected">પ્રદાતાએ એક મોડેલ સેટિંગ નકારી અને છોડી દીધી — તમારું ટેક્સ્ટ તેમ છતાં પ્રોસેસ થયું. કૃપા કરીને આની જાણ SwiftSlate ના GitHub પર કરો જેથી અમે તેને ઠીક કરી શકીએ.</string>
+    <string name="toast_key_rate_limited">API કી પર દર મર્યાદા લાગુ. %1$d સેકન્ડમાં ફરી પ્રયાસ કરો</string>
+    <string name="toast_no_keys">કોઈ API કી કોન્ફિગર કરેલી નથી</string>
+    <string name="toast_all_keys_invalid">બધી API કીઓ અમાન્ય છે. કૃપા કરીને તમારી કીઓ તપાસો</string>
+    <string name="toast_request_timed_out">વિનંતીનો સમય સમાપ્ત થયો</string>
+    <string name="toast_restore_failed">મૂળ ટેક્સ્ટ પુનઃસ્થાપિત કરી શકાયું નહીં</string>
+    <string name="toast_nothing_to_undo">પૂર્વવત્ કરવા માટે કંઈ નથી</string>
+    <string name="toast_undo_failed">પૂર્વવત્ કરી શકાયું નહીં</string>
+    <string name="toast_nothing_to_copy">કૉપિ કરવા માટે કંઈ નથી</string>
+    <string name="toast_copied">ક્લિપબોર્ડ પર કૉપિ થયું</string>
+    <string name="toast_nothing_to_cut">કટ કરવા માટે કંઈ નથી</string>
+    <string name="toast_cut">ક્લિપબોર્ડ પર કટ થયું</string>
+    <string name="toast_clipboard_empty">ક્લિપબોર્ડ ખાલી છે</string>
+    <string name="toast_clipboard_failed">ક્લિપબોર્ડ ક્રિયા નિષ્ફળ</string>
+    <string name="toast_keystore_unavailable">સુરક્ષિત કી સ્ટોરેજ ઉપલબ્ધ નથી. કૃપા કરીને એપ્લિકેશન ફરીથી ઇન્સ્ટોલ કરો.</string>
+    <string name="error_no_model_access">તમારી API કીને આ મોડેલની ઍક્સેસ નથી.</string>
+    <string name="error_invalid_key">અમાન્ય API કી. કૃપા કરીને સેટિંગ્સમાં તમારી કી તપાસો.</string>
+    <string name="error_rate_limited">દર મર્યાદા લાગુ. કૃપા કરીને થોડી વારમાં ફરી પ્રયાસ કરો.</string>
+    <string name="error_model_not_found">મોડેલ મળ્યું નથી. સેટિંગ્સમાં તમારી મોડેલ પસંદગી તપાસો.</string>
+    <string name="error_safety_blocked">સલામતી ફિલ્ટર્સ દ્વારા પ્રતિસાદ અવરોધિત. ફરીથી શબ્દરચના કરવાનો પ્રયાસ કરો.</string>
+    <string name="error_empty_response">મોડેલે ખાલી પ્રતિસાદ પરત કર્યો. ફરી પ્રયાસ કરો.</string>
+    <string name="error_timeout_connection">વિનંતીનો સમય સમાપ્ત થયો. તમારું કનેક્શન તપાસો.</string>
+    <string name="error_no_internet">કોઈ ઇન્ટરનેટ કનેક્શન નથી.</string>
+    <string name="error_endpoint_unreachable">API સુધી પહોંચી શકાયું નહીં. તમારું એન્ડપોઇન્ટ URL તપાસો.</string>
+    <string name="error_bad_request">વિનંતી નિષ્ફળ. તમારી સેટિંગ્સ તપાસો.</string>
+
+    <!-- Updates and command descriptions -->
+    <string name="update_channel_name">ઍપ અપડેટ્સ</string>
+    <string name="update_channel_desc">SwiftSlate ની નવી આવૃત્તિ ઉપલબ્ધ થાય ત્યારે સૂચિત કરે છે</string>
+    <string name="update_available_title">SwiftSlate અપડેટ ઉપલબ્ધ છે</string>
+    <string name="update_available_text">નવીનતમ રિલીઝ જોવા માટે ટૅપ કરો</string>
 </resources>

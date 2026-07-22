@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">இந்த API விசையை நீக்கவா?</string>
     <string name="delete_confirm_message">இந்த செயலை மீண்டும் செய்ய முடியாது.</string>
     <string name="delete_confirm_button">நீக்கு</string>
+
+    <!-- Toasts &amp; errors -->
+    <string name="toast_replace_failed">உரையை மாற்ற முடியவில்லை</string>
+    <string name="toast_custom_not_configured">தனிப்பயன் வழங்குநர் கட்டமைக்கப்படவில்லை. அமைப்புகளில் இறுதிப் புள்ளி மற்றும் மாதிரியை அமைக்கவும்.</string>
+    <string name="toast_model_setting_rejected">ஒரு மாதிரி அமைப்பு வழங்குநரால் நிராகரிக்கப்பட்டு தவிர்க்கப்பட்டது — உங்கள் உரை இன்னும் செயலாக்கப்பட்டது. நாங்கள் சரிசெய்யும் வகையில் இதை SwiftSlate GitHub இல் தெரிவிக்கவும்.</string>
+    <string name="toast_key_rate_limited">API விசை வரம்பு மீறப்பட்டது. %1$d நொடிகளில் மீண்டும் முயற்சிக்கவும்</string>
+    <string name="toast_no_keys">API விசைகள் எதுவும் கட்டமைக்கப்படவில்லை</string>
+    <string name="toast_all_keys_invalid">அனைத்து API விசைகளும் செல்லுபடியாகாது. உங்கள் விசைகளைச் சரிபார்க்கவும்</string>
+    <string name="toast_request_timed_out">கோரிக்கை காலாவதியானது</string>
+    <string name="toast_restore_failed">அசல் உரையை மீட்டெடுக்க முடியவில்லை</string>
+    <string name="toast_nothing_to_undo">செயல்தவிர்க்க எதுவும் இல்லை</string>
+    <string name="toast_undo_failed">செயல்தவிர்க்க முடியவில்லை</string>
+    <string name="toast_nothing_to_copy">நகலெடுக்க எதுவும் இல்லை</string>
+    <string name="toast_copied">கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது</string>
+    <string name="toast_nothing_to_cut">வெட்ட எதுவும் இல்லை</string>
+    <string name="toast_cut">கிளிப்போர்டுக்கு வெட்டப்பட்டது</string>
+    <string name="toast_clipboard_empty">கிளிப்போர்டு காலியாக உள்ளது</string>
+    <string name="toast_clipboard_failed">கிளிப்போர்டு செயல்பாடு தோல்வியடைந்தது</string>
+    <string name="toast_keystore_unavailable">பாதுகாப்பான விசை சேமிப்பு கிடைக்கவில்லை. பயன்பாட்டை மீண்டும் நிறுவவும்.</string>
+    <string name="error_no_model_access">உங்கள் API விசைக்கு இந்த மாதிரிக்கான அணுகல் இல்லை.</string>
+    <string name="error_invalid_key">தவறான API விசை. அமைப்புகளில் உங்கள் விசையைச் சரிபார்க்கவும்.</string>
+    <string name="error_rate_limited">வரம்பு மீறப்பட்டது. சிறிது நேரத்தில் மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="error_model_not_found">மாதிரி கிடைக்கவில்லை. அமைப்புகளில் உங்கள் மாதிரி தேர்வைச் சரிபார்க்கவும்.</string>
+    <string name="error_safety_blocked">பாதுகாப்பு வடிப்பான்களால் பதில் தடுக்கப்பட்டது. மறுவடிவமைத்து முயற்சிக்கவும்.</string>
+    <string name="error_empty_response">மாதிரி வெற்று பதிலை வழங்கியது. மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="error_timeout_connection">கோரிக்கை காலாவதியானது. உங்கள் இணைப்பைச் சரிபார்க்கவும்.</string>
+    <string name="error_no_internet">இணைய இணைப்பு இல்லை.</string>
+    <string name="error_endpoint_unreachable">API ஐ அடைய முடியவில்லை. உங்கள் இறுதிப் புள்ளி URL ஐச் சரிபார்க்கவும்.</string>
+    <string name="error_bad_request">கோரிக்கை தோல்வியடைந்தது. உங்கள் அமைப்புகளைச் சரிபார்க்கவும்.</string>
+
+    <!-- Updates &amp; command descriptions -->
+    <string name="update_channel_name">ஆப் புதுப்பிப்புகள்</string>
+    <string name="update_channel_desc">SwiftSlate இன் புதிய பதிப்பு கிடைக்கும்போது அறிவிக்கிறது</string>
+    <string name="update_available_title">SwiftSlate புதுப்பிப்பு கிடைக்கிறது</string>
+    <string name="update_available_text">சமீபத்திய வெளியீட்டைப் பார்க்க தட்டவும்</string>
 </resources>

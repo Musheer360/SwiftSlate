@@ -91,4 +91,41 @@
     <string name="delete_confirm_key_title">Vols suprimir aquesta clau API?</string>
     <string name="delete_confirm_message">Aquesta acció no es pot desfer.</string>
     <string name="delete_confirm_button">Suprimeix</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">No s’ha pogut substituir el text</string>
+    <string name="toast_custom_not_configured">El proveïdor personalitzat no està configurat. Defineix el punt final i el model a Configuració.</string>
+    <string name="toast_model_setting_rejected">El proveïdor ha rebutjat una configuració del model i s’ha omès — el teu text s’ha processat igualment. Informa’n al GitHub de SwiftSlate perquè ho puguem corregir.</string>
+    <string name="toast_key_rate_limited">Clau API amb límit de freqüència. Torna-ho a provar en %1$ds</string>
+    <string name="toast_no_keys">No hi ha cap clau API configurada</string>
+    <string name="toast_all_keys_invalid">Totes les claus API no són vàlides. Comprova les teves claus</string>
+    <string name="toast_request_timed_out">La sol·licitud ha esgotat el temps d’espera</string>
+    <string name="toast_restore_failed">No s’ha pogut restaurar el text original</string>
+    <string name="toast_nothing_to_undo">No hi ha res per desfer</string>
+    <string name="toast_undo_failed">No s’ha pogut desfer</string>
+    <string name="toast_nothing_to_copy">No hi ha res per copiar</string>
+    <string name="toast_copied">Copiat al porta-retalls</string>
+    <string name="toast_nothing_to_cut">No hi ha res per retallar</string>
+    <string name="toast_cut">Retallat al porta-retalls</string>
+    <string name="toast_clipboard_empty">El porta-retalls és buit</string>
+    <string name="toast_clipboard_failed">L’operació del porta-retalls ha fallat</string>
+    <string name="toast_keystore_unavailable">L’emmagatzematge segur de claus no està disponible. Torna a instal·lar l’aplicació.</string>
+    <string name="error_no_model_access">La teva clau API no té accés a aquest model.</string>
+    <string name="error_invalid_key">Clau API no vàlida. Comprova la teva clau a Configuració.</string>
+    <string name="error_rate_limited">Límit de freqüència assolit. Torna-ho a provar aviat.</string>
+    <string name="error_model_not_found">No s’ha trobat el model. Comprova la selecció de model a Configuració.</string>
+    <string name="error_safety_blocked">Resposta bloquejada pels filtres de seguretat. Prova de reformular-la.</string>
+    <string name="error_empty_response">El model ha retornat una resposta buida. Torna-ho a provar.</string>
+    <string name="error_timeout_connection">La sol·licitud ha esgotat el temps d’espera. Comprova la connexió.</string>
+    <string name="error_no_internet">No hi ha connexió a internet.</string>
+    <string name="error_endpoint_unreachable">No s’ha pogut accedir a l’API. Comprova l’URL del punt final.</string>
+    <string name="error_bad_request">La sol·licitud ha fallat. Comprova la configuració.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">Actualitzacions de l\'aplicació</string>
+    <string name="update_channel_desc">Avisa quan hi ha disponible una nova versió de SwiftSlate</string>
+    <string name="update_available_title">Hi ha una actualització de SwiftSlate disponible</string>
+    <string name="update_available_text">Toca per veure l\'última versió</string>
+
+    <!-- Command descriptions -->
 </resources>

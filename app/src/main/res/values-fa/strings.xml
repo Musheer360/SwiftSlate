@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">آیا این کلید API حذف شود؟</string>
     <string name="delete_confirm_message">این عمل قابل بازگشت نیست.</string>
     <string name="delete_confirm_button">حذف</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">جایگزینی متن انجام نشد</string>
+    <string name="toast_custom_not_configured">ارائه‌دهنده سفارشی پیکربندی نشده است. نقطه پایانی و مدل را در تنظیمات تعیین کنید.</string>
+    <string name="toast_model_setting_rejected">یک تنظیم مدل توسط ارائه‌دهنده رد شد و نادیده گرفته شد — متن شما همچنان پردازش شد. لطفاً این را در GitHub مربوط به SwiftSlate گزارش دهید تا آن را برطرف کنیم.</string>
+    <string name="toast_key_rate_limited">کلید API با محدودیت نرخ مواجه شد. %1$d ثانیه دیگر دوباره تلاش کنید</string>
+    <string name="toast_no_keys">هیچ کلید API پیکربندی نشده است</string>
+    <string name="toast_all_keys_invalid">همه کلیدهای API نامعتبر هستند. لطفاً کلیدهای خود را بررسی کنید</string>
+    <string name="toast_request_timed_out">مهلت درخواست به پایان رسید</string>
+    <string name="toast_restore_failed">بازیابی متن اصلی انجام نشد</string>
+    <string name="toast_nothing_to_undo">چیزی برای واگرد وجود ندارد</string>
+    <string name="toast_undo_failed">واگرد انجام نشد</string>
+    <string name="toast_nothing_to_copy">چیزی برای کپی وجود ندارد</string>
+    <string name="toast_copied">در کلیپ‌بورد کپی شد</string>
+    <string name="toast_nothing_to_cut">چیزی برای برش وجود ندارد</string>
+    <string name="toast_cut">در کلیپ‌بورد برش داده شد</string>
+    <string name="toast_clipboard_empty">کلیپ‌بورد خالی است</string>
+    <string name="toast_clipboard_failed">عملیات کلیپ‌بورد ناموفق بود</string>
+    <string name="toast_keystore_unavailable">ذخیره‌سازی امن کلید در دسترس نیست. لطفاً برنامه را دوباره نصب کنید.</string>
+    <string name="error_no_model_access">کلید API شما به این مدل دسترسی ندارد.</string>
+    <string name="error_invalid_key">کلید API نامعتبر است. لطفاً کلید خود را در تنظیمات بررسی کنید.</string>
+    <string name="error_rate_limited">محدودیت نرخ اعمال شد. لطفاً کمی بعد دوباره تلاش کنید.</string>
+    <string name="error_model_not_found">مدل پیدا نشد. انتخاب مدل خود را در تنظیمات بررسی کنید.</string>
+    <string name="error_safety_blocked">پاسخ توسط فیلترهای ایمنی مسدود شد. سعی کنید عبارت را بازنویسی کنید.</string>
+    <string name="error_empty_response">مدل پاسخ خالی برگرداند. دوباره تلاش کنید.</string>
+    <string name="error_timeout_connection">مهلت درخواست به پایان رسید. اتصال خود را بررسی کنید.</string>
+    <string name="error_no_internet">اتصال اینترنت وجود ندارد.</string>
+    <string name="error_endpoint_unreachable">اتصال به API ممکن نشد. آدرس URL نقطه پایانی خود را بررسی کنید.</string>
+    <string name="error_bad_request">درخواست ناموفق بود. تنظیمات خود را بررسی کنید.</string>
+
+    <!-- Updates and command descriptions -->
+    <string name="update_channel_name">به‌روزرسانی‌های برنامه</string>
+    <string name="update_channel_desc">هنگامی که نسخه جدیدی از SwiftSlate در دسترس باشد اطلاع می‌دهد</string>
+    <string name="update_available_title">به‌روزرسانی SwiftSlate در دسترس است</string>
+    <string name="update_available_text">برای مشاهده آخرین نسخه ضربه بزنید</string>
 </resources>

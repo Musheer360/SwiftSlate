@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">この API キーを削除しますか？</string>
     <string name="delete_confirm_message">この操作は元に戻せません。</string>
     <string name="delete_confirm_button">削除</string>
+
+    <!-- Toasts & errors -->
+    <string name="toast_replace_failed">テキストを置換できませんでした</string>
+    <string name="toast_custom_not_configured">カスタムプロバイダーが設定されていません。設定でエンドポイントとモデルを指定してください。</string>
+    <string name="toast_model_setting_rejected">モデル設定がプロバイダーによって拒否され、スキップされました — テキストは処理されました。修正できるよう、SwiftSlate の GitHub で報告してください。</string>
+    <string name="toast_key_rate_limited">API キーがレート制限されています。%1$d 秒後に再試行してください</string>
+    <string name="toast_no_keys">API キーが設定されていません</string>
+    <string name="toast_all_keys_invalid">すべての API キーが無効です。キーを確認してください</string>
+    <string name="toast_request_timed_out">リクエストがタイムアウトしました</string>
+    <string name="toast_restore_failed">元のテキストを復元できませんでした</string>
+    <string name="toast_nothing_to_undo">元に戻す操作がありません</string>
+    <string name="toast_undo_failed">元に戻せませんでした</string>
+    <string name="toast_nothing_to_copy">コピーするものがありません</string>
+    <string name="toast_copied">クリップボードにコピーしました</string>
+    <string name="toast_nothing_to_cut">切り取るものがありません</string>
+    <string name="toast_cut">クリップボードに切り取りました</string>
+    <string name="toast_clipboard_empty">クリップボードが空です</string>
+    <string name="toast_clipboard_failed">クリップボード操作に失敗しました</string>
+    <string name="toast_keystore_unavailable">セキュアなキーストアが利用できません。アプリを再インストールしてください。</string>
+    <string name="error_no_model_access">お使いの API キーはこのモデルにアクセスできません。</string>
+    <string name="error_invalid_key">無効な API キーです。設定でキーを確認してください。</string>
+    <string name="error_rate_limited">レート制限されています。しばらくしてから再試行してください。</string>
+    <string name="error_model_not_found">モデルが見つかりません。設定でモデルの選択を確認してください。</string>
+    <string name="error_safety_blocked">安全フィルターによって応答がブロックされました。表現を変えてお試しください。</string>
+    <string name="error_empty_response">モデルが空の応答を返しました。再試行してください。</string>
+    <string name="error_timeout_connection">リクエストがタイムアウトしました。接続を確認してください。</string>
+    <string name="error_no_internet">インターネット接続がありません。</string>
+    <string name="error_endpoint_unreachable">API に到達できませんでした。エンドポイント URL を確認してください。</string>
+    <string name="error_bad_request">リクエストに失敗しました。設定を確認してください。</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">アプリのアップデート</string>
+    <string name="update_channel_desc">SwiftSlate の新しいバージョンが利用可能になると通知します</string>
+    <string name="update_available_title">SwiftSlate のアップデートが利用可能です</string>
+    <string name="update_available_text">タップして最新リリースを表示</string>
 </resources>

@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Dzēst šo API atslēgu?</string>
     <string name="delete_confirm_message">Šo darbību nevar atsaukt.</string>
     <string name="delete_confirm_button">Dzēst</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Nevarēja aizstāt tekstu</string>
+    <string name="toast_custom_not_configured">Pielāgotais nodrošinātājs nav konfigurēts. Iestatījumos norādiet galapunktu un modeli.</string>
+    <string name="toast_model_setting_rejected">Nodrošinātājs noraidīja modeļa iestatījumu, un tas tika izlaists — jūsu teksts joprojām tika apstrādāts. Lūdzu, ziņojiet par to SwiftSlate GitHub, lai mēs to varētu labot.</string>
+    <string name="toast_key_rate_limited">API atslēgas pieprasījumu ātrums ierobežots. Mēģiniet vēlreiz pēc %1$d s</string>
+    <string name="toast_no_keys">Nav konfigurēta neviena API atslēga</string>
+    <string name="toast_all_keys_invalid">Visas API atslēgas ir nederīgas. Lūdzu, pārbaudiet savas atslēgas</string>
+    <string name="toast_request_timed_out">Pieprasījuma noildze</string>
+    <string name="toast_restore_failed">Nevarēja atjaunot sākotnējo tekstu</string>
+    <string name="toast_nothing_to_undo">Nav ko atsaukt</string>
+    <string name="toast_undo_failed">Nevarēja atsaukt</string>
+    <string name="toast_nothing_to_copy">Nav ko kopēt</string>
+    <string name="toast_copied">Kopēts starpliktuvē</string>
+    <string name="toast_nothing_to_cut">Nav ko izgriezt</string>
+    <string name="toast_cut">Izgriezts starpliktuvē</string>
+    <string name="toast_clipboard_empty">Starpliktuve ir tukša</string>
+    <string name="toast_clipboard_failed">Starpliktuves darbība neizdevās</string>
+    <string name="toast_keystore_unavailable">Droša atslēgu glabātuve nav pieejama. Lūdzu, pārinstalējiet lietotni.</string>
+    <string name="error_no_model_access">Jūsu API atslēgai nav piekļuves šim modelim.</string>
+    <string name="error_invalid_key">Nederīga API atslēga. Lūdzu, pārbaudiet savu atslēgu Iestatījumos.</string>
+    <string name="error_rate_limited">Pieprasījumu ātrums ierobežots. Drīz mēģiniet vēlreiz.</string>
+    <string name="error_model_not_found">Modelis nav atrasts. Pārbaudiet modeļa izvēli Iestatījumos.</string>
+    <string name="error_safety_blocked">Atbildi bloķēja drošības filtri. Mēģiniet pārformulēt.</string>
+    <string name="error_empty_response">Modelis atgrieza tukšu atbildi. Mēģiniet vēlreiz.</string>
+    <string name="error_timeout_connection">Pieprasījuma noildze. Pārbaudiet savienojumu.</string>
+    <string name="error_no_internet">Nav interneta savienojuma.</string>
+    <string name="error_endpoint_unreachable">Nevarēja sasniegt API. Pārbaudiet sava galapunkta URL.</string>
+    <string name="error_bad_request">Pieprasījums neizdevās. Pārbaudiet iestatījumus.</string>
+
+    <!-- Update notifications -->
+    <string name="update_channel_name">Lietotnes atjauninājumi</string>
+    <string name="update_channel_desc">Paziņo, kad ir pieejama jauna SwiftSlate versija</string>
+    <string name="update_available_title">Pieejams SwiftSlate atjauninājums</string>
+    <string name="update_available_text">Pieskarieties, lai skatītu jaunāko laidienu</string>
 </resources>

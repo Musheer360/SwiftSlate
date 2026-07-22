@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Törli ezt az API-kulcsot?</string>
     <string name="delete_confirm_message">Ez a művelet nem vonható vissza.</string>
     <string name="delete_confirm_button">Törlés</string>
+
+    <!-- Toasts & errors -->
+    <string name="toast_replace_failed">Nem sikerült lecserélni a szöveget</string>
+    <string name="toast_custom_not_configured">Az egyéni szolgáltató nincs beállítva. Adja meg a végpontot és a modellt a Beállításokban.</string>
+    <string name="toast_model_setting_rejected">A szolgáltató elutasított egy modellbeállítást, és kihagyta azt — a szövege ettől függetlenül feldolgozásra került. Kérjük, jelentse ezt a SwiftSlate GitHubon, hogy kijavíthassuk.</string>
+    <string name="toast_key_rate_limited">Az API-kulcs sebességkorlátozva. Próbálja újra %1$d mp múlva</string>
+    <string name="toast_no_keys">Nincsenek API-kulcsok beállítva</string>
+    <string name="toast_all_keys_invalid">Minden API-kulcs érvénytelen. Kérjük, ellenőrizze a kulcsait</string>
+    <string name="toast_request_timed_out">A kérés időtúllépést okozott</string>
+    <string name="toast_restore_failed">Nem sikerült visszaállítani az eredeti szöveget</string>
+    <string name="toast_nothing_to_undo">Nincs mit visszavonni</string>
+    <string name="toast_undo_failed">Nem sikerült a visszavonás</string>
+    <string name="toast_nothing_to_copy">Nincs mit másolni</string>
+    <string name="toast_copied">Vágólapra másolva</string>
+    <string name="toast_nothing_to_cut">Nincs mit kivágni</string>
+    <string name="toast_cut">Vágólapra kivágva</string>
+    <string name="toast_clipboard_empty">A vágólap üres</string>
+    <string name="toast_clipboard_failed">A vágólapművelet sikertelen</string>
+    <string name="toast_keystore_unavailable">A biztonságos kulcstároló nem érhető el. Kérjük, telepítse újra az alkalmazást.</string>
+    <string name="error_no_model_access">Az API-kulcsa nem fér hozzá ehhez a modellhez.</string>
+    <string name="error_invalid_key">Érvénytelen API-kulcs. Kérjük, ellenőrizze a kulcsát a Beállításokban.</string>
+    <string name="error_rate_limited">Sebességkorlátozva. Próbálja újra hamarosan.</string>
+    <string name="error_model_not_found">A modell nem található. Ellenőrizze a modellválasztást a Beállításokban.</string>
+    <string name="error_safety_blocked">A választ biztonsági szűrők blokkolták. Próbálja átfogalmazni.</string>
+    <string name="error_empty_response">A modell üres választ adott. Próbálja újra.</string>
+    <string name="error_timeout_connection">A kérés időtúllépést okozott. Ellenőrizze a kapcsolatát.</string>
+    <string name="error_no_internet">Nincs internetkapcsolat.</string>
+    <string name="error_endpoint_unreachable">Nem sikerült elérni az API-t. Ellenőrizze a végpont URL-jét.</string>
+    <string name="error_bad_request">A kérés sikertelen. Ellenőrizze a beállításait.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">Alkalmazásfrissítések</string>
+    <string name="update_channel_desc">Értesít, amikor elérhető a SwiftSlate új verziója</string>
+    <string name="update_available_title">SwiftSlate-frissítés érhető el</string>
+    <string name="update_available_text">Koppintson a legújabb kiadás megtekintéséhez</string>
 </resources>

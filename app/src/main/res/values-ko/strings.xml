@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">이 API 키를 삭제하시겠습니까?</string>
     <string name="delete_confirm_message">이 작업은 되돌릴 수 없습니다.</string>
     <string name="delete_confirm_button">삭제</string>
+
+    <!-- Toasts & errors -->
+    <string name="toast_replace_failed">텍스트를 대체할 수 없습니다</string>
+    <string name="toast_custom_not_configured">사용자 지정 제공자가 구성되지 않았습니다. 설정에서 엔드포인트와 모델을 지정하세요.</string>
+    <string name="toast_model_setting_rejected">제공자가 모델 설정을 거부하여 건너뛰었습니다 — 텍스트는 정상적으로 처리되었습니다. 수정할 수 있도록 SwiftSlate GitHub에 신고해 주세요.</string>
+    <string name="toast_key_rate_limited">API 키 속도 제한. %1$d초 후에 다시 시도하세요</string>
+    <string name="toast_no_keys">구성된 API 키가 없습니다</string>
+    <string name="toast_all_keys_invalid">모든 API 키가 유효하지 않습니다. 키를 확인하세요</string>
+    <string name="toast_request_timed_out">요청 시간이 초과되었습니다</string>
+    <string name="toast_restore_failed">원본 텍스트를 복원할 수 없습니다</string>
+    <string name="toast_nothing_to_undo">실행 취소할 항목이 없습니다</string>
+    <string name="toast_undo_failed">실행 취소할 수 없습니다</string>
+    <string name="toast_nothing_to_copy">복사할 항목이 없습니다</string>
+    <string name="toast_copied">클립보드에 복사됨</string>
+    <string name="toast_nothing_to_cut">잘라낼 항목이 없습니다</string>
+    <string name="toast_cut">클립보드로 잘라냄</string>
+    <string name="toast_clipboard_empty">클립보드가 비어 있습니다</string>
+    <string name="toast_clipboard_failed">클립보드 작업 실패</string>
+    <string name="toast_keystore_unavailable">보안 키 저장소를 사용할 수 없습니다. 앱을 다시 설치하세요.</string>
+    <string name="error_no_model_access">API 키에 이 모델에 대한 액세스 권한이 없습니다.</string>
+    <string name="error_invalid_key">잘못된 API 키입니다. 설정에서 키를 확인하세요.</string>
+    <string name="error_rate_limited">속도가 제한되었습니다. 잠시 후 다시 시도하세요.</string>
+    <string name="error_model_not_found">모델을 찾을 수 없습니다. 설정에서 모델 선택을 확인하세요.</string>
+    <string name="error_safety_blocked">안전 필터에 의해 응답이 차단되었습니다. 다시 표현해 보세요.</string>
+    <string name="error_empty_response">모델이 빈 응답을 반환했습니다. 다시 시도하세요.</string>
+    <string name="error_timeout_connection">요청 시간이 초과되었습니다. 연결을 확인하세요.</string>
+    <string name="error_no_internet">인터넷 연결이 없습니다.</string>
+    <string name="error_endpoint_unreachable">API에 연결할 수 없습니다. 엔드포인트 URL을 확인하세요.</string>
+    <string name="error_bad_request">요청이 실패했습니다. 설정을 확인하세요.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">앱 업데이트</string>
+    <string name="update_channel_desc">SwiftSlate의 새 버전이 출시되면 알립니다</string>
+    <string name="update_available_title">SwiftSlate 업데이트 사용 가능</string>
+    <string name="update_available_text">최신 릴리스를 보려면 탭하세요</string>
 </resources>

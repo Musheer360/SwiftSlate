@@ -91,4 +91,41 @@
     <string name="delete_confirm_key_title">Να διαγραφεί αυτό το κλειδί API;</string>
     <string name="delete_confirm_message">Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
     <string name="delete_confirm_button">Διαγραφή</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Δεν ήταν δυνατή η αντικατάσταση του κειμένου</string>
+    <string name="toast_custom_not_configured">Ο προσαρμοσμένος πάροχος δεν έχει διαμορφωθεί. Ορίστε το τελικό σημείο και το μοντέλο στις Ρυθμίσεις.</string>
+    <string name="toast_model_setting_rejected">Μια ρύθμιση του μοντέλου απορρίφθηκε από τον πάροχο και παραλείφθηκε — το κείμενό σας επεξεργάστηκε ούτως ή άλλως. Παρακαλούμε αναφέρετέ το στο GitHub του SwiftSlate ώστε να το διορθώσουμε.</string>
+    <string name="toast_key_rate_limited">Το κλειδί API έχει περιορισμό ρυθμού. Δοκιμάστε ξανά σε %1$d δευτ</string>
+    <string name="toast_no_keys">Δεν έχουν διαμορφωθεί κλειδιά API</string>
+    <string name="toast_all_keys_invalid">Όλα τα κλειδιά API είναι μη έγκυρα. Παρακαλούμε ελέγξτε τα κλειδιά σας</string>
+    <string name="toast_request_timed_out">Το αίτημα έληξε</string>
+    <string name="toast_restore_failed">Δεν ήταν δυνατή η επαναφορά του αρχικού κειμένου</string>
+    <string name="toast_nothing_to_undo">Δεν υπάρχει τίποτα για αναίρεση</string>
+    <string name="toast_undo_failed">Δεν ήταν δυνατή η αναίρεση</string>
+    <string name="toast_nothing_to_copy">Δεν υπάρχει τίποτα για αντιγραφή</string>
+    <string name="toast_copied">Αντιγράφηκε στο πρόχειρο</string>
+    <string name="toast_nothing_to_cut">Δεν υπάρχει τίποτα για αποκοπή</string>
+    <string name="toast_cut">Αποκόπηκε στο πρόχειρο</string>
+    <string name="toast_clipboard_empty">Το πρόχειρο είναι κενό</string>
+    <string name="toast_clipboard_failed">Η λειτουργία προχείρου απέτυχε</string>
+    <string name="toast_keystore_unavailable">Η ασφαλής αποθήκευση κλειδιών δεν είναι διαθέσιμη. Παρακαλούμε επανεγκαταστήστε την εφαρμογή.</string>
+    <string name="error_no_model_access">Το κλειδί API σας δεν έχει πρόσβαση σε αυτό το μοντέλο.</string>
+    <string name="error_invalid_key">Μη έγκυρο κλειδί API. Παρακαλούμε ελέγξτε το κλειδί σας στις Ρυθμίσεις.</string>
+    <string name="error_rate_limited">Περιορισμός ρυθμού. Δοκιμάστε ξανά σύντομα.</string>
+    <string name="error_model_not_found">Το μοντέλο δεν βρέθηκε. Ελέγξτε την επιλογή μοντέλου στις Ρυθμίσεις.</string>
+    <string name="error_safety_blocked">Η απάντηση αποκλείστηκε από τα φίλτρα ασφαλείας. Δοκιμάστε να την αναδιατυπώσετε.</string>
+    <string name="error_empty_response">Το μοντέλο επέστρεψε κενή απάντηση. Δοκιμάστε ξανά.</string>
+    <string name="error_timeout_connection">Το αίτημα έληξε. Ελέγξτε τη σύνδεσή σας.</string>
+    <string name="error_no_internet">Δεν υπάρχει σύνδεση στο διαδίκτυο.</string>
+    <string name="error_endpoint_unreachable">Δεν ήταν δυνατή η προσέγγιση του API. Ελέγξτε τη διεύθυνση URL του τελικού σημείου.</string>
+    <string name="error_bad_request">Το αίτημα απέτυχε. Ελέγξτε τις ρυθμίσεις σας.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">Ενημερώσεις εφαρμογής</string>
+    <string name="update_channel_desc">Ειδοποιεί όταν είναι διαθέσιμη μια νέα έκδοση του SwiftSlate</string>
+    <string name="update_available_title">Διαθέσιμη ενημέρωση SwiftSlate</string>
+    <string name="update_available_text">Πατήστε για να δείτε την τελευταία έκδοση</string>
+
+    <!-- Command descriptions -->
 </resources>

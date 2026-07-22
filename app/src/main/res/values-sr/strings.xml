@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Обрисати овај API кључ?</string>
     <string name="delete_confirm_message">Ова радња се не може опозвати.</string>
     <string name="delete_confirm_button">Обриши</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Није могуће заменити текст</string>
+    <string name="toast_custom_not_configured">Прилагођени провајдер није конфигурисан. Подесите крајњу тачку и модел у Подешавањима.</string>
+    <string name="toast_model_setting_rejected">Провајдер је одбио подешавање модела и прескочио га — ваш текст је ипак обрађен. Пријавите ово на SwiftSlate GitHub-у како бисмо могли да решимо проблем.</string>
+    <string name="toast_key_rate_limited">Достигнуто ограничење захтева за API кључ. Покушајте поново за %1$d с</string>
+    <string name="toast_no_keys">Нема конфигурисаних API кључева</string>
+    <string name="toast_all_keys_invalid">Сви API кључеви су неважећи. Проверите своје кључеве</string>
+    <string name="toast_request_timed_out">Истекло је време захтева</string>
+    <string name="toast_restore_failed">Није могуће вратити оригинални текст</string>
+    <string name="toast_nothing_to_undo">Нема ништа за опозивање</string>
+    <string name="toast_undo_failed">Опозивање није успело</string>
+    <string name="toast_nothing_to_copy">Нема ништа за копирање</string>
+    <string name="toast_copied">Копирано у привремену меморију</string>
+    <string name="toast_nothing_to_cut">Нема ништа за исецање</string>
+    <string name="toast_cut">Исечено у привремену меморију</string>
+    <string name="toast_clipboard_empty">Привремена меморија је празна</string>
+    <string name="toast_clipboard_failed">Операција са привременом меморијом није успела</string>
+    <string name="toast_keystore_unavailable">Безбедно складиште кључева није доступно. Поново инсталирајте апликацију.</string>
+    <string name="error_no_model_access">Ваш API кључ нема приступ овом моделу.</string>
+    <string name="error_invalid_key">Неважећи API кључ. Проверите свој кључ у Подешавањима.</string>
+    <string name="error_rate_limited">Достигнуто ограничење захтева. Покушајте поново ускоро.</string>
+    <string name="error_model_not_found">Модел није пронађен. Проверите избор модела у Подешавањима.</string>
+    <string name="error_safety_blocked">Одговор је блокиран безбедносним филтерима. Покушајте да преформулишете.</string>
+    <string name="error_empty_response">Модел је вратио празан одговор. Покушајте поново.</string>
+    <string name="error_timeout_connection">Истекло је време захтева. Проверите везу.</string>
+    <string name="error_no_internet">Нема интернет везе.</string>
+    <string name="error_endpoint_unreachable">Није могуће контактирати API. Проверите URL крајње тачке.</string>
+    <string name="error_bad_request">Захтев није успео. Проверите своја подешавања.</string>
+
+    <!-- Updates & command descriptions -->
+    <string name="update_channel_name">Ажурирања апликације</string>
+    <string name="update_channel_desc">Обавештава када је доступна нова верзија SwiftSlate-а</string>
+    <string name="update_available_title">Доступно је ажурирање SwiftSlate-а</string>
+    <string name="update_available_text">Додирните да видите најновије издање</string>
 </resources>

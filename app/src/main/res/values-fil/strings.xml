@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Burahin ang API key na ito?</string>
     <string name="delete_confirm_message">Hindi na maibabalik ang aksyong ito.</string>
     <string name="delete_confirm_button">Burahin</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Hindi mapalitan ang teksto</string>
+    <string name="toast_custom_not_configured">Hindi naka-configure ang custom na provider. Itakda ang endpoint at modelo sa Mga Setting.</string>
+    <string name="toast_model_setting_rejected">May setting ng modelo na tinanggihan ng provider at nilaktawan — naproseso pa rin ang iyong teksto. Mangyaring iulat ito sa GitHub ng SwiftSlate para maayos namin ito.</string>
+    <string name="toast_key_rate_limited">Na-rate limit ang API key. Subukan muli sa loob ng %1$d segundo</string>
+    <string name="toast_no_keys">Walang naka-configure na API key</string>
+    <string name="toast_all_keys_invalid">Hindi wasto ang lahat ng API key. Pakisuri ang iyong mga key</string>
+    <string name="toast_request_timed_out">Nag-time out ang kahilingan</string>
+    <string name="toast_restore_failed">Hindi maibalik ang orihinal na teksto</string>
+    <string name="toast_nothing_to_undo">Walang maibabalik</string>
+    <string name="toast_undo_failed">Hindi ma-undo</string>
+    <string name="toast_nothing_to_copy">Walang kokopyahin</string>
+    <string name="toast_copied">Nakopya sa clipboard</string>
+    <string name="toast_nothing_to_cut">Walang gugupitin</string>
+    <string name="toast_cut">Na-cut sa clipboard</string>
+    <string name="toast_clipboard_empty">Walang laman ang clipboard</string>
+    <string name="toast_clipboard_failed">Nabigo ang operasyon ng clipboard</string>
+    <string name="toast_keystore_unavailable">Hindi available ang secure na imbakan ng key. Mangyaring i-reinstall ang app.</string>
+    <string name="error_no_model_access">Walang access ang iyong API key sa modelong ito.</string>
+    <string name="error_invalid_key">Di-wastong API key. Pakisuri ang iyong key sa Mga Setting.</string>
+    <string name="error_rate_limited">Na-rate limit. Subukang muli sa ilang sandali.</string>
+    <string name="error_model_not_found">Hindi natagpuan ang modelo. Suriin ang iyong napiling modelo sa Mga Setting.</string>
+    <string name="error_safety_blocked">Na-block ang tugon ng mga safety filter. Subukang muling bumuo ng pananalita.</string>
+    <string name="error_empty_response">Nagbalik ang modelo ng walang laman na tugon. Subukang muli.</string>
+    <string name="error_timeout_connection">Nag-time out ang kahilingan. Suriin ang iyong koneksyon.</string>
+    <string name="error_no_internet">Walang koneksyon sa internet.</string>
+    <string name="error_endpoint_unreachable">Hindi maabot ang API. Suriin ang URL ng iyong endpoint.</string>
+    <string name="error_bad_request">Nabigo ang kahilingan. Suriin ang iyong mga setting.</string>
+
+    <!-- Updates and command descriptions -->
+    <string name="update_channel_name">Mga Update ng App</string>
+    <string name="update_channel_desc">Nag-aabiso kapag may bagong bersyon ng SwiftSlate na available</string>
+    <string name="update_available_title">May available na update ng SwiftSlate</string>
+    <string name="update_available_text">I-tap para tingnan ang pinakabagong release</string>
 </resources>

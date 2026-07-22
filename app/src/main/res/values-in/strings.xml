@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Hapus kunci API ini?</string>
     <string name="delete_confirm_message">Tindakan ini tidak dapat dibatalkan.</string>
     <string name="delete_confirm_button">Hapus</string>
+
+    <!-- Toasts & errors -->
+    <string name="toast_replace_failed">Tidak dapat mengganti teks</string>
+    <string name="toast_custom_not_configured">Penyedia kustom belum dikonfigurasi. Atur endpoint dan model di Pengaturan.</string>
+    <string name="toast_model_setting_rejected">Sebuah pengaturan model ditolak oleh penyedia dan dilewati — teks Anda tetap diproses. Harap laporkan ini di GitHub SwiftSlate agar kami dapat memperbaikinya.</string>
+    <string name="toast_key_rate_limited">Kunci API dibatasi. Coba lagi dalam %1$d dtk</string>
+    <string name="toast_no_keys">Tidak ada kunci API yang dikonfigurasi</string>
+    <string name="toast_all_keys_invalid">Semua kunci API tidak valid. Harap periksa kunci Anda</string>
+    <string name="toast_request_timed_out">Permintaan kehabisan waktu</string>
+    <string name="toast_restore_failed">Tidak dapat memulihkan teks asli</string>
+    <string name="toast_nothing_to_undo">Tidak ada yang bisa dibatalkan</string>
+    <string name="toast_undo_failed">Tidak dapat membatalkan</string>
+    <string name="toast_nothing_to_copy">Tidak ada yang bisa disalin</string>
+    <string name="toast_copied">Disalin ke papan klip</string>
+    <string name="toast_nothing_to_cut">Tidak ada yang bisa dipotong</string>
+    <string name="toast_cut">Dipotong ke papan klip</string>
+    <string name="toast_clipboard_empty">Papan klip kosong</string>
+    <string name="toast_clipboard_failed">Operasi papan klip gagal</string>
+    <string name="toast_keystore_unavailable">Penyimpanan kunci aman tidak tersedia. Harap instal ulang aplikasi.</string>
+    <string name="error_no_model_access">Kunci API Anda tidak memiliki akses ke model ini.</string>
+    <string name="error_invalid_key">Kunci API tidak valid. Harap periksa kunci Anda di Pengaturan.</string>
+    <string name="error_rate_limited">Dibatasi. Coba lagi sebentar.</string>
+    <string name="error_model_not_found">Model tidak ditemukan. Periksa pilihan model Anda di Pengaturan.</string>
+    <string name="error_safety_blocked">Respons diblokir oleh filter keamanan. Coba ubah kalimatnya.</string>
+    <string name="error_empty_response">Model mengembalikan respons kosong. Coba lagi.</string>
+    <string name="error_timeout_connection">Permintaan kehabisan waktu. Periksa koneksi Anda.</string>
+    <string name="error_no_internet">Tidak ada koneksi internet.</string>
+    <string name="error_endpoint_unreachable">Tidak dapat menjangkau API. Periksa URL endpoint Anda.</string>
+    <string name="error_bad_request">Permintaan gagal. Periksa pengaturan Anda.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">Pembaruan Aplikasi</string>
+    <string name="update_channel_desc">Memberi tahu saat versi baru SwiftSlate tersedia</string>
+    <string name="update_available_title">Pembaruan SwiftSlate tersedia</string>
+    <string name="update_available_text">Ketuk untuk melihat rilis terbaru</string>
 </resources>

@@ -91,4 +91,41 @@
     <string name="delete_confirm_key_title">هل تريد حذف مفتاح API هذا؟</string>
     <string name="delete_confirm_message">لا يمكن التراجع عن هذا الإجراء.</string>
     <string name="delete_confirm_button">حذف</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">تعذّر استبدال النص</string>
+    <string name="toast_custom_not_configured">لم يتم تكوين الموفر المخصص. حدّد نقطة النهاية والنموذج في الإعدادات.</string>
+    <string name="toast_model_setting_rejected">تم رفض أحد إعدادات النموذج من قبل الموفر وتم تخطيه — لا يزال نصك قد تمت معالجته. يُرجى الإبلاغ عن هذا على GitHub الخاص بـ SwiftSlate حتى نتمكن من إصلاحه.</string>
+    <string name="toast_key_rate_limited">تم تقييد معدل مفتاح API. أعد المحاولة خلال %1$d ثانية</string>
+    <string name="toast_no_keys">لم يتم تكوين أي مفاتيح API</string>
+    <string name="toast_all_keys_invalid">جميع مفاتيح API غير صالحة. يُرجى التحقق من مفاتيحك</string>
+    <string name="toast_request_timed_out">انتهت مهلة الطلب</string>
+    <string name="toast_restore_failed">تعذّر استعادة النص الأصلي</string>
+    <string name="toast_nothing_to_undo">لا يوجد شيء للتراجع عنه</string>
+    <string name="toast_undo_failed">تعذّر التراجع</string>
+    <string name="toast_nothing_to_copy">لا يوجد شيء لنسخه</string>
+    <string name="toast_copied">تم النسخ إلى الحافظة</string>
+    <string name="toast_nothing_to_cut">لا يوجد شيء لقصه</string>
+    <string name="toast_cut">تم القص إلى الحافظة</string>
+    <string name="toast_clipboard_empty">الحافظة فارغة</string>
+    <string name="toast_clipboard_failed">فشلت عملية الحافظة</string>
+    <string name="toast_keystore_unavailable">تخزين المفاتيح الآمن غير متوفر. يُرجى إعادة تثبيت التطبيق.</string>
+    <string name="error_no_model_access">لا يملك مفتاح API الخاص بك حق الوصول إلى هذا النموذج.</string>
+    <string name="error_invalid_key">مفتاح API غير صالح. يُرجى التحقق من مفتاحك في الإعدادات.</string>
+    <string name="error_rate_limited">تم تقييد المعدل. أعد المحاولة قريباً.</string>
+    <string name="error_model_not_found">لم يتم العثور على النموذج. تحقق من اختيار النموذج في الإعدادات.</string>
+    <string name="error_safety_blocked">تم حظر الاستجابة بواسطة عوامل تصفية الأمان. حاول إعادة الصياغة.</string>
+    <string name="error_empty_response">أعاد النموذج استجابة فارغة. أعد المحاولة.</string>
+    <string name="error_timeout_connection">انتهت مهلة الطلب. تحقق من اتصالك.</string>
+    <string name="error_no_internet">لا يوجد اتصال بالإنترنت.</string>
+    <string name="error_endpoint_unreachable">تعذّر الوصول إلى API. تحقق من رابط نقطة النهاية.</string>
+    <string name="error_bad_request">فشل الطلب. تحقق من إعداداتك.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">تحديثات التطبيق</string>
+    <string name="update_channel_desc">يُعلمك عند توفر إصدار جديد من SwiftSlate</string>
+    <string name="update_available_title">يتوفر تحديث لـ SwiftSlate</string>
+    <string name="update_available_text">انقر لعرض أحدث إصدار</string>
+
+    <!-- Command descriptions -->
 </resources>

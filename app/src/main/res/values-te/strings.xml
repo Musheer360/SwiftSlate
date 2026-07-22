@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">ఈ API కీని తొలగించాలా?</string>
     <string name="delete_confirm_message">ఈ చర్యను తిరిగి పొందలేము.</string>
     <string name="delete_confirm_button">తొలగించు</string>
+
+    <!-- Toasts &amp; errors -->
+    <string name="toast_replace_failed">టెక్స్ట్‌ను భర్తీ చేయలేకపోయాము</string>
+    <string name="toast_custom_not_configured">అనుకూల ప్రొవైడర్ కాన్ఫిగర్ చేయబడలేదు. సెట్టింగ్‌లలో ఎండ్ పాయింట్ మరియు మోడల్‌ను సెట్ చేయండి.</string>
+    <string name="toast_model_setting_rejected">ఒక మోడల్ సెట్టింగ్ ప్రొవైడర్ చేత తిరస్కరించబడి దాటవేయబడింది — మీ టెక్స్ట్ ఇప్పటికీ ప్రాసెస్ చేయబడింది. మేము దీన్ని సరిచేయగలిగేలా SwiftSlate GitHub లో దయచేసి నివేదించండి.</string>
+    <string name="toast_key_rate_limited">API కీ రేట్ పరిమితం చేయబడింది. %1$d సెకన్లలో మళ్లీ ప్రయత్నించండి</string>
+    <string name="toast_no_keys">API కీలు ఏవీ కాన్ఫిగర్ చేయబడలేదు</string>
+    <string name="toast_all_keys_invalid">అన్ని API కీలు చెల్లనివి. దయచేసి మీ కీలను తనిఖీ చేయండి</string>
+    <string name="toast_request_timed_out">అభ్యర్థన గడువు ముగిసింది</string>
+    <string name="toast_restore_failed">అసలు టెక్స్ట్‌ను పునరుద్ధరించలేకపోయాము</string>
+    <string name="toast_nothing_to_undo">రద్దు చేయడానికి ఏమీ లేదు</string>
+    <string name="toast_undo_failed">రద్దు చేయలేకపోయాము</string>
+    <string name="toast_nothing_to_copy">కాపీ చేయడానికి ఏమీ లేదు</string>
+    <string name="toast_copied">క్లిప్‌బోర్డ్‌కు కాపీ చేయబడింది</string>
+    <string name="toast_nothing_to_cut">కత్తిరించడానికి ఏమీ లేదు</string>
+    <string name="toast_cut">క్లిప్‌బోర్డ్‌కు కత్తిరించబడింది</string>
+    <string name="toast_clipboard_empty">క్లిప్‌బోర్డ్ ఖాళీగా ఉంది</string>
+    <string name="toast_clipboard_failed">క్లిప్‌బోర్డ్ ఆపరేషన్ విఫలమైంది</string>
+    <string name="toast_keystore_unavailable">సురక్షిత కీ నిల్వ అందుబాటులో లేదు. దయచేసి యాప్‌ను మళ్లీ ఇన్‌స్టాల్ చేయండి.</string>
+    <string name="error_no_model_access">మీ API కీకి ఈ మోడల్‌కు యాక్సెస్ లేదు.</string>
+    <string name="error_invalid_key">చెల్లని API కీ. సెట్టింగ్‌లలో మీ కీని తనిఖీ చేయండి.</string>
+    <string name="error_rate_limited">రేట్ పరిమితం చేయబడింది. కొద్దిసేపటిలో మళ్లీ ప్రయత్నించండి.</string>
+    <string name="error_model_not_found">మోడల్ కనుగొనబడలేదు. సెట్టింగ్‌లలో మీ మోడల్ ఎంపికను తనిఖీ చేయండి.</string>
+    <string name="error_safety_blocked">భద్రతా ఫిల్టర్ల ద్వారా ప్రతిస్పందన నిరోధించబడింది. తిరిగి పదాలు మార్చి ప్రయత్నించండి.</string>
+    <string name="error_empty_response">మోడల్ ఖాళీ ప్రతిస్పందనను అందించింది. మళ్లీ ప్రయత్నించండి.</string>
+    <string name="error_timeout_connection">అభ్యర్థన గడువు ముగిసింది. మీ కనెక్షన్‌ను తనిఖీ చేయండి.</string>
+    <string name="error_no_internet">ఇంటర్నెట్ కనెక్షన్ లేదు.</string>
+    <string name="error_endpoint_unreachable">API ని చేరుకోలేకపోయాము. మీ ఎండ్ పాయింట్ URL ని తనిఖీ చేయండి.</string>
+    <string name="error_bad_request">అభ్యర్థన విఫలమైంది. మీ సెట్టింగ్‌లను తనిఖీ చేయండి.</string>
+
+    <!-- Updates &amp; command descriptions -->
+    <string name="update_channel_name">యాప్ నవీకరణలు</string>
+    <string name="update_channel_desc">SwiftSlate యొక్క కొత్త వెర్షన్ అందుబాటులో ఉన్నప్పుడు తెలియజేస్తుంది</string>
+    <string name="update_available_title">SwiftSlate నవీకరణ అందుబాటులో ఉంది</string>
+    <string name="update_available_text">తాజా విడుదలను చూడటానికి నొక్కండి</string>
 </resources>

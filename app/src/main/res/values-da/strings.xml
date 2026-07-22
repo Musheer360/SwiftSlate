@@ -91,4 +91,41 @@
     <string name="delete_confirm_key_title">Slet denne API-nøgle?</string>
     <string name="delete_confirm_message">Denne handling kan ikke fortrydes.</string>
     <string name="delete_confirm_button">Slet</string>
+
+    <!-- Toasts and errors -->
+    <string name="toast_replace_failed">Teksten kunne ikke erstattes</string>
+    <string name="toast_custom_not_configured">Brugerdefineret udbyder er ikke konfigureret. Angiv endpoint og model i Indstillinger.</string>
+    <string name="toast_model_setting_rejected">En modelindstilling blev afvist af udbyderen og sprunget over — din tekst blev stadig behandlet. Rapporter dette på SwiftSlate GitHub, så vi kan rette det.</string>
+    <string name="toast_key_rate_limited">API-nøgle hastighedsbegrænset. Prøv igen om %1$d s</string>
+    <string name="toast_no_keys">Ingen API-nøgler konfigureret</string>
+    <string name="toast_all_keys_invalid">Alle API-nøgler er ugyldige. Tjek venligst dine nøgler</string>
+    <string name="toast_request_timed_out">Anmodningen fik timeout</string>
+    <string name="toast_restore_failed">Den oprindelige tekst kunne ikke gendannes</string>
+    <string name="toast_nothing_to_undo">Intet at fortryde</string>
+    <string name="toast_undo_failed">Kunne ikke fortryde</string>
+    <string name="toast_nothing_to_copy">Intet at kopiere</string>
+    <string name="toast_copied">Kopieret til udklipsholder</string>
+    <string name="toast_nothing_to_cut">Intet at klippe</string>
+    <string name="toast_cut">Klippet til udklipsholder</string>
+    <string name="toast_clipboard_empty">Udklipsholderen er tom</string>
+    <string name="toast_clipboard_failed">Handling med udklipsholder mislykkedes</string>
+    <string name="toast_keystore_unavailable">Sikker nøgleopbevaring er ikke tilgængelig. Geninstaller venligst appen.</string>
+    <string name="error_no_model_access">Din API-nøgle har ikke adgang til denne model.</string>
+    <string name="error_invalid_key">Ugyldig API-nøgle. Tjek din nøgle i Indstillinger.</string>
+    <string name="error_rate_limited">Hastighedsbegrænset. Prøv igen om lidt.</string>
+    <string name="error_model_not_found">Model ikke fundet. Tjek dit modelvalg i Indstillinger.</string>
+    <string name="error_safety_blocked">Svar blokeret af sikkerhedsfiltre. Prøv at omformulere.</string>
+    <string name="error_empty_response">Modellen returnerede et tomt svar. Prøv igen.</string>
+    <string name="error_timeout_connection">Anmodningen fik timeout. Tjek din forbindelse.</string>
+    <string name="error_no_internet">Ingen internetforbindelse.</string>
+    <string name="error_endpoint_unreachable">Kunne ikke nå API\'et. Tjek din endpoint-URL.</string>
+    <string name="error_bad_request">Anmodningen mislykkedes. Tjek dine indstillinger.</string>
+
+    <!-- Updates -->
+    <string name="update_channel_name">App-opdateringer</string>
+    <string name="update_channel_desc">Giver besked, når en ny version af SwiftSlate er tilgængelig</string>
+    <string name="update_available_title">SwiftSlate-opdatering tilgængelig</string>
+    <string name="update_available_text">Tryk for at se den nyeste version</string>
+
+    <!-- Command descriptions -->
 </resources>

@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Izbrišem ta ključ API?</string>
     <string name="delete_confirm_message">Tega dejanja ni mogoče razveljaviti.</string>
     <string name="delete_confirm_button">Izbriši</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Besedila ni bilo mogoče zamenjati</string>
+    <string name="toast_custom_not_configured">Poljuben ponudnik ni konfiguriran. Nastavite končno točko in model v Nastavitvah.</string>
+    <string name="toast_model_setting_rejected">Ponudnik je zavrnil nastavitev modela in jo preskočil — vaše besedilo je bilo kljub temu obdelano. Prosimo, prijavite to na GitHub SwiftSlate, da bomo lahko odpravili težavo.</string>
+    <string name="toast_key_rate_limited">Presežena omejitev zahtevkov ključa API. Poskusite znova čez %1$d s</string>
+    <string name="toast_no_keys">Ni konfiguriranih ključev API</string>
+    <string name="toast_all_keys_invalid">Vsi ključi API so neveljavni. Preverite svoje ključe</string>
+    <string name="toast_request_timed_out">Časovna omejitev zahteve je potekla</string>
+    <string name="toast_restore_failed">Izvirnega besedila ni bilo mogoče obnoviti</string>
+    <string name="toast_nothing_to_undo">Ni ničesar za razveljavitev</string>
+    <string name="toast_undo_failed">Razveljavitev ni uspela</string>
+    <string name="toast_nothing_to_copy">Ni ničesar za kopiranje</string>
+    <string name="toast_copied">Kopirano v odložišče</string>
+    <string name="toast_nothing_to_cut">Ni ničesar za izrez</string>
+    <string name="toast_cut">Izrezano v odložišče</string>
+    <string name="toast_clipboard_empty">Odložišče je prazno</string>
+    <string name="toast_clipboard_failed">Operacija odložišča ni uspela</string>
+    <string name="toast_keystore_unavailable">Varna hramba ključev ni na voljo. Znova namestite aplikacijo.</string>
+    <string name="error_no_model_access">Vaš ključ API nima dostopa do tega modela.</string>
+    <string name="error_invalid_key">Neveljaven ključ API. Preverite svoj ključ v Nastavitvah.</string>
+    <string name="error_rate_limited">Presežena omejitev zahtevkov. Poskusite znova čez trenutek.</string>
+    <string name="error_model_not_found">Modela ni mogoče najti. Preverite izbiro modela v Nastavitvah.</string>
+    <string name="error_safety_blocked">Odgovor je blokiran zaradi varnostnih filtrov. Poskusite preoblikovati.</string>
+    <string name="error_empty_response">Model je vrnil prazen odgovor. Poskusite znova.</string>
+    <string name="error_timeout_connection">Časovna omejitev zahteve je potekla. Preverite povezavo.</string>
+    <string name="error_no_internet">Ni internetne povezave.</string>
+    <string name="error_endpoint_unreachable">Do API-ja ni bilo mogoče dostopati. Preverite URL končne točke.</string>
+    <string name="error_bad_request">Zahteva ni uspela. Preverite svoje nastavitve.</string>
+
+    <!-- Updates & command descriptions -->
+    <string name="update_channel_name">Posodobitve aplikacije</string>
+    <string name="update_channel_desc">Obvesti, ko je na voljo nova različica SwiftSlate</string>
+    <string name="update_available_title">Na voljo je posodobitev SwiftSlate</string>
+    <string name="update_available_text">Tapnite za ogled najnovejše različice</string>
 </resources>

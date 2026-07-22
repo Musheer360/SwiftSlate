@@ -91,4 +91,39 @@
     <string name="delete_confirm_key_title">Usunąć ten klucz API?</string>
     <string name="delete_confirm_message">Tej czynności nie można cofnąć.</string>
     <string name="delete_confirm_button">Usuń</string>
+
+    <!-- Toast & error messages -->
+    <string name="toast_replace_failed">Nie udało się zastąpić tekstu</string>
+    <string name="toast_custom_not_configured">Niestandardowy dostawca nie jest skonfigurowany. Ustaw endpoint i model w Ustawieniach.</string>
+    <string name="toast_model_setting_rejected">Ustawienie modelu zostało odrzucone przez dostawcę i pominięte — Twój tekst został mimo to przetworzony. Zgłoś to na GitHub SwiftSlate, abyśmy mogli to naprawić.</string>
+    <string name="toast_key_rate_limited">Przekroczono limit zapytań klucza API. Spróbuj ponownie za %1$ds</string>
+    <string name="toast_no_keys">Nie skonfigurowano kluczy API</string>
+    <string name="toast_all_keys_invalid">Wszystkie klucze API są nieprawidłowe. Sprawdź swoje klucze</string>
+    <string name="toast_request_timed_out">Upłynął limit czasu żądania</string>
+    <string name="toast_restore_failed">Nie udało się przywrócić oryginalnego tekstu</string>
+    <string name="toast_nothing_to_undo">Nie ma nic do cofnięcia</string>
+    <string name="toast_undo_failed">Nie udało się cofnąć</string>
+    <string name="toast_nothing_to_copy">Nie ma nic do skopiowania</string>
+    <string name="toast_copied">Skopiowano do schowka</string>
+    <string name="toast_nothing_to_cut">Nie ma nic do wycięcia</string>
+    <string name="toast_cut">Wycięto do schowka</string>
+    <string name="toast_clipboard_empty">Schowek jest pusty</string>
+    <string name="toast_clipboard_failed">Operacja schowka nie powiodła się</string>
+    <string name="toast_keystore_unavailable">Bezpieczne przechowywanie kluczy jest niedostępne. Zainstaluj aplikację ponownie.</string>
+    <string name="error_no_model_access">Twój klucz API nie ma dostępu do tego modelu.</string>
+    <string name="error_invalid_key">Nieprawidłowy klucz API. Sprawdź swój klucz w Ustawieniach.</string>
+    <string name="error_rate_limited">Przekroczono limit zapytań. Spróbuj ponownie za chwilę.</string>
+    <string name="error_model_not_found">Nie znaleziono modelu. Sprawdź wybór modelu w Ustawieniach.</string>
+    <string name="error_safety_blocked">Odpowiedź zablokowana przez filtry bezpieczeństwa. Spróbuj sformułować inaczej.</string>
+    <string name="error_empty_response">Model zwrócił pustą odpowiedź. Spróbuj ponownie.</string>
+    <string name="error_timeout_connection">Upłynął limit czasu żądania. Sprawdź swoje połączenie.</string>
+    <string name="error_no_internet">Brak połączenia z internetem.</string>
+    <string name="error_endpoint_unreachable">Nie można połączyć się z API. Sprawdź adres URL endpointu.</string>
+    <string name="error_bad_request">Żądanie nie powiodło się. Sprawdź swoje ustawienia.</string>
+
+    <!-- Updates & command descriptions -->
+    <string name="update_channel_name">Aktualizacje aplikacji</string>
+    <string name="update_channel_desc">Powiadamia, gdy dostępna jest nowa wersja SwiftSlate</string>
+    <string name="update_available_title">Dostępna aktualizacja SwiftSlate</string>
+    <string name="update_available_text">Dotknij, aby zobaczyć najnowszą wersję</string>
 </resources>
