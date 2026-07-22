@@ -37,9 +37,9 @@ class CommandManager(context: Context) {
         "fix" to "Fix grammar, spelling, and punctuation errors.",
         "improve" to "Rewrite to improve clarity, flow, and coherence.",
         "shorten" to "Rewrite to be more concise while preserving the core meaning.",
-        "expand" to "Add more words and descriptive detail to the text. Keep the same intent and structure.",
+        "expand" to "Rewrite with more detail. Elaborate only on what is stated or widely known \u2014 do not fabricate information.",
         "formal" to "Rewrite in a formal, professional tone.",
-        "casual" to "Rephrase this text to sound more casual and laid-back.",
+        "casual" to "Rewrite in a casual, friendly tone.",
         "emoji" to "Add relevant emojis throughout.",
         "human" to "Rewrite to sound naturally human, not AI-generated. Never use emdashes or semicolons, use commas or periods instead. Drop AI clichés and filler phrases. Use contractions, everyday words, and varied sentence lengths. Keep all facts, names, and numbers intact.",
         "reply" to "Generate a contextual reply to this message."
