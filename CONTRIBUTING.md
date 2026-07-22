@@ -5,7 +5,7 @@ Thanks for wanting to contribute! Here's everything you need to know.
 ## Project Philosophy
 
 - **Zero external dependencies** for networking/JSON — use `HttpURLConnection` and `org.json`
-- **Minimal APK size** — currently ~1.2 MB, keep it that way
+- **Minimal APK size** — currently ~1.4 MB, keep it that way
 - **API 23+ compatibility** — every feature must work on Android 6.0+
 - **Privacy first** — no analytics, no telemetry, no data leaves the device except to the user's configured AI provider
 

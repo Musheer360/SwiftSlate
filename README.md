@@ -213,8 +213,8 @@ Beyond AI, you can create **text replacer commands** that run **entirely offline
 
 | Provider | Models | Notes |
 |:---------|:-------|:------|
-| **Google Gemini** (default) | `gemini-2.5-flash-lite`, `gemini-3-flash-preview`, `gemini-3.1-flash-lite-preview` | Free tier available at [aistudio.google.com](https://aistudio.google.com) |
-| **Groq** | `llama-3.3-70b-versatile`, `llama-3.1-8b-instant`, `openai/gpt-oss-120b`, `openai/gpt-oss-20b`, `meta-llama/llama-4-scout-17b-16e-instruct` | Free tier at [console.groq.com](https://console.groq.com/keys) |
+| **Google Gemini** (default) | `gemini-3.5-flash-lite` (default), `gemini-3.6-flash` | Free tier available at [aistudio.google.com](https://aistudio.google.com) |
+| **Groq** | `openai/gpt-oss-120b` (default), `qwen/qwen3.6-27b` | Free tier at [console.groq.com](https://console.groq.com/keys) |
 | **Custom (OpenAI-compatible)** | Any model your endpoint supports | Works with Ollama, LM Studio, vLLM, any `/v1/chat/completions` endpoint |
 
 > [!TIP]
@@ -505,7 +505,7 @@ The app automatically uses your device's language. Contributions for additional 
 ## 🏗️ Tech Stack
 
 <table>
-<tr><td><strong>Language</strong></td><td>Kotlin 2.1</td></tr>
+<tr><td><strong>Language</strong></td><td>Kotlin 2.4</td></tr>
 <tr><td><strong>UI</strong></td><td>Jetpack Compose · Material 3</td></tr>
 <tr><td><strong>Async</strong></td><td>Kotlin Coroutines</td></tr>
 <tr><td><strong>HTTP</strong></td><td><code>HttpURLConnection</code> (zero external dependencies)</td></tr>
