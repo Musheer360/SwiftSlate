@@ -66,23 +66,40 @@ class OpenAICompatibleClient {
         temperature: Double,
         endpoint: String,
         useStructuredOutput: Boolean = false,
-        useJsonObjectMode: Boolean = false
+        useJsonObjectMode: Boolean = false,
+        extraParams: Map<String, Any> = emptyMap()
     ): Result<GenerateResult> = withContext(Dispatchers.IO) {
         var soFailed = false
+        // Whether we had to drop rejected tuning params to succeed (surfaced to the user).
+        var tuningDegraded = false
+        // Optional provider tuning (e.g. Groq reasoning params). Threaded as a var so
+        // that if the provider rejects it, we can drop it and keep degraded retries consistent.
+        var effectiveExtras = extraParams
 
-        var result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode)
+        var result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode, effectiveExtras)
 
         // Retry once for transient network errors
         if (result.isFailure && result.exceptionOrNull().isTransientNetwork()) {
             kotlinx.coroutines.delay(1000)
-            result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode)
+            result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode, effectiveExtras)
+        }
+
+        // Graceful degradation: if the API rejects our optional tuning params with a
+        // client error (a bad/removed reasoning param, or a future API change), retry
+        // once without them. Working-but-unoptimized beats a hard failure. Only runs on
+        // a 400/422 when such params were actually sent, so there is no happy-path cost.
+        if (result.isFailure && effectiveExtras.isNotEmpty() && isBadRequest(result)) {
+            val degraded = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode, emptyMap())
+            if (degraded.isSuccess) {
+                result = degraded
+                effectiveExtras = emptyMap()
+                tuningDegraded = true
+            }
         }
 
         val finalResult = if (useStructuredOutput && result.isFailure) {
-            val msg = result.exceptionOrNull()?.message ?: ""
-            val code = HTTP_CODE_REGEX.find(msg)?.groupValues?.get(1)?.toIntOrNull()
-            if (code == 400 || code == 422) {
-                val retry = doGenerate(prompt, text, apiKey, model, temperature, endpoint, false, false)
+            if (isBadRequest(result)) {
+                val retry = doGenerate(prompt, text, apiKey, model, temperature, endpoint, false, false, effectiveExtras)
                 if (retry.isSuccess) soFailed = true
                 stripHttpPrefix(retry.map { it.first })
             } else {
@@ -93,7 +110,14 @@ class OpenAICompatibleClient {
             stripHttpPrefix(result.map { it.first })
         }
 
-        finalResult.map { GenerateResult(it, soFailed) }
+        finalResult.map { GenerateResult(it, soFailed, tuningDegraded) }
+    }
+
+    /** True if a failed result carries an HTTP 400/422 (bad-request) marker. */
+    private fun isBadRequest(result: Result<*>): Boolean {
+        if (result.isSuccess) return false
+        val code = HTTP_CODE_REGEX.find(result.exceptionOrNull()?.message ?: "")?.groupValues?.get(1)?.toIntOrNull()
+        return code == 400 || code == 422
     }
 
     private fun stripHttpPrefix(result: Result<String>): Result<String> {
@@ -113,7 +137,8 @@ class OpenAICompatibleClient {
         temperature: Double,
         endpoint: String,
         withStructured: Boolean,
-        withJsonObject: Boolean = false
+        withJsonObject: Boolean = false,
+        extraParams: Map<String, Any> = emptyMap()
     ): Result<Pair<String, Boolean>> {
         var connection: HttpURLConnection? = null
         return try {
@@ -143,7 +168,7 @@ class OpenAICompatibleClient {
                     })
                     put(JSONObject().apply {
                         put("role", "user")
-                        put("content", text)
+                        put("content", ApiClientUtils.wrapUserText(text))
                     })
                 })
                 put("temperature", temperature)
@@ -168,6 +193,10 @@ class OpenAICompatibleClient {
                         put("type", "json_object")
                     })
                 }
+                // Extra provider-specific params (e.g. Groq reasoning controls),
+                // resolved by the caller from the active provider config. Empty
+                // for providers/models that take none, so nothing is sent.
+                extraParams.forEach { (k, v) -> put(k, v) }
             }
 
             connection.outputStream.use { os ->

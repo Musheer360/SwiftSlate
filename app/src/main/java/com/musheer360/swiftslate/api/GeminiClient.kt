@@ -63,23 +63,40 @@ class GeminiClient {
         apiKey: String,
         model: String,
         temperature: Double,
-        useStructuredOutput: Boolean = false
+        useStructuredOutput: Boolean = false,
+        thinkingLevel: String? = null
     ): Result<GenerateResult> = withContext(Dispatchers.IO) {
         var soFailed = false
+        // Whether we had to drop a rejected thinking level to succeed (surfaced to the user).
+        var tuningDegraded = false
+        // Optional thinking control. Threaded as a var so a rejection can drop it and
+        // keep degraded retries consistent.
+        var effectiveThinking = thinkingLevel
 
-        var result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput)
+        var result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, effectiveThinking)
 
         // Retry once for transient network errors
         if (result.isFailure && result.exceptionOrNull().isTransientNetwork()) {
             kotlinx.coroutines.delay(1000)
-            result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput)
+            result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, effectiveThinking)
+        }
+
+        // Graceful degradation: if the API rejects the thinking config with a client
+        // error (a bad level, or a future API change), retry once without it. The model
+        // then thinks at its own default (slower) but still works. Only runs on a
+        // 400/422 when a thinking level was actually sent, so no happy-path cost.
+        if (result.isFailure && effectiveThinking != null && isBadRequest(result)) {
+            val degraded = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, null)
+            if (degraded.isSuccess) {
+                result = degraded
+                effectiveThinking = null
+                tuningDegraded = true
+            }
         }
 
         val finalResult = if (useStructuredOutput && result.isFailure) {
-            val msg = result.exceptionOrNull()?.message ?: ""
-            val code = HTTP_CODE_REGEX.find(msg)?.groupValues?.get(1)?.toIntOrNull()
-            if (code == 400 || code == 422) {
-                val retry = doGenerate(prompt, text, apiKey, model, temperature, false)
+            if (isBadRequest(result)) {
+                val retry = doGenerate(prompt, text, apiKey, model, temperature, false, effectiveThinking)
                 if (retry.isSuccess) soFailed = true
                 stripHttpPrefix(retry.map { it.first })
             } else {
@@ -90,7 +107,14 @@ class GeminiClient {
             stripHttpPrefix(result.map { it.first })
         }
 
-        finalResult.map { GenerateResult(it, soFailed) }
+        finalResult.map { GenerateResult(it, soFailed, tuningDegraded) }
+    }
+
+    /** True if a failed result carries an HTTP 400/422 (bad-request) marker. */
+    private fun isBadRequest(result: Result<*>): Boolean {
+        if (result.isSuccess) return false
+        val code = HTTP_CODE_REGEX.find(result.exceptionOrNull()?.message ?: "")?.groupValues?.get(1)?.toIntOrNull()
+        return code == 400 || code == 422
     }
 
     private fun stripHttpPrefix(result: Result<String>): Result<String> {
@@ -108,7 +132,8 @@ class GeminiClient {
         apiKey: String,
         model: String,
         temperature: Double,
-        withStructured: Boolean
+        withStructured: Boolean,
+        thinkingLevel: String? = null
     ): Result<Pair<String, Boolean>> {
         var connection: HttpURLConnection? = null
         return try {
@@ -134,7 +159,7 @@ class GeminiClient {
                     put(JSONObject().apply {
                         put("parts", JSONArray().apply {
                             put(JSONObject().apply {
-                                put("text", text)
+                                put("text", ApiClientUtils.wrapUserText(text))
                             })
                         })
                     })
@@ -149,6 +174,13 @@ class GeminiClient {
                 })
                 put("generationConfig", JSONObject().apply {
                     put("temperature", temperature)
+                    // Spec-driven thinking control (mirrors Groq reasoning params).
+                    // "minimal" keeps latency low; null => send no thinkingConfig.
+                    if (thinkingLevel != null) {
+                        put("thinkingConfig", JSONObject().apply {
+                            put("thinkingLevel", thinkingLevel)
+                        })
+                    }
                     if (withStructured) {
                         put("responseMimeType", "application/json")
                         put("responseSchema", JSONObject().apply {
