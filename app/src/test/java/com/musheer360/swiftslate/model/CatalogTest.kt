@@ -33,11 +33,23 @@ class CatalogTest {
             mapOf("reasoning_effort" to "medium", "include_reasoning" to false),
             GroqModels.reasoningParams("openai/gpt-oss-120b")
         )
+        assertEquals(
+            mapOf("reasoning_effort" to "high", "include_reasoning" to false),
+            GroqModels.reasoningParams("openai/gpt-oss-120b-quality")
+        )
         assertEquals(mapOf("reasoning_effort" to "none"), GroqModels.reasoningParams("qwen/qwen3.6-27b"))
         // Unknown / removed models must send nothing (else the API 400s).
         assertEquals(emptyMap<String, Any>(), GroqModels.reasoningParams("openai/gpt-oss-20b"))
         assertEquals(emptyMap<String, Any>(), GroqModels.reasoningParams("llama-3.1-8b-instant"))
         assertEquals(emptyMap<String, Any>(), GroqModels.reasoningParams("something-else"))
+    }
+
+    @Test
+    fun groq_apiModelId_resolves_virtual_entries() {
+        assertEquals("openai/gpt-oss-120b", GroqModels.apiModelId("openai/gpt-oss-120b"))
+        assertEquals("openai/gpt-oss-120b", GroqModels.apiModelId("openai/gpt-oss-120b-quality"))
+        assertEquals("qwen/qwen3.6-27b", GroqModels.apiModelId("qwen/qwen3.6-27b"))
+        assertEquals("unknown-model", GroqModels.apiModelId("unknown-model"))
     }
 
     @Test

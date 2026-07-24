@@ -83,7 +83,14 @@ class ProviderConfigTest {
             mapOf("reasoning_effort" to "medium", "include_reasoning" to false),
             GroqConfig.reasoningParams("openai/gpt-oss-120b")
         )
+        assertEquals(
+            mapOf("reasoning_effort" to "high", "include_reasoning" to false),
+            GroqConfig.reasoningParams("openai/gpt-oss-120b-quality")
+        )
         assertTrue(GroqConfig.reasoningParams("llama-3.1-8b-instant").isEmpty())
+        // apiModelId resolves virtual entries
+        assertEquals("openai/gpt-oss-120b", GroqConfig.apiModelId("openai/gpt-oss-120b-quality"))
+        assertEquals("openai/gpt-oss-120b", GroqConfig.apiModelId("openai/gpt-oss-120b"))
         // Non-Gemini providers expose no thinking level.
         assertNull(GroqConfig.thinkingLevel("openai/gpt-oss-120b"))
         assertNull(CustomConfig.thinkingLevel("anything"))

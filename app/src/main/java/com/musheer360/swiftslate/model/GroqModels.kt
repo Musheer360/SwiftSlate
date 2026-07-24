@@ -41,9 +41,15 @@ object GroqModels {
     // once without these params) so a bad entry won't hard-break the app, but new or
     // edited entries should still be verified against the live API before shipping.
     private val SPECS: List<Spec> = listOf(
-        // GPT-OSS: cannot disable reasoning; "medium" balances quality and latency (~1.2s).
-        Spec("openai/gpt-oss-120b", "GPT-OSS 120B", mapOf("reasoning_effort" to "medium", "include_reasoning" to false)),
+        // GPT-OSS 120B offered at two reasoning levels:
+        // - "medium": good for most commands (?fix, ?formal, ?expand). ~1s latency.
+        // - "high": perfect system-prompt adherence + better creative output (?roast,
+        //   ?poetic, ?hood). ~2-3s latency. Also handles edgy prompts that medium refuses.
+        // "low" was removed: unreliable system-prompt adherence on ambiguous inputs.
+        Spec("openai/gpt-oss-120b", "GPT-OSS 120B (Balanced)", mapOf("reasoning_effort" to "medium", "include_reasoning" to false)),
+        Spec("openai/gpt-oss-120b-quality", "GPT-OSS 120B (Quality)", mapOf("reasoning_effort" to "high", "include_reasoning" to false)),
         // Qwen 3.x: fully disable reasoning (never "default" — that blows up latency/quota).
+        // Fastest option (~250ms) with excellent system-prompt adherence.
         Spec("qwen/qwen3.6-27b", "Qwen 3.6 27B", mapOf("reasoning_effort" to "none"))
     )
 
@@ -61,6 +67,15 @@ object GroqModels {
 
     /** Coerce a stored/selected model to a currently-supported one. */
     fun sanitize(value: String?): String = if (value in ALL) value!! else DEFAULT
+
+    /**
+     * Resolve the actual API model ID to send in the request body. Virtual entries
+     * (e.g. "openai/gpt-oss-120b-quality") map to their real API model ID.
+     */
+    fun apiModelId(model: String): String = when {
+        model.startsWith("openai/gpt-oss-120b") -> "openai/gpt-oss-120b"
+        else -> model
+    }
 
     /**
      * Reasoning parameters to merge into a Groq chat-completions request body for

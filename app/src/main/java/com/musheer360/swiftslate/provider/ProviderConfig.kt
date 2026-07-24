@@ -52,6 +52,13 @@ interface ProviderConfig {
     fun reasoningParams(model: String): Map<String, Any> = emptyMap()
 
     /**
+     * Resolve the actual API model ID from a stored/virtual model ID.
+     * Virtual entries (e.g. "openai/gpt-oss-120b-quality") map to their real
+     * API model. Default: returns [model] unchanged.
+     */
+    fun apiModelId(model: String): String = model
+
+    /**
      * Gemini-native thinking level (generationConfig.thinkingConfig.thinkingLevel)
      * for [model], or null to send none. No-op for non-Gemini providers.
      */
@@ -89,6 +96,7 @@ object GroqConfig : ProviderConfig {
     override fun sanitizeModel(stored: String?): String = GroqModels.sanitize(stored)
     override fun resolveEndpoint(customEndpoint: String): String = ENDPOINT
     override fun reasoningParams(model: String): Map<String, Any> = GroqModels.reasoningParams(model)
+    override fun apiModelId(model: String): String = GroqModels.apiModelId(model)
     override fun useJsonObjectMode(structuredOutputEnabled: Boolean): Boolean = structuredOutputEnabled
 }
 

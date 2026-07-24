@@ -330,7 +330,7 @@ class AssistantService : AccessibilityService() {
 
                         val result = when (provider.transport) {
                             Transport.OPENAI_COMPAT -> openAIClient.generate(
-                                command.prompt, text, key, model, temperature, endpoint,
+                                command.prompt, text, key, provider.apiModelId(model), temperature, endpoint,
                                 useStructuredOutput = false,
                                 useJsonObjectMode = provider.useJsonObjectMode(useStructuredOutput),
                                 extraParams = provider.reasoningParams(model))
