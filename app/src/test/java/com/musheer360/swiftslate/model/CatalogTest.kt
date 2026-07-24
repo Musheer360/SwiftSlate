@@ -30,7 +30,7 @@ class CatalogTest {
     @Test
     fun groq_reasoningParams_per_family() {
         assertEquals(
-            mapOf("reasoning_effort" to "low", "include_reasoning" to false),
+            mapOf("reasoning_effort" to "medium", "include_reasoning" to false),
             GroqModels.reasoningParams("openai/gpt-oss-120b")
         )
         assertEquals(mapOf("reasoning_effort" to "none"), GroqModels.reasoningParams("qwen/qwen3.6-27b"))
@@ -68,8 +68,10 @@ class CatalogTest {
     }
 
     @Test
-    fun gemini_thinkingLevel_minimal_for_catalog_null_for_unknown() {
-        for (id in GeminiModels.ALL) assertEquals("minimal", GeminiModels.thinkingLevel(id))
+    fun gemini_thinkingLevel_for_catalog_null_for_unknown() {
+        // flash-lite uses "low", flash uses "minimal"
+        assertEquals("low", GeminiModels.thinkingLevel("gemini-3.5-flash-lite"))
+        assertEquals("minimal", GeminiModels.thinkingLevel("gemini-3.6-flash"))
         assertNull(GeminiModels.thinkingLevel("gemini-9-ultra"))
     }
 

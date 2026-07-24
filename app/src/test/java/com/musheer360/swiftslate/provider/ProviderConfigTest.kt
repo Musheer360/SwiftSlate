@@ -74,13 +74,13 @@ class ProviderConfigTest {
     @Test
     fun gemini_config_coerces_model_and_exposes_thinking_level() {
         assertEquals(GeminiModels.DEFAULT, GeminiConfig.sanitizeModel("gemini-2.5-flash-lite"))
-        assertEquals("minimal", GeminiConfig.thinkingLevel(GeminiModels.DEFAULT))
+        assertEquals("low", GeminiConfig.thinkingLevel(GeminiModels.DEFAULT))
     }
 
     @Test
     fun groq_config_delegates_reasoning_params() {
         assertEquals(
-            mapOf("reasoning_effort" to "low", "include_reasoning" to false),
+            mapOf("reasoning_effort" to "medium", "include_reasoning" to false),
             GroqConfig.reasoningParams("openai/gpt-oss-120b")
         )
         assertTrue(GroqConfig.reasoningParams("llama-3.1-8b-instant").isEmpty())
