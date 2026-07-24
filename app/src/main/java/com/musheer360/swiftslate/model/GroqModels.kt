@@ -41,8 +41,8 @@ object GroqModels {
     // once without these params) so a bad entry won't hard-break the app, but new or
     // edited entries should still be verified against the live API before shipping.
     private val SPECS: List<Spec> = listOf(
-        // GPT-OSS: cannot disable reasoning; minimize to "low" and hide from the response.
-        Spec("openai/gpt-oss-120b", "GPT-OSS 120B", mapOf("reasoning_effort" to "low", "include_reasoning" to false)),
+        // GPT-OSS: cannot disable reasoning; "medium" balances quality and latency (~1.2s).
+        Spec("openai/gpt-oss-120b", "GPT-OSS 120B", mapOf("reasoning_effort" to "medium", "include_reasoning" to false)),
         // Qwen 3.x: fully disable reasoning (never "default" — that blows up latency/quota).
         Spec("qwen/qwen3.6-27b", "Qwen 3.6 27B", mapOf("reasoning_effort" to "none"))
     )

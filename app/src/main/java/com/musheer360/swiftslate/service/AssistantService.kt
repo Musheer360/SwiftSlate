@@ -600,14 +600,15 @@ class AssistantService : AccessibilityService() {
             try {
                 source.refresh()
                 val fieldText = source.text?.toString()
-                if (fieldText == newText) {
-                    val current = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
-                    if (current == newText) {
-                        if (oldClip != null) {
-                            clipboard.setPrimaryClip(oldClip)
-                        } else {
-                            clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
-                        }
+                // Restore original clipboard regardless of paste success.
+                // If paste succeeded, fieldText == newText and clipboard holds our temp data.
+                // If paste failed, clipboard still holds our temp data that should be cleaned.
+                val current = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
+                if (current == newText) {
+                    if (oldClip != null) {
+                        clipboard.setPrimaryClip(oldClip)
+                    } else {
+                        clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
                     }
                 }
             } catch (_: Exception) {}

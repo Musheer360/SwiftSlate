@@ -25,7 +25,7 @@ object GeminiModels {
     // hard-break the app, but new/edited entries should still be verified against the
     // live API before shipping.
     private val SPECS: List<Spec> = listOf(
-        Spec("gemini-3.5-flash-lite", "Gemini 3.5 Flash-Lite", "minimal"), // fastest/cheapest GA flash-lite
+        Spec("gemini-3.5-flash-lite", "Gemini 3.5 Flash-Lite", "low"), // fastest/cheapest GA flash-lite; "low" = same latency as "minimal" on this model but slightly better reasoning
         Spec("gemini-3.6-flash", "Gemini 3.6 Flash", "minimal")            // higher quality; minimal thinking to stay fast
     )
 

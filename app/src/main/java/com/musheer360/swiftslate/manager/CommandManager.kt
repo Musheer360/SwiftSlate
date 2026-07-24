@@ -235,7 +235,7 @@ class CommandManager(context: Context) {
         val translateIdx = text.lastIndexOf(translatePrefix)
         if (translateIdx >= 0) {
             val langPart = text.substring(translateIdx + translatePrefix.length)
-            if (langPart.length in 2..5 && langPart.all { it.isLetterOrDigit() }) {
+            if (langPart.length in 2..5 && langPart.all { it in 'a'..'z' || it in 'A'..'Z' || it in '0'..'9' }) {
                 return Command("${translatePrefix}$langPart", "Translate to language code '$langPart'.", true)
             }
         }
