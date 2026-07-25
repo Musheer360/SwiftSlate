@@ -42,9 +42,12 @@ object GroqModels {
     // edited entries should still be verified against the live API before shipping.
     private val SPECS: List<Spec> = listOf(
         // GPT-OSS: cannot fully disable reasoning; "medium" balances quality and latency (~1s).
-        // max_completion_tokens=16384 prevents json_validate_failed when reasoning tokens
-        // exhaust Groq's default 3072 cap (especially with json_object mode enabled).
-        Spec("openai/gpt-oss-120b", "GPT-OSS 120B", mapOf("reasoning_effort" to "medium", "include_reasoning" to false, "max_completion_tokens" to 16384)),
+        // Deliberately NO max_completion_tokens: Groq pre-reserves that value against the
+        // per-minute token budget (Requested = prompt_tokens + max_completion_tokens) and
+        // this model's TPM limit is only 8,000 on the free/on-demand tier. Any value at or
+        // near 8,000 makes every single request fail with HTTP 413 "Request too large"
+        // before it reaches the model. Groq's own default is ample for medium effort.
+        Spec("openai/gpt-oss-120b", "GPT-OSS 120B", mapOf("reasoning_effort" to "medium", "include_reasoning" to false)),
         // Qwen 3.x: fully disable reasoning (never "default" — that blows up latency/quota).
         // Fastest option (~250ms) with excellent system-prompt adherence.
         Spec("qwen/qwen3.6-27b", "Qwen 3.6 27B", mapOf("reasoning_effort" to "none"))

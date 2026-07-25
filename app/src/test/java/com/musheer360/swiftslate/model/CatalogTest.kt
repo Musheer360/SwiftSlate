@@ -30,7 +30,7 @@ class CatalogTest {
     @Test
     fun groq_reasoningParams_per_family() {
         assertEquals(
-            mapOf("reasoning_effort" to "medium", "include_reasoning" to false, "max_completion_tokens" to 16384),
+            mapOf("reasoning_effort" to "medium", "include_reasoning" to false),
             GroqModels.reasoningParams("openai/gpt-oss-120b")
         )
         assertEquals(mapOf("reasoning_effort" to "none"), GroqModels.reasoningParams("qwen/qwen3.6-27b"))
