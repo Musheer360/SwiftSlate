@@ -598,10 +598,14 @@ class AssistantService : AccessibilityService() {
 
         handler.postDelayed({
             try {
-                source.refresh()
-                val fieldText = source.text?.toString()
+                // Deliberately does NOT touch `source`: scheduleTextVerification recycles
+                // the node at +300ms, so calling source.refresh() here threw
+                // IllegalStateException on API < 33 (where recycle() is real), the catch
+                // swallowed it, and the clipboard was never restored — leaving SwiftSlate's
+                // temp clip as the user's clipboard. The field text was read into an unused
+                // variable, so nothing needed it.
                 // Restore original clipboard regardless of paste success.
-                // If paste succeeded, fieldText == newText and clipboard holds our temp data.
+                // If paste succeeded, clipboard holds our temp data.
                 // If paste failed, clipboard still holds our temp data that should be cleaned.
                 val current = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
                 if (current == newText) {

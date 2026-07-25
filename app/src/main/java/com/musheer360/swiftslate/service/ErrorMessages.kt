@@ -17,7 +17,8 @@ object ErrorMessages {
                 context.getString(R.string.error_no_model_access)
             lower.contains("invalid api key") || lower.contains("api key not valid") || lower.contains("api_key_invalid") ->
                 context.getString(R.string.error_invalid_key)
-            lower.contains("rate limit") || lower.contains("resource_exhausted") || lower.contains("quota") ->
+            lower.contains("rate limit") || lower.contains("resource_exhausted") || lower.contains("quota") ||
+                lower.contains("request too large") || lower.contains("tokens per minute") ->
                 context.getString(R.string.error_rate_limited)
             lower.contains("model not found") || lower.contains("model_not_found") || lower.contains("not found for api version") ->
                 context.getString(R.string.error_model_not_found)

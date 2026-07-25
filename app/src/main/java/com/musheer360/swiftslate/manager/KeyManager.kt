@@ -24,10 +24,16 @@ class KeyManager(context: Context) {
         private const val IV_SEPARATOR = "]"
         private const val PREF_KEY_ARRAY = "keys_array"
         private const val CACHE_TTL_MS = 5_000L
+        // Invalid-key marks expire. A 403 is not always the key's fault (e.g. selecting a
+        // model the key's project can't access returns 403 for every key), and marks used
+        // to last for the whole process lifetime — so one bad model choice permanently
+        // killed every key with no recovery except re-adding them all.
+        private const val INVALID_KEY_TTL_MS = 900_000L // 15 min
     }
 
     private val rateLimitedKeys = java.util.concurrent.ConcurrentHashMap<String, Long>()
-    private val invalidKeys: MutableSet<String> = java.util.Collections.newSetFromMap(java.util.concurrent.ConcurrentHashMap<String, Boolean>())
+    /** key -> timestamp after which the invalid mark is forgotten. */
+    private val invalidKeys = java.util.concurrent.ConcurrentHashMap<String, Long>()
     private val roundRobinIndex = AtomicInteger(0)
     @Volatile
     private var cachedKeys: List<String>? = null
@@ -184,7 +190,7 @@ class KeyManager(context: Context) {
         
         val now = System.currentTimeMillis()
         val validKeys = keys.filter { key ->
-            if (invalidKeys.contains(key)) return@filter false
+            if (isInvalid(key)) return@filter false
             val limitTime = rateLimitedKeys[key] ?: 0L
             now > limitTime
         }
@@ -201,14 +207,28 @@ class KeyManager(context: Context) {
     }
 
     fun markInvalid(key: String) {
-        invalidKeys.add(key)
+        invalidKeys[key] = System.currentTimeMillis() + INVALID_KEY_TTL_MS
+    }
+
+    /**
+     * Whether [key] is currently benched as invalid, expiring the mark if it is due.
+     * Self-healing: without expiry a transient 403 killed the key until the process
+     * restarted (see [INVALID_KEY_TTL_MS]).
+     */
+    private fun isInvalid(key: String): Boolean {
+        val until = invalidKeys[key] ?: return false
+        if (System.currentTimeMillis() >= until) {
+            invalidKeys.remove(key)
+            return false
+        }
+        return true
     }
 
     fun getShortestWaitTimeMs(): Long? {
         val keys = getKeys()
         if (keys.isEmpty()) return null
         val now = System.currentTimeMillis()
-        val waits = keys.filter { !invalidKeys.contains(it) }
+        val waits = keys.filter { !isInvalid(it) }
             .mapNotNull { key ->
                 val limitTime = rateLimitedKeys[key] ?: return@mapNotNull null
                 val remaining = limitTime - now

@@ -93,14 +93,21 @@ internal object ApiClientUtils {
     }
 
     fun stripMarkdownFences(text: String): String {
-        var result = text
-        if (result.startsWith("```")) {
-            val lines = result.lines().toMutableList()
-            if (lines.isNotEmpty() && lines.first().startsWith("```")) lines.removeAt(0)
-            if (lines.isNotEmpty() && lines.last().startsWith("```")) lines.removeAt(lines.size - 1)
-            result = lines.joinToString("\n")
-        }
-        return result.trim()
+        val trimmed = text.trim()
+        // Check the trimmed string: leading whitespace before the fence previously
+        // defeated this check entirely and left the fences in the output.
+        if (!trimmed.startsWith("```")) return trimmed
+        val lines = trimmed.lines().toMutableList()
+        if (lines.isNotEmpty() && lines.first().startsWith("```")) lines.removeAt(0)
+        // Drop trailing blank lines before looking for the closing fence. Models commonly
+        // end the response with a newline, which made lines.last() == "" and hid the
+        // closing fence, so it survived into the user's text field.
+        while (lines.isNotEmpty() && lines.last().isBlank()) lines.removeAt(lines.size - 1)
+        if (lines.isNotEmpty() && lines.last().startsWith("```")) lines.removeAt(lines.size - 1)
+        val stripped = lines.joinToString("\n").trim()
+        // Never return blank: a response of just "```" stripped to "" and, since the
+        // callers' blank check runs *before* stripping, that emptied the user's field.
+        return if (stripped.isNotBlank()) stripped else trimmed
     }
 
     fun tryExtractStructuredText(rawText: String): Pair<String?, Boolean> {

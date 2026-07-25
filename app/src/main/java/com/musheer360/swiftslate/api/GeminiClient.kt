@@ -223,8 +223,14 @@ class GeminiClient {
                         }
 
                         if (withStructured) {
-                            val (extracted, _) = ApiClientUtils.tryExtractStructuredText(resultText)
+                            val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
                             if (extracted != null) return Result.success(Pair(extracted, false))
+                            // Same guard as the OpenAI-compatible client: never paste a raw
+                            // JSON payload into the user's field when the structured response
+                            // is unusable (parsed with no "text", or malformed/truncated JSON).
+                            if (!parseFailed || resultText.trimStart().startsWith("{")) {
+                                return Result.failure(Exception("Model returned empty response"))
+                            }
                         }
 
                         resultText = ApiClientUtils.stripMarkdownFences(resultText)
@@ -236,8 +242,27 @@ class GeminiClient {
                         Result.failure(Exception("No content found in response"))
                     }
                 } else {
-                    Result.failure(Exception("No candidates found in response"))
+                    // No candidates at all: when Gemini blocks the *prompt* rather than the
+                    // response, the payload carries promptFeedback.blockReason and omits
+                    // candidates entirely. Reporting this as an empty response told the user
+                    // to "try again", which can never succeed.
+                    val blockReason = jsonResponse.optJSONObject("promptFeedback")
+                        ?.optString("blockReason", "") ?: ""
+                    if (blockReason.isNotEmpty()) {
+                        Result.failure(Exception("Response blocked by safety filters ($blockReason)"))
+                    } else {
+                        Result.failure(Exception("No candidates found in response"))
+                    }
                 }
+            } else if (responseCode == 413) {
+                // Request too large for this key's per-minute token budget. Groq enforces
+                // TPM per organization, so another key (different org) may still have
+                // headroom. Classified as a rate limit so the caller cools this key down
+                // briefly and rotates, instead of hard-failing the whole command.
+                val errorBody = ApiClientUtils.readErrorBody(connection)
+                val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
+                val detail = if (apiMessage.isNotEmpty()) apiMessage else "Request too large"
+                Result.failure(ApiException(ApiError.RateLimit(detail, 10), detail))
             } else if (responseCode == 429) {
                 val retryAfter = connection.getHeaderField("Retry-After")
                 val seconds = retryAfter?.toIntOrNull()

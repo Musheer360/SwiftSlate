@@ -224,13 +224,21 @@ class OpenAICompatibleClient {
                     }
 
                     if (withStructured || withJsonObject) {
-                        val (extracted, _) = ApiClientUtils.tryExtractStructuredText(resultText)
+                        val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
                         if (extracted != null) return Result.success(Pair(extracted, false))
-                        if (withStructured) {
-                            resultText = ApiClientUtils.stripMarkdownFences(resultText)
-                            if (finishReason == "length") resultText += "\n\n[Note: Response may be truncated]"
-                            return Result.success(Pair(resultText, true))
+                        // Do not fall through with a raw JSON payload — that pasted literal
+                        // JSON such as {"text": ""} (parsed, no usable field) or a truncated
+                        // object (unparseable but clearly JSON) into the user's text field.
+                        if (!parseFailed || resultText.trimStart().startsWith("{")) {
+                            return Result.failure(Exception("Model returned empty response"))
                         }
+                        // Genuinely not JSON: the model ignored response_format. Use the text,
+                        // but flag it so the caller disables JSON mode for 24h. Previously only
+                        // the withStructured branch did this, so json_object mode never got
+                        // disabled and kept corrupting output on every request.
+                        resultText = ApiClientUtils.stripMarkdownFences(resultText)
+                        if (finishReason == "length") resultText += "\n\n[Note: Response may be truncated]"
+                        return Result.success(Pair(resultText, true))
                     }
 
                     resultText = ApiClientUtils.stripMarkdownFences(resultText)
@@ -241,6 +249,15 @@ class OpenAICompatibleClient {
                 } else {
                     Result.failure(Exception("No choices found in response"))
                 }
+            } else if (responseCode == 413) {
+                // Request too large for this key's per-minute token budget. Groq enforces
+                // TPM per organization, so another key (different org) may still have
+                // headroom. Classified as a rate limit so the caller cools this key down
+                // briefly and rotates, instead of hard-failing the whole command.
+                val errorBody = ApiClientUtils.readErrorBody(connection)
+                val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
+                val detail = if (apiMessage.isNotEmpty()) apiMessage else "Request too large"
+                Result.failure(ApiException(ApiError.RateLimit(detail, 10), detail))
             } else if (responseCode == 429) {
                 val retryAfter = connection.getHeaderField("Retry-After")
                 val seconds = retryAfter?.toIntOrNull()
