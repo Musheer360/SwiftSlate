@@ -6,10 +6,17 @@ import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.util.Locale
 import org.json.JSONObject
 
 sealed interface ApiError {
     data class RateLimit(val message: String, val retryAfterSeconds: Int? = null) : ApiError
+    /**
+     * HTTP 413 — the payload exceeds this key's per-minute token budget. Distinct from
+     * [RateLimit] because rotating to another key (another org, another budget) can help
+     * while waiting alone cannot, so the user must not be shown a countdown.
+     */
+    data class RequestTooLarge(val message: String) : ApiError
     data class InvalidKey(val message: String) : ApiError
     data class Network(val message: String) : ApiError
     data class ServerError(val message: String) : ApiError
@@ -18,7 +25,13 @@ sealed interface ApiError {
 
 class ApiException(val apiError: ApiError, message: String) : Exception(message)
 
-data class GenerateResult(val text: String, val structuredOutputFailed: Boolean, val tuningDegraded: Boolean = false)
+data class GenerateResult(
+    val text: String,
+    val structuredOutputFailed: Boolean,
+    val tuningDegraded: Boolean = false,
+    /** The parameter the provider named as rejected, so the user is told which one. */
+    val rejectedTuningParam: String? = null
+)
 
 internal object ApiClientUtils {
     // System instruction prepended to every request, followed by the command's own
@@ -91,6 +104,72 @@ internal object ApiClientUtils {
         val apiMessage = extractApiErrorMessage(errorBody)
         return if (apiMessage.isNotEmpty()) apiMessage else fallbackMessage
     }
+
+    /** Provider machine-readable reason, e.g. Groq's error.code (json_validate_failed). */
+    fun extractApiErrorCode(errorBody: String): String {
+        if (errorBody.isBlank()) return ""
+        return try {
+            JSONObject(errorBody).optJSONObject("error")?.optString("code", "") ?: ""
+        } catch (_: Exception) {
+            ""
+        }
+    }
+
+    /**
+     * Marker appended when a 200 response carried an unusable structured payload, so
+     * [OpenAICompatibleClient]/[GeminiClient] can retry in plain-text mode. It is always
+     * accompanied by "empty response", which ErrorMessages maps to a localized string, so
+     * the marker itself never reaches the user.
+     */
+    const val STRUCTURED_UNUSABLE_MARKER = "structured output unusable"
+
+    /**
+     * Whether [errorMessage] actually names one of the tuning parameters we sent.
+     *
+     * Both providers name the offending property in the message — verified against the
+     * live Groq API:
+     *   "'reasoning_effort' : value is not one of the allowed values ['none',...]"
+     *   "`reasoning_effort` must be one of `none` or `default`"
+     *   "property 'thinkingLevel' is unsupported"
+     * so an unrelated 400 (a bad temperature, a JSON validation failure) can be told apart
+     * from a genuinely stale tuning spec. Without this check any 400 whose retry happened
+     * to succeed was reported to the user as "a model setting was rejected".
+     */
+    fun namesTuningParam(errorMessage: String, sentParamNames: Collection<String>): Boolean =
+        namedTuningParam(errorMessage, sentParamNames) != null
+
+    /** The tuning parameter [errorMessage] names, or null if it names none of [sentParamNames]. */
+    fun namedTuningParam(errorMessage: String, sentParamNames: Collection<String>): String? {
+        if (sentParamNames.isEmpty() || errorMessage.isBlank()) return null
+        val lower = errorMessage.lowercase(Locale.ROOT)
+        return sentParamNames.firstOrNull { lower.contains(it.lowercase(Locale.ROOT)) }
+    }
+
+    /**
+     * Whether the provider rejected the request because it could not produce valid JSON.
+     * Groq returns HTTP 400 with error.code = json_validate_failed (confirmed live) when
+     * the model runs out of completion budget mid-object in json_object mode. The remedy is
+     * dropping JSON mode — dropping the reasoning params does not help and previously got
+     * the blame.
+     */
+    fun isJsonModeFailure(errorMessage: String): Boolean {
+        val lower = errorMessage.lowercase(Locale.ROOT)
+        return lower.contains("json_validate_failed") ||
+            lower.contains("failed to validate json") ||
+            lower.contains("response_format") ||
+            lower.contains("json_object") ||
+            lower.contains(STRUCTURED_UNUSABLE_MARKER)
+    }
+
+    /**
+     * Removes anything shaped like an API key from provider text before it is displayed.
+     * Some OpenAI-compatible endpoints echo the key back ("Incorrect API key provided:
+     * sk-ab...XYZ"), and unmatched provider errors are surfaced to the user verbatim.
+     */
+    fun redactSecrets(text: String): String =
+        text.replace(SECRET_REGEX, "***")
+
+    private val SECRET_REGEX = Regex("(?:sk-|gsk_|AIza|xai-|sk-ant-)[A-Za-z0-9_\\-]{6,}")
 
     fun stripMarkdownFences(text: String): String {
         val trimmed = text.trim()

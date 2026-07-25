@@ -14,6 +14,8 @@ class GeminiClient {
 
     companion object {
         private val HTTP_CODE_REGEX = Regex("^HTTP_(\\d+):")
+        /** Names Gemini uses for the thinking control, for attributing a rejection to it. */
+        private val THINKING_PARAM_NAMES = listOf("thinkinglevel", "thinkingconfig", "thinking_level")
         private val HTTP_PREFIX_REGEX = Regex("^HTTP_\\d+:\\s*")
     }
 
@@ -67,35 +69,73 @@ class GeminiClient {
         thinkingLevel: String? = null
     ): Result<GenerateResult> = withContext(Dispatchers.IO) {
         var soFailed = false
-        // Whether we had to drop a rejected thinking level to succeed (surfaced to the user).
+        // Whether the thinking level was *specifically* named as rejected and dropped to
+        // succeed. Only set when the provider's message names it — see the ladder below.
         var tuningDegraded = false
+        var rejectedParam: String? = null
         // Optional thinking control. Threaded as a var so a rejection can drop it and
         // keep degraded retries consistent.
         var effectiveThinking = thinkingLevel
+        var structuredMode = useStructuredOutput
+        // Guards against re-sending a byte-identical request (see OpenAICompatibleClient).
+        var triedWithoutThinking = false
+        var triedWithoutStructured = false
 
-        var result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, effectiveThinking)
+        var result = doGenerate(prompt, text, apiKey, model, temperature, structuredMode, effectiveThinking)
 
         // Retry once for transient network errors (with backoff)
         if (result.isFailure && result.exceptionOrNull().isTransientNetwork()) {
             kotlinx.coroutines.delay(2000)
-            result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, effectiveThinking)
+            result = doGenerate(prompt, text, apiKey, model, temperature, structuredMode, effectiveThinking)
         }
 
-        // Graceful degradation: if the API rejects the thinking config with a client
-        // error (a bad level, or a future API change), retry once without it. The model
-        // then thinks at its own default (slower) but still works. Only runs on a
-        // 400/422 when a thinking level was actually sent, so no happy-path cost.
-        if (result.isFailure && effectiveThinking != null && isBadRequest(result)) {
-            val degraded = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, null)
+        // Degradation ladder — mirrors OpenAICompatibleClient. Order matters so the failure is
+        // attributed to whatever actually caused it.
+        //
+        // 1. Structured-output failure (schema rejected, or a 200 whose payload was unusable):
+        //    fixed by dropping structured output, not by dropping the thinking level.
+        if (result.isFailure && structuredMode && ApiClientUtils.isJsonModeFailure(errorTextOf(result))) {
+            triedWithoutStructured = true
+            val retry = doGenerate(prompt, text, apiKey, model, temperature, false, effectiveThinking)
+            if (retry.isSuccess) {
+                result = retry
+                structuredMode = false
+                soFailed = true
+            }
+            else result = preferActionableFailure(result, retry)
+        }
+
+        // 2. Genuine tuning rejection: the provider named thinkingLevel/thinkingConfig, so our
+        //    model catalog is stale. Only this path may tell the user a setting was rejected.
+        if (result.isFailure && effectiveThinking != null && isBadRequest(result) &&
+            ApiClientUtils.namesTuningParam(errorTextOf(result), THINKING_PARAM_NAMES)) {
+            triedWithoutThinking = true
+            val degraded = doGenerate(prompt, text, apiKey, model, temperature, structuredMode, null)
             if (degraded.isSuccess) {
                 result = degraded
                 effectiveThinking = null
                 tuningDegraded = true
+                rejectedParam = "thinkingLevel"
             }
+            else result = preferActionableFailure(result, degraded)
         }
 
-        val finalResult = if (useStructuredOutput && result.isFailure) {
-            if (isBadRequest(result)) {
+        // 3. Unattributed 4xx with a thinking level sent: one blind retry without it, but do
+        //    NOT claim the thinking level was rejected — we have no evidence of that.
+        //    Skipped when step 2 already sent this exact payload and it failed.
+        if (result.isFailure && effectiveThinking != null && isBadRequest(result) && !triedWithoutThinking) {
+            triedWithoutThinking = true
+            val degraded = doGenerate(prompt, text, apiKey, model, temperature, structuredMode, null)
+            if (degraded.isSuccess) {
+                result = degraded
+                effectiveThinking = null
+            }
+            else result = preferActionableFailure(result, degraded)
+        }
+
+        val finalResult = if (structuredMode && result.isFailure) {
+            // Only if step 1 has not already sent the identical no-structured request.
+            if (isBadRequest(result) && !triedWithoutStructured) {
                 val retry = doGenerate(prompt, text, apiKey, model, temperature, false, effectiveThinking)
                 if (retry.isSuccess) soFailed = true
                 stripHttpPrefix(retry.map { it.first })
@@ -107,8 +147,20 @@ class GeminiClient {
             stripHttpPrefix(result.map { it.first })
         }
 
-        finalResult.map { GenerateResult(it, soFailed, tuningDegraded) }
+        finalResult.map { GenerateResult(it, soFailed, tuningDegraded, rejectedParam) }
     }
+
+    /**
+     * Keeps [retry]'s failure when it carries an [ApiException] the caller can act on
+     * (rate limit, invalid key, server error). Ladder steps previously kept only successes,
+     * so a retry that surfaced a 401 or 429 had that error silently discarded and the command
+     * was reported with the original error and never rotated to another key.
+     */
+    private fun preferActionableFailure(original: Result<Pair<String, Boolean>>, retry: Result<Pair<String, Boolean>>): Result<Pair<String, Boolean>> =
+        if (retry.isFailure && retry.exceptionOrNull() is ApiException) retry else original
+
+    /** Failure message of [result], for attributing *why* a request was rejected. */
+    private fun errorTextOf(result: Result<*>): String = result.exceptionOrNull()?.message ?: ""
 
     /** True if a failed result carries an HTTP 400/422 (bad-request) marker. */
     private fun isBadRequest(result: Result<*>): Boolean {
@@ -229,7 +281,8 @@ class GeminiClient {
                             // JSON payload into the user's field when the structured response
                             // is unusable (parsed with no "text", or malformed/truncated JSON).
                             if (!parseFailed || resultText.trimStart().startsWith("{")) {
-                                return Result.failure(Exception("Model returned empty response"))
+                                return Result.failure(Exception(
+                                    "Model returned empty response (${ApiClientUtils.STRUCTURED_UNUSABLE_MARKER})"))
                             }
                         }
 
@@ -262,7 +315,7 @@ class GeminiClient {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
                 val detail = if (apiMessage.isNotEmpty()) apiMessage else "Request too large"
-                Result.failure(ApiException(ApiError.RateLimit(detail, 10), detail))
+                Result.failure(ApiException(ApiError.RequestTooLarge(detail), detail))
             } else if (responseCode == 429) {
                 val retryAfter = connection.getHeaderField("Retry-After")
                 val seconds = retryAfter?.toIntOrNull()
@@ -288,7 +341,13 @@ class GeminiClient {
                 Result.failure(ApiException(ApiError.InvalidKey(detail), detail))
             } else {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
-                val detail = ApiClientUtils.sanitizeErrorForUser(responseCode, errorBody, "Unexpected error")
+                var detail = ApiClientUtils.sanitizeErrorForUser(responseCode, errorBody, "Unexpected error (HTTP $responseCode)")
+                // Mirror the OpenAI-compatible client: normalize an unknown/inaccessible model
+                // onto the existing translated "model not found" string instead of raw English.
+                val providerCode = ApiClientUtils.extractApiErrorCode(errorBody)
+                if (responseCode == 404 || providerCode == "model_not_found") {
+                    detail = "Model not found. $detail"
+                }
                 val apiError = if (responseCode in 500..599) ApiError.ServerError(detail) else ApiError.Other(detail)
                 Result.failure(ApiException(apiError, detail))
             }

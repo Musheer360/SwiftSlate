@@ -183,13 +183,22 @@ class KeyManager(context: Context) {
 
     // All @Synchronized methods use `this` as monitor (reentrant).
     // getNextKey() intentionally calls getKeys() while holding the lock.
+    /**
+     * Next usable key, skipping benched ones and anything in [alreadyTried].
+     *
+     * [alreadyTried] exists because a monotonic round-robin index modulo a *shrinking* list is
+     * not a permutation: with keys [A,B,C] and the counter at 1, a 5xx on B followed by a 429 on
+     * C mapped attempt 3 back to B — re-sending a byte-identical request while A was never tried
+     * at all, so the command could fail with a healthy key sitting idle.
+     */
     @Synchronized
-    fun getNextKey(): String? {
+    fun getNextKey(alreadyTried: Set<String> = emptySet()): String? {
         val keys = getKeys()
         if (keys.isEmpty()) return null
         
         val now = System.currentTimeMillis()
         val validKeys = keys.filter { key ->
+            if (key in alreadyTried) return@filter false
             if (isInvalid(key)) return@filter false
             val limitTime = rateLimitedKeys[key] ?: 0L
             now > limitTime

@@ -70,35 +70,81 @@ class OpenAICompatibleClient {
         extraParams: Map<String, Any> = emptyMap()
     ): Result<GenerateResult> = withContext(Dispatchers.IO) {
         var soFailed = false
-        // Whether we had to drop rejected tuning params to succeed (surfaced to the user).
+        // Whether a tuning param we sent was *specifically* named as rejected by the provider
+        // and dropped to succeed. Only set when the provider's message names one of our
+        // params — see the ladder below.
         var tuningDegraded = false
+        var rejectedParam: String? = null
         // Optional provider tuning (e.g. Groq reasoning params). Threaded as a var so
         // that if the provider rejects it, we can drop it and keep degraded retries consistent.
         var effectiveExtras = extraParams
+        var jsonMode = useJsonObjectMode
+        // Guards against re-sending a byte-identical request: without them the ladder's
+        // steps 2 and 3 (and step 1 vs the structured fallback) issued the same payload
+        // twice, burning quota against an 8,000 TPM ceiling for no chance of a new outcome.
+        var triedWithoutTuning = false
+        var triedWithoutStructured = false
 
-        var result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode, effectiveExtras)
+        var result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, jsonMode, effectiveExtras)
 
         // Retry once for transient network errors (with backoff)
         if (result.isFailure && result.exceptionOrNull().isTransientNetwork()) {
             kotlinx.coroutines.delay(2000)
-            result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode, effectiveExtras)
+            result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, jsonMode, effectiveExtras)
         }
 
-        // Graceful degradation: if the API rejects our optional tuning params with a
-        // client error (a bad/removed reasoning param, or a future API change), retry
-        // once without them. Working-but-unoptimized beats a hard failure. Only runs on
-        // a 400/422 when such params were actually sent, so there is no happy-path cost.
-        if (result.isFailure && effectiveExtras.isNotEmpty() && isBadRequest(result)) {
-            val degraded = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode, emptyMap())
+        // Degradation ladder. Order matters: attribute the failure to the thing that actually
+        // caused it, so the user is told the truth and the right feature gets disabled.
+        //
+        // 1. JSON-mode failure. Groq answers HTTP 400 json_validate_failed when the model
+        //    cannot finish a valid JSON object, and a 200 with an unusable payload is treated
+        //    the same way. Both are fixed by dropping JSON mode. This case used to fall into
+        //    step 3 below, where a successful retry was misreported as a rejected model
+        //    setting — the single biggest source of that bogus toast.
+        if (result.isFailure && jsonMode && ApiClientUtils.isJsonModeFailure(errorTextOf(result))) {
+            triedWithoutStructured = true
+            val retry = doGenerate(prompt, text, apiKey, model, temperature, endpoint, false, false, effectiveExtras)
+            if (retry.isSuccess) {
+                result = retry
+                jsonMode = false
+                soFailed = true // disables JSON mode for 24h via the caller
+            }
+            else result = preferActionableFailure(result, retry)
+        }
+
+        // 2. Genuine tuning rejection: the provider named one of the params we sent, so our
+        //    model catalog is stale. This is the only path that may claim so to the user.
+        if (result.isFailure && effectiveExtras.isNotEmpty() && isBadRequest(result) &&
+            ApiClientUtils.namesTuningParam(errorTextOf(result), effectiveExtras.keys)) {
+            val named = ApiClientUtils.namedTuningParam(errorTextOf(result), effectiveExtras.keys)
+            triedWithoutTuning = true
+            val degraded = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, jsonMode, emptyMap())
             if (degraded.isSuccess) {
                 result = degraded
                 effectiveExtras = emptyMap()
                 tuningDegraded = true
+                rejectedParam = named
             }
+            else result = preferActionableFailure(result, degraded)
+        }
+
+        // 3. Unattributed 4xx with tuning params sent. Still worth one blind retry without
+        //    them (working beats failing), but deliberately does NOT set tuningDegraded: we
+        //    do not know that the tuning was at fault, so we must not say it was.
+        //    Skipped when step 2 already sent this exact payload and it failed.
+        if (result.isFailure && effectiveExtras.isNotEmpty() && isBadRequest(result) && !triedWithoutTuning) {
+            triedWithoutTuning = true
+            val degraded = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, jsonMode, emptyMap())
+            if (degraded.isSuccess) {
+                result = degraded
+                effectiveExtras = emptyMap()
+            }
+            else result = preferActionableFailure(result, degraded)
         }
 
         val finalResult = if (useStructuredOutput && result.isFailure) {
-            if (isBadRequest(result)) {
+            // Only if step 1 has not already sent the identical no-structured/no-JSON request.
+            if (isBadRequest(result) && !triedWithoutStructured) {
                 val retry = doGenerate(prompt, text, apiKey, model, temperature, endpoint, false, false, effectiveExtras)
                 if (retry.isSuccess) soFailed = true
                 stripHttpPrefix(retry.map { it.first })
@@ -110,8 +156,20 @@ class OpenAICompatibleClient {
             stripHttpPrefix(result.map { it.first })
         }
 
-        finalResult.map { GenerateResult(it, soFailed, tuningDegraded) }
+        finalResult.map { GenerateResult(it, soFailed, tuningDegraded, rejectedParam) }
     }
+
+    /**
+     * Keeps [retry]'s failure when it carries an [ApiException] the caller can act on
+     * (rate limit, invalid key, server error). Ladder steps previously kept only successes,
+     * so a retry that surfaced a 401 or 429 had that error silently discarded and the command
+     * was reported with the original error and never rotated to another key.
+     */
+    private fun preferActionableFailure(original: Result<Pair<String, Boolean>>, retry: Result<Pair<String, Boolean>>): Result<Pair<String, Boolean>> =
+        if (retry.isFailure && retry.exceptionOrNull() is ApiException) retry else original
+
+    /** Failure message of [result], for attributing *why* a request was rejected. */
+    private fun errorTextOf(result: Result<*>): String = result.exceptionOrNull()?.message ?: ""
 
     /** True if a failed result carries an HTTP 400/422 (bad-request) marker. */
     private fun isBadRequest(result: Result<*>): Boolean {
@@ -230,7 +288,8 @@ class OpenAICompatibleClient {
                         // JSON such as {"text": ""} (parsed, no usable field) or a truncated
                         // object (unparseable but clearly JSON) into the user's text field.
                         if (!parseFailed || resultText.trimStart().startsWith("{")) {
-                            return Result.failure(Exception("Model returned empty response"))
+                            return Result.failure(Exception(
+                                "Model returned empty response (${ApiClientUtils.STRUCTURED_UNUSABLE_MARKER})"))
                         }
                         // Genuinely not JSON: the model ignored response_format. Use the text,
                         // but flag it so the caller disables JSON mode for 24h. Previously only
@@ -257,7 +316,7 @@ class OpenAICompatibleClient {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
                 val detail = if (apiMessage.isNotEmpty()) apiMessage else "Request too large"
-                Result.failure(ApiException(ApiError.RateLimit(detail, 10), detail))
+                Result.failure(ApiException(ApiError.RequestTooLarge(detail), detail))
             } else if (responseCode == 429) {
                 val retryAfter = connection.getHeaderField("Retry-After")
                 val seconds = retryAfter?.toIntOrNull()
@@ -275,7 +334,15 @@ class OpenAICompatibleClient {
                 Result.failure(ApiException(ApiError.InvalidKey(detail), detail))
             } else {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
-                val detail = ApiClientUtils.sanitizeErrorForUser(responseCode, errorBody, "Unexpected error")
+                var detail = ApiClientUtils.sanitizeErrorForUser(responseCode, errorBody, "Unexpected error (HTTP $responseCode)")
+                // Groq reports an unknown or inaccessible model as HTTP 404 with the reason only
+                // in error.code ("model_not_found"); its message ("The model `x` does not exist or
+                // you do not have access to it.") matches none of the localized patterns, so the
+                // user was shown raw English. Normalize onto the existing translated string.
+                val providerCode = ApiClientUtils.extractApiErrorCode(errorBody)
+                if (responseCode == 404 || providerCode == "model_not_found") {
+                    detail = "Model not found. $detail"
+                }
                 val apiError = if (responseCode in 500..599) ApiError.ServerError(detail) else ApiError.Other(detail)
                 Result.failure(ApiException(apiError, detail))
             }

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">SwiftSlate</string>
     <string name="accessibility_service_label">SwiftSlate Assistant</string>
     <string name="accessibility_service_desc">Provides system-wide AI text replacements when trigger commands are typed.</string>
@@ -121,7 +121,10 @@
     <string name="error_no_internet">No internet connection.</string>
     <string name="error_endpoint_unreachable">Could not reach the API. Check your endpoint URL.</string>
     <string name="error_bad_request">Request failed. Check your settings.</string>
-
+    <!-- TODO translate: new string, falls back to English in the other 50 locales until then.
+         Added because HTTP 413 was previously reported as "Rate limited. Try again shortly.",
+         which tells the user to wait when the fix is to select less text. -->
+    <string name="error_input_too_long" tools:ignore="MissingTranslation">Text is too long for this model\'s per-minute token limit. Select less text and try again.</string>
     <!-- Update notification (worker) -->
     <string name="update_channel_name">App Updates</string>
     <string name="update_channel_desc">Notifies when a new version of SwiftSlate is available</string>
