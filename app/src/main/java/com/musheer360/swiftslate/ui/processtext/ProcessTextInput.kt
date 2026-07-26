@@ -13,12 +13,20 @@ class RejectedSelectionException(val rejection: Rejection) : Exception()
 
 /**
  * Parses and validates the two extras an ACTION_PROCESS_TEXT intent delivers. Pure: its
- * entire input is those two values — no Context, no prefs, no CommandManager.
+ * entire input is those two values -- no Context, no prefs, no CommandManager.
  */
 object ProcessTextInput {
 
-    /** Client-side sanity bound in UTF-16 code units — what the payload actually costs. */
+    /** Client-side sanity bound in UTF-16 code units -- what the payload actually costs. */
     const val MAX_CHARS = 20_000
+
+    // Invisible characters as \u escapes so none sit literally (as raw bytes) in this file.
+    private const val BOM = '\uFEFF' // zero-width no-break space; some hosts prepend it
+    private const val ZERO_WIDTH_SPACE = '\u200B'
+    private const val ZWNJ = '\u200C'
+    private const val ZWJ = '\u200D'
+    private const val WORD_JOINER = '\u2060'
+    private const val SOFT_HYPHEN = '\u00AD'
 
     /**
      * @param rawText Intent.EXTRA_PROCESS_TEXT as delivered (may be null, often a Spanned).
@@ -35,8 +43,7 @@ object ProcessTextInput {
         // Flatten once: EXTRA_PROCESS_TEXT frequently arrives as a Spanned, and carrying
         // host-specific span classes into equality checks or the model prompt helps nobody.
         var s = rawText.toString()
-        // Some hosts prepend a BOM / zero-width no-break space.
-        s = s.removePrefix("﻿")
+        s = s.removePrefix(BOM.toString())
         // Normalize line endings so payloads are consistent across hosts and the model does
         // not appear to have "changed" text merely by echoing \n back.
         s = s.replace("\r\n", "\n").replace('\r', '\n')
@@ -53,8 +60,8 @@ object ProcessTextInput {
 
     /** Zero-width and bidi/format characters: visually nothing, so not meaningful content. */
     private fun isInvisible(c: Char): Boolean =
-        c == '​' || c == '‌' || c == '‍' || c == '⁠' ||
-            c == '­' || c == '﻿' ||
+        c == ZERO_WIDTH_SPACE || c == ZWNJ || c == ZWJ || c == WORD_JOINER ||
+            c == SOFT_HYPHEN || c == BOM ||
             c.category == CharCategory.FORMAT
 
     private fun reject(r: Rejection): Result<Selection> =
