@@ -30,6 +30,25 @@
             </intent-filter>
         </activity>
 
+        <!--
+            Text-selection entry point. android:label is what the popup shows (it would fall back
+            to the app label anyway; it is set explicitly so renaming the app cannot silently
+            change the menu item). All three filter elements are required: an implicit intent
+            needs category.DEFAULT, and the system only queries PROCESS_TEXT for text/plain.
+        -->
+        <activity
+            android:name=".ui.processtext.ProcessTextActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.SwiftSlate.Dialog">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".service.AssistantService"
             android:exported="true"
