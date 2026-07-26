@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Hindi available ang secure na imbakan ng key. Mangyaring i-reinstall ang app.</string>
     <string name="error_no_model_access">Walang access ang iyong API key sa modelong ito.</string>
     <string name="error_invalid_key">Di-wastong API key. Pakisuri ang iyong key sa Mga Setting.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Na-rate limit. Subukang muli sa ilang sandali.</string>
     <string name="error_model_not_found">Hindi natagpuan ang modelo. Suriin ang iyong napiling modelo sa Mga Setting.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Na-block ang tugon ng mga safety filter. Subukang muling bumuo ng pananalita.</string>
     <string name="error_empty_response">Nagbalik ang modelo ng walang laman na tugon. Subukang muli.</string>
     <string name="error_timeout_connection">Nag-time out ang kahilingan. Suriin ang iyong koneksyon.</string>

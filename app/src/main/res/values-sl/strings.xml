@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Varna hramba ključev ni na voljo. Znova namestite aplikacijo.</string>
     <string name="error_no_model_access">Vaš ključ API nima dostopa do tega modela.</string>
     <string name="error_invalid_key">Neveljaven ključ API. Preverite svoj ključ v Nastavitvah.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Presežena omejitev zahtevkov. Poskusite znova čez trenutek.</string>
     <string name="error_model_not_found">Modela ni mogoče najti. Preverite izbiro modela v Nastavitvah.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Odgovor je blokiran zaradi varnostnih filtrov. Poskusite preoblikovati.</string>
     <string name="error_empty_response">Model je vrnil prazen odgovor. Poskusite znova.</string>
     <string name="error_timeout_connection">Časovna omejitev zahteve je potekla. Preverite povezavo.</string>

@@ -111,8 +111,10 @@
     <string name="toast_keystore_unavailable">Armazenamento seguro de chaves indisponível. Reinstale o aplicativo.</string>
     <string name="error_no_model_access">Sua chave API não tem acesso a este modelo.</string>
     <string name="error_invalid_key">Chave API inválida. Verifique sua chave nas Configurações.</string>
+    <string name="error_invalid_key_with_hint">Chave de API inválida (%1$s). Verifique suas chaves nas Configurações.</string>
     <string name="error_rate_limited">Limite de solicitações atingido. Tente novamente em breve.</string>
     <string name="error_model_not_found">Modelo não encontrado. Verifique a seleção do modelo nas Configurações.</string>
+    <string name="error_formatting_failed">Não foi possível formatar a resposta corretamente. Tente novamente.</string>
     <string name="error_safety_blocked">Resposta bloqueada pelos filtros de segurança. Tente reformular.</string>
     <string name="error_empty_response">O modelo retornou uma resposta vazia. Tente novamente.</string>
     <string name="error_timeout_connection">A solicitação expirou. Verifique sua conexão.</string>

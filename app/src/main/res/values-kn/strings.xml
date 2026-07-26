@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">ಸುರಕ್ಷಿತ ಕೀ ಸಂಗ್ರಹ ಲಭ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಮರುಸ್ಥಾಪಿಸಿ.</string>
     <string name="error_no_model_access">ನಿಮ್ಮ API ಕೀಗೆ ಈ ಮಾದರಿಗೆ ಪ್ರವೇಶವಿಲ್ಲ.</string>
     <string name="error_invalid_key">ಅಮಾನ್ಯ API ಕೀ. ಸೆಟ್ಟಿಂಗ್ಗಳಲ್ಲಿ ನಿಮ್ಮ ಕೀ ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">ದರ ಸೀಮಿತಗೊಳಿಸಲಾಗಿದೆ. ಶೀಘ್ರದಲ್ಲೇ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="error_model_not_found">ಮಾದರಿ ಕಂಡುಬಂದಿಲ್ಲ. ಸೆಟ್ಟಿಂಗ್ಗಳಲ್ಲಿ ನಿಮ್ಮ ಮಾದರಿ ಆಯ್ಕೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">ಸುರಕ್ಷತಾ ಫಿಲ್ಟರ್‌ಗಳಿಂದ ಪ್ರತಿಕ್ರಿಯೆ ನಿರ್ಬಂಧಿಸಲಾಗಿದೆ. ಮರುರೂಪಿಸಲು ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="error_empty_response">ಮಾದರಿ ಖಾಲಿ ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು ಹಿಂತಿರುಗಿಸಿದೆ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
     <string name="error_timeout_connection">ವಿನಂತಿಯ ಸಮಯ ಮೀರಿದೆ. ನಿಮ್ಮ ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ.</string>

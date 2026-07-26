@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">సురక్షిత కీ నిల్వ అందుబాటులో లేదు. దయచేసి యాప్‌ను మళ్లీ ఇన్‌స్టాల్ చేయండి.</string>
     <string name="error_no_model_access">మీ API కీకి ఈ మోడల్‌కు యాక్సెస్ లేదు.</string>
     <string name="error_invalid_key">చెల్లని API కీ. సెట్టింగ్‌లలో మీ కీని తనిఖీ చేయండి.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">రేట్ పరిమితం చేయబడింది. కొద్దిసేపటిలో మళ్లీ ప్రయత్నించండి.</string>
     <string name="error_model_not_found">మోడల్ కనుగొనబడలేదు. సెట్టింగ్‌లలో మీ మోడల్ ఎంపికను తనిఖీ చేయండి.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">భద్రతా ఫిల్టర్ల ద్వారా ప్రతిస్పందన నిరోధించబడింది. తిరిగి పదాలు మార్చి ప్రయత్నించండి.</string>
     <string name="error_empty_response">మోడల్ ఖాళీ ప్రతిస్పందనను అందించింది. మళ్లీ ప్రయత్నించండి.</string>
     <string name="error_timeout_connection">అభ్యర్థన గడువు ముగిసింది. మీ కనెక్షన్‌ను తనిఖీ చేయండి.</string>

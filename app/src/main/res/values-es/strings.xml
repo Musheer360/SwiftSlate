@@ -111,8 +111,10 @@
     <string name="toast_keystore_unavailable">Almacenamiento seguro de claves no disponible. Reinstala la aplicación.</string>
     <string name="error_no_model_access">Tu clave API no tiene acceso a este modelo.</string>
     <string name="error_invalid_key">Clave API no válida. Comprueba tu clave en Ajustes.</string>
+    <string name="error_invalid_key_with_hint">Clave API no válida (%1$s). Comprueba tus claves en Ajustes.</string>
     <string name="error_rate_limited">Límite de uso alcanzado. Vuelve a intentarlo en breve.</string>
     <string name="error_model_not_found">Modelo no encontrado. Comprueba la selección del modelo en Ajustes.</string>
+    <string name="error_formatting_failed">No se pudo formatear la respuesta correctamente. Inténtalo de nuevo.</string>
     <string name="error_safety_blocked">Respuesta bloqueada por los filtros de seguridad. Prueba a reformular.</string>
     <string name="error_empty_response">El modelo devolvió una respuesta vacía. Inténtalo de nuevo.</string>
     <string name="error_timeout_connection">Se agotó el tiempo de espera de la solicitud. Comprueba tu conexión.</string>

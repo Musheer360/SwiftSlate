@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">নিরাপদ কী সংরক্ষণ উপলব্ধ নয়। অনুগ্রহ করে অ্যাপটি পুনরায় ইনস্টল করুন।</string>
     <string name="error_no_model_access">আপনার API কী এই মডেলে অ্যাক্সেস নেই।</string>
     <string name="error_invalid_key">অবৈধ API কী। অনুগ্রহ করে সেটিংসে আপনার কী পরীক্ষা করুন।</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">রেট সীমিত। শীঘ্রই আবার চেষ্টা করুন।</string>
     <string name="error_model_not_found">মডেল পাওয়া যায়নি। সেটিংসে আপনার মডেল নির্বাচন পরীক্ষা করুন।</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">নিরাপত্তা ফিল্টার দ্বারা প্রতিক্রিয়া ব্লক করা হয়েছে। পুনরায় বাক্য গঠন করে দেখুন।</string>
     <string name="error_empty_response">মডেল একটি খালি প্রতিক্রিয়া ফিরিয়েছে। আবার চেষ্টা করুন।</string>
     <string name="error_timeout_connection">অনুরোধের সময় শেষ হয়েছে। আপনার সংযোগ পরীক্ষা করুন।</string>

@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">സുരക്ഷിത കീ സംഭരണം ലഭ്യമല്ല. ദയവായി ആപ്പ് വീണ്ടും ഇൻസ്റ്റാൾ ചെയ്യുക.</string>
     <string name="error_no_model_access">നിങ്ങളുടെ API കീയ്ക്ക് ഈ മോഡലിലേക്ക് ആക്‌സസ് ഇല്ല.</string>
     <string name="error_invalid_key">അസാധുവായ API കീ. ക്രമീകരണങ്ങളിൽ നിങ്ങളുടെ കീ പരിശോധിക്കുക.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">നിരക്ക് പരിമിതപ്പെടുത്തി. ഉടൻ വീണ്ടും ശ്രമിക്കുക.</string>
     <string name="error_model_not_found">മോഡൽ കണ്ടെത്തിയില്ല. ക്രമീകരണങ്ങളിൽ നിങ്ങളുടെ മോഡൽ തിരഞ്ഞെടുപ്പ് പരിശോധിക്കുക.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">സുരക്ഷാ ഫിൽട്ടറുകൾ പ്രതികരണം തടഞ്ഞു. വീണ്ടും പദപ്രയോഗം ചെയ്യാൻ ശ്രമിക്കുക.</string>
     <string name="error_empty_response">മോഡൽ ശൂന്യമായ പ്രതികരണം നൽകി. വീണ്ടും ശ്രമിക്കുക.</string>
     <string name="error_timeout_connection">അഭ്യർത്ഥന സമയപരിധി കഴിഞ്ഞു. നിങ്ങളുടെ കണക്ഷൻ പരിശോധിക്കുക.</string>

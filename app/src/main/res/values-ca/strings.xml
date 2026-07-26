@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">L’emmagatzematge segur de claus no està disponible. Torna a instal·lar l’aplicació.</string>
     <string name="error_no_model_access">La teva clau API no té accés a aquest model.</string>
     <string name="error_invalid_key">Clau API no vàlida. Comprova la teva clau a Configuració.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Límit de freqüència assolit. Torna-ho a provar aviat.</string>
     <string name="error_model_not_found">No s’ha trobat el model. Comprova la selecció de model a Configuració.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Resposta bloquejada pels filtres de seguretat. Prova de reformular-la.</string>
     <string name="error_empty_response">El model ha retornat una resposta buida. Torna-ho a provar.</string>
     <string name="error_timeout_connection">La sol·licitud ha esgotat el temps d’espera. Comprova la connexió.</string>

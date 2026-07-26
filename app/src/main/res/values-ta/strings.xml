@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">பாதுகாப்பான விசை சேமிப்பு கிடைக்கவில்லை. பயன்பாட்டை மீண்டும் நிறுவவும்.</string>
     <string name="error_no_model_access">உங்கள் API விசைக்கு இந்த மாதிரிக்கான அணுகல் இல்லை.</string>
     <string name="error_invalid_key">தவறான API விசை. அமைப்புகளில் உங்கள் விசையைச் சரிபார்க்கவும்.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">வரம்பு மீறப்பட்டது. சிறிது நேரத்தில் மீண்டும் முயற்சிக்கவும்.</string>
     <string name="error_model_not_found">மாதிரி கிடைக்கவில்லை. அமைப்புகளில் உங்கள் மாதிரி தேர்வைச் சரிபார்க்கவும்.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">பாதுகாப்பு வடிப்பான்களால் பதில் தடுக்கப்பட்டது. மறுவடிவமைத்து முயற்சிக்கவும்.</string>
     <string name="error_empty_response">மாதிரி வெற்று பதிலை வழங்கியது. மீண்டும் முயற்சிக்கவும்.</string>
     <string name="error_timeout_connection">கோரிக்கை காலாவதியானது. உங்கள் இணைப்பைச் சரிபார்க்கவும்.</string>

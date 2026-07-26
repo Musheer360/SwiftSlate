@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Güvenli anahtar depolama kullanılamıyor. Lütfen uygulamayı yeniden yükleyin.</string>
     <string name="error_no_model_access">API anahtarınızın bu modele erişimi yok.</string>
     <string name="error_invalid_key">Geçersiz API anahtarı. Lütfen anahtarınızı Ayarlar\'da kontrol edin.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Hız sınırına ulaşıldı. Kısa süre içinde tekrar deneyin.</string>
     <string name="error_model_not_found">Model bulunamadı. Ayarlar\'da model seçiminizi kontrol edin.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Yanıt güvenlik filtreleri tarafından engellendi. Yeniden ifade etmeyi deneyin.</string>
     <string name="error_empty_response">Model boş bir yanıt döndürdü. Tekrar deneyin.</string>
     <string name="error_timeout_connection">İstek zaman aşımına uğradı. Bağlantınızı kontrol edin.</string>

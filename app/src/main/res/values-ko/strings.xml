@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">보안 키 저장소를 사용할 수 없습니다. 앱을 다시 설치하세요.</string>
     <string name="error_no_model_access">API 키에 이 모델에 대한 액세스 권한이 없습니다.</string>
     <string name="error_invalid_key">잘못된 API 키입니다. 설정에서 키를 확인하세요.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">속도가 제한되었습니다. 잠시 후 다시 시도하세요.</string>
     <string name="error_model_not_found">모델을 찾을 수 없습니다. 설정에서 모델 선택을 확인하세요.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">안전 필터에 의해 응답이 차단되었습니다. 다시 표현해 보세요.</string>
     <string name="error_empty_response">모델이 빈 응답을 반환했습니다. 다시 시도하세요.</string>
     <string name="error_timeout_connection">요청 시간이 초과되었습니다. 연결을 확인하세요.</string>

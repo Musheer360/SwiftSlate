@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">ਸੁਰੱਖਿਅਤ ਕੁੰਜੀ ਸਟੋਰੇਜ ਉਪਲਬਧ ਨਹੀਂ। ਕਿਰਪਾ ਕਰਕੇ ਐਪ ਨੂੰ ਦੁਬਾਰਾ ਇੰਸਟਾਲ ਕਰੋ।</string>
     <string name="error_no_model_access">ਤੁਹਾਡੀ API ਕੁੰਜੀ ਕੋਲ ਇਸ ਮਾਡਲ ਤੱਕ ਪਹੁੰਚ ਨਹੀਂ ਹੈ।</string>
     <string name="error_invalid_key">ਅਵੈਧ API ਕੁੰਜੀ। ਕਿਰਪਾ ਕਰਕੇ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਆਪਣੀ ਕੁੰਜੀ ਦੀ ਜਾਂਚ ਕਰੋ।</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">ਦਰ ਸੀਮਿਤ। ਜਲਦੀ ਹੀ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
     <string name="error_model_not_found">ਮਾਡਲ ਨਹੀਂ ਮਿਲਿਆ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਆਪਣੀ ਮਾਡਲ ਚੋਣ ਦੀ ਜਾਂਚ ਕਰੋ।</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">ਸੁਰੱਖਿਆ ਫਿਲਟਰਾਂ ਨੇ ਜਵਾਬ ਬਲੌਕ ਕੀਤਾ। ਦੁਬਾਰਾ ਸ਼ਬਦਾਂ ਵਿੱਚ ਲਿਖਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
     <string name="error_empty_response">ਮਾਡਲ ਨੇ ਖਾਲੀ ਜਵਾਬ ਵਾਪਸ ਕੀਤਾ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
     <string name="error_timeout_connection">ਬੇਨਤੀ ਦਾ ਸਮਾਂ ਸਮਾਪਤ ਹੋ ਗਿਆ। ਆਪਣੇ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ।</string>

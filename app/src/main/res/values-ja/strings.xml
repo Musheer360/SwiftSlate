@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">セキュアなキーストアが利用できません。アプリを再インストールしてください。</string>
     <string name="error_no_model_access">お使いの API キーはこのモデルにアクセスできません。</string>
     <string name="error_invalid_key">無効な API キーです。設定でキーを確認してください。</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">レート制限されています。しばらくしてから再試行してください。</string>
     <string name="error_model_not_found">モデルが見つかりません。設定でモデルの選択を確認してください。</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">安全フィルターによって応答がブロックされました。表現を変えてお試しください。</string>
     <string name="error_empty_response">モデルが空の応答を返しました。再試行してください。</string>
     <string name="error_timeout_connection">リクエストがタイムアウトしました。接続を確認してください。</string>

@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Penyimpanan kunci selamat tidak tersedia. Sila pasang semula apl.</string>
     <string name="error_no_model_access">Kunci API anda tidak mempunyai akses kepada model ini.</string>
     <string name="error_invalid_key">Kunci API tidak sah. Sila semak kunci anda dalam Tetapan.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Kadar dihadkan. Cuba lagi sebentar.</string>
     <string name="error_model_not_found">Model tidak ditemui. Semak pilihan model anda dalam Tetapan.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Respons disekat oleh penapis keselamatan. Cuba ubah kata.</string>
     <string name="error_empty_response">Model memulangkan respons kosong. Cuba lagi.</string>
     <string name="error_timeout_connection">Permintaan tamat masa. Semak sambungan anda.</string>

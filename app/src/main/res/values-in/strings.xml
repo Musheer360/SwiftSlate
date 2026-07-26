@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Penyimpanan kunci aman tidak tersedia. Harap instal ulang aplikasi.</string>
     <string name="error_no_model_access">Kunci API Anda tidak memiliki akses ke model ini.</string>
     <string name="error_invalid_key">Kunci API tidak valid. Harap periksa kunci Anda di Pengaturan.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Dibatasi. Coba lagi sebentar.</string>
     <string name="error_model_not_found">Model tidak ditemukan. Periksa pilihan model Anda di Pengaturan.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Respons diblokir oleh filter keamanan. Coba ubah kalimatnya.</string>
     <string name="error_empty_response">Model mengembalikan respons kosong. Coba lagi.</string>
     <string name="error_timeout_connection">Permintaan kehabisan waktu. Periksa koneksi Anda.</string>

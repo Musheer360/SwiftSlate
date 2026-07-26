@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">محفوظ کلید ذخیرہ دستیاب نہیں ہے۔ براہ کرم ایپ دوبارہ انسٹال کریں۔</string>
     <string name="error_no_model_access">آپ کی API کلید کو اس ماڈل تک رسائی نہیں ہے۔</string>
     <string name="error_invalid_key">غلط API کلید۔ براہ کرم ترتیبات میں اپنی کلید جانچیں۔</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">شرح محدود ہے۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔</string>
     <string name="error_model_not_found">ماڈل نہیں ملا۔ ترتیبات میں اپنے ماڈل کے انتخاب کو جانچیں۔</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">حفاظتی فلٹرز نے جواب کو روک دیا۔ دوبارہ الفاظ بدل کر کوشش کریں۔</string>
     <string name="error_empty_response">ماڈل نے خالی جواب واپس کیا۔ دوبارہ کوشش کریں۔</string>
     <string name="error_timeout_connection">درخواست کا وقت ختم ہو گیا۔ اپنا کنکشن جانچیں۔</string>

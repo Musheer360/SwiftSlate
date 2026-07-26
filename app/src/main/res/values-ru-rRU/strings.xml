@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Безопасное хранилище ключей недоступно. Переустановите приложение.</string>
     <string name="error_no_model_access">Ваш ключ API не имеет доступа к этой модели.</string>
     <string name="error_invalid_key">Недействительный ключ API. Проверьте свой ключ в Настройках.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Превышен лимит запросов. Повторите попытку чуть позже.</string>
     <string name="error_model_not_found">Модель не найдена. Проверьте выбор модели в Настройках.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Ответ заблокирован фильтрами безопасности. Попробуйте переформулировать.</string>
     <string name="error_empty_response">Модель вернула пустой ответ. Повторите попытку.</string>
     <string name="error_timeout_connection">Время ожидания запроса истекло. Проверьте подключение.</string>

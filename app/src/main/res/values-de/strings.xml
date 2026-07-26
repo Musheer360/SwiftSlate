@@ -111,8 +111,10 @@
     <string name="toast_keystore_unavailable">Sicherer Schlüsselspeicher nicht verfügbar. Bitte installiere die App neu.</string>
     <string name="error_no_model_access">Dein API-Schlüssel hat keinen Zugriff auf dieses Modell.</string>
     <string name="error_invalid_key">Ungültiger API-Schlüssel. Bitte überprüfe deinen Schlüssel in den Einstellungen.</string>
+    <string name="error_invalid_key_with_hint">Ungültiger API-Schlüssel (%1$s). Bitte überprüfe deine Schlüssel in den Einstellungen.</string>
     <string name="error_rate_limited">Ratenbegrenzt. Versuche es in Kürze erneut.</string>
     <string name="error_model_not_found">Modell nicht gefunden. Überprüfe deine Modellauswahl in den Einstellungen.</string>
+    <string name="error_formatting_failed">Antwort konnte nicht ordnungsgemäß formatiert werden. Versuche es erneut.</string>
     <string name="error_safety_blocked">Antwort durch Sicherheitsfilter blockiert. Versuche, es umzuformulieren.</string>
     <string name="error_empty_response">Das Modell hat eine leere Antwort zurückgegeben. Versuche es erneut.</string>
     <string name="error_timeout_connection">Zeitüberschreitung der Anfrage. Überprüfe deine Verbindung.</string>

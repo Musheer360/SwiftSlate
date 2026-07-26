@@ -113,10 +113,10 @@
     <!-- Runtime error messages (accessibility service) -->
     <string name="error_no_model_access">Your API key doesn\'t have access to this model.</string>
     <string name="error_invalid_key">Invalid API key. Please check your key in Settings.</string>
-    <string name="error_invalid_key_with_hint" translatable="false">Invalid API key (%1$s). Please check your keys in Settings.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Rate limited. Try again shortly.</string>
     <string name="error_model_not_found">Model not found. Check your model selection in Settings.</string>
-    <string name="error_formatting_failed" translatable="false">Could not format the response properly. Try again.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Response blocked by safety filters. Try rephrasing.</string>
     <string name="error_empty_response">Model returned an empty response. Try again.</string>
     <string name="error_timeout_connection">Request timed out. Check your connection.</string>

@@ -111,8 +111,10 @@
     <string name="toast_keystore_unavailable">安全密钥存储不可用。请重新安装应用。</string>
     <string name="error_no_model_access">您的 API 密钥无权访问此模型。</string>
     <string name="error_invalid_key">API 密钥无效。请在设置中检查您的密钥。</string>
+    <string name="error_invalid_key_with_hint">API 密钥无效 (%1$s)。请在设置中检查您的密钥。</string>
     <string name="error_rate_limited">受到速率限制。请稍后重试。</string>
     <string name="error_model_not_found">未找到模型。请在设置中检查您的模型选择。</string>
+    <string name="error_formatting_failed">无法正确格式化响应。请重试。</string>
     <string name="error_safety_blocked">响应被安全过滤器拦截。请尝试重新表述。</string>
     <string name="error_empty_response">模型返回了空响应。请重试。</string>
     <string name="error_timeout_connection">请求超时。请检查您的网络连接。</string>

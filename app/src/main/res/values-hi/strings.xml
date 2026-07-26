@@ -111,8 +111,10 @@
     <string name="toast_keystore_unavailable">सुरक्षित कुंजी संग्रहण उपलब्ध नहीं है। कृपया ऐप को फिर से इंस्टॉल करें।</string>
     <string name="error_no_model_access">आपकी API कुंजी को इस मॉडल तक पहुँच नहीं है।</string>
     <string name="error_invalid_key">अमान्य API कुंजी। कृपया सेटिंग्स में अपनी कुंजी जाँचें।</string>
+    <string name="error_invalid_key_with_hint">अमान्य एपीआई कुंजी (%1$s)। कृपया सेटिंग्स में अपनी कुंजियों की जांच करें।</string>
     <string name="error_rate_limited">दर सीमित। कृपया कुछ देर में पुनः प्रयास करें।</string>
     <string name="error_model_not_found">मॉडल नहीं मिला। सेटिंग्स में अपने मॉडल चयन की जाँच करें।</string>
+    <string name="error_formatting_failed">प्रतिक्रिया को ठीक से स्वरूपित नहीं किया जा सका। फिर से प्रयास करें।</string>
     <string name="error_safety_blocked">सुरक्षा फ़िल्टर द्वारा प्रतिक्रिया अवरुद्ध। पुनः शब्दों में कहने का प्रयास करें।</string>
     <string name="error_empty_response">मॉडल ने खाली प्रतिक्रिया दी। पुनः प्रयास करें।</string>
     <string name="error_timeout_connection">अनुरोध का समय समाप्त हो गया। अपना कनेक्शन जाँचें।</string>

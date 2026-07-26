@@ -19,10 +19,6 @@ android {
         resourceConfigurations += setOf("en", "fr", "zh-rCN", "hi", "de", "es", "pt-rBR")
     }
 
-    lint {
-        disable += "MissingTranslation"
-    }
-
     signingConfigs {
         val ksFile = System.getenv("KEYSTORE_FILE")
         val ksPassword = System.getenv("KEYSTORE_PASSWORD")

@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">सुरक्षित की स्टोरेज उपलब्ध नाही. कृपया अ‍ॅप पुन्हा इंस्टॉल करा.</string>
     <string name="error_no_model_access">तुमच्या API कीला या मॉडेलचा प्रवेश नाही.</string>
     <string name="error_invalid_key">अवैध API की. कृपया सेटिंग्जमध्ये तुमची की तपासा.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">दर मर्यादित. लवकरच पुन्हा प्रयत्न करा.</string>
     <string name="error_model_not_found">मॉडेल सापडले नाही. सेटिंग्जमध्ये तुमची मॉडेल निवड तपासा.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">सुरक्षा फिल्टरने प्रतिसाद अवरोधित केला. पुन्हा शब्दांकन करून पहा.</string>
     <string name="error_empty_response">मॉडेलने रिकामा प्रतिसाद दिला. पुन्हा प्रयत्न करा.</string>
     <string name="error_timeout_connection">विनंतीची वेळ संपली. तुमचे कनेक्शन तपासा.</string>

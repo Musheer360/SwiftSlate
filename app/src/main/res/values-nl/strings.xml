@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Veilige sleutelopslag niet beschikbaar. Installeer de app opnieuw.</string>
     <string name="error_no_model_access">Uw API-sleutel heeft geen toegang tot dit model.</string>
     <string name="error_invalid_key">Ongeldige API-sleutel. Controleer uw sleutel bij Instellingen.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Snelheidsbeperkt. Probeer het zo opnieuw.</string>
     <string name="error_model_not_found">Model niet gevonden. Controleer uw modelselectie bij Instellingen.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Reactie geblokkeerd door veiligheidsfilters. Probeer het te herformuleren.</string>
     <string name="error_empty_response">Model gaf een lege reactie terug. Probeer het opnieuw.</string>
     <string name="error_timeout_connection">Aanvraag verlopen. Controleer uw verbinding.</string>

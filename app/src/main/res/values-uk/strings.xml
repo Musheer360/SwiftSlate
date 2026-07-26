@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Безпечне сховище ключів недоступне. Будь ласка, перевстановіть застосунок.</string>
     <string name="error_no_model_access">Ваш ключ API не має доступу до цієї моделі.</string>
     <string name="error_invalid_key">Недійсний ключ API. Будь ласка, перевірте свій ключ у налаштуваннях.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Перевищено ліміт запитів. Повторіть спробу незабаром.</string>
     <string name="error_model_not_found">Модель не знайдено. Перевірте вибір моделі у налаштуваннях.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Відповідь заблоковано фільтрами безпеки. Спробуйте перефразувати.</string>
     <string name="error_empty_response">Модель повернула порожню відповідь. Спробуйте ще раз.</string>
     <string name="error_timeout_connection">Час очікування запиту вичерпано. Перевірте з’єднання.</string>

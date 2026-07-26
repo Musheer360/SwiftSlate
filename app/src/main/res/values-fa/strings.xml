@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">ذخیره‌سازی امن کلید در دسترس نیست. لطفاً برنامه را دوباره نصب کنید.</string>
     <string name="error_no_model_access">کلید API شما به این مدل دسترسی ندارد.</string>
     <string name="error_invalid_key">کلید API نامعتبر است. لطفاً کلید خود را در تنظیمات بررسی کنید.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">محدودیت نرخ اعمال شد. لطفاً کمی بعد دوباره تلاش کنید.</string>
     <string name="error_model_not_found">مدل پیدا نشد. انتخاب مدل خود را در تنظیمات بررسی کنید.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">پاسخ توسط فیلترهای ایمنی مسدود شد. سعی کنید عبارت را بازنویسی کنید.</string>
     <string name="error_empty_response">مدل پاسخ خالی برگرداند. دوباره تلاش کنید.</string>
     <string name="error_timeout_connection">مهلت درخواست به پایان رسید. اتصال خود را بررسی کنید.</string>

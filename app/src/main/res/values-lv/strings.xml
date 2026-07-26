@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Droša atslēgu glabātuve nav pieejama. Lūdzu, pārinstalējiet lietotni.</string>
     <string name="error_no_model_access">Jūsu API atslēgai nav piekļuves šim modelim.</string>
     <string name="error_invalid_key">Nederīga API atslēga. Lūdzu, pārbaudiet savu atslēgu Iestatījumos.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Pieprasījumu ātrums ierobežots. Drīz mēģiniet vēlreiz.</string>
     <string name="error_model_not_found">Modelis nav atrasts. Pārbaudiet modeļa izvēli Iestatījumos.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Atbildi bloķēja drošības filtri. Mēģiniet pārformulēt.</string>
     <string name="error_empty_response">Modelis atgrieza tukšu atbildi. Mēģiniet vēlreiz.</string>
     <string name="error_timeout_connection">Pieprasījuma noildze. Pārbaudiet savienojumu.</string>

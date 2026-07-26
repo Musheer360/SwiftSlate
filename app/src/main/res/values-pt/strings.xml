@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Armazenamento seguro de chaves indisponível. Reinstale a aplicação.</string>
     <string name="error_no_model_access">A sua chave API não tem acesso a este modelo.</string>
     <string name="error_invalid_key">Chave API inválida. Verifique a sua chave nas Definições.</string>
+    <string name="error_invalid_key_with_hint">Chave de API inválida (%1$s). Verifique suas chaves nas Configurações.</string>
     <string name="error_rate_limited">Limite de pedidos atingido. Tente novamente em breve.</string>
     <string name="error_model_not_found">Modelo não encontrado. Verifique a seleção do modelo nas Definições.</string>
+    <string name="error_formatting_failed">Não foi possível formatar a resposta corretamente. Tente novamente.</string>
     <string name="error_safety_blocked">Resposta bloqueada por filtros de segurança. Tente reformular.</string>
     <string name="error_empty_response">O modelo devolveu uma resposta vazia. Tente novamente.</string>
     <string name="error_timeout_connection">O pedido excedeu o tempo limite. Verifique a sua ligação.</string>

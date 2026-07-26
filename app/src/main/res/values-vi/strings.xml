@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Kho lưu trữ khóa an toàn không có sẵn. Vui lòng cài đặt lại ứng dụng.</string>
     <string name="error_no_model_access">Khóa API của bạn không có quyền truy cập vào mô hình này.</string>
     <string name="error_invalid_key">Khóa API không hợp lệ. Vui lòng kiểm tra khóa của bạn trong Cài đặt.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Bị giới hạn tần suất. Thử lại sau giây lát.</string>
     <string name="error_model_not_found">Không tìm thấy mô hình. Kiểm tra lựa chọn mô hình của bạn trong Cài đặt.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Phản hồi bị chặn bởi bộ lọc an toàn. Thử diễn đạt lại.</string>
     <string name="error_empty_response">Mô hình trả về phản hồi trống. Thử lại.</string>
     <string name="error_timeout_connection">Yêu cầu đã hết thời gian chờ. Kiểm tra kết nối của bạn.</string>

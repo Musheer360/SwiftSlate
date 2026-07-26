@@ -111,8 +111,10 @@
     <string name="toast_keystore_unavailable">Stockage sécurisé des clés indisponible. Veuillez réinstaller l\'application.</string>
     <string name="error_no_model_access">Votre clé API n\'a pas accès à ce modèle.</string>
     <string name="error_invalid_key">Clé API invalide. Veuillez vérifier votre clé dans les Paramètres.</string>
+    <string name="error_invalid_key_with_hint">Clé API non valide (%1$s). Veuillez vérifier vos clés dans les paramètres.</string>
     <string name="error_rate_limited">Débit limité. Réessayez sous peu.</string>
     <string name="error_model_not_found">Modèle introuvable. Vérifiez la sélection du modèle dans les Paramètres.</string>
+    <string name="error_formatting_failed">Impossible de formater la réponse correctement. Réessayez.</string>
     <string name="error_safety_blocked">Réponse bloquée par les filtres de sécurité. Essayez de reformuler.</string>
     <string name="error_empty_response">Le modèle a renvoyé une réponse vide. Réessayez.</string>
     <string name="error_timeout_connection">La requête a expiré. Vérifiez votre connexion.</string>

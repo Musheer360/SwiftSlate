@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Η ασφαλής αποθήκευση κλειδιών δεν είναι διαθέσιμη. Παρακαλούμε επανεγκαταστήστε την εφαρμογή.</string>
     <string name="error_no_model_access">Το κλειδί API σας δεν έχει πρόσβαση σε αυτό το μοντέλο.</string>
     <string name="error_invalid_key">Μη έγκυρο κλειδί API. Παρακαλούμε ελέγξτε το κλειδί σας στις Ρυθμίσεις.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Περιορισμός ρυθμού. Δοκιμάστε ξανά σύντομα.</string>
     <string name="error_model_not_found">Το μοντέλο δεν βρέθηκε. Ελέγξτε την επιλογή μοντέλου στις Ρυθμίσεις.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Η απάντηση αποκλείστηκε από τα φίλτρα ασφαλείας. Δοκιμάστε να την αναδιατυπώσετε.</string>
     <string name="error_empty_response">Το μοντέλο επέστρεψε κενή απάντηση. Δοκιμάστε ξανά.</string>
     <string name="error_timeout_connection">Το αίτημα έληξε. Ελέγξτε τη σύνδεσή σας.</string>

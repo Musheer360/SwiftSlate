@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Stocarea securizată a cheilor este indisponibilă. Te rugăm să reinstalezi aplicația.</string>
     <string name="error_no_model_access">Cheia ta API nu are acces la acest model.</string>
     <string name="error_invalid_key">Cheie API invalidă. Verifică-ți cheia în Setări.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Limită de solicitări atinsă. Încearcă din nou în scurt timp.</string>
     <string name="error_model_not_found">Modelul nu a fost găsit. Verifică selecția modelului în Setări.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Răspuns blocat de filtrele de siguranță. Încearcă să reformulezi.</string>
     <string name="error_empty_response">Modelul a returnat un răspuns gol. Încearcă din nou.</string>
     <string name="error_timeout_connection">Solicitarea a expirat. Verifică-ți conexiunea.</string>

@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Sigurno pohranjivanje ključeva nije dostupno. Ponovno instalirajte aplikaciju.</string>
     <string name="error_no_model_access">Vaš API ključ nema pristup ovom modelu.</string>
     <string name="error_invalid_key">Nevažeći API ključ. Provjerite svoj ključ u Postavkama.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Ograničena brzina. Pokušajte ponovno uskoro.</string>
     <string name="error_model_not_found">Model nije pronađen. Provjerite odabir modela u Postavkama.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Odgovor je blokiran sigurnosnim filtrima. Pokušajte preformulirati.</string>
     <string name="error_empty_response">Model je vratio prazan odgovor. Pokušajte ponovno.</string>
     <string name="error_timeout_connection">Isteklo je vrijeme zahtjeva. Provjerite svoju vezu.</string>

@@ -112,8 +112,10 @@
     <string name="toast_keystore_unavailable">Turvaline võtmehoidla pole saadaval. Palun installi rakendus uuesti.</string>
     <string name="error_no_model_access">Sinu API võtmel puudub juurdepääs sellele mudelile.</string>
     <string name="error_invalid_key">Kehtetu API võti. Palun kontrolli oma võtit Seadetes.</string>
+    <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Päringulimiit on täis. Proovi peagi uuesti.</string>
     <string name="error_model_not_found">Mudelit ei leitud. Kontrolli mudeli valikut Seadetes.</string>
+    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Vastus blokeeriti turvafiltrite poolt. Proovi ümber sõnastada.</string>
     <string name="error_empty_response">Mudel tagastas tühja vastuse. Proovi uuesti.</string>
     <string name="error_timeout_connection">Päring aegus. Kontrolli oma ühendust.</string>
