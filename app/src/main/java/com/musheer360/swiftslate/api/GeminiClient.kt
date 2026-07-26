@@ -68,105 +68,17 @@ class GeminiClient {
         useStructuredOutput: Boolean = false,
         thinkingLevel: String? = null
     ): Result<GenerateResult> = withContext(Dispatchers.IO) {
-        var soFailed = false
-        // Whether the thinking level was *specifically* named as rejected and dropped to
-        // succeed. Only set when the provider's message names it — see the ladder below.
-        var tuningDegraded = false
-        var rejectedParam: String? = null
-        // Optional thinking control. Threaded as a var so a rejection can drop it and
-        // keep degraded retries consistent.
-        var effectiveThinking = thinkingLevel
-        var structuredMode = useStructuredOutput
-        // Guards against re-sending a byte-identical request (see OpenAICompatibleClient).
-        var triedWithoutThinking = false
-        var triedWithoutStructured = false
+        var result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, thinkingLevel)
 
-        var result = doGenerate(prompt, text, apiKey, model, temperature, structuredMode, effectiveThinking)
-
-        // Retry once for transient network errors (with backoff)
+        // Retry once for transient network/server errors (with 1.5s backoff)
         if (result.isFailure && result.exceptionOrNull().isTransientNetwork()) {
-            kotlinx.coroutines.delay(2000)
-            result = doGenerate(prompt, text, apiKey, model, temperature, structuredMode, effectiveThinking)
+            kotlinx.coroutines.delay(1500)
+            result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, thinkingLevel)
         }
 
-        // Degradation ladder — mirrors OpenAICompatibleClient. Order matters so the failure is
-        // attributed to whatever actually caused it.
-        //
-        // 1. Structured-output failure (schema rejected, or a 200 whose payload was unusable):
-        //    fixed by dropping structured output, not by dropping the thinking level.
-        if (result.isFailure && structuredMode && ApiClientUtils.isJsonModeFailure(errorTextOf(result))) {
-            triedWithoutStructured = true
-            val retry = doGenerate(prompt, text, apiKey, model, temperature, false, effectiveThinking)
-            if (retry.isSuccess) {
-                result = retry
-                structuredMode = false
-                soFailed = true
-            }
-            else result = preferActionableFailure(result, retry)
-        }
-
-        // 2. Genuine tuning rejection: the provider named thinkingLevel/thinkingConfig, so our
-        //    model catalog is stale. Only this path may tell the user a setting was rejected.
-        if (result.isFailure && effectiveThinking != null && isBadRequest(result) &&
-            ApiClientUtils.namesTuningParam(errorTextOf(result), THINKING_PARAM_NAMES)) {
-            triedWithoutThinking = true
-            val degraded = doGenerate(prompt, text, apiKey, model, temperature, structuredMode, null)
-            if (degraded.isSuccess) {
-                result = degraded
-                effectiveThinking = null
-                tuningDegraded = true
-                rejectedParam = "thinkingLevel"
-            }
-            else result = preferActionableFailure(result, degraded)
-        }
-
-        // 3. Unattributed 4xx with a thinking level sent: one blind retry without it, but do
-        //    NOT claim the thinking level was rejected — we have no evidence of that.
-        //    Skipped when step 2 already sent this exact payload and it failed.
-        if (result.isFailure && effectiveThinking != null && isBadRequest(result) && !triedWithoutThinking) {
-            triedWithoutThinking = true
-            val degraded = doGenerate(prompt, text, apiKey, model, temperature, structuredMode, null)
-            if (degraded.isSuccess) {
-                result = degraded
-                effectiveThinking = null
-            }
-            else result = preferActionableFailure(result, degraded)
-        }
-
-        val finalResult = if (structuredMode && result.isFailure) {
-            // Only if step 1 has not already sent the identical no-structured request.
-            if (isBadRequest(result) && !triedWithoutStructured) {
-                val retry = doGenerate(prompt, text, apiKey, model, temperature, false, effectiveThinking)
-                if (retry.isSuccess) soFailed = true
-                stripHttpPrefix(retry.map { it.first })
-            } else {
-                stripHttpPrefix(result.map { it.first })
-            }
-        } else {
-            if (result.isSuccess && result.getOrNull()?.second == true) soFailed = true
-            stripHttpPrefix(result.map { it.first })
-        }
-
-        finalResult.map { GenerateResult(it, soFailed, tuningDegraded, rejectedParam) }
-    }
-
-    /**
-     * Keeps [retry]'s failure when it carries an [ApiException] the caller can act on
-     * (rate limit, invalid key, server error). Ladder steps previously kept only successes,
-     * so a retry that surfaced a 401 or 429 had that error silently discarded and the command
-     * was reported with the original error and never rotated to another key.
-     */
-    private fun preferActionableFailure(original: Result<Pair<String, Boolean>>, retry: Result<Pair<String, Boolean>>): Result<Pair<String, Boolean>> =
-        if (retry.isFailure && retry.exceptionOrNull() is ApiException) retry else original
-
-    /** Failure message of [result], for attributing *why* a request was rejected. */
-    private fun errorTextOf(result: Result<*>): String = result.exceptionOrNull()?.message ?: ""
-
-    /** True if a failed result carries an HTTP 400/422 (bad-request) marker. */
-    private fun isBadRequest(result: Result<*>): Boolean {
-        if (result.isSuccess) return false
-        val code = HTTP_CODE_REGEX.find(result.exceptionOrNull()?.message ?: "")?.groupValues?.get(1)?.toIntOrNull()
-        return code == 400 || code == 422
+        val cleaned = stripHttpPrefix(result.map { it.first })
+        val soFailed = result.isSuccess && result.getOrNull()?.second == true
+        cleaned.map { GenerateResult(it, soFailed) }
     }
 
     private fun stripHttpPrefix(result: Result<String>): Result<String> {

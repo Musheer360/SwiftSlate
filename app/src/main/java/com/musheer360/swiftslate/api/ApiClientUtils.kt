@@ -27,10 +27,7 @@ class ApiException(val apiError: ApiError, message: String) : Exception(message)
 
 data class GenerateResult(
     val text: String,
-    val structuredOutputFailed: Boolean,
-    val tuningDegraded: Boolean = false,
-    /** The parameter the provider named as rejected, so the user is told which one. */
-    val rejectedTuningParam: String? = null
+    val structuredOutputFailed: Boolean = false
 )
 
 internal object ApiClientUtils {
@@ -124,25 +121,24 @@ internal object ApiClientUtils {
     const val STRUCTURED_UNUSABLE_MARKER = "structured output unusable"
 
     /**
-     * Whether [errorMessage] actually names one of the tuning parameters we sent.
-     *
-     * Both providers name the offending property in the message — verified against the
-     * live Groq API:
-     *   "'reasoning_effort' : value is not one of the allowed values ['none',...]"
-     *   "`reasoning_effort` must be one of `none` or `default`"
-     *   "property 'thinkingLevel' is unsupported"
-     * so an unrelated 400 (a bad temperature, a JSON validation failure) can be told apart
-     * from a genuinely stale tuning spec. Without this check any 400 whose retry happened
-     * to succeed was reported to the user as "a model setting was rejected".
+     * Detects whether an LLM output string is an in-band safety refusal
+     * (e.g. "I'm sorry, but I can't help with that") rather than a valid
+     * text transformation, to prevent overwriting user input with refusal text.
      */
-    fun namesTuningParam(errorMessage: String, sentParamNames: Collection<String>): Boolean =
-        namedTuningParam(errorMessage, sentParamNames) != null
-
-    /** The tuning parameter [errorMessage] names, or null if it names none of [sentParamNames]. */
-    fun namedTuningParam(errorMessage: String, sentParamNames: Collection<String>): String? {
-        if (sentParamNames.isEmpty() || errorMessage.isBlank()) return null
-        val lower = errorMessage.lowercase(Locale.ROOT)
-        return sentParamNames.firstOrNull { lower.contains(it.lowercase(Locale.ROOT)) }
+    fun isModelRefusal(text: String): Boolean {
+        val lower = text.trim().lowercase(Locale.ROOT)
+        if (lower.isBlank()) return false
+        val head = lower.take(200)
+        val refusalSignatures = listOf(
+            "can't help with that", "cannot help with that",
+            "can't comply with", "cannot comply with",
+            "cannot fulfill the request", "cannot fulfill this request", "cannot fulfill your request",
+            "unable to fulfill the request", "unable to fulfill your request",
+            "as an ai", "as an assistant",
+            "safety guidelines", "safety policy", "helpful and harmless",
+            "violates our policy", "violates safety"
+        )
+        return refusalSignatures.any { head.contains(it) || lower.contains("safety guidelines") || lower.contains("violates our policy") }
     }
 
     /**

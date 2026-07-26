@@ -15,6 +15,7 @@ import android.view.HapticFeedbackConstants
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
+import com.musheer360.swiftslate.api.ApiClientUtils
 import com.musheer360.swiftslate.api.ApiError
 import com.musheer360.swiftslate.api.ApiException
 import com.musheer360.swiftslate.api.GeminiClient
@@ -333,6 +334,7 @@ class AssistantService : AccessibilityService() {
                     var lastErrorMsg: String? = null
                     var lastErrorWasRateLimit = false
                     var lastErrorWasPermission = false
+                    var lastFailedKey: String? = null
                     var spinnerEverStarted = false
                     val triedKeys = mutableSetOf<String>()
                     var succeeded = false
@@ -362,6 +364,15 @@ class AssistantService : AccessibilityService() {
                             spinnerJob.cancelAndJoin()
                             spinnerJob = null
                             val generateResult = result.getOrThrow()
+
+                            if (ApiClientUtils.isModelRefusal(generateResult.text)) {
+                                replaceText(source, originalText)
+                                performHapticFeedback(HapticFeedbackConstants.REJECT)
+                                showToast(getString(R.string.error_safety_blocked))
+                                succeeded = true
+                                break
+                            }
+
                             if (!replaceText(source, generateResult.text)) {
                                 // The field rejected the write. Restore the user's text (the
                                 // spinner glyph is still in it), and don't record an undo point
@@ -377,25 +388,6 @@ class AssistantService : AccessibilityService() {
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                             if (generateResult.structuredOutputFailed) {
                                 prefs.edit().putLong(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT, System.currentTimeMillis()).apply()
-                            }
-                            // A model tuning param (reasoning/thinking) was rejected by the
-                            // provider and dropped so the command could still run. This means
-                            // the catalog spec is stale/wrong — surface it (throttled to once
-                            // per 24h) so the user can report it and we can fix the root cause.
-                            if (generateResult.tuningDegraded) {
-                                val lastNotified = prefs.getLong(PrefKeys.TUNING_DEGRADED_NOTIFIED_AT, 0L)
-                                if (System.currentTimeMillis() - lastNotified > 86_400_000L) {
-                                    prefs.edit().putLong(PrefKeys.TUNING_DEGRADED_NOTIFIED_AT, System.currentTimeMillis()).apply()
-                                    // Name the parameter the provider actually rejected. The
-                                    // message alone was too vague to act on or report, and it
-                                    // now only fires when the provider named one of our params
-                                    // (a JSON-validation failure used to land here too).
-                                    val which = generateResult.rejectedTuningParam
-                                    showToast(
-                                        getString(R.string.toast_model_setting_rejected) +
-                                            if (which != null) " ($which)" else ""
-                                    )
-                                }
                             }
                             succeeded = true
                             statsManager.recordUsage(command.trigger)
@@ -413,15 +405,12 @@ class AssistantService : AccessibilityService() {
                                 keyManager.reportRateLimit(key, seconds)
                             }
                             is ApiError.RequestTooLarge -> {
-                                // Rotate to the next key: TPM is enforced per organization, so
-                                // another key may have headroom. Deliberately does NOT bench the
-                                // key — triedKeys already prevents reusing it within this command,
-                                // and a global cooldown made the *next* command report a bogus
-                                // "rate limited, try again in 10s" for an oversized selection.
                                 lastErrorWasRateLimit = false
+                                break // Fail fast: TPM budget is per org/account, key rotation won't help
                             }
                             is ApiError.InvalidKey -> {
                                 lastErrorWasRateLimit = false
+                                lastFailedKey = key
                                 // Distinguish "this key is bad" from "this key may not use this
                                 // model" (both arrive as 401/403) so the final message can be
                                 // truthful about which one the user should go fix.
@@ -471,7 +460,13 @@ class AssistantService : AccessibilityService() {
                             // rather than bad keys, so don't send the user to check good keys.
                             showToast(restorePrefix + getString(R.string.error_no_model_access))
                         } else if (lastErrorMsg != null) {
-                            showToast(restorePrefix + mapErrorMessage(lastErrorMsg))
+                            val mapped = mapErrorMessage(lastErrorMsg)
+                            if (mapped == getString(R.string.error_invalid_key) && keyManager.getKeys().size > 1 && lastFailedKey != null) {
+                                val hint = "••••" + lastFailedKey.takeLast(4)
+                                showToast(restorePrefix + getString(R.string.error_invalid_key_with_hint, hint))
+                            } else {
+                                showToast(restorePrefix + mapped)
+                            }
                         } else if (keyManager.getKeys().isEmpty()) {
                             showToast(restorePrefix + getString(R.string.toast_no_keys))
                         } else {
@@ -738,13 +733,16 @@ class AssistantService : AccessibilityService() {
             // pendingClipRestore lets onInterrupt/onDestroy run this synchronously — both flush
             // the handler, which previously cancelled it and left SwiftSlate's temp clip (the
             // transformed text) as the user's clipboard indefinitely.
-            pendingClipRestore = Triple(clipboard, oldClip, newText)
+            val currentPending = Triple(clipboard, oldClip, newText)
+            pendingClipRestore = currentPending
             handler.postDelayed({
                 try {
                     restoreClipboard(clipboard, oldClip, newText)
                 } catch (_: Exception) {
                 } finally {
-                    pendingClipRestore = null
+                    if (pendingClipRestore === currentPending) {
+                        pendingClipRestore = null
+                    }
                 }
             }, 500)
         }
@@ -852,7 +850,7 @@ class AssistantService : AccessibilityService() {
         restoreClipboard(pending.first, pending.second, pending.third)
     }
 
-    private fun mapErrorMessage(raw: String): String = ErrorMessages.map(this, raw)
+    private fun mapErrorMessage(raw: String): String = getString(ErrorMessages.map(raw))
 
     private suspend fun showToast(msg: String) = withContext(Dispatchers.Main) {
         overlayToast.show(msg)
