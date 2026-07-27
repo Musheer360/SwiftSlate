@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +46,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
     val uriHandler = LocalUriHandler.current
     var keys by remember { mutableStateOf(keyManager.getKeys()) }
     var keyToDelete by remember { mutableStateOf<String?>(null) }
-    var newKey by remember { mutableStateOf("") }
+    var newKey by rememberSaveable { mutableStateOf("") }
     var isTesting by remember { mutableStateOf(false) }
     var testResult by remember { mutableStateOf<String?>(null) }
     var testSuccess by remember { mutableStateOf(false) }

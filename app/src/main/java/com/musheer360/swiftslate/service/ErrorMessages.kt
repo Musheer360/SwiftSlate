@@ -29,11 +29,10 @@ object ErrorMessages {
             lower.contains("model not found") || lower.contains("model_not_found") || lower.contains("not found for api version") ||
                 lower.contains("does not exist or you do not have access") || lower.contains("decommissioned") ->
                 R.string.error_model_not_found
-            lower.contains("json_validate_failed") || lower.contains("failed to validate json") ||
-                lower.contains("response_format") || lower.contains("failed to generate json") ->
-                R.string.error_formatting_failed
             lower.contains("safety") || lower.contains("content_filter") || lower.contains("content filter") || lower.contains("recitation") ||
-                lower.contains("blocked by safety") || lower.contains("finish_reason: safety") ->
+                lower.contains("blocked by safety") || lower.contains("finish_reason: safety") ||
+                lower.contains("json_validate_failed") || lower.contains("failed to validate json") ||
+                lower.contains("response_format") || lower.contains("failed to generate json") || lower.contains("failed_generation") ->
                 R.string.error_safety_blocked
             lower.contains("empty response") || lower.contains("no content found") || lower.contains("no choices found") || lower.contains("no candidates found") ->
                 R.string.error_empty_response
