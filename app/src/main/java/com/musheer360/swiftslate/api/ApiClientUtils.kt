@@ -126,7 +126,7 @@ internal object ApiClientUtils {
      * text transformation, to prevent overwriting user input with refusal text.
      */
     fun isModelRefusal(text: String): Boolean {
-        val lower = text.trim().lowercase(Locale.ROOT)
+        val lower = text.trim().lowercase(Locale.ROOT).replace('’', '\'').replace('‘', '\'')
         if (lower.isBlank()) return false
         val head = lower.take(200)
         val refusalSignatures = listOf(
