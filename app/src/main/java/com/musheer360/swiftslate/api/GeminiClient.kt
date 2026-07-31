@@ -13,9 +13,6 @@ import java.net.UnknownHostException
 class GeminiClient {
 
     companion object {
-        private val HTTP_CODE_REGEX = Regex("^HTTP_(\\d+):")
-        /** Names Gemini uses for the thinking control, for attributing a rejection to it. */
-        private val THINKING_PARAM_NAMES = listOf("thinkinglevel", "thinkingconfig", "thinking_level")
         private val HTTP_PREFIX_REGEX = Regex("^HTTP_\\d+:\\s*")
     }
 
@@ -76,9 +73,9 @@ class GeminiClient {
             result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, thinkingLevel)
         }
 
-        val cleaned = stripHttpPrefix(result.map { it.first })
-        val soFailed = result.isSuccess && result.getOrNull()?.second == true
-        cleaned.map { GenerateResult(it, soFailed) }
+        val cleaned = stripHttpPrefix(result.map { it.text })
+        val meta = result.getOrNull()
+        cleaned.map { GenerateResult(it, meta?.structuredOutputFailed == true, meta?.truncated == true) }
     }
 
     private fun stripHttpPrefix(result: Result<String>): Result<String> {
@@ -98,7 +95,7 @@ class GeminiClient {
         temperature: Double,
         withStructured: Boolean,
         thinkingLevel: String? = null
-    ): Result<Pair<String, Boolean>> {
+    ): Result<GenerateResult> {
         var connection: HttpURLConnection? = null
         return try {
             val safeModel = model.replace(Regex("[^a-zA-Z0-9._-]"), "")
@@ -188,7 +185,7 @@ class GeminiClient {
 
                         if (withStructured) {
                             val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
-                            if (extracted != null) return Result.success(Pair(extracted, false))
+                            if (extracted != null) return Result.success(GenerateResult(extracted))
                             // Same guard as the OpenAI-compatible client: never paste a raw
                             // JSON payload into the user's field when the structured response
                             // is unusable (parsed with no "text", or malformed/truncated JSON).
@@ -199,10 +196,10 @@ class GeminiClient {
                         }
 
                         resultText = ApiClientUtils.stripMarkdownFences(resultText)
-                        if (finishReason == "MAX_TOKENS") {
-                            resultText += "\n\n[Note: Response may be truncated]"
-                        }
-                        Result.success(Pair(resultText, withStructured))
+                        Result.success(GenerateResult(
+                            resultText,
+                            structuredOutputFailed = withStructured,
+                            truncated = finishReason == "MAX_TOKENS"))
                     } else {
                         Result.failure(Exception("No content found in response"))
                     }

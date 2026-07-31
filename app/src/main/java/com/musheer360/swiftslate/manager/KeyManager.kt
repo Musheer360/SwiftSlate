@@ -2,33 +2,38 @@ package com.musheer360.swiftslate.manager
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
-import android.util.Base64
 import org.json.JSONArray
-import java.nio.charset.StandardCharsets
-import java.security.KeyStore
 import java.util.concurrent.atomic.AtomicInteger
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
-import javax.crypto.spec.GCMParameterSpec
 
-class KeyManager(context: Context) {
+class KeyManager internal constructor(
+    context: Context,
+    private val cipher: KeyCipher
+) {
+    constructor(context: Context) : this(context, AndroidKeystoreCipher())
+
     private val prefs: SharedPreferences = context.getSharedPreferences("secure_keys_prefs", Context.MODE_PRIVATE)
 
     companion object {
-        private const val KEY_ALIAS = "typeslate_secure_key"
-        private const val ANDROID_KEYSTORE = "AndroidKeyStore"
-        private const val TRANSFORMATION = "AES/GCM/NoPadding"
-        private const val IV_SEPARATOR = "]"
         private const val PREF_KEY_ARRAY = "keys_array"
         private const val CACHE_TTL_MS = 5_000L
+        private const val MAX_KEY_LENGTH = 256
         // Invalid-key marks expire. A 403 is not always the key's fault (e.g. selecting a
         // model the key's project can't access returns 403 for every key), and marks used
         // to last for the whole process lifetime — so one bad model choice permanently
         // killed every key with no recovery except re-adding them all.
         private const val INVALID_KEY_TTL_MS = 900_000L // 15 min
+
+        /**
+         * Whether [stored] is a pre-encryption plaintext JSON array rather than ciphertext.
+         *
+         * This used to be `!stored.contains("]")`, which is wrong: the legacy format is a JSON
+         * array, and `["key"]` contains that separator. Legacy values were therefore routed
+         * straight to decrypt(), which split them on "]", failed, and made getKeys() return —
+         * and cache — an empty list. Anyone upgrading from a plaintext build silently lost every
+         * key. Ciphertext is "<base64>]<base64>" and base64 never starts with "[", so the two
+         * shapes are unambiguous.
+         */
+        internal fun isLegacyPlaintext(stored: String): Boolean = stored.trimStart().startsWith("[")
     }
 
     private val rateLimitedKeys = java.util.concurrent.ConcurrentHashMap<String, Long>()
@@ -39,75 +44,16 @@ class KeyManager(context: Context) {
     private var cachedKeys: List<String>? = null
     @Volatile
     private var cacheTimestamp = 0L
+    /**
+     * Ciphertext [cachedKeys] was decrypted from, so an expired TTL can be revalidated with a
+     * string compare instead of another AndroidKeyStore round trip + AES-GCM decrypt. The TTL
+     * itself has to stay: the UI and the accessibility service hold separate KeyManager
+     * instances in one process, and this is how one notices the other's writes.
+     */
     @Volatile
-    var keystoreAvailable: Boolean = true
-        private set
+    private var cachedCipherText: String? = null
 
-    init {
-        try {
-            val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
-            keyStore.load(null)
-            if (!keyStore.containsAlias(KEY_ALIAS)) {
-                val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
-                val keyGenParameterSpec = KeyGenParameterSpec.Builder(
-                    KEY_ALIAS,
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-                )
-                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                    .setKeySize(256)
-                    .build()
-                keyGenerator.init(keyGenParameterSpec)
-                keyGenerator.generateKey()
-            }
-        } catch (e: Exception) {
-            android.util.Log.e("KeyManager", "Keystore init failed", e)
-            keystoreAvailable = false
-        }
-    }
-
-    private fun getSecretKey(): SecretKey? {
-        return try {
-            val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
-            keyStore.load(null)
-            keyStore.getKey(KEY_ALIAS, null) as? SecretKey
-        } catch (e: Exception) {
-            android.util.Log.e("KeyManager", "Failed to get secret key", e)
-            null
-        }
-    }
-
-    private fun encrypt(plainText: String): String {
-        val secretKey = getSecretKey()
-            ?: throw IllegalStateException("Keystore unavailable")
-        val cipher = Cipher.getInstance(TRANSFORMATION)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-        val iv = cipher.iv
-        val cipherText = cipher.doFinal(plainText.toByteArray(StandardCharsets.UTF_8))
-        val ivString = Base64.encodeToString(iv, Base64.NO_WRAP)
-        val cipherTextString = Base64.encodeToString(cipherText, Base64.NO_WRAP)
-        return "$ivString$IV_SEPARATOR$cipherTextString"
-    }
-
-    private fun decrypt(encryptedString: String): String? {
-        if (!encryptedString.contains(IV_SEPARATOR)) {
-            return null // corrupted or legacy plaintext — no longer supported
-        }
-        val parts = encryptedString.split(IV_SEPARATOR)
-        if (parts.size != 2) return null
-        return try {
-            val iv = Base64.decode(parts[0], Base64.NO_WRAP)
-            val cipherText = Base64.decode(parts[1], Base64.NO_WRAP)
-            val secretKey = getSecretKey() ?: return null
-            val cipher = Cipher.getInstance(TRANSFORMATION)
-            val spec = GCMParameterSpec(128, iv)
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
-            val plainTextBytes = cipher.doFinal(cipherText)
-            String(plainTextBytes, StandardCharsets.UTF_8)
-        } catch (_: Exception) {
-            null
-        }
-    }
+    val keystoreAvailable: Boolean get() = cipher.available
 
     private fun JSONArray.toStringList(): List<String> =
         (0 until length()).map { getString(it) }
@@ -117,43 +63,55 @@ class KeyManager(context: Context) {
         val now = System.currentTimeMillis()
         val cached = cachedKeys
         if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
-        val encryptedStr = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
-        // Legacy plaintext migration — can be removed once all users are on v1.3+
-        if (!encryptedStr.contains(IV_SEPARATOR)) {
+        val stored = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
+        // TTL expired but the stored ciphertext is byte-identical, so the plaintext cannot have
+        // changed: revalidate the cache rather than paying for another KeyStore decrypt. Without
+        // this, every 5s of active typing re-ran AES-GCM on the accessibility service's path.
+        if (cached != null && stored == cachedCipherText) {
+            cacheTimestamp = now
+            return cached
+        }
+        // Legacy plaintext migration — can be removed once all users are on an encrypted build.
+        if (isLegacyPlaintext(stored)) {
             return try {
-                val encrypted = encrypt(encryptedStr)
+                val encrypted = cipher.encrypt(stored)
                 prefs.edit().putString(PREF_KEY_ARRAY, encrypted).commit()
-                val jsonStr = decrypt(encrypted) ?: return emptyList()
-                val list = JSONArray(jsonStr).toStringList()
-                cachedKeys = list
-                cacheTimestamp = System.currentTimeMillis()
+                val list = JSONArray(stored).toStringList()
+                cacheKeys(list, encrypted)
                 list
             } catch (_: Exception) {
-                // Encryption failed (e.g. keystore invalidated) — return plaintext keys so user doesn't lose access
-                try { JSONArray(encryptedStr).toStringList() } catch (_: Exception) { emptyList() }
+                // Encryption failed (e.g. keystore invalidated) — return the plaintext keys so
+                // the user does not lose access, without caching or rewriting anything.
+                try { JSONArray(stored).toStringList() } catch (_: Exception) { emptyList() }
             }
         }
-        val jsonStr = decrypt(encryptedStr) ?: run {
-            cachedKeys = emptyList()
-            cacheTimestamp = System.currentTimeMillis()
+        val jsonStr = cipher.decrypt(stored) ?: run {
+            cacheKeys(emptyList(), stored)
             return emptyList()
         }
         val list = try { JSONArray(jsonStr).toStringList() } catch (_: Exception) { emptyList() }
-        cachedKeys = list
-        cacheTimestamp = System.currentTimeMillis()
+        cacheKeys(list, stored)
         return list
+    }
+
+    private fun cacheKeys(keys: List<String>, cipherText: String?) {
+        cachedKeys = keys
+        cachedCipherText = cipherText
+        cacheTimestamp = System.currentTimeMillis()
     }
 
     @Synchronized
     private fun saveKeys(keys: List<String>): Boolean {
         val arr = JSONArray(keys)
         return try {
-            prefs.edit().putString(PREF_KEY_ARRAY, encrypt(arr.toString())).apply()
-            cachedKeys = keys
-            cacheTimestamp = System.currentTimeMillis()
+            val cipherText = cipher.encrypt(arr.toString())
+            prefs.edit().putString(PREF_KEY_ARRAY, cipherText).apply()
+            cacheKeys(keys, cipherText)
             true
         } catch (_: Exception) {
+            // Invalidate: the stored value and the in-memory list may now disagree.
             cachedKeys = null
+            cachedCipherText = null
             cacheTimestamp = 0L
             false
         }
@@ -161,7 +119,7 @@ class KeyManager(context: Context) {
 
     @Synchronized
     fun addKey(key: String): Boolean {
-        if (key.isBlank() || key.length > 256) return false
+        if (key.isBlank() || key.length > MAX_KEY_LENGTH) return false
         val keys = getKeys().toMutableList()
         if (!keys.contains(key)) {
             keys.add(key)
@@ -195,7 +153,7 @@ class KeyManager(context: Context) {
     fun getNextKey(alreadyTried: Set<String> = emptySet()): String? {
         val keys = getKeys()
         if (keys.isEmpty()) return null
-        
+
         val now = System.currentTimeMillis()
         val validKeys = keys.filter { key ->
             if (key in alreadyTried) return@filter false
@@ -203,9 +161,9 @@ class KeyManager(context: Context) {
             val limitTime = rateLimitedKeys[key] ?: 0L
             now > limitTime
         }
-        
+
         if (validKeys.isEmpty()) return null
-        
+
         val idx = (roundRobinIndex.getAndIncrement() and Int.MAX_VALUE) % validKeys.size
         return validKeys[idx]
     }

@@ -37,9 +37,10 @@ object GroqModels {
     //
     // CONTRACT: the reasoning map is sent verbatim as top-level request params and
     // must be valid for that specific model (see the category notes above) — an
-    // invalid key/value returns HTTP 400. The client degrades gracefully (retries
-    // once without these params) so a bad entry won't hard-break the app, but new or
-    // edited entries should still be verified against the live API before shipping.
+    // invalid key/value returns HTTP 400 for EVERY request with that model selected,
+    // and there is no client-side fallback that strips them (deliberately: silently
+    // re-sending a different request hid catalog bugs and doubled latency on real
+    // 400s). Verify any new or edited entry against the live API before shipping.
     private val SPECS: List<Spec> = listOf(
         // GPT-OSS: cannot fully disable reasoning; "medium" balances quality and latency (~1s).
         // Deliberately NO max_completion_tokens: Groq pre-reserves that value against the

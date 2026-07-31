@@ -33,6 +33,27 @@ class UpdateCheckWorker(
             "https://api.github.com/repos/Musheer360/SwiftSlate/releases/latest"
         private const val RELEASES_URL =
             "https://github.com/Musheer360/SwiftSlate/releases/latest"
+
+        /**
+         * Compares dot-separated versions (e.g. "1.0.50" > "1.0.49").
+         * Returns true if [latest] is strictly newer than [current].
+         *
+         * Internal (rather than a private instance method) so it can be unit tested without
+         * constructing a Worker: a wrong answer here either spams an update notification on
+         * every run or silently never notifies.
+         */
+        internal fun isNewer(latest: String, current: String): Boolean {
+            val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
+            val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
+            val maxLen = maxOf(latestParts.size, currentParts.size)
+            for (i in 0 until maxLen) {
+                val l = latestParts.getOrElse(i) { 0 }
+                val c = currentParts.getOrElse(i) { 0 }
+                if (l > c) return true
+                if (l < c) return false
+            }
+            return false
+        }
     }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -88,18 +109,7 @@ class UpdateCheckWorker(
      * Compares semantic versions (e.g. "1.0.50" > "1.0.49").
      * Returns true if [latest] is strictly newer than [current].
      */
-    private fun isNewer(latest: String, current: String): Boolean {
-        val latestParts = latest.split(".").mapNotNull { it.toIntOrNull() }
-        val currentParts = current.split(".").mapNotNull { it.toIntOrNull() }
-        val maxLen = maxOf(latestParts.size, currentParts.size)
-        for (i in 0 until maxLen) {
-            val l = latestParts.getOrElse(i) { 0 }
-            val c = currentParts.getOrElse(i) { 0 }
-            if (l > c) return true
-            if (l < c) return false
-        }
-        return false
-    }
+    private fun isNewer(latest: String, current: String): Boolean = Companion.isNewer(latest, current)
 
     private fun alreadyNotified(version: String): Boolean {
         val prefs = applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

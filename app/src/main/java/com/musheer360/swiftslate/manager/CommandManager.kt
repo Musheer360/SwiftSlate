@@ -15,12 +15,44 @@ class CommandManager(context: Context) {
     private var cachedCommands: List<Command>? = null
     @Volatile
     private var cacheTimestamp = 0L
+    /**
+     * Raw JSON [cachedCommands] was parsed from, so an expired TTL can be revalidated with a
+     * string compare instead of re-parsing every command. The TTL has to stay: the UI and the
+     * accessibility service hold separate CommandManager instances in one process, and this is
+     * how the service notices commands edited in the UI. But it fired on the service's
+     * keystroke path, so the parse ran again every 5s of typing for no change.
+     */
+    @Volatile
+    private var cachedCommandsJson: String? = null
+    /**
+     * Prefix [cachedCommands] was built with. Part of the cache key because built-in triggers
+     * are derived from it — with a JSON-only check, changing the prefix while no custom commands
+     * exist leaves custom_commands as "[]" and the other instance would keep serving built-ins
+     * under the old prefix forever.
+     */
+    @Volatile
+    private var cachedPrefix: String? = null
     private var aiCommandsSeeded = prefs.getBoolean("ai_commands_seeded", false)
 
     companion object {
         const val DEFAULT_PREFIX = "?"
         const val PREF_TRIGGER_PREFIX = "trigger_prefix"
         private const val CACHE_TTL_MS = 5_000L
+
+        /** Limits enforced on every write path — see [isValidCommand] / [importCommands]. */
+        const val MAX_TRIGGER_LENGTH = 50
+        const val MAX_PROMPT_LENGTH = 5_000
+        const val MAX_CUSTOM_COMMANDS = 100
+
+        /**
+         * Whether a custom command is storable. Applied by both [saveCustomCommand] and
+         * [importCommands]: the limits used to live only in the import path, so the UI could
+         * create commands that the app's own exported backup would then refuse to import.
+         */
+        fun isValidCommand(trigger: String, prompt: String, prefix: String): Boolean =
+            trigger.isNotBlank() && prompt.isNotBlank() &&
+                trigger.length <= MAX_TRIGGER_LENGTH && prompt.length <= MAX_PROMPT_LENGTH &&
+                trigger.startsWith(prefix) && trigger.length > prefix.length
     }
 
     // System commands — local operations that cannot be edited or deleted
@@ -45,6 +77,13 @@ class CommandManager(context: Context) {
         "reply" to "Generate a contextual reply to this message."
     )
 
+    /** Drops the cache and its validity key so the next [getCommands] rebuilds from prefs. */
+    private fun invalidateCache() {
+        cachedCommands = null
+        cachedCommandsJson = null
+        cachedPrefix = null
+    }
+
     fun getTriggerPrefix(): String {
         return settingsPrefs.getString(PREF_TRIGGER_PREFIX, DEFAULT_PREFIX) ?: DEFAULT_PREFIX
     }
@@ -57,7 +96,7 @@ class CommandManager(context: Context) {
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = try { JSONArray(customStr) } catch (_: Exception) {
             prefs.edit().putString("custom_commands", "[]").apply()
-            cachedCommands = null
+            invalidateCache()
             return true
         }
         val newArr = JSONArray()
@@ -78,7 +117,7 @@ class CommandManager(context: Context) {
             newArr.put(newObj)
         }
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
-        cachedCommands = null
+        invalidateCache()
         return true
     }
 
@@ -109,7 +148,7 @@ class CommandManager(context: Context) {
         val editor = prefs.edit()
         if (added) {
             editor.putString("custom_commands", arr.toString())
-            cachedCommands = null
+            invalidateCache()
         }
         editor.putBoolean("ai_commands_seeded", true).apply()
         aiCommandsSeeded = true
@@ -127,6 +166,10 @@ class CommandManager(context: Context) {
         if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
         val prefix = getTriggerPrefix()
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
+        if (cached != null && customStr == cachedCommandsJson && prefix == cachedPrefix) {
+            cacheTimestamp = now
+            return cached
+        }
         // Guard against a corrupted store — an unhandled JSONException here would
         // crash the accessibility service on every text-change event with no recovery.
         val arr = try { JSONArray(customStr) } catch (_: Exception) {
@@ -156,17 +199,31 @@ class CommandManager(context: Context) {
         }
         val result = (getBuiltInCommands() + customCommands).sortedByDescending { it.trigger.length }
         cachedCommands = result
+        cachedCommandsJson = customStr
+        cachedPrefix = prefix
         cacheTimestamp = System.currentTimeMillis()
         return result
     }
 
-    @Synchronized fun addCustomCommand(command: Command) {
+    /**
+     * Stores [command], replacing [replacing] in the same write.
+     *
+     * [replacing] defaults to the command's own trigger, which makes this an upsert; pass the
+     * old trigger to rename. The Commands screen used to call removeCustomCommand() then
+     * saveCustomCommand() when saving a rename — two separate prefs writes, so a failure between
+     * them left the command deleted and not re-added.
+     *
+     * Returns false if the command is not storable, in which case nothing is written.
+     */
+    @Synchronized fun saveCustomCommand(command: Command, replacing: String = command.trigger): Boolean {
+        if (!isValidCommand(command.trigger, command.prompt, getTriggerPrefix())) return false
         val customStr = prefs.getString("custom_commands", "[]") ?: "[]"
         val arr = try { JSONArray(customStr) } catch (_: Exception) { JSONArray() }
         val newArr = JSONArray()
         for (i in 0 until arr.length()) {
             val obj = arr.optJSONObject(i) ?: continue
-            if (obj.optString("trigger") != command.trigger) {
+            val trigger = obj.optString("trigger")
+            if (trigger != replacing && trigger != command.trigger) {
                 newArr.put(obj)
             }
         }
@@ -176,7 +233,8 @@ class CommandManager(context: Context) {
         newObj.put("type", command.type.name)
         newArr.put(newObj)
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
-        cachedCommands = null
+        invalidateCache()
+        return true
     }
 
     @Synchronized fun removeCustomCommand(trigger: String) {
@@ -190,7 +248,7 @@ class CommandManager(context: Context) {
             }
         }
         prefs.edit().putString("custom_commands", newArr.toString()).apply()
-        cachedCommands = null
+        invalidateCache()
     }
 
     @Synchronized fun exportCommands(): String {
@@ -200,20 +258,18 @@ class CommandManager(context: Context) {
     @Synchronized fun importCommands(json: String): Boolean {
         return try {
             val arr = JSONArray(json)
-            if (arr.length() > 100) return false
+            if (arr.length() > MAX_CUSTOM_COMMANDS) return false
             val prefix = getTriggerPrefix()
             for (i in 0 until arr.length()) {
                 val obj = arr.getJSONObject(i)
                 val trigger = obj.optString("trigger", "")
                 val prompt = obj.optString("prompt", "")
-                if (trigger.isBlank() || prompt.isBlank()) return false
-                if (trigger.length > 50 || prompt.length > 5000) return false
-                if (!trigger.startsWith(prefix)) return false
+                if (!isValidCommand(trigger, prompt, prefix)) return false
                 val type = obj.optString("type", CommandType.AI.name)
                 if (type != CommandType.AI.name && type != CommandType.TEXT_REPLACER.name) return false
             }
             prefs.edit().putString("custom_commands", arr.toString()).apply()
-            cachedCommands = null
+            invalidateCache()
             true
         } catch (_: Exception) {
             false

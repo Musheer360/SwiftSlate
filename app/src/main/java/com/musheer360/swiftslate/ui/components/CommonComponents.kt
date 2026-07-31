@@ -52,7 +52,6 @@ fun SlateTextField(
     singleLine: Boolean = true,
     readOnly: Boolean = false,
     isError: Boolean = false,
-    trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     OutlinedTextField(
@@ -63,7 +62,6 @@ fun SlateTextField(
         singleLine = singleLine,
         readOnly = readOnly,
         isError = isError,
-        trailingIcon = trailingIcon,
         visualTransformation = visualTransformation,
         shape = RoundedCornerShape(10.dp),
         modifier = modifier.fillMaxWidth(),

@@ -20,10 +20,11 @@ object GeminiModels {
     // Curated set, ordered cost-efficient -> higher quality.
     //
     // CONTRACT: thinkingLevel is sent verbatim as generationConfig.thinkingConfig and
-    // must be a valid enum value for that model — an invalid value returns HTTP 400.
-    // The client degrades gracefully (retries once without it) so a bad entry won't
-    // hard-break the app, but new/edited entries should still be verified against the
-    // live API before shipping.
+    // must be a valid enum value for that model — an invalid value returns HTTP 400 for
+    // EVERY request with that model selected, and there is no client-side fallback that
+    // strips it (deliberately: silently re-sending a different request hid catalog bugs
+    // and doubled latency on real 400s). Verify any new or edited entry against the live
+    // API before shipping.
     private val SPECS: List<Spec> = listOf(
         Spec("gemini-3.5-flash-lite", "Gemini 3.5 Flash-Lite", "low"), // fastest/cheapest GA flash-lite; "low" = same latency as "minimal" on this model but slightly better reasoning
         Spec("gemini-3.6-flash", "Gemini 3.6 Flash", "minimal")            // higher quality; minimal thinking to stay fast

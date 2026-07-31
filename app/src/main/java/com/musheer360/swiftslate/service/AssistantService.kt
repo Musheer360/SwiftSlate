@@ -56,8 +56,6 @@ class AssistantService : AccessibilityService() {
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(serviceJob + Dispatchers.IO)
     private val isProcessing = java.util.concurrent.atomic.AtomicBoolean(false)
-    @Volatile
-    private var processingStartedAt = 0L
     private val handler = Handler(Looper.getMainLooper())
     private var triggerLastChars = setOf<Char>()
     private var cachedPrefix = CommandManager.DEFAULT_PREFIX
@@ -86,8 +84,20 @@ class AssistantService : AccessibilityService() {
     private var watchdogRunnable: Runnable? = null
     private val overlayToast by lazy { OverlayToast(this@AssistantService, handler) }
 
-    private fun sourceId(source: AccessibilityNodeInfo): String =
-        "${source.windowId}:${source.viewIdResourceName ?: source.hashCode()}"
+    /**
+     * Stable identity for the field an undo point belongs to.
+     *
+     * Uses [AccessibilityNodeInfo.hashCode], which the framework overrides to derive from the
+     * source node id (accessibility view id + virtual descendant id) and window id — so it is
+     * a per-node value, not an identity hash, and it is equal across the successive node
+     * instances the same field produces.
+     *
+     * This deliberately does NOT prefer viewIdResourceName, which it used to: that is the less
+     * precise of the two. Sibling fields built from one layout share a resource name, so a
+     * RecyclerView of identical rows or a multi-field form collapsed to a single id and undo
+     * could be applied to the wrong field — exactly the corruption the check exists to prevent.
+     */
+    private fun sourceId(source: AccessibilityNodeInfo): String = source.hashCode().toString()
 
     private companion object {
         const val TRIGGER_REFRESH_INTERVAL_MS = 5_000L
@@ -118,7 +128,6 @@ class AssistantService : AccessibilityService() {
             if (isProcessing.get()) {
                 currentJob?.cancel()
                 isProcessing.set(false)
-                processingStartedAt = 0L
             }
         }
         watchdogRunnable = runnable
@@ -204,7 +213,6 @@ class AssistantService : AccessibilityService() {
                 source.safeRecycle()
                 return
             }
-            processingStartedAt = System.currentTimeMillis()
             startWatchdog()
             cancelPendingProcessingReset()
             currentJob?.cancel()
@@ -218,7 +226,6 @@ class AssistantService : AccessibilityService() {
                 source.safeRecycle()
                 return
             }
-            processingStartedAt = System.currentTimeMillis()
             startWatchdog()
             cancelPendingProcessingReset()
             currentJob?.cancel()
@@ -232,7 +239,6 @@ class AssistantService : AccessibilityService() {
                     source.safeRecycle()
                     return
                 }
-                processingStartedAt = System.currentTimeMillis()
                 startWatchdog()
                 cancelPendingProcessingReset()
                 currentJob?.cancel()
@@ -263,7 +269,6 @@ class AssistantService : AccessibilityService() {
                         withContext(NonCancellable + Dispatchers.Main) {
                             if (currentJob === thisJob) {
                                 cancelWatchdog()
-                                processingStartedAt = 0L
                                 scheduleProcessingReset()
                             }
                             recycleIfUnowned(source)
@@ -280,7 +285,6 @@ class AssistantService : AccessibilityService() {
                     source.safeRecycle()
                     return
                 }
-                processingStartedAt = System.currentTimeMillis()
                 startWatchdog()
                 cancelPendingProcessingReset()
                 currentJob?.cancel()
@@ -297,7 +301,6 @@ class AssistantService : AccessibilityService() {
             // change, where re-adding the keys is enough). Both strings are already localized.
             handler.post { Toast.makeText(applicationContext, getString(R.string.keys_keystore_error), Toast.LENGTH_LONG).show() }
             cancelWatchdog()
-            processingStartedAt = 0L
             isProcessing.set(false)
             recycleIfUnowned(source)
             return
@@ -314,7 +317,6 @@ class AssistantService : AccessibilityService() {
                 showToast(getString(R.string.toast_custom_not_configured))
                 withContext(NonCancellable + Dispatchers.Main) {
                     cancelWatchdog()
-                    processingStartedAt = 0L
                     scheduleProcessingReset()
                     recycleIfUnowned(source)
                 }
@@ -352,7 +354,6 @@ class AssistantService : AccessibilityService() {
                         val result = when (provider.transport) {
                             Transport.OPENAI_COMPAT -> openAIClient.generate(
                                 command.prompt, text, key, model, temperature, endpoint,
-                                useStructuredOutput = false,
                                 useJsonObjectMode = provider.useJsonObjectMode(useStructuredOutput),
                                 extraParams = provider.reasoningParams(model))
                             Transport.GEMINI_NATIVE -> client.generate(
@@ -373,7 +374,17 @@ class AssistantService : AccessibilityService() {
                                 break
                             }
 
-                            if (!replaceText(source, generateResult.text)) {
+                            // The truncation note is appended here, not in the client: the
+                            // clients have no Context, so they used to splice an English
+                            // "[Note: Response may be truncated]" into the user's field
+                            // regardless of locale.
+                            val outputText = if (generateResult.truncated) {
+                                generateResult.text + "\n\n" + getString(R.string.note_response_truncated)
+                            } else {
+                                generateResult.text
+                            }
+
+                            if (!replaceText(source, outputText)) {
                                 // The field rejected the write. Restore the user's text (the
                                 // spinner glyph is still in it), and don't record an undo point
                                 // or a CONFIRM haptic for text that never landed.
@@ -488,7 +499,13 @@ class AssistantService : AccessibilityService() {
             } catch (e: CancellationException) {
                 withContext(NonCancellable + Dispatchers.Main) {
                     spinnerJob?.cancel()
-                    try { replaceText(source, originalText) } catch (_: Exception) {}
+                    // Only restore if this job still owns the field. The watchdog clears
+                    // isProcessing as soon as it cancels, so a new command can start while this
+                    // handler is still running under NonCancellable — and restoring the old text
+                    // then would overwrite what the newer job has already written.
+                    if (currentJob === thisJob) {
+                        try { replaceText(source, originalText) } catch (_: Exception) {}
+                    }
                 }
                 throw e
             } catch (e: Exception) {
@@ -504,7 +521,6 @@ class AssistantService : AccessibilityService() {
                 withContext(NonCancellable + Dispatchers.Main) {
                     if (currentJob === thisJob) {
                         cancelWatchdog()
-                        processingStartedAt = 0L
                         scheduleProcessingReset()
                     }
                     spinnerJob?.cancel()
@@ -540,7 +556,6 @@ class AssistantService : AccessibilityService() {
                 withContext(NonCancellable + Dispatchers.Main) {
                     if (currentJob === thisJob) {
                         cancelWatchdog()
-                        processingStartedAt = 0L
                         scheduleProcessingReset()
                     }
                     recycleIfUnowned(source)
@@ -551,7 +566,6 @@ class AssistantService : AccessibilityService() {
 
     private fun handleClipboardCommand(source: AccessibilityNodeInfo, precedingText: String, command: Command) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipText = clipboard.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
         currentJob = serviceScope.launch {
             val thisJob = coroutineContext[Job]
             try {
@@ -610,46 +624,8 @@ class AssistantService : AccessibilityService() {
                             }
                         }
                     }
-                    trigger.endsWith("paste") -> {
-                        val pasteText = lastCopiedText ?: clipText
-                        if (pasteText.isNullOrEmpty()) {
-                            performHapticFeedback(HapticFeedbackConstants.REJECT)
-                            showToast(getString(R.string.toast_clipboard_empty))
-                        } else {
-                            val wrote = withContext(Dispatchers.Main) {
-                                replaceText(source, precedingText + pasteText)
-                            }
-                            if (wrote) {
-                                lastOriginalText = precedingText
-                                lastUndoSourceId = sourceId(source)
-                                performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                                statsManager.recordUsage(command.trigger)
-                            } else {
-                                performHapticFeedback(HapticFeedbackConstants.REJECT)
-                                showToast(getString(R.string.toast_replace_failed))
-                            }
-                        }
-                    }
-                    trigger.endsWith("replace") -> {
-                        val pasteText = lastCopiedText ?: clipText
-                        if (pasteText.isNullOrEmpty()) {
-                            performHapticFeedback(HapticFeedbackConstants.REJECT)
-                            showToast(getString(R.string.toast_clipboard_empty))
-                        } else {
-                            val wrote = withContext(Dispatchers.Main) {
-                                replaceText(source, pasteText)
-                            }
-                            if (wrote) {
-                                lastOriginalText = precedingText
-                                lastUndoSourceId = sourceId(source)
-                                performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                                statsManager.recordUsage(command.trigger)
-                            } else {
-                                performHapticFeedback(HapticFeedbackConstants.REJECT)
-                                showToast(getString(R.string.toast_replace_failed))
-                            }
-                        }
-                    }
+                    trigger.endsWith("paste") -> handlePasteInto(source, precedingText, keepPrefix = precedingText, command = command)
+                    trigger.endsWith("replace") -> handlePasteInto(source, precedingText, keepPrefix = "", command = command)
                 }
             } catch (e: CancellationException) {
                 throw e
@@ -659,13 +635,110 @@ class AssistantService : AccessibilityService() {
                 withContext(NonCancellable + Dispatchers.Main) {
                     if (currentJob === thisJob) {
                         cancelWatchdog()
-                        processingStartedAt = 0L
                         scheduleProcessingReset()
                     }
                     recycleIfUnowned(source)
                 }
             }
         }
+    }
+
+    /**
+     * Handles `?paste` and `?replace`.
+     *
+     * [keepPrefix] is the text to keep in front of the pasted content: the text preceding
+     * the trigger for `?paste`, empty for `?replace`.
+     *
+     * Prefers [pasteFromSystemClipboard], which drives the target app's own paste action so
+     * the *real* system clipboard is used. The previous implementation read the clipboard
+     * itself and fell back to [lastCopiedText], which could never work for text copied in
+     * another app: an accessibility service is not the focused window and not the default
+     * IME, and framework ClipboardService gates OP_READ_CLIPBOARD on exactly that — so
+     * `primaryClip` was always null and `?paste` reported "Clipboard is empty" for anything
+     * SwiftSlate had not copied itself. Writing is not gated, which is why `?copy` works and
+     * why the fallback below can still stage text on the clipboard.
+     */
+    private suspend fun handlePasteInto(
+        source: AccessibilityNodeInfo,
+        precedingText: String,
+        keepPrefix: String,
+        command: Command
+    ) {
+        val pasted = pasteFromSystemClipboard(source, keepPrefix)
+        if (pasted != null) {
+            lastOriginalText = precedingText
+            lastUndoSourceId = sourceId(source)
+            performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+            statsManager.recordUsage(command.trigger)
+            return
+        }
+
+        // Either the clipboard is empty or the field ignored ACTION_SET_TEXT / ACTION_PASTE.
+        // Fall back to the only clipboard content this service is allowed to know about: what
+        // it last copied itself.
+        val fallback = lastCopiedText
+        if (fallback.isNullOrEmpty()) {
+            performHapticFeedback(HapticFeedbackConstants.REJECT)
+            showToast(getString(R.string.toast_clipboard_empty))
+            return
+        }
+        if (replaceText(source, keepPrefix + fallback)) {
+            lastOriginalText = precedingText
+            lastUndoSourceId = sourceId(source)
+            performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+            statsManager.recordUsage(command.trigger)
+        } else {
+            performHapticFeedback(HapticFeedbackConstants.REJECT)
+            showToast(getString(R.string.toast_replace_failed))
+        }
+    }
+
+    /**
+     * Strips the trigger, puts the caret after [keepPrefix], and asks the target app to paste.
+     * The app performs the read under its own window focus, so this honours text copied
+     * anywhere on the device without SwiftSlate ever reading the clipboard.
+     *
+     * Returns the resulting field text, or null when the field does not offer a paste action,
+     * the app refused a step, or the paste landed somewhere unexpected. The field is left
+     * untouched in the first case and holding [keepPrefix] in the others, both of which the
+     * caller's fallback can recover from.
+     */
+    private suspend fun pasteFromSystemClipboard(
+        source: AccessibilityNodeInfo,
+        keepPrefix: String
+    ): String? = withContext(Dispatchers.Main) {
+        if (!source.refresh()) return@withContext null
+        // Check before touching anything: TextView only advertises ACTION_PASTE when the field is
+        // editable, has a selection, AND hasPrimaryClip() is true. Without this guard an empty
+        // clipboard still got the trigger stripped by the setFieldText below, so the command
+        // silently ate the user's "?paste" and then reported the clipboard was empty.
+        val pasteSupported = source.actionList.any {
+            it.id == AccessibilityNodeInfo.ACTION_PASTE
+        }
+        if (!pasteSupported) return@withContext null
+        if (!setFieldText(source, keepPrefix)) return@withContext null
+        delay(50)
+        if (!source.refresh()) return@withContext null
+        // Bail out if the field silently rejected the write, otherwise the paste would land
+        // on top of the still-present trigger text.
+        if (source.text?.toString() != keepPrefix) return@withContext null
+
+        val caret = Bundle().apply {
+            putInt(AccessibilityNodeInfo.ACTION_ARGUMENT_SELECTION_START_INT, keepPrefix.length)
+            putInt(AccessibilityNodeInfo.ACTION_ARGUMENT_SELECTION_END_INT, keepPrefix.length)
+        }
+        source.performAction(AccessibilityNodeInfo.ACTION_SET_SELECTION, caret)
+        if (!source.performAction(AccessibilityNodeInfo.ACTION_PASTE)) return@withContext null
+
+        delay(100)
+        if (!source.refresh()) return@withContext null
+        val after = source.text?.toString() ?: return@withContext null
+        // Nothing added => empty clipboard or an ignored paste. Not starting with keepPrefix
+        // => the app ignored ACTION_SET_SELECTION and pasted somewhere else; treat both as a
+        // failure so the caller's fallback can put the field into a known state.
+        if (after == keepPrefix || !after.startsWith(keepPrefix)) return@withContext null
+        scheduleTextVerification(source, after)
+        after
     }
 
     /**
@@ -752,18 +825,27 @@ class AssistantService : AccessibilityService() {
     }
 
     /**
-     * Puts the user's clipboard back after the paste fallback. If [oldClip] is null we could not
-     * read the clipboard (from API 29 a non-focused app is denied clipboard reads, so this is the
-     * normal case for an accessibility service) — clear it instead, because leaving SwiftSlate's
-     * temp clip in place would hand the user's transformed text to every later paste, and
-     * IS_SENSITIVE only applies from API 33.
+     * Puts the user's clipboard back after the paste fallback in [replaceText].
+     *
+     * [oldClip] is null whenever the read was denied, which is the normal case: framework
+     * ClipboardService gates OP_READ_CLIPBOARD on window focus / default-IME status, and an
+     * accessibility service is neither. So this cannot verify what is currently on the
+     * clipboard, and it cannot restore what was there before.
+     *
+     * Leaving SwiftSlate's temp clip in place is not an option — it holds the user's
+     * transformed text and would be handed to every later paste, and IS_SENSITIVE only
+     * applies from API 33. Previously the fallback therefore cleared the clipboard outright,
+     * which destroyed whatever the user had copied on every replacement in an app that
+     * ignores ACTION_SET_TEXT (Firefox, Google Keep). Restoring [lastCopiedText] instead
+     * recovers the most recent clip this service actually knows about, and only falls back
+     * to clearing when there is none.
      */
     private fun restoreClipboard(clipboard: ClipboardManager, oldClip: ClipData?, ourText: String) {
         try {
             val current = clipboard.primaryClip?.getItemAt(0)?.text?.toString()
             if (current != null && current != ourText) return // user copied something newer
-            if (oldClip != null) clipboard.setPrimaryClip(oldClip)
-            else clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
+            val recovered = oldClip ?: lastCopiedText?.let { ClipData.newPlainText("SwiftSlate", it) }
+            clipboard.setPrimaryClip(recovered ?: ClipData.newPlainText("", ""))
         } catch (_: Exception) {}
     }
 
@@ -890,7 +972,6 @@ class AssistantService : AccessibilityService() {
     override fun onInterrupt() {
         flushPendingClipRestore()
         isProcessing.set(false)
-        processingStartedAt = 0L
         currentJob?.cancel()
         serviceJob.cancelChildren()
         handler.removeCallbacksAndMessages(null)

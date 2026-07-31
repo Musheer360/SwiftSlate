@@ -29,6 +29,14 @@ object ErrorMessages {
             lower.contains("model not found") || lower.contains("model_not_found") || lower.contains("not found for api version") ||
                 lower.contains("does not exist or you do not have access") || lower.contains("decommissioned") ->
                 R.string.error_model_not_found
+            // The JSON-mode failures below are deliberately treated as safety refusals, not as
+            // formatting errors. In practice they have only one cause: the input is something
+            // the model will not transform, so it breaks out of the requested JSON envelope to
+            // refuse in prose — the provider then rejects the response as invalid JSON. The
+            // model is capable of JSON mode; it chose not to use it. "Blocked by safety
+            // filters, try rephrasing" is therefore the accurate and actionable message, and
+            // this must NOT be re-routed to error_formatting_failed (which would tell the user
+            // to retry an input that can never succeed).
             lower.contains("safety") || lower.contains("content_filter") || lower.contains("content filter") || lower.contains("recitation") ||
                 lower.contains("blocked by safety") || lower.contains("finish_reason: safety") ||
                 lower.contains("json_validate_failed") || lower.contains("failed to validate json") ||

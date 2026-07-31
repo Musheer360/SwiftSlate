@@ -27,7 +27,14 @@ class ApiException(val apiError: ApiError, message: String) : Exception(message)
 
 data class GenerateResult(
     val text: String,
-    val structuredOutputFailed: Boolean = false
+    val structuredOutputFailed: Boolean = false,
+    /**
+     * The provider stopped at its output-token ceiling, so [text] may be cut off mid-sentence.
+     * Reported as a flag rather than an English note appended to [text] by the client: that note
+     * went straight into the user's text field in every language, and the clients hold no
+     * Context to localize it.
+     */
+    val truncated: Boolean = false
 )
 
 internal object ApiClientUtils {
@@ -113,48 +120,74 @@ internal object ApiClientUtils {
     }
 
     /**
-     * Marker appended when a 200 response carried an unusable structured payload, so
-     * [OpenAICompatibleClient]/[GeminiClient] can retry in plain-text mode. It is always
-     * accompanied by "empty response", which ErrorMessages maps to a localized string, so
-     * the marker itself never reaches the user.
+     * Marker appended when a 200 response carried an unusable structured payload. It is always
+     * accompanied by "empty response", which ErrorMessages maps to a localized string, so the
+     * marker itself never reaches the user.
      */
     const val STRUCTURED_UNUSABLE_MARKER = "structured output unusable"
+
+    /** How much of the response can carry a refusal. See [isModelRefusal]. */
+    private const val REFUSAL_HEAD_CHARS = 200
+
+    /**
+     * Phrases that only occur when the model declines the task, never in ordinary
+     * prose a user would ask to transform.
+     *
+     * Every entry keeps enough context to stay refusal-specific. Bare fragments were
+     * removed after they were shown to misfire on perfectly normal input:
+     *  - "safety guidelines" / "safety policy" matched "review the attached workplace
+     *    safety guidelines"; they now require a "violates"/"against" qualifier.
+     *  - "violates our policy" matched "the contractor violates our policy on late
+     *    deliveries"; it now requires a safety/content/usage qualifier.
+     *  - "as an ai" matched "as an AI engineer I built..."; it now requires the comma
+     *    or noun that makes it a refusal preamble ("As an AI, I cannot...").
+     *  - "cannot fulfill" is kept object-qualified because "I cannot fulfill my
+     *    promises" is legitimate user text.
+     */
+    private val REFUSAL_SIGNATURES = listOf(
+        // First-person declines.
+        "i can't help with that", "i cannot help with that",
+        "i can't help you with that", "i cannot help you with that",
+        "i can't assist with that", "i cannot assist with that",
+        "i can't comply", "i cannot comply",
+        "i can't generate that", "i cannot generate that",
+        "i won't be able to help with that",
+        "i'm unable to help with that", "i am unable to help with that",
+        "i'm not able to help with that", "i am not able to help with that",
+        "can't fulfill the request", "cannot fulfill the request",
+        "can't fulfill this request", "cannot fulfill this request",
+        "can't fulfill your request", "cannot fulfill your request",
+        "unable to fulfill the request", "unable to fulfill this request",
+        "unable to fulfill your request",
+        // Model self-identification, which only surfaces when it steps out of the
+        // transformation task.
+        "as an ai,", "as an ai language model", "as an ai assistant",
+        // Policy language, qualified so ordinary text about safety documents or
+        // company policy does not match.
+        "violates safety guidelines", "violates our safety",
+        "violates our content polic", "violates our usage polic",
+        "against our safety guidelines", "against my safety guidelines",
+        "goes against my guidelines"
+    )
 
     /**
      * Detects whether an LLM output string is an in-band safety refusal
      * (e.g. "I'm sorry, but I can't help with that") rather than a valid
      * text transformation, to prevent overwriting user input with refusal text.
+     *
+     * Only the opening of the response is considered: a refusal *replaces* the
+     * transformation, it never trails a valid one. The previous implementation also
+     * folded two whole-text checks into the `any {}` lambda, where they did not depend
+     * on the loop variable — so they were evaluated against the entire response rather
+     * than the head, and flagged ordinary sentences as refusals. A false positive is
+     * expensive: the caller reverts the field and tells the user their text was blocked,
+     * so the transformation can never succeed. Prefer missing a refusal over inventing one.
      */
     fun isModelRefusal(text: String): Boolean {
-        val lower = text.trim().lowercase(Locale.ROOT).replace('’', '\'').replace('‘', '\'')
-        if (lower.isBlank()) return false
-        val head = lower.take(200)
-        val refusalSignatures = listOf(
-            "can't help with that", "cannot help with that",
-            "can't comply with", "cannot comply with",
-            "cannot fulfill the request", "cannot fulfill this request", "cannot fulfill your request",
-            "unable to fulfill the request", "unable to fulfill your request",
-            "as an ai", "as an assistant",
-            "safety guidelines", "safety policy", "helpful and harmless",
-            "violates our policy", "violates safety"
-        )
-        return refusalSignatures.any { head.contains(it) || lower.contains("safety guidelines") || lower.contains("violates our policy") }
-    }
-
-    /**
-     * Whether the provider rejected the request because it could not produce valid JSON.
-     * Groq returns HTTP 400 with error.code = json_validate_failed (confirmed live) when
-     * the model runs out of completion budget mid-object in json_object mode. The remedy is
-     * dropping JSON mode — dropping the reasoning params does not help and previously got
-     * the blame.
-     */
-    fun isJsonModeFailure(errorMessage: String): Boolean {
-        val lower = errorMessage.lowercase(Locale.ROOT)
-        return lower.contains("json_validate_failed") ||
-            lower.contains("failed to validate json") ||
-            lower.contains("response_format") ||
-            lower.contains("json_object") ||
-            lower.contains(STRUCTURED_UNUSABLE_MARKER)
+        val normalized = text.trim().lowercase(Locale.ROOT).replace('’', '\'').replace('‘', '\'')
+        if (normalized.isBlank()) return false
+        val head = normalized.take(REFUSAL_HEAD_CHARS)
+        return REFUSAL_SIGNATURES.any { head.contains(it) }
     }
 
     /**

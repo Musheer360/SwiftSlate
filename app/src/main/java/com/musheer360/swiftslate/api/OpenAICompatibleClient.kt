@@ -13,7 +13,6 @@ import java.net.UnknownHostException
 class OpenAICompatibleClient {
 
     companion object {
-        private val HTTP_CODE_REGEX = Regex("^HTTP_(\\d+):")
         private val HTTP_PREFIX_REGEX = Regex("^HTTP_\\d+:\\s*")
     }
 
@@ -65,21 +64,20 @@ class OpenAICompatibleClient {
         model: String,
         temperature: Double,
         endpoint: String,
-        useStructuredOutput: Boolean = false,
         useJsonObjectMode: Boolean = false,
         extraParams: Map<String, Any> = emptyMap()
     ): Result<GenerateResult> = withContext(Dispatchers.IO) {
-        var result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode, extraParams)
+        var result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useJsonObjectMode, extraParams)
 
         // Retry once for transient network/server errors (with 1.5s backoff)
         if (result.isFailure && result.exceptionOrNull().isTransientNetwork()) {
             kotlinx.coroutines.delay(1500)
-            result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useStructuredOutput, useJsonObjectMode, extraParams)
+            result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useJsonObjectMode, extraParams)
         }
 
-        val cleaned = stripHttpPrefix(result.map { it.first })
-        val soFailed = result.isSuccess && result.getOrNull()?.second == true
-        cleaned.map { GenerateResult(it, soFailed) }
+        val cleaned = stripHttpPrefix(result.map { it.text })
+        val meta = result.getOrNull()
+        cleaned.map { GenerateResult(it, meta?.structuredOutputFailed == true, meta?.truncated == true) }
     }
 
     private fun stripHttpPrefix(result: Result<String>): Result<String> {
@@ -98,10 +96,9 @@ class OpenAICompatibleClient {
         model: String,
         temperature: Double,
         endpoint: String,
-        withStructured: Boolean,
         withJsonObject: Boolean = false,
         extraParams: Map<String, Any> = emptyMap()
-    ): Result<Pair<String, Boolean>> {
+    ): Result<GenerateResult> {
         var connection: HttpURLConnection? = null
         return try {
             val baseUrl = endpoint.trimEnd('/')
@@ -134,23 +131,7 @@ class OpenAICompatibleClient {
                     })
                 })
                 put("temperature", temperature)
-                if (withStructured) {
-                    put("response_format", JSONObject().apply {
-                        put("type", "json_schema")
-                        put("json_schema", JSONObject().apply {
-                            put("name", "text_output")
-                            put("schema", JSONObject().apply {
-                                put("type", "object")
-                                put("properties", JSONObject().apply {
-                                    put("text", JSONObject().apply {
-                                        put("type", "string")
-                                    })
-                                })
-                                put("required", JSONArray().apply { put("text") })
-                            })
-                        })
-                    })
-                } else if (withJsonObject) {
+                if (withJsonObject) {
                     put("response_format", JSONObject().apply {
                         put("type", "json_object")
                     })
@@ -185,9 +166,9 @@ class OpenAICompatibleClient {
                         return Result.failure(Exception("Model returned empty response"))
                     }
 
-                    if (withStructured || withJsonObject) {
+                    if (withJsonObject) {
                         val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
-                        if (extracted != null) return Result.success(Pair(extracted, false))
+                        if (extracted != null) return Result.success(GenerateResult(extracted))
                         // Do not fall through with a raw JSON payload — that pasted literal
                         // JSON such as {"text": ""} (parsed, no usable field) or a truncated
                         // object (unparseable but clearly JSON) into the user's text field.
@@ -196,19 +177,14 @@ class OpenAICompatibleClient {
                                 "Model returned empty response (${ApiClientUtils.STRUCTURED_UNUSABLE_MARKER})"))
                         }
                         // Genuinely not JSON: the model ignored response_format. Use the text,
-                        // but flag it so the caller disables JSON mode for 24h. Previously only
-                        // the withStructured branch did this, so json_object mode never got
-                        // disabled and kept corrupting output on every request.
+                        // but flag it so the caller disables JSON mode for 24h.
                         resultText = ApiClientUtils.stripMarkdownFences(resultText)
-                        if (finishReason == "length") resultText += "\n\n[Note: Response may be truncated]"
-                        return Result.success(Pair(resultText, true))
+                        return Result.success(GenerateResult(
+                            resultText, structuredOutputFailed = true, truncated = finishReason == "length"))
                     }
 
                     resultText = ApiClientUtils.stripMarkdownFences(resultText)
-                    if (finishReason == "length") {
-                        resultText += "\n\n[Note: Response may be truncated]"
-                    }
-                    Result.success(Pair(resultText, false))
+                    Result.success(GenerateResult(resultText, truncated = finishReason == "length"))
                 } else {
                     Result.failure(Exception("No choices found in response"))
                 }
@@ -230,7 +206,14 @@ class OpenAICompatibleClient {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
                 val detail = if (apiMessage.isNotEmpty()) apiMessage else "Bad request"
-                Result.failure(Exception("HTTP_${responseCode}: $detail"))
+                // Keep the machine-readable reason: Groq puts json_validate_failed in
+                // error.code, not error.message, and that code is the only thing separating
+                // "the model could not produce valid JSON" (recoverable by dropping JSON mode)
+                // from a genuine bad request. Never reaches the user — the service maps every
+                // raw message onto a localized string.
+                val providerCode = ApiClientUtils.extractApiErrorCode(errorBody)
+                val withCode = if (providerCode.isNotEmpty()) "$detail [$providerCode]" else detail
+                Result.failure(Exception("HTTP_${responseCode}: $withCode"))
             } else if (responseCode == 401 || responseCode == 403) {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)

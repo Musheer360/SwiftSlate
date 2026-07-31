@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.R
+import com.musheer360.swiftslate.api.ApiClientUtils
 import com.musheer360.swiftslate.api.GeminiClient
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import com.musheer360.swiftslate.manager.KeyManager
@@ -37,14 +38,19 @@ import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
 import com.musheer360.swiftslate.ui.components.SlateItemCard
 import com.musheer360.swiftslate.ui.components.SlateTextField
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val uriHandler = LocalUriHandler.current
-    var keys by remember { mutableStateOf(keyManager.getKeys()) }
+    // Deliberately not seeded from keyManager.getKeys(): that decrypts through AndroidKeyStore
+    // (and on a legacy store also does a synchronous prefs commit), which ran on the main thread
+    // during composition. Loaded in the LaunchedEffect below instead.
+    var keys by remember { mutableStateOf<List<String>>(emptyList()) }
     var keyToDelete by remember { mutableStateOf<String?>(null) }
     var newKey by rememberSaveable { mutableStateOf("") }
     var isTesting by remember { mutableStateOf(false) }
@@ -53,6 +59,10 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
     val scope = rememberCoroutineScope()
     val geminiClient = remember { GeminiClient() }
     val openAIClient = remember { OpenAICompatibleClient() }
+
+    LaunchedEffect(Unit) {
+        keys = withContext(Dispatchers.IO) { keyManager.getKeys() }
+    }
 
     val validAddedMsg = stringResource(R.string.keys_valid_added)
     val alreadyAddedMsg = stringResource(R.string.keys_already_added)
@@ -96,7 +106,7 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                         testResult = null
                         scope.launch {
                             val trimmedKey = newKey.trim()
-                            if (keyManager.getKeys().contains(trimmedKey)) {
+                            if (withContext(Dispatchers.IO) { keyManager.getKeys() }.contains(trimmedKey)) {
                                 isTesting = false
                                 testResult = alreadyAddedMsg
                                 testSuccess = false
@@ -122,12 +132,12 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                             }
                             isTesting = false
                             if (result.isSuccess) {
-                                if (!keyManager.addKey(trimmedKey)) {
+                                if (!withContext(Dispatchers.IO) { keyManager.addKey(trimmedKey) }) {
                                     testResult = keystoreErrorMsg
                                     testSuccess = false
                                     return@launch
                                 }
-                                keys = keyManager.getKeys()
+                                keys = withContext(Dispatchers.IO) { keyManager.getKeys() }
                                 newKey = ""
                                 testResult = validAddedMsg
                                 testSuccess = true
@@ -135,7 +145,15 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                                 clipboard.setPrimaryClip(ClipData.newPlainText("", ""))
                             } else {
-                                testResult = result.exceptionOrNull()?.message ?: validationFailedMsg
+                                // redactSecrets: some OpenAI-compatible endpoints echo the
+                                // submitted key back in error.message ("Incorrect API key
+                                // provided: sk-ab...XYZ"). This is the one path that shows a
+                                // raw provider message — the accessibility service maps every
+                                // message onto a localized string instead — so it is the one
+                                // path that has to strip secrets before displaying it.
+                                testResult = result.exceptionOrNull()?.message
+                                    ?.let { ApiClientUtils.redactSecrets(it) }
+                                    ?: validationFailedMsg
                                 testSuccess = false
                             }
                         }
@@ -231,13 +249,16 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
             confirmButton = {
                 TextButton(onClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    if (keyManager.removeKey(keyValue)) {
-                        keys = keyManager.getKeys()
-                    } else {
-                        testResult = keystoreErrorMsg
-                        testSuccess = false
-                    }
                     keyToDelete = null
+                    scope.launch {
+                        val removed = withContext(Dispatchers.IO) { keyManager.removeKey(keyValue) }
+                        if (removed) {
+                            keys = withContext(Dispatchers.IO) { keyManager.getKeys() }
+                        } else {
+                            testResult = keystoreErrorMsg
+                            testSuccess = false
+                        }
+                    }
                 }) {
                     Text(stringResource(R.string.delete_confirm_button), color = MaterialTheme.colorScheme.error)
                 }

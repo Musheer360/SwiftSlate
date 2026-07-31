@@ -51,7 +51,10 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, stat
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     var isServiceEnabled by remember { mutableStateOf(checkServiceEnabled(context)) }
-    var keyCount by remember { mutableIntStateOf(keyManager.getKeys().size) }
+    // Not seeded from keyManager.getKeys(): that decrypts through AndroidKeyStore on the main
+    // thread. The LaunchedEffect below fills it in on the IO dispatcher, as it already did on
+    // every subsequent resume.
+    var keyCount by remember { mutableIntStateOf(0) }
 
     // Stats state
     var monthlyRequests by remember { mutableIntStateOf(statsManager.monthlyRequests) }

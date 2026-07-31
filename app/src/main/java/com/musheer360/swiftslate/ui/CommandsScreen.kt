@@ -377,7 +377,7 @@ fun CommandsScreen(commandManager: CommandManager) {
                     SlateTextField(
                         value = trigger,
                         onValueChange = {
-                            trigger = it
+                            if (it.length <= CommandManager.MAX_TRIGGER_LENGTH) trigger = it
                             errorMessage = null
                         },
                         label = { Text(stringResource(R.string.commands_trigger_label, prefix)) },
@@ -386,7 +386,10 @@ fun CommandsScreen(commandManager: CommandManager) {
                     Spacer(modifier = Modifier.height(8.dp))
                     SlateTextField(
                         value = prompt,
-                        onValueChange = { prompt = it; errorMessage = null },
+                        onValueChange = {
+                            if (it.length <= CommandManager.MAX_PROMPT_LENGTH) prompt = it
+                            errorMessage = null
+                        },
                         label = { Text(if (selectedType == CommandType.AI) stringResource(R.string.commands_prompt_label) else stringResource(R.string.commands_replacement_label)) },
                         singleLine = false,
                         modifier = Modifier.height(100.dp)
@@ -439,13 +442,19 @@ fun CommandsScreen(commandManager: CommandManager) {
                                     errorMessage = errorConflictTemplate.replace("\u0000", conflicting.trigger)
                                     return@Button
                                 }
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                if (editingTrigger != null) {
-                                    commandManager.removeCustomCommand(editingTrigger!!)
+                                if (!CommandManager.isValidCommand(trimmedTrigger, prompt.trim(), prefix)) {
+                                    errorMessage = errorEmptyTrigger
+                                    return@Button
                                 }
-                                val newCommand = Command(trimmedTrigger, prompt.trim(), false, selectedType)
-                                commandManager.addCustomCommand(newCommand)
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                // Single atomic write: replaces the command being edited (or the
+                                // same trigger, when adding) without a delete-then-add window.
+                                val saved = commandManager.saveCustomCommand(
+                                    command = Command(trimmedTrigger, prompt.trim(), false, selectedType),
+                                    replacing = editingTrigger ?: trimmedTrigger
+                                )
                                 commands = commandManager.getCommands()
+                                if (!saved) return@Button
                                 trigger = ""
                                 prompt = ""
                                 errorMessage = null
