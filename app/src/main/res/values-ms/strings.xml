@@ -95,7 +95,6 @@
     <!-- Toast & error messages -->
     <string name="toast_replace_failed">Tidak dapat menggantikan teks</string>
     <string name="toast_custom_not_configured">Penyedia tersuai tidak dikonfigurasi. Tetapkan titik akhir dan model dalam Tetapan.</string>
-    <string name="toast_model_setting_rejected">Satu tetapan model telah ditolak oleh penyedia dan dilangkau — teks anda tetap diproses. Sila laporkan ini di GitHub SwiftSlate supaya kami dapat membaikinya.</string>
     <string name="toast_key_rate_limited">Kadar kunci API dihadkan. Cuba lagi dalam %1$d s</string>
     <string name="toast_no_keys">Tiada kunci API dikonfigurasi</string>
     <string name="toast_all_keys_invalid">Semua kunci API tidak sah. Sila semak kunci anda</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Dipotong ke papan keratan</string>
     <string name="toast_clipboard_empty">Papan keratan kosong</string>
     <string name="toast_clipboard_failed">Operasi papan keratan gagal</string>
-    <string name="toast_keystore_unavailable">Penyimpanan kunci selamat tidak tersedia. Sila pasang semula apl.</string>
     <string name="error_no_model_access">Kunci API anda tidak mempunyai akses kepada model ini.</string>
     <string name="error_invalid_key">Kunci API tidak sah. Sila semak kunci anda dalam Tetapan.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Kadar dihadkan. Cuba lagi sebentar.</string>
     <string name="error_model_not_found">Model tidak ditemui. Semak pilihan model anda dalam Tetapan.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Respons disekat oleh penapis keselamatan. Cuba ubah kata.</string>
     <string name="error_empty_response">Model memulangkan respons kosong. Cuba lagi.</string>
     <string name="error_timeout_connection">Permintaan tamat masa. Semak sambungan anda.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Memberitahu apabila versi baharu SwiftSlate tersedia</string>
     <string name="update_available_title">Kemas kini SwiftSlate tersedia</string>
     <string name="update_available_text">Ketik untuk melihat keluaran terkini</string>
+    <string name="error_input_too_long">Teks terlalu panjang untuk had token seminit model ini. Cuba lagi dengan teks yang lebih pendek.</string>
+    <string name="note_response_truncated">[Nota: respons mungkin dipotong]</string>
 </resources>

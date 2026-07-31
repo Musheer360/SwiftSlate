@@ -95,7 +95,6 @@
     <!-- Toast & error messages -->
     <string name="toast_replace_failed">Није могуће заменити текст</string>
     <string name="toast_custom_not_configured">Прилагођени провајдер није конфигурисан. Подесите крајњу тачку и модел у Подешавањима.</string>
-    <string name="toast_model_setting_rejected">Провајдер је одбио подешавање модела и прескочио га — ваш текст је ипак обрађен. Пријавите ово на SwiftSlate GitHub-у како бисмо могли да решимо проблем.</string>
     <string name="toast_key_rate_limited">Достигнуто ограничење захтева за API кључ. Покушајте поново за %1$d с</string>
     <string name="toast_no_keys">Нема конфигурисаних API кључева</string>
     <string name="toast_all_keys_invalid">Сви API кључеви су неважећи. Проверите своје кључеве</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Исечено у привремену меморију</string>
     <string name="toast_clipboard_empty">Привремена меморија је празна</string>
     <string name="toast_clipboard_failed">Операција са привременом меморијом није успела</string>
-    <string name="toast_keystore_unavailable">Безбедно складиште кључева није доступно. Поново инсталирајте апликацију.</string>
     <string name="error_no_model_access">Ваш API кључ нема приступ овом моделу.</string>
     <string name="error_invalid_key">Неважећи API кључ. Проверите свој кључ у Подешавањима.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Достигнуто ограничење захтева. Покушајте поново ускоро.</string>
     <string name="error_model_not_found">Модел није пронађен. Проверите избор модела у Подешавањима.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Одговор је блокиран безбедносним филтерима. Покушајте да преформулишете.</string>
     <string name="error_empty_response">Модел је вратио празан одговор. Покушајте поново.</string>
     <string name="error_timeout_connection">Истекло је време захтева. Проверите везу.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Обавештава када је доступна нова верзија SwiftSlate-а</string>
     <string name="update_available_title">Доступно је ажурирање SwiftSlate-а</string>
     <string name="update_available_text">Додирните да видите најновије издање</string>
+    <string name="error_input_too_long">Текст је предуг за ограничење токена у минути овог модела. Пробајте поново са краћим текстом.</string>
+    <string name="note_response_truncated">[Напомена: одговор је можда скраћен]</string>
 </resources>

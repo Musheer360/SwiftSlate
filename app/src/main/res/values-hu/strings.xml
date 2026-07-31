@@ -95,7 +95,6 @@
     <!-- Toasts & errors -->
     <string name="toast_replace_failed">Nem sikerült lecserélni a szöveget</string>
     <string name="toast_custom_not_configured">Az egyéni szolgáltató nincs beállítva. Adja meg a végpontot és a modellt a Beállításokban.</string>
-    <string name="toast_model_setting_rejected">A szolgáltató elutasított egy modellbeállítást, és kihagyta azt — a szövege ettől függetlenül feldolgozásra került. Kérjük, jelentse ezt a SwiftSlate GitHubon, hogy kijavíthassuk.</string>
     <string name="toast_key_rate_limited">Az API-kulcs sebességkorlátozva. Próbálja újra %1$d mp múlva</string>
     <string name="toast_no_keys">Nincsenek API-kulcsok beállítva</string>
     <string name="toast_all_keys_invalid">Minden API-kulcs érvénytelen. Kérjük, ellenőrizze a kulcsait</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Vágólapra kivágva</string>
     <string name="toast_clipboard_empty">A vágólap üres</string>
     <string name="toast_clipboard_failed">A vágólapművelet sikertelen</string>
-    <string name="toast_keystore_unavailable">A biztonságos kulcstároló nem érhető el. Kérjük, telepítse újra az alkalmazást.</string>
     <string name="error_no_model_access">Az API-kulcsa nem fér hozzá ehhez a modellhez.</string>
     <string name="error_invalid_key">Érvénytelen API-kulcs. Kérjük, ellenőrizze a kulcsát a Beállításokban.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Sebességkorlátozva. Próbálja újra hamarosan.</string>
     <string name="error_model_not_found">A modell nem található. Ellenőrizze a modellválasztást a Beállításokban.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">A választ biztonsági szűrők blokkolták. Próbálja átfogalmazni.</string>
     <string name="error_empty_response">A modell üres választ adott. Próbálja újra.</string>
     <string name="error_timeout_connection">A kérés időtúllépést okozott. Ellenőrizze a kapcsolatát.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Értesít, amikor elérhető a SwiftSlate új verziója</string>
     <string name="update_available_title">SwiftSlate-frissítés érhető el</string>
     <string name="update_available_text">Koppintson a legújabb kiadás megtekintéséhez</string>
+    <string name="error_input_too_long">A szöveg túl hosszú ennek a modellnek a percenkénti tokenkorlátjához. Próbáld újra rövidebb szöveggel.</string>
+    <string name="note_response_truncated">[Megjegyzés: a válasz csonka lehet]</string>
 </resources>

@@ -95,7 +95,6 @@
     <!-- Toast & error messages -->
     <string name="toast_replace_failed">Kunne ikke erstatte tekst</string>
     <string name="toast_custom_not_configured">Egendefinert leverandør er ikke konfigurert. Angi endepunkt og modell i Innstillinger.</string>
-    <string name="toast_model_setting_rejected">En modellinnstilling ble avvist av leverandøren og hoppet over — teksten din ble likevel behandlet. Rapporter dette på SwiftSlate GitHub slik at vi kan fikse det.</string>
     <string name="toast_key_rate_limited">API-nøkkel begrenset. Prøv igjen om %1$d s</string>
     <string name="toast_no_keys">Ingen API-nøkler konfigurert</string>
     <string name="toast_all_keys_invalid">Alle API-nøkler er ugyldige. Kontroller nøklene dine</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Klippet ut til utklippstavlen</string>
     <string name="toast_clipboard_empty">Utklippstavlen er tom</string>
     <string name="toast_clipboard_failed">Utklippstavleoperasjonen mislyktes</string>
-    <string name="toast_keystore_unavailable">Sikker nøkkellagring er ikke tilgjengelig. Installer appen på nytt.</string>
     <string name="error_no_model_access">API-nøkkelen din har ikke tilgang til denne modellen.</string>
     <string name="error_invalid_key">Ugyldig API-nøkkel. Kontroller nøkkelen din i Innstillinger.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Begrenset. Prøv igjen snart.</string>
     <string name="error_model_not_found">Modell ikke funnet. Kontroller modellvalget ditt i Innstillinger.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Svaret ble blokkert av sikkerhetsfiltre. Prøv å omformulere.</string>
     <string name="error_empty_response">Modellen returnerte et tomt svar. Prøv igjen.</string>
     <string name="error_timeout_connection">Forespørselen fikk tidsavbrudd. Kontroller tilkoblingen din.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Varsler når en ny versjon av SwiftSlate er tilgjengelig</string>
     <string name="update_available_title">SwiftSlate-oppdatering tilgjengelig</string>
     <string name="update_available_text">Trykk for å se den nyeste utgivelsen</string>
+    <string name="error_input_too_long">Teksten er for lang for denne modellens tokengrense per minutt. Prøv igjen med kortere tekst.</string>
+    <string name="note_response_truncated">[Merk: svaret kan være avkuttet]</string>
 </resources>

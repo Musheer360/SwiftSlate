@@ -95,7 +95,6 @@
     <!-- Toasts and errors -->
     <string name="toast_replace_failed">Текстът не можа да бъде заменен</string>
     <string name="toast_custom_not_configured">Потребителският доставчик не е конфигуриран. Задайте крайна точка и модел в Настройки.</string>
-    <string name="toast_model_setting_rejected">Настройка на модела беше отхвърлена от доставчика и пропусната — текстът ви все пак беше обработен. Моля, докладвайте това в GitHub на SwiftSlate, за да можем да го поправим.</string>
     <string name="toast_key_rate_limited">API ключът е с ограничена честота. Опитайте отново след %1$d сек</string>
     <string name="toast_no_keys">Няма конфигурирани API ключове</string>
     <string name="toast_all_keys_invalid">Всички API ключове са невалидни. Моля, проверете ключовете си</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Изрязано в клипборда</string>
     <string name="toast_clipboard_empty">Клипбордът е празен</string>
     <string name="toast_clipboard_failed">Операцията с клипборда беше неуспешна</string>
-    <string name="toast_keystore_unavailable">Сигурното съхранение на ключове не е налично. Моля, преинсталирайте приложението.</string>
     <string name="error_no_model_access">Вашият API ключ няма достъп до този модел.</string>
     <string name="error_invalid_key">Невалиден API ключ. Моля, проверете ключа си в Настройки.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Ограничена честота. Опитайте отново скоро.</string>
     <string name="error_model_not_found">Моделът не е намерен. Проверете избора на модел в Настройки.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Отговорът е блокиран от филтрите за безопасност. Опитайте да префразирате.</string>
     <string name="error_empty_response">Моделът върна празен отговор. Опитайте отново.</string>
     <string name="error_timeout_connection">Времето за заявката изтече. Проверете връзката си.</string>
@@ -130,4 +127,6 @@
     <string name="update_available_text">Докоснете, за да видите последната версия</string>
 
     <!-- Command descriptions -->
+    <string name="error_input_too_long">Текстът е твърде дълъг за лимита на токени в минута на този модел. Опитайте отново с по-кратък текст.</string>
+    <string name="note_response_truncated">[Бележка: отговорът може да е отрязан]</string>
 </resources>

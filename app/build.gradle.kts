@@ -16,7 +16,37 @@ android {
         versionCode = (project.findProperty("versionCode") as String?)?.toIntOrNull() ?: 1
         versionName = (project.findProperty("versionName") as String?) ?: "$baseVersion-dev"
 
-        resourceConfigurations += setOf("en", "fr", "zh-rCN", "hi", "de", "es", "pt-rBR")
+        // Ship exactly the locales that exist in res/, and nothing else.
+        //
+        // Derived from the directory listing on purpose. The previous hand-written
+        // `resourceConfigurations` allow-list of 7 locales silently discarded the 43
+        // translations contributed in #104 — they sat in the repo, were kept green by CI lint,
+        // and never reached a single user, while issue #100 was answered with "Done — Italian
+        // added". Deriving the list means a new values-<locale>/ ships the moment it lands, so
+        // that failure mode cannot come back.
+        //
+        // The filter is still worth having: without it AndroidX/Compose contributes its own
+        // strings for ~30 further locales that SwiftSlate does not translate, for ~64KB of APK
+        // in languages the app cannot actually speak.
+        //
+        // Deliberately NOT translated (removed in this commit): bn, gu, kn, ml, mr, pa, ta, te,
+        // ur, fil. English is an official language in India, Pakistan and the Philippines and is
+        // the default for technology there, so native-language phone UI is the exception rather
+        // than the norm — especially among users who sideload an APK and paste an API key from
+        // an English-only provider console. Hindi is kept as the one Indian language with broad
+        // native-UI adoption. Re-add a directory and it ships automatically.
+        val locales = file("src/main/res").listFiles().orEmpty()
+            .filter { it.isDirectory && it.name.startsWith("values-") && it.name != "values-night" }
+            .map { it.name.removePrefix("values-") }
+        androidResources.localeFilters += (listOf("en") + locales)
+    }
+
+    androidResources {
+        // Generates <locale-config> from the locales in res/ and references it from the
+        // manifest, which is what lets Android 13+ users pick a per-app language in
+        // Settings > Apps > SwiftSlate > Language. Without it a heavily localized app is
+        // still stuck following the system language.
+        generateLocaleConfig = true
     }
 
     signingConfigs {

@@ -95,7 +95,6 @@
     <!-- Toast & error messages -->
     <string name="toast_replace_failed">Nie udało się zastąpić tekstu</string>
     <string name="toast_custom_not_configured">Niestandardowy dostawca nie jest skonfigurowany. Ustaw endpoint i model w Ustawieniach.</string>
-    <string name="toast_model_setting_rejected">Ustawienie modelu zostało odrzucone przez dostawcę i pominięte — Twój tekst został mimo to przetworzony. Zgłoś to na GitHub SwiftSlate, abyśmy mogli to naprawić.</string>
     <string name="toast_key_rate_limited">Przekroczono limit zapytań klucza API. Spróbuj ponownie za %1$ds</string>
     <string name="toast_no_keys">Nie skonfigurowano kluczy API</string>
     <string name="toast_all_keys_invalid">Wszystkie klucze API są nieprawidłowe. Sprawdź swoje klucze</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Wycięto do schowka</string>
     <string name="toast_clipboard_empty">Schowek jest pusty</string>
     <string name="toast_clipboard_failed">Operacja schowka nie powiodła się</string>
-    <string name="toast_keystore_unavailable">Bezpieczne przechowywanie kluczy jest niedostępne. Zainstaluj aplikację ponownie.</string>
     <string name="error_no_model_access">Twój klucz API nie ma dostępu do tego modelu.</string>
     <string name="error_invalid_key">Nieprawidłowy klucz API. Sprawdź swój klucz w Ustawieniach.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Przekroczono limit zapytań. Spróbuj ponownie za chwilę.</string>
     <string name="error_model_not_found">Nie znaleziono modelu. Sprawdź wybór modelu w Ustawieniach.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Odpowiedź zablokowana przez filtry bezpieczeństwa. Spróbuj sformułować inaczej.</string>
     <string name="error_empty_response">Model zwrócił pustą odpowiedź. Spróbuj ponownie.</string>
     <string name="error_timeout_connection">Upłynął limit czasu żądania. Sprawdź swoje połączenie.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Powiadamia, gdy dostępna jest nowa wersja SwiftSlate</string>
     <string name="update_available_title">Dostępna aktualizacja SwiftSlate</string>
     <string name="update_available_text">Dotknij, aby zobaczyć najnowszą wersję</string>
+    <string name="error_input_too_long">Tekst jest zbyt długi dla limitu tokenów na minutę tego modelu. Spróbuj ponownie z krótszym tekstem.</string>
+    <string name="note_response_truncated">[Uwaga: odpowiedź może być skrócona]</string>
 </resources>

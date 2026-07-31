@@ -95,7 +95,6 @@
     <!-- Toasts & errors -->
     <string name="toast_replace_failed">Nije moguće zamijeniti tekst</string>
     <string name="toast_custom_not_configured">Prilagođeni davatelj nije konfiguriran. Postavite krajnju točku i model u Postavkama.</string>
-    <string name="toast_model_setting_rejected">Davatelj je odbio postavku modela i preskočio ju — vaš tekst je ipak obrađen. Prijavite ovo na SwiftSlate GitHubu kako bismo to mogli popraviti.</string>
     <string name="toast_key_rate_limited">API ključ je ograničen. Pokušajte ponovno za %1$ds</string>
     <string name="toast_no_keys">Nema konfiguriranih API ključeva</string>
     <string name="toast_all_keys_invalid">Svi API ključevi su nevažeći. Provjerite svoje ključeve</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Izrezano u međuspremnik</string>
     <string name="toast_clipboard_empty">Međuspremnik je prazan</string>
     <string name="toast_clipboard_failed">Operacija međuspremnika nije uspjela</string>
-    <string name="toast_keystore_unavailable">Sigurno pohranjivanje ključeva nije dostupno. Ponovno instalirajte aplikaciju.</string>
     <string name="error_no_model_access">Vaš API ključ nema pristup ovom modelu.</string>
     <string name="error_invalid_key">Nevažeći API ključ. Provjerite svoj ključ u Postavkama.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Ograničena brzina. Pokušajte ponovno uskoro.</string>
     <string name="error_model_not_found">Model nije pronađen. Provjerite odabir modela u Postavkama.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Odgovor je blokiran sigurnosnim filtrima. Pokušajte preformulirati.</string>
     <string name="error_empty_response">Model je vratio prazan odgovor. Pokušajte ponovno.</string>
     <string name="error_timeout_connection">Isteklo je vrijeme zahtjeva. Provjerite svoju vezu.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Obavještava kada je dostupna nova verzija aplikacije SwiftSlate</string>
     <string name="update_available_title">Dostupno je ažuriranje za SwiftSlate</string>
     <string name="update_available_text">Dodirnite za prikaz najnovijeg izdanja</string>
+    <string name="error_input_too_long">Tekst je predug za ograničenje tokena po minuti ovog modela. Pokušajte ponovno s kraćim tekstom.</string>
+    <string name="note_response_truncated">[Napomena: odgovor je možda skraćen]</string>
 </resources>

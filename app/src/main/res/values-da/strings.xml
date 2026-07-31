@@ -95,7 +95,6 @@
     <!-- Toasts and errors -->
     <string name="toast_replace_failed">Teksten kunne ikke erstattes</string>
     <string name="toast_custom_not_configured">Brugerdefineret udbyder er ikke konfigureret. Angiv endpoint og model i Indstillinger.</string>
-    <string name="toast_model_setting_rejected">En modelindstilling blev afvist af udbyderen og sprunget over — din tekst blev stadig behandlet. Rapporter dette på SwiftSlate GitHub, så vi kan rette det.</string>
     <string name="toast_key_rate_limited">API-nøgle hastighedsbegrænset. Prøv igen om %1$d s</string>
     <string name="toast_no_keys">Ingen API-nøgler konfigureret</string>
     <string name="toast_all_keys_invalid">Alle API-nøgler er ugyldige. Tjek venligst dine nøgler</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Klippet til udklipsholder</string>
     <string name="toast_clipboard_empty">Udklipsholderen er tom</string>
     <string name="toast_clipboard_failed">Handling med udklipsholder mislykkedes</string>
-    <string name="toast_keystore_unavailable">Sikker nøgleopbevaring er ikke tilgængelig. Geninstaller venligst appen.</string>
     <string name="error_no_model_access">Din API-nøgle har ikke adgang til denne model.</string>
     <string name="error_invalid_key">Ugyldig API-nøgle. Tjek din nøgle i Indstillinger.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Hastighedsbegrænset. Prøv igen om lidt.</string>
     <string name="error_model_not_found">Model ikke fundet. Tjek dit modelvalg i Indstillinger.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Svar blokeret af sikkerhedsfiltre. Prøv at omformulere.</string>
     <string name="error_empty_response">Modellen returnerede et tomt svar. Prøv igen.</string>
     <string name="error_timeout_connection">Anmodningen fik timeout. Tjek din forbindelse.</string>
@@ -130,4 +127,6 @@
     <string name="update_available_text">Tryk for at se den nyeste version</string>
 
     <!-- Command descriptions -->
+    <string name="error_input_too_long">Teksten er for lang til denne models tokengrænse pr. minut. Prøv igen med kortere tekst.</string>
+    <string name="note_response_truncated">[Bemærk: svaret kan være afkortet]</string>
 </resources>

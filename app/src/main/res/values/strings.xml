@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">SwiftSlate</string>
     <string name="accessibility_service_label">SwiftSlate Assistant</string>
     <string name="accessibility_service_desc">Provides system-wide AI text replacements when trigger commands are typed.</string>
@@ -94,7 +94,6 @@
     <!-- Runtime toasts (accessibility service) -->
     <string name="toast_replace_failed">Could not replace text</string>
     <string name="toast_custom_not_configured">Custom provider not configured. Set endpoint and model in Settings.</string>
-    <string name="toast_model_setting_rejected">A model setting was rejected by the provider and skipped — your text was still processed. Please report this on the SwiftSlate GitHub so we can fix it.</string>
     <string name="toast_key_rate_limited">API key rate limited. Try again in %1$ds</string>
     <string name="toast_no_keys">No API keys configured</string>
     <string name="toast_all_keys_invalid">All API keys are invalid. Please check your keys</string>
@@ -108,7 +107,6 @@
     <string name="toast_cut">Cut to clipboard</string>
     <string name="toast_clipboard_empty">Clipboard is empty</string>
     <string name="toast_clipboard_failed">Clipboard operation failed</string>
-    <string name="toast_keystore_unavailable">Secure key storage unavailable. Please reinstall the app.</string>
 
     <!-- Runtime error messages (accessibility service) -->
     <string name="error_no_model_access">Your API key doesn\'t have access to this model.</string>
@@ -116,7 +114,6 @@
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Rate limited. Try again shortly.</string>
     <string name="error_model_not_found">Model not found. Check your model selection in Settings.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Response blocked by safety filters. Try rephrasing.</string>
     <string name="error_empty_response">Model returned an empty response. Try again.</string>
     <string name="error_timeout_connection">Request timed out. Check your connection.</string>
@@ -126,7 +123,8 @@
     <!-- TODO translate: new string, falls back to English in the other 50 locales until then.
          Added because HTTP 413 was previously reported as "Rate limited. Try again shortly.",
          which tells the user to wait when the fix is to select less text. -->
-    <string name="error_input_too_long" tools:ignore="MissingTranslation">Text is too long for this model\'s per-minute token limit. Select less text and try again.</string>
+    <string name="error_input_too_long">Text is too long for this model\'s per-minute token limit. Try again with shorter text.</string>
+    <string name="note_response_truncated">[Note: response may be cut off]</string>
     <!-- Update notification (worker) -->
     <string name="update_channel_name">App Updates</string>
     <string name="update_channel_desc">Notifies when a new version of SwiftSlate is available</string>

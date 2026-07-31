@@ -94,7 +94,6 @@
     <!-- Toasts and errors -->
     <string name="toast_replace_failed">Text konnte nicht ersetzt werden</string>
     <string name="toast_custom_not_configured">Benutzerdefinierter Anbieter nicht konfiguriert. Lege Endpoint und Modell in den Einstellungen fest.</string>
-    <string name="toast_model_setting_rejected">Eine Modelleinstellung wurde vom Anbieter abgelehnt und übersprungen — dein Text wurde dennoch verarbeitet. Bitte melde dies auf dem SwiftSlate GitHub, damit wir es beheben können.</string>
     <string name="toast_key_rate_limited">API-Schlüssel ratenbegrenzt. Versuche es in %1$d s erneut</string>
     <string name="toast_no_keys">Keine API-Schlüssel konfiguriert</string>
     <string name="toast_all_keys_invalid">Alle API-Schlüssel sind ungültig. Bitte überprüfe deine Schlüssel</string>
@@ -108,13 +107,11 @@
     <string name="toast_cut">In die Zwischenablage ausgeschnitten</string>
     <string name="toast_clipboard_empty">Zwischenablage ist leer</string>
     <string name="toast_clipboard_failed">Zwischenablage-Vorgang fehlgeschlagen</string>
-    <string name="toast_keystore_unavailable">Sicherer Schlüsselspeicher nicht verfügbar. Bitte installiere die App neu.</string>
     <string name="error_no_model_access">Dein API-Schlüssel hat keinen Zugriff auf dieses Modell.</string>
     <string name="error_invalid_key">Ungültiger API-Schlüssel. Bitte überprüfe deinen Schlüssel in den Einstellungen.</string>
     <string name="error_invalid_key_with_hint">Ungültiger API-Schlüssel (%1$s). Bitte überprüfe deine Schlüssel in den Einstellungen.</string>
     <string name="error_rate_limited">Ratenbegrenzt. Versuche es in Kürze erneut.</string>
     <string name="error_model_not_found">Modell nicht gefunden. Überprüfe deine Modellauswahl in den Einstellungen.</string>
-    <string name="error_formatting_failed">Antwort konnte nicht ordnungsgemäß formatiert werden. Versuche es erneut.</string>
     <string name="error_safety_blocked">Antwort durch Sicherheitsfilter blockiert. Versuche, es umzuformulieren.</string>
     <string name="error_empty_response">Das Modell hat eine leere Antwort zurückgegeben. Versuche es erneut.</string>
     <string name="error_timeout_connection">Zeitüberschreitung der Anfrage. Überprüfe deine Verbindung.</string>
@@ -129,4 +126,6 @@
     <string name="update_available_text">Tippe, um die neueste Version anzuzeigen</string>
 
     <!-- Command descriptions -->
+    <string name="error_input_too_long">Der Text ist zu lang für das Token-Limit pro Minute dieses Modells. Versuche es mit kürzerem Text erneut.</string>
+    <string name="note_response_truncated">[Hinweis: Antwort ist möglicherweise abgeschnitten]</string>
 </resources>

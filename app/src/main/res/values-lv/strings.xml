@@ -95,7 +95,6 @@
     <!-- Toast & error messages -->
     <string name="toast_replace_failed">Nevarēja aizstāt tekstu</string>
     <string name="toast_custom_not_configured">Pielāgotais nodrošinātājs nav konfigurēts. Iestatījumos norādiet galapunktu un modeli.</string>
-    <string name="toast_model_setting_rejected">Nodrošinātājs noraidīja modeļa iestatījumu, un tas tika izlaists — jūsu teksts joprojām tika apstrādāts. Lūdzu, ziņojiet par to SwiftSlate GitHub, lai mēs to varētu labot.</string>
     <string name="toast_key_rate_limited">API atslēgas pieprasījumu ātrums ierobežots. Mēģiniet vēlreiz pēc %1$d s</string>
     <string name="toast_no_keys">Nav konfigurēta neviena API atslēga</string>
     <string name="toast_all_keys_invalid">Visas API atslēgas ir nederīgas. Lūdzu, pārbaudiet savas atslēgas</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Izgriezts starpliktuvē</string>
     <string name="toast_clipboard_empty">Starpliktuve ir tukša</string>
     <string name="toast_clipboard_failed">Starpliktuves darbība neizdevās</string>
-    <string name="toast_keystore_unavailable">Droša atslēgu glabātuve nav pieejama. Lūdzu, pārinstalējiet lietotni.</string>
     <string name="error_no_model_access">Jūsu API atslēgai nav piekļuves šim modelim.</string>
     <string name="error_invalid_key">Nederīga API atslēga. Lūdzu, pārbaudiet savu atslēgu Iestatījumos.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Pieprasījumu ātrums ierobežots. Drīz mēģiniet vēlreiz.</string>
     <string name="error_model_not_found">Modelis nav atrasts. Pārbaudiet modeļa izvēli Iestatījumos.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Atbildi bloķēja drošības filtri. Mēģiniet pārformulēt.</string>
     <string name="error_empty_response">Modelis atgrieza tukšu atbildi. Mēģiniet vēlreiz.</string>
     <string name="error_timeout_connection">Pieprasījuma noildze. Pārbaudiet savienojumu.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Paziņo, kad ir pieejama jauna SwiftSlate versija</string>
     <string name="update_available_title">Pieejams SwiftSlate atjauninājums</string>
     <string name="update_available_text">Pieskarieties, lai skatītu jaunāko laidienu</string>
+    <string name="error_input_too_long">Teksts ir pārāk garš šī modeļa marķieru ierobežojumam minūtē. Mēģiniet vēlreiz ar īsāku tekstu.</string>
+    <string name="note_response_truncated">[Piezīme: atbilde var būt saīsināta]</string>
 </resources>

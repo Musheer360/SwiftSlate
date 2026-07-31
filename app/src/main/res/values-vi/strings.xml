@@ -95,7 +95,6 @@
     <!-- Toasts &amp; errors -->
     <string name="toast_replace_failed">Không thể thay thế văn bản</string>
     <string name="toast_custom_not_configured">Chưa cấu hình nhà cung cấp tùy chỉnh. Đặt điểm cuối và mô hình trong Cài đặt.</string>
-    <string name="toast_model_setting_rejected">Một cài đặt mô hình đã bị nhà cung cấp từ chối và bỏ qua — văn bản của bạn vẫn được xử lý. Vui lòng báo cáo điều này trên SwiftSlate GitHub để chúng tôi có thể khắc phục.</string>
     <string name="toast_key_rate_limited">Khóa API bị giới hạn tần suất. Thử lại sau %1$d giây</string>
     <string name="toast_no_keys">Chưa cấu hình khóa API nào</string>
     <string name="toast_all_keys_invalid">Tất cả khóa API đều không hợp lệ. Vui lòng kiểm tra khóa của bạn</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Đã cắt vào khay nhớ tạm</string>
     <string name="toast_clipboard_empty">Khay nhớ tạm trống</string>
     <string name="toast_clipboard_failed">Thao tác khay nhớ tạm thất bại</string>
-    <string name="toast_keystore_unavailable">Kho lưu trữ khóa an toàn không có sẵn. Vui lòng cài đặt lại ứng dụng.</string>
     <string name="error_no_model_access">Khóa API của bạn không có quyền truy cập vào mô hình này.</string>
     <string name="error_invalid_key">Khóa API không hợp lệ. Vui lòng kiểm tra khóa của bạn trong Cài đặt.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Bị giới hạn tần suất. Thử lại sau giây lát.</string>
     <string name="error_model_not_found">Không tìm thấy mô hình. Kiểm tra lựa chọn mô hình của bạn trong Cài đặt.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Phản hồi bị chặn bởi bộ lọc an toàn. Thử diễn đạt lại.</string>
     <string name="error_empty_response">Mô hình trả về phản hồi trống. Thử lại.</string>
     <string name="error_timeout_connection">Yêu cầu đã hết thời gian chờ. Kiểm tra kết nối của bạn.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Thông báo khi có phiên bản SwiftSlate mới</string>
     <string name="update_available_title">Đã có bản cập nhật SwiftSlate</string>
     <string name="update_available_text">Nhấn để xem bản phát hành mới nhất</string>
+    <string name="error_input_too_long">Văn bản quá dài so với giới hạn token mỗi phút của mô hình này. Hãy thử lại với văn bản ngắn hơn.</string>
+    <string name="note_response_truncated">[Lưu ý: phản hồi có thể bị cắt]</string>
 </resources>

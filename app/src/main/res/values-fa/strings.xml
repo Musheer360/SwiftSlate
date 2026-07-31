@@ -95,7 +95,6 @@
     <!-- Toasts and errors -->
     <string name="toast_replace_failed">جایگزینی متن انجام نشد</string>
     <string name="toast_custom_not_configured">ارائه‌دهنده سفارشی پیکربندی نشده است. نقطه پایانی و مدل را در تنظیمات تعیین کنید.</string>
-    <string name="toast_model_setting_rejected">یک تنظیم مدل توسط ارائه‌دهنده رد شد و نادیده گرفته شد — متن شما همچنان پردازش شد. لطفاً این را در GitHub مربوط به SwiftSlate گزارش دهید تا آن را برطرف کنیم.</string>
     <string name="toast_key_rate_limited">کلید API با محدودیت نرخ مواجه شد. %1$d ثانیه دیگر دوباره تلاش کنید</string>
     <string name="toast_no_keys">هیچ کلید API پیکربندی نشده است</string>
     <string name="toast_all_keys_invalid">همه کلیدهای API نامعتبر هستند. لطفاً کلیدهای خود را بررسی کنید</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">در کلیپ‌بورد برش داده شد</string>
     <string name="toast_clipboard_empty">کلیپ‌بورد خالی است</string>
     <string name="toast_clipboard_failed">عملیات کلیپ‌بورد ناموفق بود</string>
-    <string name="toast_keystore_unavailable">ذخیره‌سازی امن کلید در دسترس نیست. لطفاً برنامه را دوباره نصب کنید.</string>
     <string name="error_no_model_access">کلید API شما به این مدل دسترسی ندارد.</string>
     <string name="error_invalid_key">کلید API نامعتبر است. لطفاً کلید خود را در تنظیمات بررسی کنید.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">محدودیت نرخ اعمال شد. لطفاً کمی بعد دوباره تلاش کنید.</string>
     <string name="error_model_not_found">مدل پیدا نشد. انتخاب مدل خود را در تنظیمات بررسی کنید.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">پاسخ توسط فیلترهای ایمنی مسدود شد. سعی کنید عبارت را بازنویسی کنید.</string>
     <string name="error_empty_response">مدل پاسخ خالی برگرداند. دوباره تلاش کنید.</string>
     <string name="error_timeout_connection">مهلت درخواست به پایان رسید. اتصال خود را بررسی کنید.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">هنگامی که نسخه جدیدی از SwiftSlate در دسترس باشد اطلاع می‌دهد</string>
     <string name="update_available_title">به‌روزرسانی SwiftSlate در دسترس است</string>
     <string name="update_available_text">برای مشاهده آخرین نسخه ضربه بزنید</string>
+    <string name="error_input_too_long">متن از محدودیت توکن در دقیقه این مدل بلندتر است. با متن کوتاه‌تری دوباره تلاش کنید.</string>
+    <string name="note_response_truncated">[توجه: ممکن است پاسخ ناقص باشد]</string>
 </resources>

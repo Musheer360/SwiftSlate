@@ -95,7 +95,6 @@
     <!-- Toasts &amp; errors -->
     <string name="toast_replace_failed">ไม่สามารถแทนที่ข้อความได้</string>
     <string name="toast_custom_not_configured">ยังไม่ได้กำหนดค่าผู้ให้บริการที่กำหนดเอง ตั้งค่าเอนด์พอยต์และโมเดลในการตั้งค่า</string>
-    <string name="toast_model_setting_rejected">การตั้งค่าโมเดลถูกผู้ให้บริการปฏิเสธและถูกข้ามไป — ข้อความของคุณยังคงได้รับการประมวลผล โปรดรายงานเรื่องนี้บน SwiftSlate GitHub เพื่อให้เราแก้ไขได้</string>
     <string name="toast_key_rate_limited">คีย์ API ถูกจำกัดอัตรา ลองอีกครั้งใน %1$d วินาที</string>
     <string name="toast_no_keys">ยังไม่ได้กำหนดค่าคีย์ API</string>
     <string name="toast_all_keys_invalid">คีย์ API ทั้งหมดไม่ถูกต้อง โปรดตรวจสอบคีย์ของคุณ</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">ตัดไปยังคลิปบอร์ดแล้ว</string>
     <string name="toast_clipboard_empty">คลิปบอร์ดว่างเปล่า</string>
     <string name="toast_clipboard_failed">การดำเนินการคลิปบอร์ดล้มเหลว</string>
-    <string name="toast_keystore_unavailable">ที่เก็บคีย์แบบปลอดภัยไม่พร้อมใช้งาน โปรดติดตั้งแอปใหม่</string>
     <string name="error_no_model_access">คีย์ API ของคุณไม่มีสิทธิ์เข้าถึงโมเดลนี้</string>
     <string name="error_invalid_key">คีย์ API ไม่ถูกต้อง โปรดตรวจสอบคีย์ของคุณในการตั้งค่า</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">ถูกจำกัดอัตรา ลองอีกครั้งในไม่ช้า</string>
     <string name="error_model_not_found">ไม่พบโมเดล ตรวจสอบการเลือกโมเดลของคุณในการตั้งค่า</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">การตอบกลับถูกบล็อกโดยตัวกรองความปลอดภัย ลองเรียบเรียงใหม่</string>
     <string name="error_empty_response">โมเดลส่งคืนการตอบกลับที่ว่างเปล่า ลองอีกครั้ง</string>
     <string name="error_timeout_connection">คำขอหมดเวลา ตรวจสอบการเชื่อมต่อของคุณ</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">แจ้งเตือนเมื่อมี SwiftSlate เวอร์ชันใหม่</string>
     <string name="update_available_title">มีอัปเดต SwiftSlate</string>
     <string name="update_available_text">แตะเพื่อดูรุ่นล่าสุด</string>
+    <string name="error_input_too_long">ข้อความยาวเกินขีดจำกัดโทเค็นต่อนาทีของโมเดลนี้ ลองอีกครั้งด้วยข้อความที่สั้นลง</string>
+    <string name="note_response_truncated">[หมายเหตุ: คำตอบอาจถูกตัดจบ]</string>
 </resources>

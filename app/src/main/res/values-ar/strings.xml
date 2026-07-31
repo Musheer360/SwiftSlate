@@ -95,7 +95,6 @@
     <!-- Toasts and errors -->
     <string name="toast_replace_failed">تعذّر استبدال النص</string>
     <string name="toast_custom_not_configured">لم يتم تكوين الموفر المخصص. حدّد نقطة النهاية والنموذج في الإعدادات.</string>
-    <string name="toast_model_setting_rejected">تم رفض أحد إعدادات النموذج من قبل الموفر وتم تخطيه — لا يزال نصك قد تمت معالجته. يُرجى الإبلاغ عن هذا على GitHub الخاص بـ SwiftSlate حتى نتمكن من إصلاحه.</string>
     <string name="toast_key_rate_limited">تم تقييد معدل مفتاح API. أعد المحاولة خلال %1$d ثانية</string>
     <string name="toast_no_keys">لم يتم تكوين أي مفاتيح API</string>
     <string name="toast_all_keys_invalid">جميع مفاتيح API غير صالحة. يُرجى التحقق من مفاتيحك</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">تم القص إلى الحافظة</string>
     <string name="toast_clipboard_empty">الحافظة فارغة</string>
     <string name="toast_clipboard_failed">فشلت عملية الحافظة</string>
-    <string name="toast_keystore_unavailable">تخزين المفاتيح الآمن غير متوفر. يُرجى إعادة تثبيت التطبيق.</string>
     <string name="error_no_model_access">لا يملك مفتاح API الخاص بك حق الوصول إلى هذا النموذج.</string>
     <string name="error_invalid_key">مفتاح API غير صالح. يُرجى التحقق من مفتاحك في الإعدادات.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">تم تقييد المعدل. أعد المحاولة قريباً.</string>
     <string name="error_model_not_found">لم يتم العثور على النموذج. تحقق من اختيار النموذج في الإعدادات.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">تم حظر الاستجابة بواسطة عوامل تصفية الأمان. حاول إعادة الصياغة.</string>
     <string name="error_empty_response">أعاد النموذج استجابة فارغة. أعد المحاولة.</string>
     <string name="error_timeout_connection">انتهت مهلة الطلب. تحقق من اتصالك.</string>
@@ -130,4 +127,6 @@
     <string name="update_available_text">انقر لعرض أحدث إصدار</string>
 
     <!-- Command descriptions -->
+    <string name="error_input_too_long">النص أطول من حد الرموز في الدقيقة لهذا الطراز. أعد المحاولة بنص أقصر.</string>
+    <string name="note_response_truncated">[ملاحظة: قد تكون الإجابة مقطوعة]</string>
 </resources>

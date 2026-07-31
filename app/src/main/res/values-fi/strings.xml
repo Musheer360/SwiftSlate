@@ -95,7 +95,6 @@
     <!-- Toasts and errors -->
     <string name="toast_replace_failed">Tekstin korvaaminen epäonnistui</string>
     <string name="toast_custom_not_configured">Mukautettua tarjoajaa ei ole määritetty. Määritä päätepiste ja malli Asetuksissa.</string>
-    <string name="toast_model_setting_rejected">Tarjoaja hylkäsi malliasetuksen ja se ohitettiin — tekstisi käsiteltiin silti. Ilmoita tästä SwiftSlate-projektin GitHubissa, jotta voimme korjata sen.</string>
     <string name="toast_key_rate_limited">API-avaimen käyttöraja saavutettu. Yritä uudelleen %1$d s kuluttua</string>
     <string name="toast_no_keys">API-avaimia ei ole määritetty</string>
     <string name="toast_all_keys_invalid">Kaikki API-avaimet ovat virheellisiä. Tarkista avaimesi</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Leikattu leikepöydälle</string>
     <string name="toast_clipboard_empty">Leikepöytä on tyhjä</string>
     <string name="toast_clipboard_failed">Leikepöytätoiminto epäonnistui</string>
-    <string name="toast_keystore_unavailable">Turvallinen avainten tallennus ei ole käytettävissä. Asenna sovellus uudelleen.</string>
     <string name="error_no_model_access">API-avaimellasi ei ole pääsyä tähän malliin.</string>
     <string name="error_invalid_key">Virheellinen API-avain. Tarkista avaimesi Asetuksissa.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Käyttöraja saavutettu. Yritä pian uudelleen.</string>
     <string name="error_model_not_found">Mallia ei löytynyt. Tarkista mallin valinta Asetuksissa.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Vastaus estettiin turvasuodattimilla. Yritä muotoilla uudelleen.</string>
     <string name="error_empty_response">Malli palautti tyhjän vastauksen. Yritä uudelleen.</string>
     <string name="error_timeout_connection">Pyyntö aikakatkaistiin. Tarkista yhteytesi.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Ilmoittaa, kun uusi SwiftSlate-versio on saatavilla</string>
     <string name="update_available_title">SwiftSlate-päivitys saatavilla</string>
     <string name="update_available_text">Napauta nähdäksesi uusimman version</string>
+    <string name="error_input_too_long">Teksti on liian pitkä tämän mallin minuuttikohtaiselle token-rajalle. Yritä uudelleen lyhyemmällä tekstillä.</string>
+    <string name="note_response_truncated">[Huomio: vastaus voi olla katkaistu]</string>
 </resources>

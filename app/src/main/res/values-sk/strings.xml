@@ -95,7 +95,6 @@
     <!-- Toast & error messages -->
     <string name="toast_replace_failed">Text sa nepodarilo nahradiť</string>
     <string name="toast_custom_not_configured">Vlastný poskytovateľ nie je nakonfigurovaný. Nastavte koncový bod a model v Nastaveniach.</string>
-    <string name="toast_model_setting_rejected">Nastavenie modelu bolo poskytovateľom odmietnuté a preskočené — váš text bol napriek tomu spracovaný. Nahláste to na GitHub SwiftSlate, aby sme to mohli opraviť.</string>
     <string name="toast_key_rate_limited">Prekročený limit požiadaviek kľúča API. Skúste to znova o %1$d s</string>
     <string name="toast_no_keys">Nie sú nakonfigurované žiadne kľúče API</string>
     <string name="toast_all_keys_invalid">Všetky kľúče API sú neplatné. Skontrolujte svoje kľúče</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Vystrihnuté do schránky</string>
     <string name="toast_clipboard_empty">Schránka je prázdna</string>
     <string name="toast_clipboard_failed">Operácia so schránkou zlyhala</string>
-    <string name="toast_keystore_unavailable">Bezpečné úložisko kľúčov nie je k dispozícii. Preinštalujte aplikáciu.</string>
     <string name="error_no_model_access">Váš kľúč API nemá prístup k tomuto modelu.</string>
     <string name="error_invalid_key">Neplatný kľúč API. Skontrolujte svoj kľúč v Nastaveniach.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Prekročený limit požiadaviek. Skúste to znova o chvíľu.</string>
     <string name="error_model_not_found">Model sa nenašiel. Skontrolujte výber modelu v Nastaveniach.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Odpoveď bola zablokovaná bezpečnostnými filtrami. Skúste to preformulovať.</string>
     <string name="error_empty_response">Model vrátil prázdnu odpoveď. Skúste to znova.</string>
     <string name="error_timeout_connection">Vypršal časový limit požiadavky. Skontrolujte pripojenie.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Upozorní, keď je k dispozícii nová verzia SwiftSlate</string>
     <string name="update_available_title">Dostupná aktualizácia SwiftSlate</string>
     <string name="update_available_text">Ťuknutím zobrazíte najnovšiu verziu</string>
+    <string name="error_input_too_long">Text je príliš dlhý pre limit tokenov za minútu tohto modelu. Skúste to znova s kratším textom.</string>
+    <string name="note_response_truncated">[Poznámka: odpoveď môže byť skrátená]</string>
 </resources>

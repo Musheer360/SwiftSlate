@@ -95,7 +95,6 @@
     <!-- Toast & error messages -->
     <string name="toast_replace_failed">Nepavyko pakeisti teksto</string>
     <string name="toast_custom_not_configured">Pasirinktinis tiekėjas nesukonfigūruotas. Nustatymuose nurodykite galinį tašką ir modelį.</string>
-    <string name="toast_model_setting_rejected">Tiekėjas atmetė modelio nustatymą ir jis buvo praleistas — jūsų tekstas vis tiek buvo apdorotas. Praneškite apie tai SwiftSlate GitHub, kad galėtume tai pataisyti.</string>
     <string name="toast_key_rate_limited">API rakto užklausų dažnis apribotas. Bandykite dar kartą po %1$d s</string>
     <string name="toast_no_keys">Nesukonfigūruota jokių API raktų</string>
     <string name="toast_all_keys_invalid">Visi API raktai negalioja. Patikrinkite savo raktus</string>
@@ -109,13 +108,11 @@
     <string name="toast_cut">Iškirpta į iškarpinę</string>
     <string name="toast_clipboard_empty">Iškarpinė tuščia</string>
     <string name="toast_clipboard_failed">Iškarpinės operacija nepavyko</string>
-    <string name="toast_keystore_unavailable">Saugus raktų saugojimas negalimas. Iš naujo įdiekite programą.</string>
     <string name="error_no_model_access">Jūsų API raktas neturi prieigos prie šio modelio.</string>
     <string name="error_invalid_key">Netinkamas API raktas. Patikrinkite savo raktą Nustatymuose.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_rate_limited">Užklausų dažnis apribotas. Netrukus bandykite dar kartą.</string>
     <string name="error_model_not_found">Modelis nerastas. Patikrinkite modelio pasirinkimą Nustatymuose.</string>
-    <string name="error_formatting_failed">Could not format the response properly. Try again.</string>
     <string name="error_safety_blocked">Atsakymą užblokavo saugumo filtrai. Pabandykite performuluoti.</string>
     <string name="error_empty_response">Modelis grąžino tuščią atsakymą. Bandykite dar kartą.</string>
     <string name="error_timeout_connection">Baigėsi užklausos laikas. Patikrinkite ryšį.</string>
@@ -128,4 +125,6 @@
     <string name="update_channel_desc">Praneša, kai yra nauja SwiftSlate versija</string>
     <string name="update_available_title">Yra SwiftSlate naujinys</string>
     <string name="update_available_text">Palieskite, kad peržiūrėtumėte naujausią leidimą</string>
+    <string name="error_input_too_long">Tekstas per ilgas šio modelio žetonų per minutę ribai. Bandykite dar kartą su trumpesniu tekstu.</string>
+    <string name="note_response_truncated">[Pastaba: atsakymas gali būti nutrūkęs]</string>
 </resources>
