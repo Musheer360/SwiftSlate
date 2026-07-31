@@ -23,7 +23,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 [![Downloads](https://img.shields.io/github/downloads/Musheer360/SwiftSlate/total?style=flat-square&label=Downloads&color=brightgreen)](https://github.com/Musheer360/SwiftSlate/releases)
 [![F-Droid](https://img.shields.io/f-droid/v/com.musheer360.swiftslate?style=flat-square)](https://f-droid.org/en/packages/com.musheer360.swiftslate/)
 [![GitHub Stars](https://img.shields.io/github/stars/Musheer360/SwiftSlate?style=flat-square&color=yellow)](https://github.com/Musheer360/SwiftSlate/stargazers)
-[![APK Size](https://img.shields.io/badge/APK_Size-~1.4_MB-blue?style=flat-square)](#)
+[![APK Size](https://img.shields.io/badge/APK_Size-~1.7_MB-blue?style=flat-square)](#)
 [![Build](https://img.shields.io/github/actions/workflow/status/Musheer360/SwiftSlate/build.yml?branch=master&style=flat-square&label=CI)](https://github.com/Musheer360/SwiftSlate/actions/workflows/build.yml)
 
 <br>
@@ -142,7 +142,7 @@ App UI available in English, French, German, Spanish, Portuguese (BR), Hindi, an
 
 ## 🧩 Built-in Commands
 
-SwiftSlate ships with **10 AI-powered commands**, dynamic translation, and **4 clipboard commands** — ready to use out of the box:
+SwiftSlate ships with **9 AI-powered commands**, dynamic translation, and **5 built-in local commands** — ready to use out of the box. The AI commands are seeded as editable entries, so you can reword or delete any of them:
 
 | Trigger | Action | Example |
 |:--------|:-------|:--------|
@@ -179,17 +179,17 @@ Use any standard language code with `?translate:XX`:
 
 ### 📋 Clipboard Commands
 
-SwiftSlate also includes **4 clipboard commands** that work entirely offline using an **internal clipboard** (not the Android system clipboard):
+SwiftSlate also includes **4 clipboard commands** that work entirely offline, using the real Android system clipboard:
 
 | Trigger | Action | Example |
 |:--------|:-------|:--------|
-| **`?copy`** | Copy preceding text to internal clipboard | `Hello world?copy` → copies "Hello world" |
+| **`?copy`** | Copy preceding text to the clipboard | `Hello world?copy` → copies "Hello world" |
 | **`?cut`** | Cut preceding text (copy + delete) | `Hello world?cut` → cuts "Hello world" |
-| **`?paste`** | Paste after existing text | Type `?paste` → appends last copied/cut text |
-| **`?replace`** | Replace all text with clipboard content | Type `?replace` → replaces field content with last copied/cut text |
+| **`?paste`** | Paste after existing text | Type `?paste` → appends the clipboard contents |
+| **`?replace`** | Replace all text with clipboard content | Type `?replace` → replaces field content with the clipboard contents |
 
-> [!IMPORTANT]
-> These commands use SwiftSlate's own internal clipboard, **not** the Android system clipboard. Due to Android 13+ restrictions, accessibility services cannot read the system clipboard. You must use `?copy` or `?cut` within SwiftSlate first — then `?paste` or `?replace` will work in any text field.
+> [!NOTE]
+> `?paste` and `?replace` work with anything you've copied, in any app. Since Android 10, an accessibility service can't *read* the clipboard (only the focused app and the active keyboard can), so SwiftSlate doesn't try — it asks the text field itself to paste, which the app performs under its own focus. If a field ignores that request, SwiftSlate falls back to the last text you copied with `?copy` or `?cut`.
 
 <br>
 
@@ -412,7 +412,8 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 <td width="25%" valign="top">
 
 #### 📝 Commands
-- 10 built-in commands (read-only)
+- 5 built-in commands (read-only)
+- 9 AI commands, editable like your own
 - Add custom commands (AI or Text Replacer)
 - Edit existing custom commands
 - Delete custom commands
@@ -469,19 +470,24 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 
 ## 🌍 Localization
 
-SwiftSlate's UI is available in **7 languages**:
+SwiftSlate's UI is available in **40 languages**:
 
-| Language | Code |
-|:---------|:-----|
-| 🇺🇸 English | `en` |
-| 🇫🇷 French | `fr` |
-| 🇩🇪 German | `de` |
-| 🇪🇸 Spanish | `es` |
-| 🇧🇷 Portuguese (Brazil) | `pt-rBR` |
-| 🇮🇳 Hindi | `hi` |
-| 🇨🇳 Simplified Chinese | `zh-rCN` |
+| | | | |
+|:--|:--|:--|:--|
+| 🇺🇸 English `en` | 🇸🇦 Arabic `ar` | 🇧🇬 Bulgarian `bg` | 🇪🇸 Catalan `ca` |
+| 🇨🇿 Czech `cs` | 🇩🇰 Danish `da` | 🇩🇪 German `de` | 🇬🇷 Greek `el` |
+| 🇪🇸 Spanish `es` | 🇪🇪 Estonian `et` | 🇮🇷 Persian `fa` | 🇫🇮 Finnish `fi` |
+| 🇫🇷 French `fr` | 🇮🇳 Hindi `hi` | 🇭🇷 Croatian `hr` | 🇭🇺 Hungarian `hu` |
+| 🇮🇩 Indonesian `in` | 🇮🇹 Italian `it` | 🇮🇱 Hebrew `iw` | 🇯🇵 Japanese `ja` |
+| 🇰🇷 Korean `ko` | 🇱🇹 Lithuanian `lt` | 🇱🇻 Latvian `lv` | 🇲🇾 Malay `ms` |
+| 🇳🇴 Norwegian `nb` | 🇳🇱 Dutch `nl` | 🇵🇱 Polish `pl` | 🇵🇹 Portuguese `pt` |
+| 🇧🇷 Portuguese (BR) `pt-rBR` | 🇷🇴 Romanian `ro` | 🇷🇺 Russian `ru` | 🇸🇰 Slovak `sk` |
+| 🇸🇮 Slovenian `sl` | 🇷🇸 Serbian `sr` | 🇹🇭 Thai `th` | 🇹🇷 Turkish `tr` |
+| 🇺🇦 Ukrainian `uk` | 🇻🇳 Vietnamese `vi` | 🇨🇳 Chinese `zh` | 🇨🇳 Chinese (Simplified) `zh-rCN` |
 
-The app automatically uses your device's language. Contributions for additional translations are welcome!
+The app automatically uses your device's language, and falls back to English otherwise.
+
+Adding a translation is a single directory: drop `values-<locale>/strings.xml` into `app/src/main/res/` and it ships automatically — the build derives the shipped locale list from that folder, so nothing else needs editing. Contributions welcome.
 
 <br>
 
@@ -528,32 +534,43 @@ The app automatically uses your device's language. Contributions for additional 
 ```
 com.musheer360.swiftslate/
 ├── service/
-│   └── AssistantService.kt      # Core accessibility service — event listening,
-│                                 # trigger detection, text replacement, inline spinner
+│   ├── AssistantService.kt      # Core accessibility service — event listening, trigger
+│   │                            # detection, text replacement, undo, inline spinner
+│   ├── ErrorMessages.kt         # Maps raw provider/network errors to localized strings
+│   └── OverlayToast.kt          # TYPE_ACCESSIBILITY_OVERLAY toast with enter/exit animation
 ├── api/
 │   ├── GeminiClient.kt          # Google Gemini API client
 │   ├── OpenAICompatibleClient.kt # Unified client for Groq + any OpenAI-compatible endpoint
-│   └── ApiClientUtils.kt        # Shared utilities — response parsing, error handling,
-│                                 # structured output extraction, system prompt
+│   └── ApiClientUtils.kt        # Shared utilities — response parsing, error classification,
+│                                # refusal detection, secret redaction, system prompt
 ├── manager/
-│   ├── KeyManager.kt            # AES-256-GCM encrypted key storage, round-robin rotation,
-│   │                            # rate-limit tracking, invalid key detection
-│   └── CommandManager.kt        # Command CRUD, trigger matching (longest-match),
-│                                # prefix migration, import/export
+│   ├── KeyManager.kt            # Key storage, round-robin rotation, rate-limit tracking,
+│   │                            # invalid-key benching with expiry
+│   ├── KeyCipher.kt             # AES-256-GCM via AndroidKeyStore, behind an interface so
+│   │                            # KeyManager is testable without the keystore
+│   ├── CommandManager.kt        # Command CRUD, trigger matching (longest-match),
+│   │                            # prefix migration, import/export
+│   └── StatsManager.kt          # Usage counters — monthly total, per-command, last 7 days
+├── provider/
+│   └── ProviderConfig.kt        # Per-provider config (transport, endpoint, model key,
+│                                # reasoning/thinking params) + registry
 ├── model/
 │   ├── Command.kt               # Command data class (AI or Text Replacer)
+│   ├── GeminiModels.kt          # Gemini model catalog + per-model thinking level
+│   ├── GroqModels.kt            # Groq model catalog + per-model reasoning params
+│   ├── PrefKeys.kt              # SharedPreferences key constants
 │   └── ProviderType.kt          # Provider constants (gemini, groq, custom)
 ├── ui/
-│   ├── DashboardScreen.kt       # Service status, key count, quick-start guide
+│   ├── DashboardScreen.kt       # Service status, key count, usage stats, 7-day chart
 │   ├── KeysScreen.kt            # API key management with live validation
 │   ├── CommandsScreen.kt        # Command list, add/edit/delete with collapsible form
-│   ├── SettingsScreen.kt        # Provider, model, prefix, backup/restore
+│   ├── SettingsScreen.kt        # Provider, model, temperature, prefix, backup/restore
 │   ├── components/              # Reusable UI components (cards, text fields, dividers)
 │   └── theme/Theme.kt           # AMOLED dark + light Material 3 color schemes
 ├── MainActivity.kt              # AnimatedContent tab navigation (4 tabs)
 ├── SwiftSlateViewModel.kt       # Shared ViewModel exposing managers + prefs
 ├── SwiftSlateApp.kt             # Application class — SharedPreferences pre-warming,
-│                                 # WorkManager update check scheduling
+│                                # WorkManager update check scheduling
 └── worker/
     └── UpdateCheckWorker.kt     # Daily background check for new GitHub releases
 ```

@@ -11,9 +11,9 @@ Features:
 • Multi-key rotation with automatic rate-limit handling
 • API keys encrypted with AES-256-GCM via Android Keystore
 • AMOLED dark theme and light theme with Material 3
-• Localized in 7 languages: English, French, German, Spanish, Portuguese (BR), Hindi, and Simplified Chinese
+• Localized in 40 languages — the app follows your device language automatically
 • Zero analytics, zero tracking, zero telemetry
-• Tiny APK (~1.3 MB) with zero third-party networking dependencies
+• Tiny APK (~1.7 MB) with zero third-party networking dependencies
 
 Built-in commands:
 
@@ -24,9 +24,11 @@ Built-in commands:
 • ?formal — Rewrite in professional tone
 • ?casual — Rewrite in friendly tone
 • ?emoji — Add relevant emojis
+• ?human — Rewrite so it doesn't read as AI-generated
 • ?reply — Generate a contextual reply
 • ?undo — Restore text from before the last replacement
 • ?translate:XX — Translate to any language
+• ?copy / ?cut / ?paste / ?replace — Clipboard actions without leaving the keyboard
 
 You can also create your own custom AI commands with any prompt, or text replacer commands for instant offline snippets like signatures, canned responses, and shortcuts.
 
