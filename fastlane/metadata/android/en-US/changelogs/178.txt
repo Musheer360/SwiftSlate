@@ -1,0 +1,1 @@
+- feat(ci): side-by-side installable preview APK for every pull request, and fix the F-Droid changelog step
