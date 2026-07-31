@@ -71,6 +71,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 - [Tech Stack](#%EF%B8%8F-tech-stack)
 - [Architecture](#-architecture)
 - [Building from Source](#-building-from-source)
+- [Trying a Pull Request](#-trying-a-pull-request-without-touching-your-install)
 - [Contributing](#-contributing)
 - [Sponsors](#-sponsors)
 - [Support the Project](#-support-the-project)
@@ -619,6 +620,26 @@ export KEY_PASSWORD=your_key_password
 ```
 
 </details>
+
+<br>
+
+## 🧪 Trying a Pull Request Without Touching Your Install
+
+Every pull request builds a **preview APK** you can install side by side with a stable release.
+
+It ships as a separate app — applicationId `com.musheer360.swiftslate.preview`, shown on your launcher as **SwiftSlate Preview** — so installing it never replaces your stable build and never touches its API keys, commands, stats or accessibility setting. Both appear as separate entries under Settings → Accessibility, and you can enable whichever you want to test.
+
+1. Open the pull request's **Checks** tab and pick the latest **Build & Release** run
+2. Download the `SwiftSlate-preview-prNNN` artifact from the **Artifacts** section
+3. Unzip and install the APK, then enable **SwiftSlate Preview** in accessibility settings
+4. Uninstall it when you're done — your stable install is untouched throughout
+
+Preview builds are shrunk and non-debuggable like release builds, but signed with a debug key, so they'll never silently update your stable app. To build one locally:
+
+```bash
+./gradlew assemblePreview
+# app/build/outputs/apk/preview/app-preview.apk
+```
 
 <br>
 

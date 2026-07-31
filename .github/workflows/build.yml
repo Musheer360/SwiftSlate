@@ -344,13 +344,16 @@ jobs:
           mkdir -p "$DIR"
           # F-Droid renders these as plain text and truncates around 500 chars.
           head -c 480 /tmp/changelog.md > "$DIR/${VERSION_CODE}.txt"
-          if git diff --quiet -- "$DIR"; then
+          # Stage first: `git diff` does not report untracked files, so checking the working
+          # tree before staging always reported "no changes" for a brand new changelog and
+          # skipped the commit entirely.
+          git add "$DIR/${VERSION_CODE}.txt"
+          if git diff --cached --quiet -- "$DIR"; then
             echo "::notice::F-Droid changelog already up to date"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$DIR/${VERSION_CODE}.txt"
           git commit -m "docs(fastlane): changelog for ${TAG} [skip ci]"
           # Fail loudly rather than tagging a commit that never reached origin. The next
           # push to master retries cleanly because no tag was created.
@@ -384,6 +387,76 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Produces an APK reviewers and testers can install *alongside* a stable install.
+  # Pull requests previously produced no artifact at all, so trying a change meant
+  # building it yourself or overwriting your working install.
+  preview-apk:
+    name: Preview APK
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
+          gradle-home-cache-cleanup: true
+          cache-read-only: true
+
+      - name: Build preview APK
+        shell: bash
+        env:
+          # Monotonic so a later preview build upgrades an earlier one in place instead of
+          # forcing an uninstall. No signing secrets needed: the preview build type is signed
+          # with the local debug key, so this works for fork pull requests too.
+          VERSION_CODE: ${{ github.run_number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          ./gradlew assemblePreview --parallel --build-cache --no-daemon \
+            --configuration-cache-problems=warn \
+            -PversionCode="$VERSION_CODE" \
+            -PversionName="pr${PR_NUMBER}-${GITHUB_SHA:0:7}"
+
+      - name: Rename APK
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          mv app/build/outputs/apk/preview/app-preview.apk \
+             "app/build/outputs/apk/preview/SwiftSlate-preview-pr${PR_NUMBER}-${GITHUB_SHA:0:7}.apk"
+
+      - name: Upload preview APK
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: SwiftSlate-preview-pr${{ github.event.pull_request.number }}
+          path: app/build/outputs/apk/preview/SwiftSlate-preview-*.apk
+          retention-days: 14
+
+      - name: Explain how to use it
+        shell: bash
+        run: |
+          {
+            echo "### Preview APK ready"
+            echo
+            echo "Installs as a **separate app** (\`com.musheer360.swiftslate.preview\`, shown as"
+            echo "**SwiftSlate Preview**), so it will not touch your stable install, its API keys,"
+            echo "its commands or its accessibility setting."
+            echo
+            echo "Download it from the **Artifacts** section of this run, then enable it under"
+            echo "Settings > Accessibility as a second entry. Uninstall it when you are done."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   notify-failure:
     name: Notify on Failure

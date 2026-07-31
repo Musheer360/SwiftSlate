@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Overrides for the `preview` build type only, so a side-by-side preview install is
+  distinguishable from the stable one on the launcher and in the accessibility settings list.
+  Deliberately English-only: preview builds are for testing a change, and the strings that
+  matter for translation coverage all live in the main source set.
+-->
+<resources>
+    <string name="app_name">SwiftSlate Preview</string>
+    <string name="accessibility_service_label">SwiftSlate Preview</string>
+</resources>

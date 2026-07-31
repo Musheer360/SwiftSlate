@@ -71,6 +71,23 @@ android {
             signingConfig = signingConfigs.findByName("release")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        // Installable side by side with a stable release: a different applicationId means
+        // Android treats it as a separate app, so testing a pull request never touches the
+        // installed stable build, its API keys, its commands or its accessibility setting.
+        //
+        // Shrunk and non-debuggable like release (a debuggable accessibility service is not
+        // something to hand out), but signed with the local debug key so pull requests from
+        // forks can build it without access to the release signing secrets.
+        //
+        // The label and icon are overridden in src/preview/res so the two are told apart on
+        // the launcher and in Settings > Accessibility.
+        create("preview") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".preview"
+            versionNameSuffix = "-preview"
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
