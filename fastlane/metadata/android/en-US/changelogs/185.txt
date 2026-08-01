@@ -1,0 +1,3 @@
+- docs: document OEM battery optimization killing the accessibility service
+- docs: note banking apps' accessibility-service detection as a known limitation
+- fix: truncate over-limit command input instead of rejecting it
