@@ -14,7 +14,6 @@ import android.os.VibratorManager
 import android.view.HapticFeedbackConstants
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.Toast
 import com.musheer360.swiftslate.api.ApiClientUtils
 import com.musheer360.swiftslate.api.ApiError
 import com.musheer360.swiftslate.api.ApiException
@@ -154,6 +153,23 @@ class AssistantService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        try {
+            handleAccessibilityEvent(event)
+        } catch (e: Exception) {
+            // AccessibilityNodeInfo methods throw IllegalStateException when the underlying
+            // view is gone or the node was already recycled by the time we call into it — a
+            // real race in the Accessibility API, not something we can fully prevent by
+            // checking first. Nothing here ran inside a coroutine, so nothing catches this on
+            // its own: an accessibility service has no foreground UI to crash into, so an
+            // uncaught exception silently kills the whole service process. The Settings toggle
+            // stays "on" (that flag is independent of whether the process is alive), so the
+            // user sees the Dashboard go inactive with no error and no way to tell why. See
+            // #125 — swallow and drop the event instead of taking the service down with it.
+            try { event?.source?.safeRecycle() } catch (_: Exception) {}
+        }
+    }
+
+    private fun handleAccessibilityEvent(event: AccessibilityEvent?) {
         if (event?.eventType != AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) return
         if (event.packageName?.toString() == packageName) return
         if (!::keyManager.isInitialized) return
@@ -299,7 +315,7 @@ class AssistantService : AccessibilityService() {
             // user to reinstall, which destroys every key, command and setting, and does not
             // address the usual cause (the KeyStore key being invalidated by a lock-screen
             // change, where re-adding the keys is enough). Both strings are already localized.
-            handler.post { Toast.makeText(applicationContext, getString(R.string.keys_keystore_error), Toast.LENGTH_LONG).show() }
+            handler.post { overlayToast.show(getString(R.string.keys_keystore_error)) }
             cancelWatchdog()
             isProcessing.set(false)
             recycleIfUnowned(source)
