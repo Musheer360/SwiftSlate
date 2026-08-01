@@ -173,13 +173,21 @@ jobs:
 
   build:
     name: Build Signed APK
-    needs: [version, lint, test]
+    needs: [version, lint, test, tag]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      # Check out the tag itself, not the branch tip. F-Droid (and anyone else verifying
+      # reproducibility) builds from the tagged commit and compares the result — including
+      # the vcsInfo AGP embeds in META-INF/version-control-info.textproto — against this
+      # release's APK. The `tag` job above creates the tag on the changelog commit, so
+      # checking out the branch here would build one commit behind what the tag names,
+      # and the two builds' vcsInfo would never agree. See #128.
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.version.outputs.tag }}
 
       - name: Set up JDK 21
         uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
@@ -267,9 +275,9 @@ jobs:
           path: app/build/outputs/apk/release/SwiftSlate-*.apk
           retention-days: 90
 
-  release:
-    name: Release
-    needs: [version, build]
+  tag:
+    name: Tag Release
+    needs: [version, lint, test]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -277,8 +285,8 @@ jobs:
       contents: write
     steps:
       # Defence in depth. The job-level `if` already restricts this to push events, but this
-      # job creates tags, pushes to master and publishes GitHub releases — if someone later
-      # loosens that condition, a pull request must fail loudly here rather than cut a release.
+      # job creates tags and pushes to master — if someone later loosens that condition, a
+      # pull request must fail loudly here rather than cut a release.
       - name: Guard — releases only from a master push
         shell: bash
         run: |
@@ -298,14 +306,7 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Download APK
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: SwiftSlate-${{ needs.version.outputs.tag }}
-          path: artifacts/
-
       - name: Generate changelog
-        id: changelog
         shell: bash
         env:
           TAG: ${{ needs.version.outputs.tag }}
@@ -359,6 +360,12 @@ jobs:
           # push to master retries cleanly because no tag was created.
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
+      # Tag the commit we are actually about to build, whichever one that is (the changelog
+      # commit above, or plain HEAD if that step was a no-op / this ref is already a tag).
+      # `build` and `release` check out this exact tag afterwards, so the APK they produce
+      # and the tree the tag names are always identical — the two must never diverge. See
+      # #128: they previously did, because the tag used to land on a commit created after
+      # the build had already run against the branch tip.
       - name: Create tag
         if: needs.version.outputs.create_tag == 'true'
         shell: bash
@@ -367,6 +374,34 @@ jobs:
         run: |
           git tag "$TAG"
           git push origin "$TAG"
+
+      - name: Upload changelog
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: changelog-${{ needs.version.outputs.tag }}
+          path: /tmp/changelog.md
+          retention-days: 1
+
+  release:
+    name: Release
+    needs: [version, tag, build]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download APK
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: SwiftSlate-${{ needs.version.outputs.tag }}
+          path: artifacts/
+
+      - name: Download changelog
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: changelog-${{ needs.version.outputs.tag }}
+          path: /tmp/
 
       - name: Write versionCode file for F-Droid auto-update
         shell: bash
@@ -460,7 +495,7 @@ jobs:
 
   notify-failure:
     name: Notify on Failure
-    needs: [version, lint, test, build, release]
+    needs: [version, lint, test, tag, build, release]
     if: failure() && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 5
