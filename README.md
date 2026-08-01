@@ -647,6 +647,7 @@ Preview builds are shrunk and non-debuggable like release builds, but signed wit
 
 - **Some apps use custom input fields** that don't support Android's standard text replacement APIs. SwiftSlate includes a clipboard-based fallback, but apps like **WeChat** and **Chrome's address bar** may still not work. Most standard text fields (messaging apps, email composers, notes, etc.) work fine.
 - **Some OEMs restrict accessibility services.** Certain manufacturers (e.g., OnePlus, Xiaomi) may hide or block third-party accessibility services in their settings UI. If SwiftSlate doesn't appear in your accessibility settings, check for a "Downloaded apps" or "Installed services" section, or try searching for it.
+- **Some banking apps refuse to open while any accessibility service is enabled**, including SwiftSlate. This is a security measure the bank's app controls entirely — it checks the OS's list of enabled accessibility services and blocks itself if that list isn't empty, regardless of which app is on it or what that app actually does. There's no manifest flag or API that lets a legitimate accessibility tool opt out of another app's own check, so this can't be fixed on SwiftSlate's end. Disable SwiftSlate's accessibility permission before opening the affected banking app, then re-enable it afterward.
 
 <br>
 
