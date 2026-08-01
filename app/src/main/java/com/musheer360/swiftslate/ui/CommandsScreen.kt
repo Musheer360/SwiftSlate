@@ -377,7 +377,14 @@ fun CommandsScreen(commandManager: CommandManager) {
                     SlateTextField(
                         value = trigger,
                         onValueChange = {
-                            if (it.length <= CommandManager.MAX_TRIGGER_LENGTH) trigger = it
+                            // take(), not a conditional guard: rejecting an over-limit value
+                            // outright leaves the platform's IME composing state (autocorrect,
+                            // predictive text, multi-char composition) pointing at text Compose
+                            // never accepted, which some keyboards resync from badly — the next
+                            // keystroke lands as a cursor move or a silently dropped edit
+                            // instead of a change. Truncating always accepts *some* update, so
+                            // Compose and the IME stay in sync. See #129.
+                            trigger = it.take(CommandManager.MAX_TRIGGER_LENGTH)
                             errorMessage = null
                         },
                         label = { Text(stringResource(R.string.commands_trigger_label, prefix)) },
@@ -387,7 +394,9 @@ fun CommandsScreen(commandManager: CommandManager) {
                     SlateTextField(
                         value = prompt,
                         onValueChange = {
-                            if (it.length <= CommandManager.MAX_PROMPT_LENGTH) prompt = it
+                            // See the trigger field's onValueChange above for why take() and
+                            // not a conditional guard.
+                            prompt = it.take(CommandManager.MAX_PROMPT_LENGTH)
                             errorMessage = null
                         },
                         label = { Text(if (selectedType == CommandType.AI) stringResource(R.string.commands_prompt_label) else stringResource(R.string.commands_replacement_label)) },
