@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.musheer360.swiftslate.R
+import com.musheer360.swiftslate.SwiftSlateApp
 import com.musheer360.swiftslate.api.GeminiClient
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import com.musheer360.swiftslate.manager.CommandManager
-import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.manager.StatsManager
 import com.musheer360.swiftslate.model.Command
 import com.musheer360.swiftslate.model.CommandType
@@ -47,7 +47,9 @@ class ProcessTextViewModel(
     // All lazy: each constructor touches SharedPreferences (and, for KeyManager, the
     // Keystore), and this class is built on the main thread. First touch of each happens
     // inside a Dispatchers.IO block.
-    private val keyManager by lazy { KeyManager(app) }
+    // KeyManager is the process-wide one: benched keys have to be shared with the accessibility
+    // service, or this flow re-tries keys that one already knows are rate-limited or invalid.
+    private val keyManager by lazy { (app as SwiftSlateApp).keyManager }
     private val commandManager by lazy { CommandManager(app) }
     private val statsManager by lazy { StatsManager(app) }
     private val geminiClient by lazy { GeminiClient() }

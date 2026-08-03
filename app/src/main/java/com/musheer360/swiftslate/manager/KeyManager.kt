@@ -47,8 +47,9 @@ class KeyManager internal constructor(
     /**
      * Ciphertext [cachedKeys] was decrypted from, so an expired TTL can be revalidated with a
      * string compare instead of another AndroidKeyStore round trip + AES-GCM decrypt. The TTL
-     * itself has to stay: the UI and the accessibility service hold separate KeyManager
-     * instances in one process, and this is how one notices the other's writes.
+     * used to be what let the UI's instance notice the accessibility service's writes; every
+     * caller now shares [com.musheer360.swiftslate.SwiftSlateApp.keyManager], so it is only a
+     * backstop against prefs changing underneath a single instance.
      */
     @Volatile
     private var cachedCipherText: String? = null

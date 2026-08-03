@@ -22,6 +22,7 @@ import com.musheer360.swiftslate.manager.StatsManager
 import com.musheer360.swiftslate.model.Command
 import com.musheer360.swiftslate.model.CommandType
 import com.musheer360.swiftslate.R
+import com.musheer360.swiftslate.SwiftSlateApp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -99,7 +100,7 @@ class AssistantService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        keyManager = KeyManager(applicationContext)
+        keyManager = (applicationContext as SwiftSlateApp).keyManager
         commandManager = CommandManager(applicationContext)
         statsManager = StatsManager(applicationContext)
         updateTriggers()
