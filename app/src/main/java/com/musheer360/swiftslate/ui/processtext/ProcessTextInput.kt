@@ -58,7 +58,7 @@ object ProcessTextInput {
         return Result.success(Selection(text = s, readOnly = readOnlyExtra ?: true))
     }
 
-    /** Ignore selections made only of invisible text, including bidi overrides such as RTLO. */
+    /** Zero-width and bidi/format characters: visually nothing, so not meaningful content. */
     private fun isInvisible(c: Char): Boolean =
         c == ZERO_WIDTH_SPACE || c == ZWNJ || c == ZWJ || c == WORD_JOINER ||
             c == SOFT_HYPHEN || c == BOM ||

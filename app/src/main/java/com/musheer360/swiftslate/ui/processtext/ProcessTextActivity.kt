@@ -9,11 +9,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,7 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +39,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -77,7 +71,7 @@ class ProcessTextActivity : ComponentActivity() {
             // Finish with a short toast rather than showing an empty sheet.
             val message = when ((e as? RejectedSelectionException)?.rejection) {
                 Rejection.TooLong -> getString(R.string.error_input_too_long)
-                Rejection.Missing, null -> getString(R.string.process_text_no_selection)
+                else -> getString(R.string.process_text_no_selection)
             }
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             finish()
@@ -125,19 +119,10 @@ private fun ProcessTextSheet(
     onCopy: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    LaunchedEffect(state) {
-        val preview = state as? UiState.Preview ?: return@LaunchedEffect
-        if (preview.canInsert) onInsert(preview.result)
-    }
-
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.background
-    ) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 24.dp)) {
             Text(
                 text = stringResource(R.string.process_text_title),
@@ -147,89 +132,65 @@ private fun ProcessTextSheet(
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
-            AnimatedContent(
-                targetState = state,
-                transitionSpec = {
-                    val direction = if (targetState is UiState.CommandList) {
-                        AnimatedContentTransitionScope.SlideDirection.Down
-                    } else {
-                        AnimatedContentTransitionScope.SlideDirection.Up
-                    }
-                    slideIntoContainer(direction, tween(250, easing = FastOutSlowInEasing)) togetherWith
-                        slideOutOfContainer(direction, tween(250, easing = FastOutSlowInEasing))
-                },
-                contentKey = { it::class },
-                label = "process_text_transition"
-            ) { currentState ->
-                ProcessTextContent(currentState, viewModel, onInsert, onCopy)
-            }
-        }
-    }
-}
-
-@Composable
-private fun ProcessTextContent(
-    state: UiState,
-    viewModel: ProcessTextViewModel,
-    onInsert: (String) -> Unit,
-    onCopy: (String) -> Unit
-) {
-    when (state) {
-        is UiState.CommandList -> CommandRows(state.commands) { viewModel.run(it) }
-        is UiState.Loading -> Row(verticalAlignment = Alignment.CenterVertically) {
-            CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-            Spacer(Modifier.width(12.dp))
-            Text(
-                text = state.command.trigger,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        is UiState.Preview -> {
-            Text(
-                text = state.result,
-                fontSize = 15.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .heightIn(max = 240.dp)
-                    .verticalScroll(rememberScrollState())
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                if (state.canInsert) {
-                    Button(onClick = { onInsert(state.result) }) {
-                        Text(stringResource(R.string.process_text_insert))
+            when (val s = state) {
+                is UiState.CommandList -> CommandRows(s.commands) { viewModel.run(it) }
+                is UiState.Loading -> Row(verticalAlignment = Alignment.CenterVertically) {
+                    CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        text = s.command.trigger,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                is UiState.Preview -> {
+                    Text(
+                        text = s.result,
+                        fontSize = 15.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .heightIn(max = 240.dp)
+                            .verticalScroll(rememberScrollState())
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        if (s.canInsert) {
+                            Button(onClick = { onInsert(s.result) }) {
+                                Text(stringResource(R.string.process_text_insert))
+                            }
+                        }
+                        // Always offered, editable or not: it is also the recovery path when a
+                        // host silently declines the replacement.
+                        OutlinedButton(onClick = { onCopy(s.result) }) {
+                            Text(stringResource(R.string.process_text_copy))
+                        }
+                        TextButton(onClick = { viewModel.backToCommands() }) {
+                            Text(stringResource(R.string.process_text_back))
+                        }
                     }
                 }
-                // Copy is also the fallback when a host refuses to replace the selection.
-                OutlinedButton(onClick = { onCopy(state.result) }) {
-                    Text(stringResource(R.string.process_text_copy))
-                }
-                TextButton(onClick = viewModel::backToCommands) {
-                    Text(stringResource(R.string.process_text_back))
-                }
-            }
-        }
-        is UiState.Error -> {
-            Text(
-                text = state.message,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.error
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                // Retry only when another request could help.
-                state.retry?.let { command ->
-                    Button(onClick = { viewModel.run(command) }) {
-                        Text(stringResource(R.string.process_text_retry))
+                is UiState.Error -> {
+                    Text(
+                        text = s.message,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // Offered only for failures a re-run could actually fix.
+                        s.retry?.let { command ->
+                            Button(onClick = { viewModel.run(command) }) {
+                                Text(stringResource(R.string.process_text_retry))
+                            }
+                        }
+                        TextButton(onClick = { viewModel.backToCommands() }) {
+                            Text(stringResource(R.string.process_text_back))
+                        }
                     }
-                }
-                TextButton(onClick = viewModel::backToCommands) {
-                    Text(stringResource(R.string.process_text_back))
                 }
             }
         }
