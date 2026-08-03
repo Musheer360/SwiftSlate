@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Nicio cheie API configurată</string>
     <string name="toast_all_keys_invalid">Toate cheile API sunt invalide. Verifică-ți cheile</string>
     <string name="toast_request_timed_out">Solicitarea a expirat</string>
+    <string name="process_text_title">Aplică o comandă</string>
+    <string name="process_text_insert">Inserează</string>
+    <string name="process_text_copy">Copiază</string>
+    <string name="process_text_back">Înapoi</string>
+    <string name="process_text_retry">Încearcă din nou</string>
+    <string name="process_text_copied">Copiat</string>
+    <string name="process_text_no_selection">Niciun text selectat</string>
+    <string name="process_text_no_commands">Nu există comenzi disponibile. Adaugă una în SwiftSlate.</string>
     <string name="toast_restore_failed">Textul original nu a putut fi restaurat</string>
     <string name="toast_nothing_to_undo">Nimic de anulat</string>
     <string name="toast_undo_failed">Anularea nu a reușit</string>

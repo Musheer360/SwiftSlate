@@ -99,6 +99,14 @@
     <string name="toast_no_keys">לא הוגדרו מפתחות API</string>
     <string name="toast_all_keys_invalid">כל מפתחות ה-API אינם תקינים. אנא בדוק את המפתחות שלך</string>
     <string name="toast_request_timed_out">תם הזמן הקצוב לבקשה</string>
+    <string name="process_text_title">החלת פקודה</string>
+    <string name="process_text_insert">הוספה</string>
+    <string name="process_text_copy">העתקה</string>
+    <string name="process_text_back">חזרה</string>
+    <string name="process_text_retry">ניסיון חוזר</string>
+    <string name="process_text_copied">הועתק</string>
+    <string name="process_text_no_selection">לא נבחר טקסט</string>
+    <string name="process_text_no_commands">אין פקודות זמינות. אפשר להוסיף פקודה ב-SwiftSlate.</string>
     <string name="toast_restore_failed">לא ניתן לשחזר את הטקסט המקורי</string>
     <string name="toast_nothing_to_undo">אין מה לבטל</string>
     <string name="toast_undo_failed">לא ניתן לבטל</string>

@@ -99,6 +99,14 @@
     <string name="toast_no_keys">لم يتم تكوين أي مفاتيح API</string>
     <string name="toast_all_keys_invalid">جميع مفاتيح API غير صالحة. يُرجى التحقق من مفاتيحك</string>
     <string name="toast_request_timed_out">انتهت مهلة الطلب</string>
+    <string name="process_text_title">تطبيق أمر</string>
+    <string name="process_text_insert">إدراج</string>
+    <string name="process_text_copy">نسخ</string>
+    <string name="process_text_back">رجوع</string>
+    <string name="process_text_retry">إعادة المحاولة</string>
+    <string name="process_text_copied">تم النسخ</string>
+    <string name="process_text_no_selection">لم يتم تحديد نص</string>
+    <string name="process_text_no_commands">لا توجد أوامر متاحة. أضف أمرًا في SwiftSlate.</string>
     <string name="toast_restore_failed">تعذّر استعادة النص الأصلي</string>
     <string name="toast_nothing_to_undo">لا يوجد شيء للتراجع عنه</string>
     <string name="toast_undo_failed">تعذّر التراجع</string>

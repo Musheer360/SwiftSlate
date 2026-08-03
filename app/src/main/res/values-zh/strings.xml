@@ -99,6 +99,14 @@
     <string name="toast_no_keys">未配置 API 密钥</string>
     <string name="toast_all_keys_invalid">所有 API 密钥均无效。请检查您的密钥</string>
     <string name="toast_request_timed_out">请求超时</string>
+    <string name="process_text_title">应用命令</string>
+    <string name="process_text_insert">插入</string>
+    <string name="process_text_copy">复制</string>
+    <string name="process_text_back">返回</string>
+    <string name="process_text_retry">重试</string>
+    <string name="process_text_copied">已复制</string>
+    <string name="process_text_no_selection">未选择文本</string>
+    <string name="process_text_no_commands">没有可用命令。请在 SwiftSlate 中添加一个命令。</string>
     <string name="toast_restore_failed">无法恢复原始文本</string>
     <string name="toast_nothing_to_undo">没有可撤销的内容</string>
     <string name="toast_undo_failed">无法撤销</string>

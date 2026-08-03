@@ -98,6 +98,14 @@
     <string name="toast_no_keys">कोई API कुंजी कॉन्फ़िगर नहीं है</string>
     <string name="toast_all_keys_invalid">सभी API कुंजियाँ अमान्य हैं। कृपया अपनी कुंजियाँ जाँचें</string>
     <string name="toast_request_timed_out">अनुरोध का समय समाप्त हो गया</string>
+    <string name="process_text_title">कोई कमांड लागू करें</string>
+    <string name="process_text_insert">सम्मिलित करें</string>
+    <string name="process_text_copy">कॉपी करें</string>
+    <string name="process_text_back">वापस</string>
+    <string name="process_text_retry">पुनः प्रयास करें</string>
+    <string name="process_text_copied">कॉपी किया गया</string>
+    <string name="process_text_no_selection">कोई टेक्स्ट चयनित नहीं है</string>
+    <string name="process_text_no_commands">कोई कमांड उपलब्ध नहीं है। SwiftSlate में एक कमांड जोड़ें।</string>
     <string name="toast_restore_failed">मूल टेक्स्ट पुनर्स्थापित नहीं किया जा सका</string>
     <string name="toast_nothing_to_undo">पूर्ववत करने के लिए कुछ नहीं है</string>
     <string name="toast_undo_failed">पूर्ववत नहीं किया जा सका</string>

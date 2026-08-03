@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Nincsenek API-kulcsok beállítva</string>
     <string name="toast_all_keys_invalid">Minden API-kulcs érvénytelen. Kérjük, ellenőrizze a kulcsait</string>
     <string name="toast_request_timed_out">A kérés időtúllépést okozott</string>
+    <string name="process_text_title">Parancs alkalmazása</string>
+    <string name="process_text_insert">Beszúrás</string>
+    <string name="process_text_copy">Másolás</string>
+    <string name="process_text_back">Vissza</string>
+    <string name="process_text_retry">Újra</string>
+    <string name="process_text_copied">Másolva</string>
+    <string name="process_text_no_selection">Nincs kijelölt szöveg</string>
+    <string name="process_text_no_commands">Nincs elérhető parancs. Adjon hozzá egyet a SwiftSlate-ben.</string>
     <string name="toast_restore_failed">Nem sikerült visszaállítani az eredeti szöveget</string>
     <string name="toast_nothing_to_undo">Nincs mit visszavonni</string>
     <string name="toast_undo_failed">Nem sikerült a visszavonás</string>

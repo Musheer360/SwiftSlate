@@ -99,6 +99,14 @@
     <string name="toast_no_keys">API キーが設定されていません</string>
     <string name="toast_all_keys_invalid">すべての API キーが無効です。キーを確認してください</string>
     <string name="toast_request_timed_out">リクエストがタイムアウトしました</string>
+    <string name="process_text_title">コマンドを適用</string>
+    <string name="process_text_insert">挿入</string>
+    <string name="process_text_copy">コピー</string>
+    <string name="process_text_back">戻る</string>
+    <string name="process_text_retry">再試行</string>
+    <string name="process_text_copied">コピーしました</string>
+    <string name="process_text_no_selection">テキストが選択されていません</string>
+    <string name="process_text_no_commands">使用できるコマンドがありません。SwiftSlate で追加してください。</string>
     <string name="toast_restore_failed">元のテキストを復元できませんでした</string>
     <string name="toast_nothing_to_undo">元に戻す操作がありません</string>
     <string name="toast_undo_failed">元に戻せませんでした</string>

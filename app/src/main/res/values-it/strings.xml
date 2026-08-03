@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Nessuna chiave API configurata</string>
     <string name="toast_all_keys_invalid">Tutte le chiavi API non sono valide. Controlla le tue chiavi</string>
     <string name="toast_request_timed_out">Richiesta scaduta</string>
+    <string name="process_text_title">Applica un comando</string>
+    <string name="process_text_insert">Inserisci</string>
+    <string name="process_text_copy">Copia</string>
+    <string name="process_text_back">Indietro</string>
+    <string name="process_text_retry">Riprova</string>
+    <string name="process_text_copied">Copiato</string>
+    <string name="process_text_no_selection">Nessun testo selezionato</string>
+    <string name="process_text_no_commands">Nessun comando disponibile. Aggiungine uno in SwiftSlate.</string>
     <string name="toast_restore_failed">Impossibile ripristinare il testo originale</string>
     <string name="toast_nothing_to_undo">Niente da annullare</string>
     <string name="toast_undo_failed">Impossibile annullare</string>
