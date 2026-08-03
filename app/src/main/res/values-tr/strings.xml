@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Tüm API anahtarları geçersiz. Lütfen anahtarlarınızı kontrol edin</string>
     <string name="toast_request_timed_out">İstek zaman aşımına uğradı</string>
     <string name="process_text_title">Bir komut uygula</string>
-    <string name="process_text_insert">Ekle</string>
+    <string name="process_text_replace">Değiştir</string>
     <string name="process_text_copy">Kopyala</string>
     <string name="process_text_back">Geri</string>
     <string name="process_text_retry">Tekrar dene</string>

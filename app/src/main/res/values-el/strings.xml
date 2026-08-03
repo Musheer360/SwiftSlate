@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Όλα τα κλειδιά API είναι μη έγκυρα. Παρακαλούμε ελέγξτε τα κλειδιά σας</string>
     <string name="toast_request_timed_out">Το αίτημα έληξε</string>
     <string name="process_text_title">Εφαρμογή εντολής</string>
-    <string name="process_text_insert">Εισαγωγή</string>
+    <string name="process_text_replace">Αντικατάσταση</string>
     <string name="process_text_copy">Αντιγραφή</string>
     <string name="process_text_back">Πίσω</string>
     <string name="process_text_retry">Δοκιμάστε ξανά</string>

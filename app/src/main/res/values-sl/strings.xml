@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Vsi ključi API so neveljavni. Preverite svoje ključe</string>
     <string name="toast_request_timed_out">Časovna omejitev zahteve je potekla</string>
     <string name="process_text_title">Uporabi ukaz</string>
-    <string name="process_text_insert">Vstavi</string>
+    <string name="process_text_replace">Zamenjaj</string>
     <string name="process_text_copy">Kopiraj</string>
     <string name="process_text_back">Nazaj</string>
     <string name="process_text_retry">Poskusi znova</string>

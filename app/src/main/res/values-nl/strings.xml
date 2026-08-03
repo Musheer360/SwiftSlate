@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Alle API-sleutels zijn ongeldig. Controleer uw sleutels</string>
     <string name="toast_request_timed_out">Aanvraag verlopen</string>
     <string name="process_text_title">Opdracht toepassen</string>
-    <string name="process_text_insert">Invoegen</string>
+    <string name="process_text_replace">Vervangen</string>
     <string name="process_text_copy">Kopiëren</string>
     <string name="process_text_back">Terug</string>
     <string name="process_text_retry">Opnieuw proberen</string>

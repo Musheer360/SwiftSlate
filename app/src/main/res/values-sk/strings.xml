@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Všetky kľúče API sú neplatné. Skontrolujte svoje kľúče</string>
     <string name="toast_request_timed_out">Vypršal časový limit požiadavky</string>
     <string name="process_text_title">Použiť príkaz</string>
-    <string name="process_text_insert">Vložiť</string>
+    <string name="process_text_replace">Nahradiť</string>
     <string name="process_text_copy">Kopírovať</string>
     <string name="process_text_back">Späť</string>
     <string name="process_text_retry">Skúsiť znova</string>

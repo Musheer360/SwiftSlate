@@ -101,7 +101,7 @@
 
     <!-- Text-selection (PROCESS_TEXT) flow -->
     <string name="process_text_title">Apply a command</string>
-    <string name="process_text_insert">Insert</string>
+    <string name="process_text_replace">Replace</string>
     <string name="process_text_copy">Copy</string>
     <string name="process_text_back">Back</string>
     <string name="process_text_retry">Retry</string>

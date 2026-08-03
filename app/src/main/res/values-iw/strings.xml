@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">כל מפתחות ה-API אינם תקינים. אנא בדוק את המפתחות שלך</string>
     <string name="toast_request_timed_out">תם הזמן הקצוב לבקשה</string>
     <string name="process_text_title">החלת פקודה</string>
-    <string name="process_text_insert">הוספה</string>
+    <string name="process_text_replace">החלפה</string>
     <string name="process_text_copy">העתקה</string>
     <string name="process_text_back">חזרה</string>
     <string name="process_text_retry">ניסיון חוזר</string>

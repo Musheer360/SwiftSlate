@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Visi API raktai negalioja. Patikrinkite savo raktus</string>
     <string name="toast_request_timed_out">Baigėsi užklausos laikas</string>
     <string name="process_text_title">Taikyti komandą</string>
-    <string name="process_text_insert">Įterpti</string>
+    <string name="process_text_replace">Pakeisti</string>
     <string name="process_text_copy">Kopijuoti</string>
     <string name="process_text_back">Atgal</string>
     <string name="process_text_retry">Bandyti dar kartą</string>

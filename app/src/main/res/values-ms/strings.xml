@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Semua kunci API tidak sah. Sila semak kunci anda</string>
     <string name="toast_request_timed_out">Permintaan tamat masa</string>
     <string name="process_text_title">Gunakan perintah</string>
-    <string name="process_text_insert">Sisip</string>
+    <string name="process_text_replace">Ganti</string>
     <string name="process_text_copy">Salin</string>
     <string name="process_text_back">Kembali</string>
     <string name="process_text_retry">Cuba lagi</string>

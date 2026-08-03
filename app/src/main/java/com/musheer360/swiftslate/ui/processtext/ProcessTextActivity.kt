@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -56,6 +57,8 @@ import com.musheer360.swiftslate.ui.theme.SwiftSlateTheme
  */
 class ProcessTextActivity : ComponentActivity() {
 
+    private var resultDelivered = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -82,7 +85,7 @@ class ProcessTextActivity : ComponentActivity() {
             SwiftSlateTheme {
                 ProcessTextSheet(
                     viewModel = viewModel(factory = factoryFor(application, selection)),
-                    onInsert = { text -> insertAndFinish(text) },
+                    onInsert = { text -> replaceAndFinish(selection.text, text) },
                     onCopy = { text -> copyAndFinish(text) },
                     onDismiss = { finish() }
                 )
@@ -94,8 +97,19 @@ class ProcessTextActivity : ComponentActivity() {
      * Hands the result back for the host to substitute into the selection. Whether it actually
      * does is the host's choice — Copy is always offered as the manual fallback.
      */
-    private fun insertAndFinish(text: String) {
-        setResult(RESULT_OK, Intent().putExtra(Intent.EXTRA_PROCESS_TEXT, text))
+    private fun replaceAndFinish(original: String, replacement: String) {
+        if (resultDelivered) return
+        resultDelivered = true
+        ProcessTextReplacementBridge.prepare(
+            original = original,
+            replacement = replacement,
+            sourcePackage = callingPackage,
+            now = SystemClock.elapsedRealtime()
+        )
+        setResult(
+            RESULT_OK,
+            Intent().putExtra(Intent.EXTRA_PROCESS_TEXT, replacement)
+        )
         finish()
     }
 
@@ -158,7 +172,7 @@ private fun ProcessTextSheet(
                     ) {
                         if (s.canInsert) {
                             Button(onClick = { onInsert(s.result) }) {
-                                Text(stringResource(R.string.process_text_insert))
+                                Text(stringResource(R.string.process_text_replace))
                             }
                         }
                         // Always offered, editable or not: it is also the recovery path when a

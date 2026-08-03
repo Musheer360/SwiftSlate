@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Alle API-nøkler er ugyldige. Kontroller nøklene dine</string>
     <string name="toast_request_timed_out">Forespørselen fikk tidsavbrudd</string>
     <string name="process_text_title">Bruk en kommando</string>
-    <string name="process_text_insert">Sett inn</string>
+    <string name="process_text_replace">Erstatt</string>
     <string name="process_text_copy">Kopier</string>
     <string name="process_text_back">Tilbake</string>
     <string name="process_text_retry">Prøv igjen</string>

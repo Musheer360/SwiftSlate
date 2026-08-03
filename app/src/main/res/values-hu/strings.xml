@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Minden API-kulcs érvénytelen. Kérjük, ellenőrizze a kulcsait</string>
     <string name="toast_request_timed_out">A kérés időtúllépést okozott</string>
     <string name="process_text_title">Parancs alkalmazása</string>
-    <string name="process_text_insert">Beszúrás</string>
+    <string name="process_text_replace">Csere</string>
     <string name="process_text_copy">Másolás</string>
     <string name="process_text_back">Vissza</string>
     <string name="process_text_retry">Újra</string>

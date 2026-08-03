@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Tutte le chiavi API non sono valide. Controlla le tue chiavi</string>
     <string name="toast_request_timed_out">Richiesta scaduta</string>
     <string name="process_text_title">Applica un comando</string>
-    <string name="process_text_insert">Inserisci</string>
+    <string name="process_text_replace">Sostituisci</string>
     <string name="process_text_copy">Copia</string>
     <string name="process_text_back">Indietro</string>
     <string name="process_text_retry">Riprova</string>

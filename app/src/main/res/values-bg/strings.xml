@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Всички API ключове са невалидни. Моля, проверете ключовете си</string>
     <string name="toast_request_timed_out">Времето за заявката изтече</string>
     <string name="process_text_title">Прилагане на команда</string>
-    <string name="process_text_insert">Вмъкване</string>
+    <string name="process_text_replace">Замяна</string>
     <string name="process_text_copy">Копиране</string>
     <string name="process_text_back">Назад</string>
     <string name="process_text_retry">Повторен опит</string>

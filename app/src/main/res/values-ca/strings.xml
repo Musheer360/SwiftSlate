@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Totes les claus API no són vàlides. Comprova les teves claus</string>
     <string name="toast_request_timed_out">La sol·licitud ha esgotat el temps d’espera</string>
     <string name="process_text_title">Aplica una ordre</string>
-    <string name="process_text_insert">Insereix</string>
+    <string name="process_text_replace">Substitueix</string>
     <string name="process_text_copy">Copia</string>
     <string name="process_text_back">Enrere</string>
     <string name="process_text_retry">Torna-ho a provar</string>

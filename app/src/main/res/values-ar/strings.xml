@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">جميع مفاتيح API غير صالحة. يُرجى التحقق من مفاتيحك</string>
     <string name="toast_request_timed_out">انتهت مهلة الطلب</string>
     <string name="process_text_title">تطبيق أمر</string>
-    <string name="process_text_insert">إدراج</string>
+    <string name="process_text_replace">استبدال</string>
     <string name="process_text_copy">نسخ</string>
     <string name="process_text_back">رجوع</string>
     <string name="process_text_retry">إعادة المحاولة</string>

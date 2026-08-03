@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">คีย์ API ทั้งหมดไม่ถูกต้อง โปรดตรวจสอบคีย์ของคุณ</string>
     <string name="toast_request_timed_out">คำขอหมดเวลา</string>
     <string name="process_text_title">ใช้คำสั่ง</string>
-    <string name="process_text_insert">แทรก</string>
+    <string name="process_text_replace">แทนที่</string>
     <string name="process_text_copy">คัดลอก</string>
     <string name="process_text_back">กลับ</string>
     <string name="process_text_retry">ลองอีกครั้ง</string>

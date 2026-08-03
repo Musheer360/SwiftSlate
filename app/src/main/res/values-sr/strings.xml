@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Сви API кључеви су неважећи. Проверите своје кључеве</string>
     <string name="toast_request_timed_out">Истекло је време захтева</string>
     <string name="process_text_title">Примени наредбу</string>
-    <string name="process_text_insert">Уметни</string>
+    <string name="process_text_replace">Замени</string>
     <string name="process_text_copy">Копирај</string>
     <string name="process_text_back">Назад</string>
     <string name="process_text_retry">Покушај поново</string>

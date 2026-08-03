@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -21,6 +22,9 @@ import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.manager.StatsManager
 import com.musheer360.swiftslate.model.Command
 import com.musheer360.swiftslate.model.CommandType
+import com.musheer360.swiftslate.ui.processtext.ProcessTextEdit
+import com.musheer360.swiftslate.ui.processtext.ProcessTextReplacementBridge
+import com.musheer360.swiftslate.ui.processtext.resolveProcessTextEdit
 import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.SwiftSlateApp
 import kotlinx.coroutines.CancellationException
@@ -167,13 +171,17 @@ class AssistantService : AccessibilityService() {
         if (event.packageName?.toString() == packageName) return
         if (!::keyManager.isInitialized) return
 
-        if (isProcessing.get()) return
         val source = event.source ?: return
         if (source.isPassword) {
             source.safeRecycle()
             return
         }
         val text = source.text?.toString() ?: run {
+            source.safeRecycle()
+            return
+        }
+        if (handlePendingProcessTextReplacement(event, source, text)) return
+        if (isProcessing.get()) {
             source.safeRecycle()
             return
         }
@@ -300,6 +308,73 @@ class AssistantService : AccessibilityService() {
                 processCommand(source, cleanText, command)
             }
         }
+    }
+
+    private fun handlePendingProcessTextReplacement(
+        event: AccessibilityEvent,
+        source: AccessibilityNodeInfo,
+        afterText: String
+    ): Boolean {
+        val request = ProcessTextReplacementBridge.current(SystemClock.elapsedRealtime())
+            ?: return false
+        if (request.sourcePackage != null &&
+            event.packageName?.toString() != request.sourcePackage) {
+            return false
+        }
+        val beforeText = event.beforeText?.toString() ?: return false
+        val edit = resolveProcessTextEdit(
+            beforeText = beforeText,
+            afterText = afterText,
+            fromIndex = event.fromIndex,
+            removedCount = event.removedCount,
+            addedCount = event.addedCount,
+            request = request
+        )
+        if (edit == ProcessTextEdit.Unrelated ||
+            !ProcessTextReplacementBridge.consume(request)) {
+            return false
+        }
+        if (edit == ProcessTextEdit.Replaced) {
+            source.safeRecycle()
+            return true
+        }
+
+        edit as ProcessTextEdit.Appended
+        if (!isProcessing.compareAndSet(false, true)) {
+            source.safeRecycle()
+            return true
+        }
+        startWatchdog()
+        cancelPendingProcessingReset()
+        currentJob = serviceScope.launch {
+            val thisJob = coroutineContext[Job]
+            try {
+                val replaced = replaceText(source, edit.correctedText)
+                if (replaced) {
+                    lastOriginalText = beforeText
+                    lastUndoSourceId = sourceId(source)
+                } else {
+                    withContext(Dispatchers.Main) {
+                        showToast(getString(R.string.toast_replace_failed))
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                withContext(Dispatchers.Main) {
+                    showToast(getString(R.string.toast_replace_failed))
+                }
+            } finally {
+                withContext(NonCancellable + Dispatchers.Main) {
+                    if (currentJob === thisJob) {
+                        cancelWatchdog()
+                        scheduleProcessingReset()
+                    }
+                    recycleIfUnowned(source)
+                }
+            }
+        }
+        return true
     }
 
     private fun processCommand(source: AccessibilityNodeInfo, text: String, command: Command) {

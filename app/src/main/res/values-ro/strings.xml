@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Toate cheile API sunt invalide. Verifică-ți cheile</string>
     <string name="toast_request_timed_out">Solicitarea a expirat</string>
     <string name="process_text_title">Aplică o comandă</string>
-    <string name="process_text_insert">Inserează</string>
+    <string name="process_text_replace">Înlocuiește</string>
     <string name="process_text_copy">Copiază</string>
     <string name="process_text_back">Înapoi</string>
     <string name="process_text_retry">Încearcă din nou</string>

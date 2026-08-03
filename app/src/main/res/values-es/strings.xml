@@ -99,7 +99,7 @@
     <string name="toast_all_keys_invalid">Todas las claves API no son válidas. Comprueba tus claves</string>
     <string name="toast_request_timed_out">Se agotó el tiempo de espera de la solicitud</string>
     <string name="process_text_title">Aplicar un comando</string>
-    <string name="process_text_insert">Insertar</string>
+    <string name="process_text_replace">Reemplazar</string>
     <string name="process_text_copy">Copiar</string>
     <string name="process_text_back">Atrás</string>
     <string name="process_text_retry">Reintentar</string>

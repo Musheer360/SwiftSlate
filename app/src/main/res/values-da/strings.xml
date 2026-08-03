@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Alle API-nøgler er ugyldige. Tjek venligst dine nøgler</string>
     <string name="toast_request_timed_out">Anmodningen fik timeout</string>
     <string name="process_text_title">Anvend en kommando</string>
-    <string name="process_text_insert">Indsæt</string>
+    <string name="process_text_replace">Erstat</string>
     <string name="process_text_copy">Kopiér</string>
     <string name="process_text_back">Tilbage</string>
     <string name="process_text_retry">Prøv igen</string>

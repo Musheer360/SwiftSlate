@@ -99,7 +99,7 @@
     <string name="toast_all_keys_invalid">Alle API-Schlüssel sind ungültig. Bitte überprüfe deine Schlüssel</string>
     <string name="toast_request_timed_out">Zeitüberschreitung der Anfrage</string>
     <string name="process_text_title">Befehl anwenden</string>
-    <string name="process_text_insert">Einfügen</string>
+    <string name="process_text_replace">Ersetzen</string>
     <string name="process_text_copy">Kopieren</string>
     <string name="process_text_back">Zurück</string>
     <string name="process_text_retry">Erneut versuchen</string>

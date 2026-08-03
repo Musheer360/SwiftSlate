@@ -99,7 +99,7 @@
     <string name="toast_all_keys_invalid">सभी API कुंजियाँ अमान्य हैं। कृपया अपनी कुंजियाँ जाँचें</string>
     <string name="toast_request_timed_out">अनुरोध का समय समाप्त हो गया</string>
     <string name="process_text_title">कोई कमांड लागू करें</string>
-    <string name="process_text_insert">सम्मिलित करें</string>
+    <string name="process_text_replace">बदलें</string>
     <string name="process_text_copy">कॉपी करें</string>
     <string name="process_text_back">वापस</string>
     <string name="process_text_retry">पुनः प्रयास करें</string>

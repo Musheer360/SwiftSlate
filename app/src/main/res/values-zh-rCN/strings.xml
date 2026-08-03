@@ -99,7 +99,7 @@
     <string name="toast_all_keys_invalid">所有 API 密钥均无效。请检查您的密钥</string>
     <string name="toast_request_timed_out">请求超时</string>
     <string name="process_text_title">应用命令</string>
-    <string name="process_text_insert">插入</string>
+    <string name="process_text_replace">替换</string>
     <string name="process_text_copy">复制</string>
     <string name="process_text_back">返回</string>
     <string name="process_text_retry">重试</string>

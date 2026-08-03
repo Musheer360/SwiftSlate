@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Wszystkie klucze API są nieprawidłowe. Sprawdź swoje klucze</string>
     <string name="toast_request_timed_out">Upłynął limit czasu żądania</string>
     <string name="process_text_title">Zastosuj polecenie</string>
-    <string name="process_text_insert">Wstaw</string>
+    <string name="process_text_replace">Zastąp</string>
     <string name="process_text_copy">Kopiuj</string>
     <string name="process_text_back">Wstecz</string>
     <string name="process_text_retry">Spróbuj ponownie</string>

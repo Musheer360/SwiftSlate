@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">모든 API 키가 유효하지 않습니다. 키를 확인하세요</string>
     <string name="toast_request_timed_out">요청 시간이 초과되었습니다</string>
     <string name="process_text_title">명령 적용</string>
-    <string name="process_text_insert">삽입</string>
+    <string name="process_text_replace">바꾸기</string>
     <string name="process_text_copy">복사</string>
     <string name="process_text_back">뒤로</string>
     <string name="process_text_retry">다시 시도</string>

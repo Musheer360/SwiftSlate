@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Усі ключі API недійсні. Будь ласка, перевірте свої ключі</string>
     <string name="toast_request_timed_out">Час очікування запиту вичерпано</string>
     <string name="process_text_title">Застосувати команду</string>
-    <string name="process_text_insert">Вставити</string>
+    <string name="process_text_replace">Замінити</string>
     <string name="process_text_copy">Копіювати</string>
     <string name="process_text_back">Назад</string>
     <string name="process_text_retry">Спробувати ще раз</string>

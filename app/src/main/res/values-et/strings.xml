@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Kõik API võtmed on kehtetud. Palun kontrolli oma võtmeid</string>
     <string name="toast_request_timed_out">Päring aegus</string>
     <string name="process_text_title">Rakenda käsku</string>
-    <string name="process_text_insert">Sisesta</string>
+    <string name="process_text_replace">Asenda</string>
     <string name="process_text_copy">Kopeeri</string>
     <string name="process_text_back">Tagasi</string>
     <string name="process_text_retry">Proovi uuesti</string>

@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">Tất cả khóa API đều không hợp lệ. Vui lòng kiểm tra khóa của bạn</string>
     <string name="toast_request_timed_out">Yêu cầu đã hết thời gian chờ</string>
     <string name="process_text_title">Áp dụng lệnh</string>
-    <string name="process_text_insert">Chèn</string>
+    <string name="process_text_replace">Thay thế</string>
     <string name="process_text_copy">Sao chép</string>
     <string name="process_text_back">Quay lại</string>
     <string name="process_text_retry">Thử lại</string>

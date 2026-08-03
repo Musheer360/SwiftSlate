@@ -100,7 +100,7 @@
     <string name="toast_all_keys_invalid">همه کلیدهای API نامعتبر هستند. لطفاً کلیدهای خود را بررسی کنید</string>
     <string name="toast_request_timed_out">مهلت درخواست به پایان رسید</string>
     <string name="process_text_title">اعمال یک فرمان</string>
-    <string name="process_text_insert">درج</string>
+    <string name="process_text_replace">جایگزینی</string>
     <string name="process_text_copy">کپی</string>
     <string name="process_text_back">بازگشت</string>
     <string name="process_text_retry">تلاش دوباره</string>
