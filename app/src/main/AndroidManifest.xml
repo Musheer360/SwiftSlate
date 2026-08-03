@@ -47,6 +47,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/*" />
             </intent-filter>
+            <!-- Makes this package visible to custom editors that omit a PROCESS_TEXT query. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="https" />
+            </intent-filter>
         </activity>
 
         <service
