@@ -50,6 +50,7 @@
             <!-- Makes this package visible to custom editors that omit a PROCESS_TEXT query. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" />
             </intent-filter>
         </activity>
