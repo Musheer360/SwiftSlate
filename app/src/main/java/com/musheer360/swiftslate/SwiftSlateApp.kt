@@ -7,10 +7,22 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.worker.UpdateCheckWorker
 import java.util.concurrent.TimeUnit
 
 class SwiftSlateApp : Application() {
+    /**
+     * The one KeyManager for the process. Rate-limit benching, invalid-key marks and the
+     * round-robin cursor are in-memory only, so a second instance starts blind: it re-tries keys
+     * another instance already knows are benched, and never learns what that one learned. It also
+     * breaks [KeyManager.addKey]'s un-benching — re-adding a key in the UI cleared the invalid
+     * mark on the UI's instance while the accessibility service kept benching it for the full TTL.
+     *
+     * Lazy so the Keystore round trip in the constructor stays off Application.onCreate.
+     */
+    val keyManager: KeyManager by lazy { KeyManager(this) }
+
     override fun onCreate() {
         super.onCreate()
         // Pre-warm SharedPreferences — triggers async disk load so they're

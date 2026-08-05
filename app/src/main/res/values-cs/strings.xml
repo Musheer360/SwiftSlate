@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Nejsou nakonfigurovány žádné API klíče</string>
     <string name="toast_all_keys_invalid">Všechny API klíče jsou neplatné. Zkontrolujte prosím své klíče</string>
     <string name="toast_request_timed_out">Časový limit požadavku vypršel</string>
+    <string name="process_text_title">Použít příkaz</string>
+    <string name="process_text_replace">Nahradit</string>
+    <string name="process_text_copy">Kopírovat</string>
+    <string name="process_text_back">Zpět</string>
+    <string name="process_text_retry">Zkusit znovu</string>
+    <string name="process_text_copied">Zkopírováno</string>
+    <string name="process_text_no_selection">Není vybrán žádný text</string>
+    <string name="process_text_no_commands">Nejsou k dispozici žádné příkazy. Přidejte jeden ve SwiftSlate.</string>
     <string name="toast_restore_failed">Původní text se nepodařilo obnovit</string>
     <string name="toast_nothing_to_undo">Není co vrátit zpět</string>
     <string name="toast_undo_failed">Nepodařilo se vrátit zpět</string>

@@ -5,4 +5,20 @@
         <item name="android:navigationBarColor">#FCFCFC</item>
         <item name="android:windowBackground">#FCFCFC</item>
     </style>
+
+    <!--
+        Translucent host window for the text-selection bottom sheet. Only the window chrome is
+        themed here; the sheet content is Compose and follows light/dark itself, which is why
+        there is no values-night counterpart.
+    -->
+    <style name="Theme.SwiftSlate.Dialog" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- ModalBottomSheet draws its own scrim; a window dim on top of it double-darkens. -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 </resources>

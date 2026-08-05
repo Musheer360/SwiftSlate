@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Tidak ada kunci API yang dikonfigurasi</string>
     <string name="toast_all_keys_invalid">Semua kunci API tidak valid. Harap periksa kunci Anda</string>
     <string name="toast_request_timed_out">Permintaan kehabisan waktu</string>
+    <string name="process_text_title">Terapkan perintah</string>
+    <string name="process_text_replace">Ganti</string>
+    <string name="process_text_copy">Salin</string>
+    <string name="process_text_back">Kembali</string>
+    <string name="process_text_retry">Coba lagi</string>
+    <string name="process_text_copied">Disalin</string>
+    <string name="process_text_no_selection">Tidak ada teks yang dipilih</string>
+    <string name="process_text_no_commands">Tidak ada perintah yang tersedia. Tambahkan satu di SwiftSlate.</string>
     <string name="toast_restore_failed">Tidak dapat memulihkan teks asli</string>
     <string name="toast_nothing_to_undo">Tidak ada yang bisa dibatalkan</string>
     <string name="toast_undo_failed">Tidak dapat membatalkan</string>

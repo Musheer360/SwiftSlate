@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Nema konfiguriranih API ključeva</string>
     <string name="toast_all_keys_invalid">Svi API ključevi su nevažeći. Provjerite svoje ključeve</string>
     <string name="toast_request_timed_out">Isteklo je vrijeme zahtjeva</string>
+    <string name="process_text_title">Primijeni naredbu</string>
+    <string name="process_text_replace">Zamijeni</string>
+    <string name="process_text_copy">Kopiraj</string>
+    <string name="process_text_back">Natrag</string>
+    <string name="process_text_retry">Pokušaj ponovno</string>
+    <string name="process_text_copied">Kopirano</string>
+    <string name="process_text_no_selection">Nije odabran tekst</string>
+    <string name="process_text_no_commands">Nema dostupnih naredbi. Dodajte jednu u SwiftSlate.</string>
     <string name="toast_restore_failed">Nije moguće vratiti izvorni tekst</string>
     <string name="toast_nothing_to_undo">Ništa za poništiti</string>
     <string name="toast_undo_failed">Poništavanje nije uspjelo</string>

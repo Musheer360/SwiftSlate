@@ -8,27 +8,25 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.view.HapticFeedbackConstants
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import com.musheer360.swiftslate.api.ApiClientUtils
-import com.musheer360.swiftslate.api.ApiError
-import com.musheer360.swiftslate.api.ApiException
 import com.musheer360.swiftslate.api.GeminiClient
-import com.musheer360.swiftslate.api.GenerateResult
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.manager.StatsManager
 import com.musheer360.swiftslate.model.Command
 import com.musheer360.swiftslate.model.CommandType
-import com.musheer360.swiftslate.model.PrefKeys
-import com.musheer360.swiftslate.provider.Providers
-import com.musheer360.swiftslate.provider.Transport
+import com.musheer360.swiftslate.ui.processtext.ProcessTextEdit
+import com.musheer360.swiftslate.ui.processtext.ProcessTextReplacementBridge
+import com.musheer360.swiftslate.ui.processtext.resolveProcessTextEdit
 import com.musheer360.swiftslate.R
+import com.musheer360.swiftslate.SwiftSlateApp
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -100,14 +98,13 @@ class AssistantService : AccessibilityService() {
 
     private companion object {
         const val TRIGGER_REFRESH_INTERVAL_MS = 5_000L
-        const val DEFAULT_TEMPERATURE = 0.5
         const val PROCESSING_WATCHDOG_MS = 120_000L
         val SPINNER_FRAMES = arrayOf("◐", "◓", "◑", "◒")
     }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        keyManager = KeyManager(applicationContext)
+        keyManager = (applicationContext as SwiftSlateApp).keyManager
         commandManager = CommandManager(applicationContext)
         statsManager = StatsManager(applicationContext)
         updateTriggers()
@@ -174,13 +171,17 @@ class AssistantService : AccessibilityService() {
         if (event.packageName?.toString() == packageName) return
         if (!::keyManager.isInitialized) return
 
-        if (isProcessing.get()) return
         val source = event.source ?: return
         if (source.isPassword) {
             source.safeRecycle()
             return
         }
         val text = source.text?.toString() ?: run {
+            source.safeRecycle()
+            return
+        }
+        if (handlePendingProcessTextReplacement(event, source, text)) return
+        if (isProcessing.get()) {
             source.safeRecycle()
             return
         }
@@ -309,6 +310,73 @@ class AssistantService : AccessibilityService() {
         }
     }
 
+    private fun handlePendingProcessTextReplacement(
+        event: AccessibilityEvent,
+        source: AccessibilityNodeInfo,
+        afterText: String
+    ): Boolean {
+        val request = ProcessTextReplacementBridge.current(SystemClock.elapsedRealtime())
+            ?: return false
+        if (request.sourcePackage != null &&
+            event.packageName?.toString() != request.sourcePackage) {
+            return false
+        }
+        val beforeText = event.beforeText?.toString() ?: return false
+        val edit = resolveProcessTextEdit(
+            beforeText = beforeText,
+            afterText = afterText,
+            fromIndex = event.fromIndex,
+            removedCount = event.removedCount,
+            addedCount = event.addedCount,
+            request = request
+        )
+        if (edit == ProcessTextEdit.Unrelated ||
+            !ProcessTextReplacementBridge.consume(request)) {
+            return false
+        }
+        if (edit == ProcessTextEdit.Replaced) {
+            source.safeRecycle()
+            return true
+        }
+
+        edit as ProcessTextEdit.Appended
+        if (!isProcessing.compareAndSet(false, true)) {
+            source.safeRecycle()
+            return true
+        }
+        startWatchdog()
+        cancelPendingProcessingReset()
+        currentJob = serviceScope.launch {
+            val thisJob = coroutineContext[Job]
+            try {
+                val replaced = replaceText(source, edit.correctedText)
+                if (replaced) {
+                    lastOriginalText = beforeText
+                    lastUndoSourceId = sourceId(source)
+                } else {
+                    withContext(Dispatchers.Main) {
+                        showToast(getString(R.string.toast_replace_failed))
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                withContext(Dispatchers.Main) {
+                    showToast(getString(R.string.toast_replace_failed))
+                }
+            } finally {
+                withContext(NonCancellable + Dispatchers.Main) {
+                    if (currentJob === thisJob) {
+                        cancelWatchdog()
+                        scheduleProcessingReset()
+                    }
+                    recycleIfUnowned(source)
+                }
+            }
+        }
+        return true
+    }
+
     private fun processCommand(source: AccessibilityNodeInfo, text: String, command: Command) {
         if (!keyManager.keystoreAvailable) {
             // keys_keystore_error rather than toast_keystore_unavailable: the latter tells the
@@ -324,181 +392,52 @@ class AssistantService : AccessibilityService() {
 
         currentJob = serviceScope.launch {
             val thisJob = coroutineContext[Job]
-            val prefs = applicationContext.getSharedPreferences("settings", Context.MODE_PRIVATE)
-            val provider = Providers.forType(prefs.getString(PrefKeys.PROVIDER_TYPE, null))
-            val model = provider.sanitizeModel(prefs.getString(provider.modelPrefKey, provider.defaultModel))
-            val endpoint = provider.resolveEndpoint(prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "")
-
-            if (!provider.isConfigured(model, endpoint)) {
-                showToast(getString(R.string.toast_custom_not_configured))
-                withContext(NonCancellable + Dispatchers.Main) {
-                    cancelWatchdog()
-                    scheduleProcessingReset()
-                    recycleIfUnowned(source)
-                }
-                return@launch
-            }
-            val temperature = prefs.getFloat(PrefKeys.TEMPERATURE, DEFAULT_TEMPERATURE.toFloat()).toDouble()
-            val useStructuredOutput = run {
-                val disabledAt = prefs.getLong(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT, 0L)
-                System.currentTimeMillis() - disabledAt > 86_400_000L // re-try after 24h
-            }
-
             val originalText = text
             var spinnerJob: Job? = null
             try {
-                withTimeout(90_000) {
-                    val maxAttempts = keyManager.getKeys().size.coerceAtLeast(1)
-                    var lastErrorMsg: String? = null
-                    var lastErrorWasRateLimit = false
-                    var lastErrorWasPermission = false
-                    var lastFailedKey: String? = null
-                    var spinnerEverStarted = false
-                    val triedKeys = mutableSetOf<String>()
-                    var succeeded = false
+                val outcome = withTimeout(90_000) {
+                    runTextCommand(
+                        applicationContext, keyManager, client, openAIClient,
+                        command.prompt, text
+                    ) { spinnerJob = startInlineSpinner(source, originalText) }
+                }
+                // From the first attempt onward the field holds the spinner glyph instead of the
+                // user's text, so every outcome below starts by taking it back out. No spinner
+                // means no usable key was ever found and the field was never touched — a failed
+                // no-op write must not produce a "could not restore your text" prefix.
+                val fieldWasAltered = spinnerJob != null
+                spinnerJob?.cancelAndJoin()
+                spinnerJob = null
 
-                    for (attempt in 0 until maxAttempts) {
-                        val key = keyManager.getNextKey(triedKeys)
-                        if (key == null) break
-                        triedKeys.add(key)
-
-                        if (spinnerJob == null) {
-                            spinnerJob = startInlineSpinner(source, originalText)
-                            spinnerEverStarted = true
-                        }
-
-                        val result = when (provider.transport) {
-                            Transport.OPENAI_COMPAT -> openAIClient.generate(
-                                command.prompt, text, key, model, temperature, endpoint,
-                                useJsonObjectMode = provider.useJsonObjectMode(useStructuredOutput),
-                                extraParams = provider.reasoningParams(model))
-                            Transport.GEMINI_NATIVE -> client.generate(
-                                command.prompt, text, key, model, temperature, useStructuredOutput,
-                                thinkingLevel = provider.thinkingLevel(model))
-                        }
-
-                        if (result.isSuccess) {
-                            spinnerJob.cancelAndJoin()
-                            spinnerJob = null
-                            val generateResult = result.getOrThrow()
-
-                            if (ApiClientUtils.isModelRefusal(generateResult.text)) {
-                                replaceText(source, originalText)
-                                performHapticFeedback(HapticFeedbackConstants.REJECT)
-                                showToast(getString(R.string.error_safety_blocked))
-                                succeeded = true
-                                break
-                            }
-
-                            // The truncation note is appended here, not in the client: the
-                            // clients have no Context, so they used to splice an English
-                            // "[Note: Response may be truncated]" into the user's field
-                            // regardless of locale.
-                            val outputText = if (generateResult.truncated) {
-                                generateResult.text + "\n\n" + getString(R.string.note_response_truncated)
-                            } else {
-                                generateResult.text
-                            }
-
-                            if (!replaceText(source, outputText)) {
-                                // The field rejected the write. Restore the user's text (the
-                                // spinner glyph is still in it), and don't record an undo point
-                                // or a CONFIRM haptic for text that never landed.
-                                replaceText(source, originalText)
-                                performHapticFeedback(HapticFeedbackConstants.REJECT)
-                                showToast(getString(R.string.toast_replace_failed))
-                                succeeded = true // suppress the generic failure message below
-                                break
-                            }
+                when (outcome) {
+                    is CommandOutcome.Success -> {
+                        if (!replaceText(source, outcome.text)) {
+                            // The field rejected the write. Restore the user's text, and don't
+                            // record an undo point or a CONFIRM haptic for text that never landed.
+                            replaceText(source, originalText)
+                            performHapticFeedback(HapticFeedbackConstants.REJECT)
+                            showToast(getString(R.string.toast_replace_failed))
+                        } else {
                             lastOriginalText = originalText
                             lastUndoSourceId = sourceId(source)
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                            if (generateResult.structuredOutputFailed) {
-                                prefs.edit().putLong(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT, System.currentTimeMillis()).apply()
-                            }
-                            succeeded = true
                             statsManager.recordUsage(command.trigger)
-                            break
-                        }
-
-                        val msg = result.exceptionOrNull()?.message ?: ""
-                        lastErrorMsg = msg
-                        val apiError = (result.exceptionOrNull() as? ApiException)?.apiError
-
-                        when (apiError) {
-                            is ApiError.RateLimit -> {
-                                lastErrorWasRateLimit = true
-                                val seconds = apiError.retryAfterSeconds?.toLong() ?: 60
-                                keyManager.reportRateLimit(key, seconds)
-                            }
-                            is ApiError.RequestTooLarge -> {
-                                lastErrorWasRateLimit = false
-                                break // Fail fast: TPM budget is per org/account, key rotation won't help
-                            }
-                            is ApiError.InvalidKey -> {
-                                lastErrorWasRateLimit = false
-                                lastFailedKey = key
-                                // Distinguish "this key is bad" from "this key may not use this
-                                // model" (both arrive as 401/403) so the final message can be
-                                // truthful about which one the user should go fix.
-                                val m = msg.lowercase(java.util.Locale.ROOT)
-                                lastErrorWasPermission = m.contains("permission") ||
-                                    m.contains("does not have access") || m.contains("not been used in project")
-                                keyManager.markInvalid(key)
-                            }
-                            is ApiError.ServerError -> {
-                                lastErrorWasRateLimit = false
-                                continue // 5xx — try next key
-                            }
-                            else -> {
-                                // Non-retryable. Clear the flag so a 400 arriving after an earlier
-                                // 429 is not reported as a rate limit with a bogus countdown.
-                                lastErrorWasRateLimit = false
-                                break
-                            }
                         }
                     }
-
-                    if (!succeeded) {
-                        spinnerJob?.cancelAndJoin()
-                        spinnerJob = null
-                        // Only restore when the field was actually altered: with no usable keys
-                        // no spinner ever ran, so a failed no-op write must not produce a
-                        // "could not restore your text" prefix.
-                        val fieldWasAltered = spinnerEverStarted
+                    is CommandOutcome.Refusal -> {
+                        replaceText(source, originalText)
+                        performHapticFeedback(HapticFeedbackConstants.REJECT)
+                        showToast(getString(R.string.error_safety_blocked))
+                    }
+                    // Nothing was sent, so there is nothing to restore.
+                    is CommandOutcome.Unavailable -> showToast(outcome.message)
+                    is CommandOutcome.Failure -> {
                         val restoredOk = !fieldWasAltered || replaceText(source, originalText)
                         performHapticFeedback(HapticFeedbackConstants.REJECT)
-                        val restorePrefix = if (restoredOk) "" else getString(R.string.toast_restore_failed) + "\n"
-                        // Prefer the message that carries the actual wait time. It used to be
-                        // reachable only when nothing had been attempted, so the request that
-                        // *discovered* the rate limit showed the vague "Rate limited. Try again
-                        // shortly." and only a later request showed the seconds — the useful
-                        // message lost the common path. Gated on the last error actually being a
-                        // rate limit, so an unrelated failure still reports its own cause even
-                        // when some other key happens to be cooling down.
-                        val waitMs = keyManager.getShortestWaitTimeMs()
-                        if (waitMs != null && (lastErrorMsg == null || lastErrorWasRateLimit)) {
-                            val waitSec = ((waitMs + 999) / 1000).coerceAtLeast(1)
-                            showToast(restorePrefix + getString(R.string.toast_key_rate_limited, waitSec))
-                        } else if (lastErrorWasPermission) {
-                            // Must precede the generic branch: lastErrorMsg is never null once a
-                            // request was attempted, so this was unreachable below it. A 403 is
-                            // usually the selected model not being available to the project
-                            // rather than bad keys, so don't send the user to check good keys.
-                            showToast(restorePrefix + getString(R.string.error_no_model_access))
-                        } else if (lastErrorMsg != null) {
-                            val mapped = mapErrorMessage(lastErrorMsg)
-                            if (mapped == getString(R.string.error_invalid_key) && keyManager.getKeys().size > 1 && lastFailedKey != null) {
-                                val hint = "••••" + lastFailedKey.takeLast(4)
-                                showToast(restorePrefix + getString(R.string.error_invalid_key_with_hint, hint))
-                            } else {
-                                showToast(restorePrefix + mapped)
-                            }
-                        } else if (keyManager.getKeys().isEmpty()) {
-                            showToast(restorePrefix + getString(R.string.toast_no_keys))
-                        } else {
-                            showToast(restorePrefix + getString(R.string.toast_all_keys_invalid))
-                        }
+                        showToast(
+                            if (restoredOk) outcome.message
+                            else getString(R.string.toast_restore_failed) + "\n" + outcome.message
+                        )
                     }
                 }
             } catch (e: TimeoutCancellationException) {

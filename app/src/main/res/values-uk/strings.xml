@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Ключі API не налаштовано</string>
     <string name="toast_all_keys_invalid">Усі ключі API недійсні. Будь ласка, перевірте свої ключі</string>
     <string name="toast_request_timed_out">Час очікування запиту вичерпано</string>
+    <string name="process_text_title">Застосувати команду</string>
+    <string name="process_text_replace">Замінити</string>
+    <string name="process_text_copy">Копіювати</string>
+    <string name="process_text_back">Назад</string>
+    <string name="process_text_retry">Спробувати ще раз</string>
+    <string name="process_text_copied">Скопійовано</string>
+    <string name="process_text_no_selection">Текст не вибрано</string>
+    <string name="process_text_no_commands">Немає доступних команд. Додайте команду в SwiftSlate.</string>
     <string name="toast_restore_failed">Не вдалося відновити оригінальний текст</string>
     <string name="toast_nothing_to_undo">Немає чого скасовувати</string>
     <string name="toast_undo_failed">Не вдалося скасувати</string>

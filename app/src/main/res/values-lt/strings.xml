@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Nesukonfigūruota jokių API raktų</string>
     <string name="toast_all_keys_invalid">Visi API raktai negalioja. Patikrinkite savo raktus</string>
     <string name="toast_request_timed_out">Baigėsi užklausos laikas</string>
+    <string name="process_text_title">Taikyti komandą</string>
+    <string name="process_text_replace">Pakeisti</string>
+    <string name="process_text_copy">Kopijuoti</string>
+    <string name="process_text_back">Atgal</string>
+    <string name="process_text_retry">Bandyti dar kartą</string>
+    <string name="process_text_copied">Nukopijuota</string>
+    <string name="process_text_no_selection">Nepasirinktas tekstas</string>
+    <string name="process_text_no_commands">Nėra galimų komandų. Pridėkite komandą programoje „SwiftSlate“.</string>
     <string name="toast_restore_failed">Nepavyko atkurti pradinio teksto</string>
     <string name="toast_nothing_to_undo">Nėra ką anuliuoti</string>
     <string name="toast_undo_failed">Nepavyko anuliuoti</string>

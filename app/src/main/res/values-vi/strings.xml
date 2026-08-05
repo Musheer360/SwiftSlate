@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Chưa cấu hình khóa API nào</string>
     <string name="toast_all_keys_invalid">Tất cả khóa API đều không hợp lệ. Vui lòng kiểm tra khóa của bạn</string>
     <string name="toast_request_timed_out">Yêu cầu đã hết thời gian chờ</string>
+    <string name="process_text_title">Áp dụng lệnh</string>
+    <string name="process_text_replace">Thay thế</string>
+    <string name="process_text_copy">Sao chép</string>
+    <string name="process_text_back">Quay lại</string>
+    <string name="process_text_retry">Thử lại</string>
+    <string name="process_text_copied">Đã sao chép</string>
+    <string name="process_text_no_selection">Chưa chọn văn bản</string>
+    <string name="process_text_no_commands">Không có lệnh nào. Hãy thêm một lệnh trong SwiftSlate.</string>
     <string name="toast_restore_failed">Không thể khôi phục văn bản gốc</string>
     <string name="toast_nothing_to_undo">Không có gì để hoàn tác</string>
     <string name="toast_undo_failed">Không thể hoàn tác</string>

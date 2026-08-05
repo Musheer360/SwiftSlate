@@ -99,6 +99,14 @@
     <string name="toast_no_keys">ยังไม่ได้กำหนดค่าคีย์ API</string>
     <string name="toast_all_keys_invalid">คีย์ API ทั้งหมดไม่ถูกต้อง โปรดตรวจสอบคีย์ของคุณ</string>
     <string name="toast_request_timed_out">คำขอหมดเวลา</string>
+    <string name="process_text_title">ใช้คำสั่ง</string>
+    <string name="process_text_replace">แทนที่</string>
+    <string name="process_text_copy">คัดลอก</string>
+    <string name="process_text_back">กลับ</string>
+    <string name="process_text_retry">ลองอีกครั้ง</string>
+    <string name="process_text_copied">คัดลอกแล้ว</string>
+    <string name="process_text_no_selection">ไม่ได้เลือกข้อความ</string>
+    <string name="process_text_no_commands">ไม่มีคำสั่งที่ใช้ได้ เพิ่มคำสั่งใน SwiftSlate</string>
     <string name="toast_restore_failed">ไม่สามารถกู้คืนข้อความต้นฉบับได้</string>
     <string name="toast_nothing_to_undo">ไม่มีสิ่งที่จะเลิกทำ</string>
     <string name="toast_undo_failed">ไม่สามารถเลิกทำได้</string>

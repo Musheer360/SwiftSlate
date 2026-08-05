@@ -98,6 +98,16 @@
     <string name="toast_no_keys">No API keys configured</string>
     <string name="toast_all_keys_invalid">All API keys are invalid. Please check your keys</string>
     <string name="toast_request_timed_out">Request timed out</string>
+
+    <!-- Text-selection (PROCESS_TEXT) flow -->
+    <string name="process_text_title">Apply a command</string>
+    <string name="process_text_replace">Replace</string>
+    <string name="process_text_copy">Copy</string>
+    <string name="process_text_back">Back</string>
+    <string name="process_text_retry">Retry</string>
+    <string name="process_text_copied">Copied</string>
+    <string name="process_text_no_selection">No text selected</string>
+    <string name="process_text_no_commands">No commands available. Add one in SwiftSlate.</string>
     <string name="toast_restore_failed">Could not restore original text</string>
     <string name="toast_nothing_to_undo">Nothing to undo</string>
     <string name="toast_undo_failed">Could not undo</string>

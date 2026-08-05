@@ -99,6 +99,14 @@
     <string name="toast_no_keys">API võtmeid pole seadistatud</string>
     <string name="toast_all_keys_invalid">Kõik API võtmed on kehtetud. Palun kontrolli oma võtmeid</string>
     <string name="toast_request_timed_out">Päring aegus</string>
+    <string name="process_text_title">Rakenda käsku</string>
+    <string name="process_text_replace">Asenda</string>
+    <string name="process_text_copy">Kopeeri</string>
+    <string name="process_text_back">Tagasi</string>
+    <string name="process_text_retry">Proovi uuesti</string>
+    <string name="process_text_copied">Kopeeritud</string>
+    <string name="process_text_no_selection">Teksti pole valitud</string>
+    <string name="process_text_no_commands">Ühtegi käsku pole saadaval. Lisa käsk SwiftSlate’is.</string>
     <string name="toast_restore_failed">Algset teksti ei õnnestunud taastada</string>
     <string name="toast_nothing_to_undo">Pole midagi tagasi võtta</string>
     <string name="toast_undo_failed">Tagasivõtmine ebaõnnestus</string>

@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Nav konfigurēta neviena API atslēga</string>
     <string name="toast_all_keys_invalid">Visas API atslēgas ir nederīgas. Lūdzu, pārbaudiet savas atslēgas</string>
     <string name="toast_request_timed_out">Pieprasījuma noildze</string>
+    <string name="process_text_title">Lietot komandu</string>
+    <string name="process_text_replace">Aizstāt</string>
+    <string name="process_text_copy">Kopēt</string>
+    <string name="process_text_back">Atpakaļ</string>
+    <string name="process_text_retry">Mēģināt vēlreiz</string>
+    <string name="process_text_copied">Nokopēts</string>
+    <string name="process_text_no_selection">Nav atlasīts teksts</string>
+    <string name="process_text_no_commands">Nav pieejamu komandu. Pievienojiet komandu lietotnē SwiftSlate.</string>
     <string name="toast_restore_failed">Nevarēja atjaunot sākotnējo tekstu</string>
     <string name="toast_nothing_to_undo">Nav ko atsaukt</string>
     <string name="toast_undo_failed">Nevarēja atsaukt</string>

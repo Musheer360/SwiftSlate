@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Ingen API-nøgler konfigureret</string>
     <string name="toast_all_keys_invalid">Alle API-nøgler er ugyldige. Tjek venligst dine nøgler</string>
     <string name="toast_request_timed_out">Anmodningen fik timeout</string>
+    <string name="process_text_title">Anvend en kommando</string>
+    <string name="process_text_replace">Erstat</string>
+    <string name="process_text_copy">Kopiér</string>
+    <string name="process_text_back">Tilbage</string>
+    <string name="process_text_retry">Prøv igen</string>
+    <string name="process_text_copied">Kopieret</string>
+    <string name="process_text_no_selection">Ingen tekst markeret</string>
+    <string name="process_text_no_commands">Ingen kommandoer tilgængelige. Tilføj en i SwiftSlate.</string>
     <string name="toast_restore_failed">Den oprindelige tekst kunne ikke gendannes</string>
     <string name="toast_nothing_to_undo">Intet at fortryde</string>
     <string name="toast_undo_failed">Kunne ikke fortryde</string>

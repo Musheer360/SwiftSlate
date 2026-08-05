@@ -99,6 +99,14 @@
     <string name="toast_no_keys">Δεν έχουν διαμορφωθεί κλειδιά API</string>
     <string name="toast_all_keys_invalid">Όλα τα κλειδιά API είναι μη έγκυρα. Παρακαλούμε ελέγξτε τα κλειδιά σας</string>
     <string name="toast_request_timed_out">Το αίτημα έληξε</string>
+    <string name="process_text_title">Εφαρμογή εντολής</string>
+    <string name="process_text_replace">Αντικατάσταση</string>
+    <string name="process_text_copy">Αντιγραφή</string>
+    <string name="process_text_back">Πίσω</string>
+    <string name="process_text_retry">Δοκιμάστε ξανά</string>
+    <string name="process_text_copied">Αντιγράφηκε</string>
+    <string name="process_text_no_selection">Δεν έχει επιλεγεί κείμενο</string>
+    <string name="process_text_no_commands">Δεν υπάρχουν διαθέσιμες εντολές. Προσθέστε μία στο SwiftSlate.</string>
     <string name="toast_restore_failed">Δεν ήταν δυνατή η επαναφορά του αρχικού κειμένου</string>
     <string name="toast_nothing_to_undo">Δεν υπάρχει τίποτα για αναίρεση</string>
     <string name="toast_undo_failed">Δεν ήταν δυνατή η αναίρεση</string>

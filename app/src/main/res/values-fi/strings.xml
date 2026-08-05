@@ -99,6 +99,14 @@
     <string name="toast_no_keys">API-avaimia ei ole määritetty</string>
     <string name="toast_all_keys_invalid">Kaikki API-avaimet ovat virheellisiä. Tarkista avaimesi</string>
     <string name="toast_request_timed_out">Pyyntö aikakatkaistiin</string>
+    <string name="process_text_title">Käytä komentoa</string>
+    <string name="process_text_replace">Korvaa</string>
+    <string name="process_text_copy">Kopioi</string>
+    <string name="process_text_back">Takaisin</string>
+    <string name="process_text_retry">Yritä uudelleen</string>
+    <string name="process_text_copied">Kopioitu</string>
+    <string name="process_text_no_selection">Tekstiä ei ole valittu</string>
+    <string name="process_text_no_commands">Komentoja ei ole käytettävissä. Lisää komento SwiftSlatessa.</string>
     <string name="toast_restore_failed">Alkuperäisen tekstin palauttaminen epäonnistui</string>
     <string name="toast_nothing_to_undo">Ei mitään kumottavaa</string>
     <string name="toast_undo_failed">Kumoaminen epäonnistui</string>
