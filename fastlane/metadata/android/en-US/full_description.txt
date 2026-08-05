@@ -5,6 +5,7 @@ It works in most apps — WhatsApp, Gmail, Twitter/X, Messages, Notes, and more.
 Features:
 
 • Works system-wide via Android's Accessibility Service
+• Also works from the text-selection menu in any app — no accessibility permission required
 • Instant inline text replacement — AI response replaces your text directly
 • Multi-provider AI: Google Gemini, Groq, or any OpenAI-compatible endpoint (including local LLMs like Ollama and LM Studio)
 • Text replacer commands run entirely offline with zero latency

@@ -61,6 +61,7 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 - [Supported AI Providers](#-supported-ai-providers)
 - [Getting Started](#-getting-started)
 - [How It Works](#%EF%B8%8F-how-it-works)
+- [Text-Selection Menu](#%EF%B8%8F-text-selection-menu)
 - [Custom Commands](#-custom-commands)
 - [API Key Management](#-api-key-management)
 - [Backup & Restore](#-backup--restore)
@@ -110,6 +111,9 @@ Type a trigger like **`?fix`** at the end of any text, in any app, and watch it 
 
 ### 🌐 Works Almost Everywhere
 Integrates at the system level via Android's Accessibility Service. Works in **most apps** — messaging, email, social media, notes, browsers, and more. Some apps with custom input fields may not be supported ([see limitations](#%EF%B8%8F-known-limitations)).
+
+### ✂️ Text-Selection Menu
+Select any text, tap **SwiftSlate** in the Copy/Share popup, and pick a command — no accessibility permission required. Works in any app that offers Android's text-selection menu, including apps the accessibility flow can't reach.
 
 ### ⚡ Instant Inline Replacement
 Type, trigger, done. The AI response replaces your text directly in the same field — no copy-pasting, no app switching. While processing, an animated spinner appends to your text (e.g., `how r u ◐`) so you always see progress. Text replacer commands execute instantly.
@@ -327,6 +331,19 @@ flowchart TD
 
 <br>
 
+## ✂️ Text-Selection Menu
+
+Every app that offers Android's text-selection popup (the one with Copy, Cut, Share) can show **SwiftSlate** as an option, whether or not the accessibility service is enabled:
+
+1. Select text in any app
+2. Tap **SwiftSlate** in the popup
+3. Pick a command
+4. Get the result back with **Insert** (replaces the selection in-place, when the field allows it) or **Copy**
+
+It runs the same commands, requests, and errors as typing a trigger — just through a one-shot dialog that closes as soon as it's done, with no new permissions. Built-in clipboard commands (`?copy`, `?cut`, `?paste`, `?replace`, `?undo`) aren't available here since they need the live text field the accessibility flow has access to.
+
+<br>
+
 ## 🎨 Custom Commands
 
 Create, edit, and manage your own commands in the **Commands** tab.
@@ -537,6 +554,9 @@ com.musheer360.swiftslate/
 ├── service/
 │   ├── AssistantService.kt      # Core accessibility service — event listening, trigger
 │   │                            # detection, text replacement, undo, inline spinner
+│   ├── CommandRunner.kt         # Shared request policy (key rotation, rate-limit backoff,
+│   │                            # error mapping) used by both the accessibility service and
+│   │                            # the text-selection popup
 │   ├── ErrorMessages.kt         # Maps raw provider/network errors to localized strings
 │   └── OverlayToast.kt          # TYPE_ACCESSIBILITY_OVERLAY toast with enter/exit animation
 ├── api/
@@ -566,7 +586,14 @@ com.musheer360.swiftslate/
 │   ├── KeysScreen.kt            # API key management with live validation
 │   ├── CommandsScreen.kt        # Command list, add/edit/delete with collapsible form
 │   ├── SettingsScreen.kt        # Provider, model, temperature, prefix, backup/restore
-│   ├── components/              # Reusable UI components (cards, text fields, dividers)
+│   ├── processtext/             # ACTION_PROCESS_TEXT entry point (the text-selection menu)
+│   │   ├── ProcessTextActivity.kt      # One-shot dialog activity, owns the bottom sheet
+│   │   ├── ProcessTextViewModel.kt     # Picker -> loading -> result state machine
+│   │   ├── ProcessTextInput.kt         # Parses/validates the system-provided selection
+│   │   └── ProcessTextReplacement.kt   # Correlates a finished popup result with the next
+│   │                                    # accessibility event to auto-replace in-place
+│   ├── components/              # Reusable UI components (cards, text fields, dividers,
+│   │                            # the app's own bottom sheet and toast)
 │   └── theme/Theme.kt           # AMOLED dark + light Material 3 color schemes
 ├── MainActivity.kt              # AnimatedContent tab navigation (4 tabs)
 ├── SwiftSlateViewModel.kt       # Shared ViewModel exposing managers + prefs
@@ -648,7 +675,7 @@ Preview builds are shrunk and non-debuggable like release builds, but signed wit
 - **Some apps use custom input fields** that don't support Android's standard text replacement APIs. SwiftSlate includes a clipboard-based fallback, but apps like **WeChat** and **Chrome's address bar** may still not work. Most standard text fields (messaging apps, email composers, notes, etc.) work fine.
 - **Some OEMs restrict accessibility services.** Certain manufacturers (e.g., OnePlus, Xiaomi) may hide or block third-party accessibility services in their settings UI. If SwiftSlate doesn't appear in your accessibility settings, check for a "Downloaded apps" or "Installed services" section, or try searching for it.
 - **Aggressive battery optimization can silently disable the service.** Some OEM skins (Xiaomi/MIUI, OnePlus/OxygenOS, Infinix/XOS, and others) kill background accessibility services after a period of inactivity to save battery, and Android itself does not let an accessibility service run as a foreground/persistent service to defend against this. If SwiftSlate stops responding and shows as disabled on the Dashboard after running for a while, this is almost always the cause — re-enable it in Accessibility Settings, and look for a battery/OEM-specific "no restrictions" or "allow background activity" setting for SwiftSlate to prevent it recurring.
-- **Some banking apps refuse to open while any accessibility service is enabled**, including SwiftSlate. This is a security measure the bank's app controls entirely — it checks the OS's list of enabled accessibility services and blocks itself if that list isn't empty, regardless of which app is on it or what that app actually does. There's no manifest flag or API that lets a legitimate accessibility tool opt out of another app's own check, so this can't be fixed on SwiftSlate's end. Disable SwiftSlate's accessibility permission before opening the affected banking app, then re-enable it afterward.
+- **Some banking apps refuse to open while any accessibility service is enabled**, including SwiftSlate. This is a security measure the bank's app controls entirely — it checks the OS's list of enabled accessibility services and blocks itself if that list isn't empty, regardless of which app is on it or what that app actually does. There's no manifest flag or API that lets a legitimate accessibility tool opt out of another app's own check, so this can't be fixed on SwiftSlate's end. Disable SwiftSlate's accessibility permission before opening the affected banking app, then re-enable it afterward. The [text-selection menu](#%EF%B8%8F-text-selection-menu) still works with accessibility disabled, since it doesn't use the service at all.
 
 <br>
 

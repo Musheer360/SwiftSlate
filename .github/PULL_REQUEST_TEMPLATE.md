@@ -19,6 +19,8 @@
 - [ ] Text replacer commands execute instantly (no regressions)
 - [ ] AI commands return proper responses with Gemini / Groq
 - [ ] Password fields are still ignored
+- [ ] If touching `service/CommandRunner.kt` or `ui/processtext/`, tested the text-selection
+  popup too (with accessibility enabled and disabled)
 - [ ] No new external dependencies added
 
 ## Checklist

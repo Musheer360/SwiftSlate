@@ -38,6 +38,10 @@ You'll need a real device to test — the Accessibility Service doesn't work pro
 
 ```
 service/AssistantService.kt  → Core accessibility event handling
+service/CommandRunner.kt     → Shared request policy (key rotation, rate limits, errors),
+                                used by both the accessibility flow and the popup below
+ui/processtext/*.kt          → ACTION_PROCESS_TEXT entry point (the text-selection popup) —
+                                same commands and requests, no accessibility permission needed
 api/*Client.kt               → AI provider communication
 manager/KeyManager.kt        → Encrypted key storage + rotation
 manager/CommandManager.kt    → Command CRUD + trigger matching
@@ -49,17 +53,24 @@ Key behaviors to understand before touching core code:
 - **Longest match** wins when multiple triggers could match
 - **Text replacement** tries `ACTION_SET_TEXT` first, falls back to clipboard paste
 - **Spinner animation** runs inline in the text field during AI processing
+- **The text-selection popup** shares `CommandRunner` with the accessibility flow, but has no
+  live text field of its own — it can only offer Insert/Copy on the popup's own result, not the
+  built-in clipboard/undo commands
 
 ## Testing Guidelines
 
-Since there's no test suite yet, manual testing is critical:
+Add unit tests under `app/src/test/` for logic you can test without a device (see the existing
+suite for patterns). For anything touching the accessibility service or the text-selection popup,
+manual testing on a real device is still essential:
 
 1. **Enable the Accessibility Service** on your device
 2. **Test trigger detection** — type triggers in WhatsApp, Gmail, Notes, and Chrome
 3. **Verify password fields are skipped** — type a trigger in a password field, nothing should happen
 4. **Test both command types** — AI commands (need API key) and text replacer (offline)
 5. **Check the undo command** — `?undo` should restore previous text
-6. **Verify on API 23** — if you use any newer API, guard it with a version check
+6. **Test the text-selection popup** — select text in an app, tap SwiftSlate in the Copy/Share
+   menu, run a command, and confirm Insert/Copy work — with accessibility enabled and disabled
+7. **Verify on API 23** — if you use any newer API, guard it with a version check
 
 ## Code Style
 
