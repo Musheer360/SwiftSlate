@@ -24,6 +24,12 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 
 sealed interface UiState {
+    /**
+     * Commands are still being read off disk. The sheet is not shown at all in this state: it
+     * used to open at the height of an empty list and then jump taller the moment the commands
+     * arrived, which read as a stutter in the middle of the open animation.
+     */
+    data object Initializing : UiState
     data class CommandList(val commands: List<Command>) : UiState
     data class Loading(val command: Command) : UiState
     data class Preview(val result: String, val canInsert: Boolean) : UiState
@@ -55,7 +61,7 @@ class ProcessTextViewModel(
     private val geminiClient by lazy { GeminiClient() }
     private val openAIClient by lazy { OpenAICompatibleClient() }
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.CommandList(emptyList()))
+    private val _uiState = MutableStateFlow<UiState>(UiState.Initializing)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     /** Loaded once; the picker returns to this list rather than re-reading it from disk. */

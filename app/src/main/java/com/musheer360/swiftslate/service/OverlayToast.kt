@@ -15,6 +15,7 @@ import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import android.widget.Toast
+import com.musheer360.swiftslate.ui.components.SlateToastTokens
 
 /**
  * Renders the app's custom in-overlay toast: a TYPE_ACCESSIBILITY_OVERLAY view with
@@ -42,12 +43,16 @@ class OverlayToast(private val context: Context, private val handler: Handler) {
         val textView = TextView(context).apply {
             text = msg
             setTextColor(Color.WHITE)
-            textSize = 14f
-            setPadding(dp(24), dp(12), dp(24), dp(12))
-            maxWidth = (context.resources.displayMetrics.widthPixels * 0.85).toInt()
+            textSize = SlateToastTokens.TEXT_SIZE_SP.toFloat()
+            setPadding(
+                dp(SlateToastTokens.HORIZONTAL_PADDING_DP), dp(SlateToastTokens.VERTICAL_PADDING_DP),
+                dp(SlateToastTokens.HORIZONTAL_PADDING_DP), dp(SlateToastTokens.VERTICAL_PADDING_DP)
+            )
+            maxWidth =
+                (context.resources.displayMetrics.widthPixels * SlateToastTokens.MAX_WIDTH_FRACTION).toInt()
             background = GradientDrawable().apply {
                 setColor(TOAST_BACKGROUND_COLOR)
-                cornerRadius = dp(24).toFloat()
+                cornerRadius = dp(SlateToastTokens.CORNER_RADIUS_DP).toFloat()
             }
             gravity = Gravity.CENTER
             alpha = 0f
@@ -138,10 +143,12 @@ class OverlayToast(private val context: Context, private val handler: Handler) {
     }
 
     companion object {
-        private const val TOAST_BACKGROUND_COLOR = 0xE6323232.toInt()
-        private const val TOAST_DURATION_MS = 3500L
-        private const val TOAST_BOTTOM_MARGIN_DP = 64
-        private const val TOAST_ANIM_DURATION_MS = 300L
-        private const val TOAST_SLIDE_DISTANCE_DP = 40
+        // Single source of truth shared with the Compose renderer, so the service's toast and
+        // the in-app one cannot drift apart. See SlateToastTokens.
+        private const val TOAST_BACKGROUND_COLOR = SlateToastTokens.BACKGROUND_ARGB
+        private const val TOAST_DURATION_MS = SlateToastTokens.DURATION_MS
+        private const val TOAST_BOTTOM_MARGIN_DP = SlateToastTokens.BOTTOM_MARGIN_DP
+        private const val TOAST_ANIM_DURATION_MS = SlateToastTokens.ANIM_DURATION_MS.toLong()
+        private const val TOAST_SLIDE_DISTANCE_DP = SlateToastTokens.SLIDE_DISTANCE_DP
     }
 }
