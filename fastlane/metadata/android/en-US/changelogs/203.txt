@@ -1,0 +1,10 @@
+- fix: theme, layout, and gesture issues in the text-selection popup
+- fix: mark visibility filter browsable
+- fix: expose process actions to custom editors
+- fix: replace process text results reliably
+- fix: support rich text process actions
+- fix: restore the simpler process text flow
+- fix: replace editable selections automatically
+- test: cover ProcessTextInput's length bound and normalization edges
+- fix: share one KeyManager across the process
+- test: add unit tests for
