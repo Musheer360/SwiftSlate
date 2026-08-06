@@ -1,0 +1,3 @@
+- fix: remove artificial input-length cap on text-selection share
+- docs(readme): fix the lopsided Features table and stale '7 languages' claim
+- docs: document the text-selection popup (PR #123)
