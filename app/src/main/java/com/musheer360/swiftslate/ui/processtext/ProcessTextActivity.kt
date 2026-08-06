@@ -86,10 +86,7 @@ class ProcessTextActivity : ComponentActivity() {
         // UI, and an unusable selection is worth an explicit dismiss rather than a message that
         // disappears on its own.
         val rejectionMessage = if (selection == null) {
-            when ((parsed.exceptionOrNull() as? RejectedSelectionException)?.rejection) {
-                Rejection.TooLong -> getString(R.string.error_input_too_long)
-                else -> getString(R.string.process_text_no_selection)
-            }
+            getString(R.string.process_text_no_selection)
         } else {
             null
         }

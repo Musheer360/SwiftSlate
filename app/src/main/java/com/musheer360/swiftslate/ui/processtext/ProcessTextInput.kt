@@ -5,8 +5,6 @@ data class Selection(val text: String, val readOnly: Boolean)
 sealed interface Rejection {
     /** Extra absent, or blank/invisible-only after normalization. */
     data object Missing : Rejection
-    /** Longer than the client-side sanity limit. */
-    data object TooLong : Rejection
 }
 
 class RejectedSelectionException(val rejection: Rejection) : Exception()
@@ -16,9 +14,6 @@ class RejectedSelectionException(val rejection: Rejection) : Exception()
  * entire input is those two values -- no Context, no prefs, no CommandManager.
  */
 object ProcessTextInput {
-
-    /** Client-side sanity bound in UTF-16 code units -- what the payload actually costs. */
-    const val MAX_CHARS = 20_000
 
     // Invisible characters as \u escapes so none sit literally (as raw bytes) in this file.
     private const val BOM = '\uFEFF' // zero-width no-break space; some hosts prepend it
@@ -35,8 +30,7 @@ object ProcessTextInput {
      */
     fun parseSelection(
         rawText: CharSequence?,
-        readOnlyExtra: Boolean?,
-        maxChars: Int = MAX_CHARS
+        readOnlyExtra: Boolean?
     ): Result<Selection> {
         if (rawText == null) return reject(Rejection.Missing)
 
@@ -53,8 +47,11 @@ object ProcessTextInput {
         // and the accessibility path does not collapse them either.
         if (s.trim().all { it.isWhitespace() || isInvisible(it) }) return reject(Rejection.Missing)
 
-        if (s.length > maxChars) return reject(Rejection.TooLong)
-
+        // No client-side length cap: the accessibility (typed-trigger) path already sends
+        // whatever the field contains uncapped, and the provider itself enforces the real
+        // limit (its context/token window) and returns a proper error -- see
+        // ErrorMessages.map()'s "request too large" / "context_length_exceeded" handling,
+        // which both entry points already rely on for an over-length request.
         return Result.success(Selection(text = s, readOnly = readOnlyExtra ?: true))
     }
 

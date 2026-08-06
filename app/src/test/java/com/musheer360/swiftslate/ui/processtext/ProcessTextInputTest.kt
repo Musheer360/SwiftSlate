@@ -46,23 +46,6 @@ class ProcessTextInputTest {
     }
 
     @Test
-    fun parseSelection_rejects_text_exceeding_max_chars() {
-        val long = "a".repeat(ProcessTextInput.MAX_CHARS + 1)
-        val ex = assertThrows(RejectedSelectionException::class.java) {
-            ProcessTextInput.parseSelection(long, false).getOrThrow()
-        }
-        assertEquals(Rejection.TooLong, ex.rejection)
-    }
-
-    @Test
-    fun parseSelection_accepts_text_at_exact_max_chars() {
-        val exact = "a".repeat(ProcessTextInput.MAX_CHARS)
-        val result = ProcessTextInput.parseSelection(exact, false)
-        assertTrue(result.isSuccess)
-        assertEquals(ProcessTextInput.MAX_CHARS, result.getOrThrow().text.length)
-    }
-
-    @Test
     fun parseSelection_strips_BOM_prefix() {
         val result = ProcessTextInput.parseSelection("\uFEFFhello", false)
         assertEquals("hello", result.getOrThrow().text)
@@ -80,39 +63,12 @@ class ProcessTextInputTest {
         assertEquals("  hello  \n  world  ", result.getOrThrow().text)
     }
 
-    // --- The length bound is in UTF-16 code units, not characters ---
-
-    @Test
-    fun parseSelection_counts_astral_characters_as_two_units() {
-        // MAX_CHARS is documented as UTF-16 code units because that is what the payload costs.
-        // An emoji is a surrogate pair, so half as many of them fit as the constant suggests —
-        // switching this to codePointCount() would silently double the largest accepted payload.
-        val atLimit = "😀".repeat(ProcessTextInput.MAX_CHARS / 2)
-        assertEquals(ProcessTextInput.MAX_CHARS, atLimit.length)
-        assertTrue(ProcessTextInput.parseSelection(atLimit, false).isSuccess)
-
-        val overLimit = atLimit + "😀"
-        val ex = assertThrows(RejectedSelectionException::class.java) {
-            ProcessTextInput.parseSelection(overLimit, false).getOrThrow()
-        }
-        assertEquals(Rejection.TooLong, ex.rejection)
-    }
-
     @Test
     fun parseSelection_surrogate_pairs_are_not_mistaken_for_invisible_text() {
         // Surrogates are CharCategory.SURROGATE, not FORMAT — an emoji-only selection is real
         // content and must not be rejected as blank.
         val result = ProcessTextInput.parseSelection("😀", false)
         assertEquals("😀", result.getOrThrow().text)
-    }
-
-    @Test
-    fun parseSelection_honours_an_injected_max() {
-        assertTrue(ProcessTextInput.parseSelection("hello", false, maxChars = 5).isSuccess)
-        val ex = assertThrows(RejectedSelectionException::class.java) {
-            ProcessTextInput.parseSelection("hello", false, maxChars = 4).getOrThrow()
-        }
-        assertEquals(Rejection.TooLong, ex.rejection)
     }
 
     // --- Normalization happens before the blank check, and only where it should ---
