@@ -134,10 +134,13 @@ Ships with Google Gemini, Groq, or connect **any OpenAI-compatible endpoint** �
 **AI commands** send text to your provider for intelligent transformation. **Text replacer commands** run entirely offline for instant local text manipulation — no API key needed.
 
 ### 🔒 Encrypted Key Storage
-API keys are encrypted with **AES-256-GCM** using the Android Keystore. Your keys never leave your device unencrypted.
+API keys are encrypted with **AES-256-GCM** using the Android Keystore before being written to disk — they never leave your device unencrypted.
 
-### 🌍 Localized in 7 Languages
-App UI available in English, French, German, Spanish, Portuguese (BR), Hindi, and Simplified Chinese.
+### 🌍 Localized in 40 Languages
+The UI ships in 40 languages and automatically follows your device's language, falling back to English when a translation isn't available.
+
+### 🚫 Zero Analytics
+No telemetry, no tracking, no crash reporting — text is sent only to your configured AI provider, never anywhere else.
 
 </td>
 </tr>
