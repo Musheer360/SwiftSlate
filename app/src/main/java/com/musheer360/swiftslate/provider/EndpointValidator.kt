@@ -32,7 +32,8 @@ object EndpointValidator {
 
     /** Whether [host] is a private-LAN hostname or IP address. */
     fun isPrivateHost(host: String): Boolean {
-        val h = host.trim().removeSuffix(".").lowercase()
+        // URI.getHost() returns IPv6 literals with brackets ([::1]) — strip them.
+        val h = host.trim().lowercase().removeSurrounding("[", "]").removeSuffix(".")
         if (h == "localhost" || h == "::1") return true
         if (h.endsWith(".local") || h.endsWith(".lan")) return true
         val ip = h.toIPv4OrNull() ?: return false
