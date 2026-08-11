@@ -1,0 +1,1 @@
+- docs: clarify endpoint scheme error for private-LAN http (#135)
