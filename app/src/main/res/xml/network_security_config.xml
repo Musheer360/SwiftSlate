@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <base-config cleartextTrafficPermitted="false" />
-    <!-- Allow cleartext for local LLM endpoints (Ollama, LM Studio, etc.) -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">localhost</domain>
-        <domain includeSubdomains="true">127.0.0.1</domain>
-        <domain includeSubdomains="true">10.0.2.2</domain>
-    </domain-config>
+    <!-- Cleartext is permitted at the platform layer because the NSC cannot
+         express IP ranges. The app-level guard (EndpointValidator) restricts
+         http:// to private-LAN endpoints; all other traffic is https://. -->
+    <base-config cleartextTrafficPermitted="true" />
 </network-security-config>

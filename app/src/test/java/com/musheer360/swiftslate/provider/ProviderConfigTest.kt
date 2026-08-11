@@ -91,4 +91,44 @@ class ProviderConfigTest {
         assertTrue(GeminiConfig.reasoningParams("x").isEmpty())
         assertTrue(CustomConfig.reasoningParams("x").isEmpty())
     }
+
+    // --- EndpointValidator ---
+
+    @Test
+    fun endpointValidator_acceptsHttpsPublicAndPrivate() {
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("https://api.example.com/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("https://192.168.1.5:8080/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("https://8.8.8.8/v1"))
+    }
+
+    @Test
+    fun endpointValidator_acceptsHttpForPrivateLanHosts() {
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://localhost:11434/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://127.0.0.1:8080/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://10.0.2.2:8080/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://10.1.2.3:8080/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://192.168.1.5:8080/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://172.16.0.1:8080/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://172.31.255.254:8080/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://169.254.0.1:8080/v1"))
+        assertEquals(EndpointValidator.Error.NONE, EndpointValidator.validate("http://my-nas.local:8080/v1"))
+    }
+
+    @Test
+    fun endpointValidator_rejectsHttpForPublicHosts() {
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("http://api.example.com/v1"))
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("http://8.8.8.8/v1"))
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("http://192.168.5.5.5:8080/v1"))
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("http://172.15.0.1:8080/v1"))
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("http://172.32.0.1:8080/v1"))
+    }
+
+    @Test
+    fun endpointValidator_rejectsMalformedOrMissingScheme() {
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate(""))
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("api.example.com/v1"))
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("ftp://example.com/v1"))
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("http://"))
+        assertEquals(EndpointValidator.Error.INVALID, EndpointValidator.validate("http:// 192.168.1.5:8080"))
+    }
 }

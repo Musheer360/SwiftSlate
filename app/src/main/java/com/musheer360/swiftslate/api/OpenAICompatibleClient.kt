@@ -1,5 +1,6 @@
 package com.musheer360.swiftslate.api
 
+import com.musheer360.swiftslate.provider.EndpointValidator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -17,6 +18,9 @@ class OpenAICompatibleClient {
     }
 
     suspend fun validateKey(apiKey: String, endpoint: String): Result<String> = withContext(Dispatchers.IO) {
+        if (EndpointValidator.validate(endpoint) != EndpointValidator.Error.NONE) {
+            return@withContext Result.failure(Exception("Endpoint must be https:// or an http:// private-LAN address"))
+        }
         var connection: HttpURLConnection? = null
         try {
             val baseUrl = endpoint.trimEnd('/')
@@ -99,6 +103,9 @@ class OpenAICompatibleClient {
         withJsonObject: Boolean = false,
         extraParams: Map<String, Any> = emptyMap()
     ): Result<GenerateResult> {
+        if (EndpointValidator.validate(endpoint) != EndpointValidator.Error.NONE) {
+            return Result.failure(Exception("Endpoint must be https:// or an http:// private-LAN address"))
+        }
         var connection: HttpURLConnection? = null
         return try {
             val baseUrl = endpoint.trimEnd('/')

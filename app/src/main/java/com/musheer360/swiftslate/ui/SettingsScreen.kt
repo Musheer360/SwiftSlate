@@ -33,6 +33,7 @@ import com.musheer360.swiftslate.model.GeminiModels
 import com.musheer360.swiftslate.model.GroqModels
 import com.musheer360.swiftslate.model.PrefKeys
 import com.musheer360.swiftslate.model.ProviderType
+import com.musheer360.swiftslate.provider.EndpointValidator
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
 import com.musheer360.swiftslate.ui.components.SlateDivider
@@ -85,11 +86,8 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
             val editor = prefs.edit()
             var needsWrite = false
             if (customEndpoint != (prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "")) {
-                val isValid = customEndpoint.isBlank() || customEndpoint.startsWith("https://") ||
-                    (customEndpoint.startsWith("http://") && try {
-                        val host = java.net.URL(customEndpoint).host
-                        host == "localhost" || host == "127.0.0.1" || host == "10.0.2.2"
-                    } catch (_: Exception) { false })
+                val isValid = customEndpoint.isBlank() ||
+                    EndpointValidator.validate(customEndpoint) == EndpointValidator.Error.NONE
                 if (isValid) {
                     editor.putString(PrefKeys.CUSTOM_ENDPOINT, customEndpoint)
                     needsWrite = true
@@ -306,12 +304,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                         endpointError = when {
                             it.isBlank() -> null
                             it.contains(" ") -> endpointErrorSpaces
-                            it.startsWith("https://") -> null
-                            it.startsWith("http://") -> {
-                                val host = try { java.net.URL(it).host } catch (_: Exception) { "" }
-                                if (host == "localhost" || host == "127.0.0.1" || host == "10.0.2.2") null
-                                else endpointErrorScheme
-                            }
+                            EndpointValidator.validate(it) == EndpointValidator.Error.NONE -> null
                             else -> endpointErrorScheme
                         }
                         if (endpointError == null) {
