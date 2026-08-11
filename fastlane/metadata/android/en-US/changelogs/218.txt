@@ -1,0 +1,7 @@
+- revert: keep endpoint scheme error wording consistent across locales
+- docs: clarify endpoint scheme error for private-LAN http (#135)
+- chore(deps): bump gradle/actions/setup-gradle from 6.2.0 to 6.3.0 (#134)
+- chore(deps): bump actions/setup-java from 5.6.0 to 5.7.0 (#133)
+- fix: match bracketed IPv6 loopback hosts in EndpointValidator (#135)
+- fix: allow http:// endpoints for private-LAN servers (#135)
+- fix: make backup import lenient instead of rejecting the whole file
