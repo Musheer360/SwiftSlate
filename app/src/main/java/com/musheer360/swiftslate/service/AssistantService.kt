@@ -12,6 +12,7 @@ import android.os.SystemClock
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
@@ -28,6 +29,7 @@ import com.musheer360.swiftslate.ui.processtext.resolveProcessTextEdit
 import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.SwiftSlateApp
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -51,7 +53,15 @@ class AssistantService : AccessibilityService() {
     private val client = GeminiClient()
     private val openAIClient = OpenAICompatibleClient()
     private val serviceJob = SupervisorJob()
-    private val serviceScope = CoroutineScope(serviceJob + Dispatchers.IO)
+    // Any exception escaping a coroutine launched from the accessibility service would kill
+    // the whole process with no UI to crash into (the Settings toggle stays "on" regardless,
+    // so the Dashboard just shows the service as inactive). Log and swallow instead.
+    private val serviceScope = CoroutineScope(
+        serviceJob + Dispatchers.IO +
+            CoroutineExceptionHandler { _, e ->
+                Log.w(TAG, "uncaught exception in service scope", e)
+            }
+    )
     private val isProcessing = java.util.concurrent.atomic.AtomicBoolean(false)
     private val handler = Handler(Looper.getMainLooper())
     private var triggerLastChars = setOf<Char>()
@@ -97,6 +107,7 @@ class AssistantService : AccessibilityService() {
     private fun sourceId(source: AccessibilityNodeInfo): String = source.hashCode().toString()
 
     private companion object {
+        const val TAG = "SwiftSlateService"
         const val TRIGGER_REFRESH_INTERVAL_MS = 5_000L
         const val PROCESSING_WATCHDOG_MS = 120_000L
         val SPINNER_FRAMES = arrayOf("◐", "◓", "◑", "◒")
@@ -162,6 +173,7 @@ class AssistantService : AccessibilityService() {
             // stays "on" (that flag is independent of whether the process is alive), so the
             // user sees the Dashboard go inactive with no error and no way to tell why. See
             // #125 — swallow and drop the event instead of taking the service down with it.
+            Log.w(TAG, "dropping accessibility event", e)
             try { event?.source?.safeRecycle() } catch (_: Exception) {}
         }
     }
@@ -867,10 +879,19 @@ class AssistantService : AccessibilityService() {
     private fun startInlineSpinner(source: AccessibilityNodeInfo, baseText: String): Job {
         return serviceScope.launch(Dispatchers.Main) {
             var frameIndex = 0
-            while (isActive) {
-                if (!setFieldText(source, "$baseText ${SPINNER_FRAMES[frameIndex]}")) break
-                frameIndex = (frameIndex + 1) % SPINNER_FRAMES.size
-                delay(200)
+            try {
+                while (isActive) {
+                    if (!setFieldText(source, "$baseText ${SPINNER_FRAMES[frameIndex]}")) break
+                    frameIndex = (frameIndex + 1) % SPINNER_FRAMES.size
+                    delay(200)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // The node was recycled or the view went away mid-request; stop the spinner
+                // instead of letting an unhandled exception kill the service. The AI result
+                // path still restores the original text. See #125.
+                Log.w(TAG, "spinner node went stale; stopping spinner", e)
             }
         }
     }
