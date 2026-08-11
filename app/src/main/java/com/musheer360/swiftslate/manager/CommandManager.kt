@@ -255,20 +255,45 @@ class CommandManager(context: Context) {
         return prefs.getString("custom_commands", "[]") ?: "[]"
     }
 
+    /**
+     * Imports commands from a backup, sanitizing entries instead of rejecting the whole file.
+     *
+     * Only a genuinely malformed file (unparseable JSON) fails hard. Individual entries are
+     * cleaned so that backups from older versions — which could store prompts longer than
+     * [MAX_PROMPT_LENGTH] or triggers with a stale prefix — still restore: triggers are
+     * truncated to [MAX_TRIGGER_LENGTH] and migrated to the current prefix, prompts truncated
+     * to [MAX_PROMPT_LENGTH], unknown types default to [CommandType.AI], and unusable entries
+     * (blank trigger/prompt) are dropped. The result is capped at [MAX_CUSTOM_COMMANDS].
+     */
     @Synchronized fun importCommands(json: String): Boolean {
         return try {
             val arr = JSONArray(json)
-            if (arr.length() > MAX_CUSTOM_COMMANDS) return false
             val prefix = getTriggerPrefix()
+            val cleaned = JSONArray()
             for (i in 0 until arr.length()) {
-                val obj = arr.getJSONObject(i)
-                val trigger = obj.optString("trigger", "")
-                val prompt = obj.optString("prompt", "")
-                if (!isValidCommand(trigger, prompt, prefix)) return false
+                if (cleaned.length() >= MAX_CUSTOM_COMMANDS) break
+                val obj = arr.optJSONObject(i) ?: continue
+                var trigger = obj.optString("trigger", "").trim()
+                val prompt = obj.optString("prompt", "").take(MAX_PROMPT_LENGTH)
+                if (trigger.isEmpty() || prompt.isBlank()) continue
+                if (!trigger.startsWith(prefix)) {
+                    // Same migration as setTriggerPrefix: strip any leading non-alphanumeric
+                    // char, then apply the current prefix.
+                    val stripped = if (!trigger[0].isLetterOrDigit()) trigger.substring(1) else trigger
+                    trigger = prefix + stripped
+                }
+                trigger = trigger.take(MAX_TRIGGER_LENGTH)
+                if (trigger.length <= prefix.length) continue
                 val type = obj.optString("type", CommandType.AI.name)
-                if (type != CommandType.AI.name && type != CommandType.TEXT_REPLACER.name) return false
+                val out = JSONObject()
+                out.put("trigger", trigger)
+                out.put("prompt", prompt)
+                out.put("type",
+                    if (type == CommandType.TEXT_REPLACER.name) CommandType.TEXT_REPLACER.name else CommandType.AI.name)
+                cleaned.put(out)
             }
-            prefs.edit().putString("custom_commands", arr.toString()).apply()
+            if (arr.length() > 0 && cleaned.length() == 0) return false
+            prefs.edit().putString("custom_commands", cleaned.toString()).apply()
             invalidateCache()
             true
         } catch (_: Exception) {

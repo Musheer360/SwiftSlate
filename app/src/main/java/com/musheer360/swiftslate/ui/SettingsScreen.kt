@@ -132,7 +132,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                 try {
                     val json = withContext(Dispatchers.IO) {
                         context.contentResolver.openInputStream(it)?.bufferedReader()?.use { reader ->
-                            val text = reader.readText()
+                            val text = reader.readText().removePrefix("\uFEFF")
                             if (text.length > 1_000_000) null else text
                         } ?: ""
                     }

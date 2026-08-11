@@ -3,6 +3,7 @@ package com.musheer360.swiftslate.manager
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import com.musheer360.swiftslate.model.Command
+import com.musheer360.swiftslate.model.CommandType
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -232,46 +233,88 @@ class CommandManagerTest {
         assertNotNull(commandManager.findCommand("hello $maxTrigger"))
     }
 
-    /** The UI must not be able to create a command that the app's own import would reject. */
+    /** Import is strictly more lenient than save: it sanitizes what the UI would reject. */
     @Test
-    fun saveCustomCommand_andImportCommands_agreeOnValidity() {
-        val cases = listOf(
-            "noprefix" to "p",
-            "?" to "p",
-            "?ok" to "",
-            ("?" + "a".repeat(CommandManager.MAX_TRIGGER_LENGTH)) to "p",
-            "?ok" to "a".repeat(CommandManager.MAX_PROMPT_LENGTH + 1)
-        )
-        for ((trigger, prompt) in cases) {
-            val viaAdd = commandManager.saveCustomCommand(Command(trigger, prompt))
-            val json = JSONArray().put(
-                JSONObject().put("trigger", trigger).put("prompt", prompt).put("type", "AI")
-            ).toString()
-            val viaImport = commandManager.importCommands(json)
-            assertEquals("disagreement for trigger=$trigger prompt.len=${prompt.length}", viaAdd, viaImport)
-        }
+    fun importCommands_sanitizesWhatSaveRejects() {
+        val overLongPrompt = "a".repeat(CommandManager.MAX_PROMPT_LENGTH + 10)
+        val overLongTrigger = "?" + "a".repeat(CommandManager.MAX_TRIGGER_LENGTH + 5)
+        val json = JSONArray()
+            .put(JSONObject().put("trigger", overLongTrigger).put("prompt", overLongPrompt).put("type", "AI"))
+            .put(JSONObject().put("trigger", "noprefix").put("prompt", "p").put("type", "AI"))
+            .toString()
+        assertTrue(commandManager.importCommands(json))
+        val stored = JSONArray(commandManager.exportCommands())
+        assertEquals(2, stored.length())
+        val first = stored.getJSONObject(0)
+        assertEquals(CommandManager.MAX_TRIGGER_LENGTH, first.getString("trigger").length)
+        assertEquals(CommandManager.MAX_PROMPT_LENGTH, first.getString("prompt").length)
+        val migrated = stored.getJSONObject(1)
+        assertEquals("?noprefix", migrated.getString("trigger"))
     }
 
     @Test
-    fun importCommands_rejectsMoreThanTheMaximum() {
+    fun importCommands_dropsInvalidEntriesButKeepsValidOnes() {
+        val json = JSONArray()
+            .put(JSONObject().put("trigger", "   ").put("prompt", "p").put("type", "AI"))
+            .put(JSONObject().put("trigger", "?ok").put("prompt", "  ").put("type", "AI"))
+            .put(JSONObject().put("trigger", "?").put("prompt", "p").put("type", "AI"))
+            .put(JSONObject().put("trigger", "?good").put("prompt", "keep me").put("type", "AI"))
+            .toString()
+        assertTrue(commandManager.importCommands(json))
+        val stored = JSONArray(commandManager.exportCommands())
+        assertEquals(1, stored.length())
+        assertEquals("?good", stored.getJSONObject(0).getString("trigger"))
+    }
+
+    @Test
+    fun importCommands_emptyArray_isValidNoop() {
+        assertTrue(commandManager.importCommands("[]"))
+        assertEquals("[]", commandManager.exportCommands())
+    }
+
+    @Test
+    fun importCommands_keepsOnlyUpToTheMaximum() {
         val arr = JSONArray()
-        for (i in 0..CommandManager.MAX_CUSTOM_COMMANDS) {
+        for (i in 0 until (CommandManager.MAX_CUSTOM_COMMANDS + 5)) {
             arr.put(JSONObject().put("trigger", "?c$i").put("prompt", "p").put("type", "AI"))
         }
-        assertFalse(commandManager.importCommands(arr.toString()))
+        assertTrue(commandManager.importCommands(arr.toString()))
+        val stored = JSONArray(commandManager.exportCommands())
+        assertEquals(CommandManager.MAX_CUSTOM_COMMANDS, stored.length())
     }
 
     @Test
-    fun importCommands_rejectsUnknownType() {
+    fun importCommands_unknownTypeDefaultsToAi() {
         val json = JSONArray().put(
             JSONObject().put("trigger", "?ok").put("prompt", "p").put("type", "SOMETHING_ELSE")
         ).toString()
-        assertFalse(commandManager.importCommands(json))
+        assertTrue(commandManager.importCommands(json))
+        val stored = JSONArray(commandManager.exportCommands())
+        assertEquals(CommandType.AI.name, stored.getJSONObject(0).getString("type"))
+    }
+
+    @Test
+    fun importCommands_keepsTextReplacerType() {
+        val json = JSONArray().put(
+            JSONObject().put("trigger", "?sig").put("prompt", "regards").put("type", "TEXT_REPLACER")
+        ).toString()
+        assertTrue(commandManager.importCommands(json))
+        val stored = JSONArray(commandManager.exportCommands())
+        assertEquals(CommandType.TEXT_REPLACER.name, stored.getJSONObject(0).getString("type"))
     }
 
     @Test
     fun importCommands_rejectsMalformedJson() {
         assertFalse(commandManager.importCommands("not json at all"))
+    }
+
+    @Test
+    fun importCommands_rejectsJsonWithNoUsableEntries() {
+        val json = JSONArray()
+            .put(JSONObject().put("trigger", "   ").put("prompt", "p").put("type", "AI"))
+            .put(JSONObject().put("trigger", "?ok").put("prompt", "").put("type", "AI"))
+            .toString()
+        assertFalse(commandManager.importCommands(json))
     }
 
     // --- updateCustomCommand ---
