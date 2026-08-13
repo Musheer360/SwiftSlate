@@ -1,0 +1,6 @@
+- ci(workflow): add manual dispatch trigger for release recovery
+- i18n(sv): add the 10 strings shipped after the Swedish PR was opened
+- fix(service): harden remaining crash paths, add interrupted-service banner (#125)
+- feat(settings): fetch and pick models from custom endpoints (#136)
+- fix(api): surface real provider errors, stop benching the only key, accept CGNAT endpoints (#138)
+- feat(i18n): add Swedish translation
