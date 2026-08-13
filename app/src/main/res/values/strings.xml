@@ -148,4 +148,7 @@
     <string name="settings_fetch_models_success">%1$d models loaded</string>
     <string name="settings_fetch_models_empty">No models found. You can still enter a model manually.</string>
     <string name="settings_fetch_models_failed">Could not fetch models. Check your endpoint and API key.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate was interrupted</string>
+    <string name="dashboard_service_killed_message">The background service stopped unexpectedly. Re-enable it in accessibility settings to keep using commands.</string>
+    <string name="dashboard_service_killed_dismiss">Dismiss</string>
 </resources>

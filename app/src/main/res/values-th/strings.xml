@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">โหลดแล้ว %1$d โมเดล</string>
     <string name="settings_fetch_models_empty">ไม่พบโมเดล คุณยังป้อนชื่อโมเดลด้วยตนเองได้</string>
     <string name="settings_fetch_models_failed">ไม่สามารถดึงรายชื่อโมเดลได้ ตรวจสอบที่อยู่และคีย์ API</string>
+    <string name="dashboard_service_killed_title">SwiftSlate ถูกขัดจังหวะ</string>
+    <string name="dashboard_service_killed_message">บริการพื้นหลังหยุดทำงานโดยไม่คาดคิด เปิดใช้งานอีกครั้งในการตั้งค่าการเข้าถึงเพื่อใช้คำสั่งต่อไป</string>
+    <string name="dashboard_service_killed_dismiss">ปิด</string>
 </resources>

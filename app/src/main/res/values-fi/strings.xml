@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">%1$d mallia ladattu</string>
     <string name="settings_fetch_models_empty">Malleja ei löytynyt. Voit silti syöttää mallin käsin.</string>
     <string name="settings_fetch_models_failed">Malleja ei voitu hakea. Tarkista osoite ja API-avain.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate keskeytyi</string>
+    <string name="dashboard_service_killed_message">Taustapalvelu pysähtyi odottamatta. Ota se uudelleen käyttöön esteettömyysasetuksista, jotta voit jatkaa komentojen käyttöä.</string>
+    <string name="dashboard_service_killed_dismiss">Sulje</string>
 </resources>

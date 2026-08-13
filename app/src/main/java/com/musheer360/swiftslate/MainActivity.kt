@@ -71,10 +71,15 @@ fun SwiftSlateMainScreen(vm: SwiftSlateViewModel = viewModel()) {
 
     LaunchedEffect(Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-            val alreadyRequested = prefs.getBoolean("notification_permission_requested", false)
-            if (!alreadyRequested) {
-                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            try {
+                val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+                val alreadyRequested = prefs.getBoolean("notification_permission_requested", false)
+                if (!alreadyRequested) {
+                    permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            } catch (_: Exception) {
+                // A corrupted pref must not crash this activity — it shares the process with
+                // the accessibility service (#125).
             }
         }
     }

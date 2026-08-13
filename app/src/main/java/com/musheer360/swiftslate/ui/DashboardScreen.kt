@@ -1,6 +1,7 @@
 package com.musheer360.swiftslate.ui
 
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.musheer360.swiftslate.R
+import com.musheer360.swiftslate.SwiftSlateApp
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.manager.StatsManager
@@ -46,6 +48,47 @@ private fun checkServiceEnabled(context: Context): Boolean {
     }
 }
 
+/**
+ * Best-effort read of the framework's hidden `crashed` flag: a service stuck in the "crashed
+ * services" limbo still reports as enabled, so [checkServiceEnabled] cannot see it. Returns
+ * false whenever the reflection is unavailable — everything here is guarded (#125). Deliberate
+ * hidden-API reflection: on API 36+ the read throws, the catch returns false, and the banner
+ * simply falls back to the crash-marker pref.
+ */
+@SuppressLint("SoonBlockedPrivateApi")
+private fun isServiceCrashed(context: Context): Boolean {
+    return try {
+        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val field = AccessibilityServiceInfo::class.java.getDeclaredField("crashed")
+        am.getInstalledAccessibilityServiceList().any {
+            try {
+                it.resolveInfo.serviceInfo.packageName == context.packageName && field.getBoolean(it)
+            } catch (_: Exception) {
+                false
+            }
+        }
+    } catch (_: Exception) {
+        false
+    }
+}
+
+/** Timestamp of the last uncaught crash recorded by [SwiftSlateApp], or 0. */
+private fun readCrashMarker(context: Context): Long =
+    try {
+        context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            .getLong(SwiftSlateApp.PREF_SERVICE_DIED_AT, 0L)
+    } catch (_: Exception) {
+        0L
+    }
+
+private fun clearCrashMarker(context: Context) {
+    try {
+        context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+            .edit().remove(SwiftSlateApp.PREF_SERVICE_DIED_AT).apply()
+    } catch (_: Exception) {
+    }
+}
+
 @Composable
 fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, statsManager: StatsManager) {
     val context = LocalContext.current
@@ -55,6 +98,9 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, stat
     // thread. The LaunchedEffect below fills it in on the IO dispatcher, as it already did on
     // every subsequent resume.
     var keyCount by remember { mutableIntStateOf(0) }
+    // Set when the process died unexpectedly (crash marker) or the framework holds the service
+    // in the crashed limbo (hidden flag) — the enabled-state check cannot see either.
+    var showKilledBanner by remember { mutableStateOf(false) }
 
     // Stats state
     var monthlyRequests by remember { mutableIntStateOf(statsManager.monthlyRequests) }
@@ -75,14 +121,19 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, stat
     LaunchedEffect(lifecycleOwner) {
         val lifecycle = lifecycleOwner.lifecycle
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            val (newEnabled, newKeyCount) = withContext(Dispatchers.IO) {
-                Pair(checkServiceEnabled(context), keyManager.getKeys().size)
+            val (newEnabled, newKeyCount, killed) = withContext(Dispatchers.IO) {
+                Triple(
+                    checkServiceEnabled(context),
+                    keyManager.getKeys().size,
+                    readCrashMarker(context) > 0L || isServiceCrashed(context)
+                )
             }
             isServiceEnabled = newEnabled
             keyCount = newKeyCount
             monthlyRequests = statsManager.monthlyRequests
             favoriteCommand = statsManager.favoriteCommand
             dailyCounts = statsManager.dailyCounts()
+            showKilledBanner = killed
         }
     }
 
@@ -167,6 +218,52 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, stat
         }
 
         Spacer(modifier = Modifier.height(8.dp))
+
+        // Interrupted-service banner: the toggle can still read "on" while the process is dead.
+        if (showKilledBanner) {
+            SlateCard {
+                Text(
+                    text = stringResource(R.string.dashboard_service_killed_title),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.error
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.dashboard_service_killed_message),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            clearCrashMarker(context)
+                            showKilledBanner = false
+                            context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                        },
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.heightIn(min = 48.dp)
+                    ) {
+                        Text(stringResource(R.string.service_enable))
+                    }
+                    TextButton(
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            clearCrashMarker(context)
+                            showKilledBanner = false
+                        }
+                    ) {
+                        Text(stringResource(R.string.dashboard_service_killed_dismiss))
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         // Usage statistics card
         SlateCard(modifier = Modifier.weight(1f)) {

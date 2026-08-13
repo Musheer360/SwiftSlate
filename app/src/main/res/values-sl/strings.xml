@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">Naloženih modelov: %1$d</string>
     <string name="settings_fetch_models_empty">Ni najdenih modelov. Model lahko vseeno vnesete ročno.</string>
     <string name="settings_fetch_models_failed">Modelov ni bilo mogoče pridobiti. Preverite naslov in ključ API.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate je bil prekinjen</string>
+    <string name="dashboard_service_killed_message">Storitev v ozadju se je nepričakovano ustavila. Znova jo omogočite v nastavitvah dostopnosti, da boste lahko še naprej uporabljali ukaze.</string>
+    <string name="dashboard_service_killed_dismiss">Zapri</string>
 </resources>

@@ -32,7 +32,10 @@ class CommandManager(context: Context) {
      */
     @Volatile
     private var cachedPrefix: String? = null
-    private var aiCommandsSeeded = prefs.getBoolean("ai_commands_seeded", false)
+    // Typed prefs reads can throw ClassCastException on a corrupted store; this runs on the
+    // accessibility service's bind path, where an escape would kill the whole process (#125).
+    private var aiCommandsSeeded =
+        try { prefs.getBoolean("ai_commands_seeded", false) } catch (_: Exception) { false }
 
     companion object {
         const val DEFAULT_PREFIX = "?"
@@ -85,7 +88,11 @@ class CommandManager(context: Context) {
     }
 
     fun getTriggerPrefix(): String {
-        return settingsPrefs.getString(PREF_TRIGGER_PREFIX, DEFAULT_PREFIX) ?: DEFAULT_PREFIX
+        return try {
+            settingsPrefs.getString(PREF_TRIGGER_PREFIX, DEFAULT_PREFIX) ?: DEFAULT_PREFIX
+        } catch (_: Exception) {
+            DEFAULT_PREFIX
+        }
     }
 
     @Synchronized fun setTriggerPrefix(newPrefix: String): Boolean {

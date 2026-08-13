@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">Įkelta modelių: %1$d</string>
     <string name="settings_fetch_models_empty">Modelių nerasta. Modelį vis tiek galite įvesti rankiniu būdu.</string>
     <string name="settings_fetch_models_failed">Nepavyko gauti modelių. Patikrinkite adresą ir API raktą.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate buvo nutraukta</string>
+    <string name="dashboard_service_killed_message">Foninė tarnyba netikėtai sustojo. Iš naujo įjunkite ją pritaikymo neįgaliesiems nustatymuose, kad galėtumėte toliau naudoti komandas.</string>
+    <string name="dashboard_service_killed_dismiss">Uždaryti</string>
 </resources>

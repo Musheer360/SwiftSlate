@@ -83,6 +83,8 @@ class AssistantService : AccessibilityService() {
     @Volatile
     private var lastReplacedAt = 0L
     @Volatile
+    private var lastFocusFallbackAt = 0L
+    @Volatile
     private var lastReplacedSource: AccessibilityNodeInfo? = null
     private var verifyRunnable: Runnable? = null
     /** (clipboard, originalClip, ourText) for a paste-fallback restore that has not run yet. */
@@ -110,15 +112,24 @@ class AssistantService : AccessibilityService() {
         const val TAG = "SwiftSlateService"
         const val TRIGGER_REFRESH_INTERVAL_MS = 5_000L
         const val PROCESSING_WATCHDOG_MS = 120_000L
+        const val FOCUS_FALLBACK_MIN_INTERVAL_MS = 300L
         val SPINNER_FRAMES = arrayOf("◐", "◓", "◑", "◒")
     }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        keyManager = (applicationContext as SwiftSlateApp).keyManager
-        commandManager = CommandManager(applicationContext)
-        statsManager = StatsManager(applicationContext)
-        updateTriggers()
+        try {
+            keyManager = (applicationContext as SwiftSlateApp).keyManager
+            commandManager = CommandManager(applicationContext)
+            statsManager = StatsManager(applicationContext)
+            updateTriggers()
+        } catch (e: Exception) {
+            // This callback runs on the binder thread with no framework guard: an exception
+            // here propagates to AccessibilityManagerService, which drops the service into the
+            // "crashed services" limbo with the toggle still on. Log and degrade instead — the
+            // event path and command path already handle an uninitialized manager (#125).
+            Log.w(TAG, "onServiceConnected failed; service will stay inert until re-enabled", e)
+        }
     }
 
     private fun updateTriggers() {
@@ -183,7 +194,17 @@ class AssistantService : AccessibilityService() {
         if (event.packageName?.toString() == packageName) return
         if (!::keyManager.isInitialized) return
 
-        val source = event.source ?: return
+        // Some hosts (WeChat-style editors, WebView fields) emit text-changed events whose
+        // source node is null or already recycled. Fall back to the focused input node of the
+        // active window before giving up — see #125 / #131. The root lookup is a binder call on
+        // the main thread, so it is throttled: hosts that flood null-source events are rare, and
+        // skipping an occasional event is harmless for trigger detection.
+        val source = event.source ?: run {
+            val now = SystemClock.elapsedRealtime()
+            if (now - lastFocusFallbackAt < FOCUS_FALLBACK_MIN_INTERVAL_MS) return
+            lastFocusFallbackAt = now
+            findFocusedEditableSource()
+        } ?: return
         if (source.isPassword) {
             source.safeRecycle()
             return
@@ -322,6 +343,31 @@ class AssistantService : AccessibilityService() {
         }
     }
 
+    /**
+     * Best-effort source for text-changed events that arrive without one: the focused input
+     * node of the active window. Returns null when unavailable; the caller treats the result
+     * exactly like a null event.source and recycles it like one. All node access is guarded —
+     * the root can be stale the moment we ask (#125).
+     */
+    private fun findFocusedEditableSource(): AccessibilityNodeInfo? {
+        val root = try {
+            rootInActiveWindow
+        } catch (e: Exception) {
+            Log.w(TAG, "focused-node fallback: root unavailable", e)
+            null
+        } ?: return null
+        try {
+            val focused = root.findFocus(AccessibilityNodeInfo.FOCUS_INPUT)
+            if (focused === root) return root
+            root.safeRecycle()
+            return focused
+        } catch (e: Exception) {
+            Log.w(TAG, "focused-node fallback failed", e)
+            root.safeRecycle()
+            return null
+        }
+    }
+
     private fun handlePendingProcessTextReplacement(
         event: AccessibilityEvent,
         source: AccessibilityNodeInfo,
@@ -329,8 +375,11 @@ class AssistantService : AccessibilityService() {
     ): Boolean {
         val request = ProcessTextReplacementBridge.current(SystemClock.elapsedRealtime())
             ?: return false
-        if (request.sourcePackage != null &&
-            event.packageName?.toString() != request.sourcePackage) {
+        // The request's package is optional, but an event without a package can never be
+        // verified against it — previously a pending request with a null sourcePackage was
+        // matched against (and consumed by) an edit in ANY app, or one with no package at all.
+        val eventPackage = event.packageName?.toString() ?: return false
+        if (request.sourcePackage != null && eventPackage != request.sourcePackage) {
             return false
         }
         val beforeText = event.beforeText?.toString() ?: return false
@@ -342,8 +391,17 @@ class AssistantService : AccessibilityService() {
             addedCount = event.addedCount,
             request = request
         )
-        if (edit == ProcessTextEdit.Unrelated ||
-            !ProcessTextReplacementBridge.consume(request)) {
+        if (edit == ProcessTextEdit.Unrelated) {
+            return false
+        }
+        if (edit is ProcessTextEdit.Appended && isProcessing.get()) {
+            // A command is already running. Leave the request pending and the field untouched
+            // instead of consuming the request and swallowing the user's keystroke — a later
+            // text-changed event inside the bridge TTL can still apply it (#125).
+            source.safeRecycle()
+            return false
+        }
+        if (!ProcessTextReplacementBridge.consume(request)) {
             return false
         }
         if (edit == ProcessTextEdit.Replaced) {
@@ -353,6 +411,8 @@ class AssistantService : AccessibilityService() {
 
         edit as ProcessTextEdit.Appended
         if (!isProcessing.compareAndSet(false, true)) {
+            // Lost a race with a new command after the pre-check; the request is already
+            // consumed, so drop this edit rather than clobbering the command's field writes.
             source.safeRecycle()
             return true
         }
@@ -731,11 +791,26 @@ class AssistantService : AccessibilityService() {
             // Verify the text actually persisted — some apps (Firefox, Google Keep)
             // return true but don't update their internal text state
             delay(100)
-            source.refresh()
+            if (!source.refresh()) {
+                // The node was recycled during the verification delay. Reading .text now
+                // would throw IllegalStateException; report the write as unverified and let
+                // the caller's failure path handle it instead of failing the replacement.
+                return@withContext false
+            }
             val currentText = source.text?.toString()
             if (currentText == newText) {
                 scheduleTextVerification(source, newText)
                 return@withContext true // Text persisted
+            }
+            // Some editors (WebView-based, Samsung Notes, Keep) accept ACTION_SET_TEXT but
+            // commit asynchronously — give them one longer window before declaring the write
+            // ignored, so note-apps don't get a spurious clipboard fallback (#125).
+            delay(400)
+            if (!source.refresh()) return@withContext false
+            val settledText = source.text?.toString()
+            if (settledText == newText) {
+                scheduleTextVerification(source, newText)
+                return@withContext true // Text persisted late
             }
             // Text didn't persist, fall through to clipboard fallback
         }
@@ -751,8 +826,7 @@ class AssistantService : AccessibilityService() {
         }
         clipboard.setPrimaryClip(newClip)
 
-        source.refresh()
-        if (source.text == null) {
+        if (!source.refresh() || source.text == null) {
             // We already replaced the clipboard above; bail out without leaving our temp clip
             // (which holds the transformed text) as the user's clipboard.
             if (!callerOwnsClipboard) restoreClipboard(clipboard, oldClip, newText)

@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">%1$d 件のモデルを読み込みました</string>
     <string name="settings_fetch_models_empty">モデルが見つかりません。手動でモデルを入力することもできます。</string>
     <string name="settings_fetch_models_failed">モデルを取得できませんでした。アドレスと API キーを確認してください。</string>
+    <string name="dashboard_service_killed_title">SwiftSlate が中断されました</string>
+    <string name="dashboard_service_killed_message">バックグラウンド サービスが予期せず停止しました。コマンドを使い続けるには、アクセシビリティ設定で再度有効にしてください。</string>
+    <string name="dashboard_service_killed_dismiss">閉じる</string>
 </resources>

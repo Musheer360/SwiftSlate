@@ -144,4 +144,7 @@
     <string name="settings_fetch_models_success">تم تحميل %1$d نموذجاً</string>
     <string name="settings_fetch_models_empty">لم يتم العثور على نماذج. يمكنك إدخال اسم نموذج يدوياً.</string>
     <string name="settings_fetch_models_failed">تعذّر جلب النماذج. تحقق من عنوان الخادم ومفتاح API.</string>
+    <string name="dashboard_service_killed_title">تمت مقاطعة SwiftSlate</string>
+    <string name="dashboard_service_killed_message">توقفت خدمة الخلفية بشكل غير متوقع. أعد تفعيلها في إعدادات إمكانية الوصول لمواصلة استخدام الأوامر.</string>
+    <string name="dashboard_service_killed_dismiss">تجاهل</string>
 </resources>

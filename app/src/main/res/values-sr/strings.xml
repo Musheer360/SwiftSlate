@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">Учитано модела: %1$d</string>
     <string name="settings_fetch_models_empty">Нису пронађени модели. Ипак можете ручно унети модел.</string>
     <string name="settings_fetch_models_failed">Није било могуће преузети моделе. Проверите адресу и API кључ.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate је прекинут</string>
+    <string name="dashboard_service_killed_message">Позадинска услуга се неочекивано зауставила. Поново је омогућите у подешавањима приступачности да бисте наставили да користите команде.</string>
+    <string name="dashboard_service_killed_dismiss">Одбаци</string>
 </resources>

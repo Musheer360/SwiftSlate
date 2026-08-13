@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">%1$d modelos carregados</string>
     <string name="settings_fetch_models_empty">Nenhum modelo encontrado. Ainda pode introduzir um modelo manualmente.</string>
     <string name="settings_fetch_models_failed">Não foi possível obter os modelos. Verifique o endereço e a chave da API.</string>
+    <string name="dashboard_service_killed_title">O SwiftSlate foi interrompido</string>
+    <string name="dashboard_service_killed_message">O serviço em segundo plano parou inesperadamente. Volte a ativá-lo nas definições de acessibilidade para continuar a usar comandos.</string>
+    <string name="dashboard_service_killed_dismiss">Dispensar</string>
 </resources>

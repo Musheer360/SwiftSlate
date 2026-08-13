@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">%1$d modeller lastet</string>
     <string name="settings_fetch_models_empty">Ingen modeller funnet. Du kan fortsatt skrive inn en modell manuelt.</string>
     <string name="settings_fetch_models_failed">Kunne ikke hente modeller. Sjekk adressen og API-nøkkelen.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate ble avbrutt</string>
+    <string name="dashboard_service_killed_message">Bakgrunnstjenesten stoppet uventet. Slå den på igjen i tilgjengelighetsinnstillingene for å fortsette å bruke kommandoer.</string>
+    <string name="dashboard_service_killed_dismiss">Lukk</string>
 </resources>

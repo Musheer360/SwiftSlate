@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">已加载 %1$d 个模型</string>
     <string name="settings_fetch_models_empty">未找到模型。你仍然可以手动输入模型名称。</string>
     <string name="settings_fetch_models_failed">无法获取模型列表。请检查地址和 API 密钥。</string>
+    <string name="dashboard_service_killed_title">SwiftSlate 已中断</string>
+    <string name="dashboard_service_killed_message">后台服务意外停止。请在无障碍设置中重新启用它，以继续使用命令。</string>
+    <string name="dashboard_service_killed_dismiss">忽略</string>
 </resources>

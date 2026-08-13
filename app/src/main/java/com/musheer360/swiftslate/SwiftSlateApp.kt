@@ -2,6 +2,7 @@ package com.musheer360.swiftslate
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
@@ -23,6 +24,12 @@ class SwiftSlateApp : Application() {
      */
     val keyManager: KeyManager by lazy { KeyManager(this) }
 
+    companion object {
+        const val TAG = "SwiftSlateCrash"
+        /** Pref key (settings store) holding the timestamp of the last uncaught process crash. */
+        const val PREF_SERVICE_DIED_AT = "service_died_at"
+    }
+
     override fun onCreate() {
         super.onCreate()
         // Pre-warm SharedPreferences — triggers async disk load so they're
@@ -32,7 +39,29 @@ class SwiftSlateApp : Application() {
         getSharedPreferences("secure_keys_prefs", Context.MODE_PRIVATE)
         getSharedPreferences("stats", Context.MODE_PRIVATE)
 
+        installCrashMarker()
         scheduleUpdateCheck()
+    }
+
+    /**
+     * Records every uncaught exception in this (shared) process before the platform kills it,
+     * so the Dashboard can tell the user the service died and offer a one-tap re-enable. The
+     * accessibility service has no UI to crash into, and a UI crash takes the service down with
+     * it — without this marker both look like a silent "went inactive" (#125). The previous
+     * handler is still invoked afterwards; the process still dies as the platform intends.
+     */
+    private fun installCrashMarker() {
+        val previous = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            try {
+                Log.e(TAG, "uncaught exception on thread " + thread.name, throwable)
+                getSharedPreferences("settings", Context.MODE_PRIVATE)
+                    .edit().putLong(PREF_SERVICE_DIED_AT, System.currentTimeMillis()).apply()
+            } catch (_: Exception) {
+            } finally {
+                previous?.uncaughtException(thread, throwable)
+            }
+        }
     }
 
     private fun scheduleUpdateCheck() {

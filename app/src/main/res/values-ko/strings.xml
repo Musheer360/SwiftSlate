@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">%1$d개 모델 로드됨</string>
     <string name="settings_fetch_models_empty">모델을 찾지 못했습니다. 모델을 수동으로 입력할 수 있습니다.</string>
     <string name="settings_fetch_models_failed">모델을 가져오지 못했습니다. 주소와 API 키를 확인하세요.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate이(가) 중단되었습니다</string>
+    <string name="dashboard_service_killed_message">백그라운드 서비스가 예기치 않게 중지되었습니다. 명령을 계속 사용하려면 접근성 설정에서 다시 활성화하세요.</string>
+    <string name="dashboard_service_killed_dismiss">닫기</string>
 </resources>

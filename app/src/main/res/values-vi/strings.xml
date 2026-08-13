@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">Đã tải %1$d mô hình</string>
     <string name="settings_fetch_models_empty">Không tìm thấy mô hình nào. Bạn vẫn có thể nhập tên mô hình theo cách thủ công.</string>
     <string name="settings_fetch_models_failed">Không thể lấy danh sách mô hình. Kiểm tra địa chỉ và khóa API.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate đã bị gián đoạn</string>
+    <string name="dashboard_service_killed_message">Dịch vụ nền đã dừng bất ngờ. Hãy bật lại trong cài đặt trợ năng để tiếp tục sử dụng lệnh.</string>
+    <string name="dashboard_service_killed_dismiss">Bỏ qua</string>
 </resources>

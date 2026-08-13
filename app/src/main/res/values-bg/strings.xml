@@ -144,4 +144,7 @@
     <string name="settings_fetch_models_success">Заредени са %1$d модела</string>
     <string name="settings_fetch_models_empty">Не са намерени модели. Все пак можете да въведете модел ръчно.</string>
     <string name="settings_fetch_models_failed">Моделите не можаха да бъдат заредени. Проверете адреса и API ключа.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate беше прекъснат</string>
+    <string name="dashboard_service_killed_message">Фоновата услуга спря неочаквано. Активирайте я отново в настройките за достъпност, за да продължите да използвате командите.</string>
+    <string name="dashboard_service_killed_dismiss">Отхвърли</string>
 </resources>

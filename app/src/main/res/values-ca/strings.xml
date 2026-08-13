@@ -144,4 +144,7 @@
     <string name="settings_fetch_models_success">S\'han carregat %1$d models</string>
     <string name="settings_fetch_models_empty">No s\'ha trobat cap model. Podeu introduir-ne un manualment.</string>
     <string name="settings_fetch_models_failed">No s\'han pogut obtenir els models. Comproveu l\'adreça i la clau d\'API.</string>
+    <string name="dashboard_service_killed_title">S\'ha interromput SwiftSlate</string>
+    <string name="dashboard_service_killed_message">El servei en segon pla s\'ha aturat de manera inesperada. Torneu a activar-lo als paràmetres d\'accessibilitat per continuar fent servir les ordres.</string>
+    <string name="dashboard_service_killed_dismiss">Ignora</string>
 </resources>

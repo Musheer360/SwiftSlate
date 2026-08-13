@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">S-au încărcat %1$d modele</string>
     <string name="settings_fetch_models_empty">Nu s-au găsit modele. Puteți introduce totuși un model manual.</string>
     <string name="settings_fetch_models_failed">Nu s-au putut obține modelele. Verificați adresa și cheia API.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate a fost întrerupt</string>
+    <string name="dashboard_service_killed_message">Serviciul din fundal s-a oprit în mod neașteptat. Reactivați-l în setările de accesibilitate pentru a continua să folosiți comenzile.</string>
+    <string name="dashboard_service_killed_dismiss">Închide</string>
 </resources>

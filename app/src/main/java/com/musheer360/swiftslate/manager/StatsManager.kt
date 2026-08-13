@@ -24,19 +24,30 @@ class StatsManager(context: Context) {
     private fun readJsonObject(key: String): JSONObject =
         try { JSONObject(prefs.getString(key, "{}") ?: "{}") } catch (_: Exception) { JSONObject() }
 
+    /**
+     * Typed prefs reads can throw ClassCastException when a key was ever written with a
+     * different type (corruption, backup/restore). This manager is read on the accessibility
+     * service's bind path and from the Dashboard — an escape there kills the whole process.
+     */
+    private fun safeInt(key: String, def: Int): Int =
+        try { prefs.getInt(key, def) } catch (_: Exception) { def }
+
+    private fun safeString(key: String, def: String?): String? =
+        try { prefs.getString(key, def) } catch (_: Exception) { def }
+
     /** Call after a command is successfully processed. */
     @Synchronized
     fun recordUsage(commandName: String) {
         val editor = prefs.edit()
 
         // Total
-        val total = prefs.getInt(KEY_TOTAL, 0) + 1
+        val total = safeInt(KEY_TOTAL, 0) + 1
         editor.putInt(KEY_TOTAL, total)
 
         // Monthly — reset on rollover
-        val storedMonth = prefs.getString(KEY_MONTH, null)
+        val storedMonth = safeString(KEY_MONTH, null)
         val month = currentMonth()
-        val monthly = if (storedMonth == month) prefs.getInt(KEY_MONTHLY, 0) + 1 else 1
+        val monthly = if (storedMonth == month) safeInt(KEY_MONTHLY, 0) + 1 else 1
         editor.putString(KEY_MONTH, month)
         editor.putInt(KEY_MONTHLY, monthly)
 
@@ -59,12 +70,12 @@ class StatsManager(context: Context) {
         editor.apply()
     }
 
-    val totalRequests: Int get() = prefs.getInt(KEY_TOTAL, 0)
+    val totalRequests: Int get() = safeInt(KEY_TOTAL, 0)
 
     val monthlyRequests: Int
         get() {
-            if (prefs.getString(KEY_MONTH, null) != currentMonth()) return 0
-            return prefs.getInt(KEY_MONTHLY, 0)
+            if (safeString(KEY_MONTH, null) != currentMonth()) return 0
+            return safeInt(KEY_MONTHLY, 0)
         }
 
     /** Returns the command name with the highest usage, or null. */

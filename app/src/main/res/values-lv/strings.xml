@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">Ielādēti %1$d modeļi</string>
     <string name="settings_fetch_models_empty">Nav atrasts neviens modelis. Modeli varat ievadīt manuāli.</string>
     <string name="settings_fetch_models_failed">Neizdevās iegūt modeļus. Pārbaudiet adresi un API atslēgu.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate tika pārtraukts</string>
+    <string name="dashboard_service_killed_message">Fona pakalpojums negaidīti apstājās. Atkārtoti iespējojiet to pieejamības iestatījumos, lai turpinātu lietot komandas.</string>
+    <string name="dashboard_service_killed_dismiss">Aizvērt</string>
 </resources>

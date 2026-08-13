@@ -1,6 +1,7 @@
 package com.musheer360.swiftslate.ui.processtext
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.musheer360.swiftslate.R
@@ -48,6 +49,7 @@ class ProcessTextViewModel(
 
     private companion object {
         const val REQUEST_TIMEOUT_MS = 90_000L
+        const val TAG = "ProcessTextViewModel"
     }
 
     // All lazy: each constructor touches SharedPreferences (and, for KeyManager, the
@@ -77,12 +79,20 @@ class ProcessTextViewModel(
         viewModelScope.launch {
             // SharedPreferences is disk-backed, and viewModelScope runs on
             // Dispatchers.Main.immediate — never touch it on the main thread.
-            commands = withContext(Dispatchers.IO) {
-                // Built-ins are the clipboard/undo commands, which need the live field the
-                // accessibility service has and this flow does not. Filtered on isBuiltIn, not
-                // on trigger text: the prefix is user-configurable, so matching "?copy" would
-                // silently stop filtering the moment someone changed it.
-                commandManager.getCommands().filterNot { it.isBuiltIn }
+            commands = try {
+                withContext(Dispatchers.IO) {
+                    // Built-ins are the clipboard/undo commands, which need the live field the
+                    // accessibility service has and this flow does not. Filtered on isBuiltIn, not
+                    // on trigger text: the prefix is user-configurable, so matching "?copy" would
+                    // silently stop filtering the moment someone changed it.
+                    commandManager.getCommands().filterNot { it.isBuiltIn }
+                }
+            } catch (e: Exception) {
+                // This activity shares the process with the accessibility service — an
+                // uncaught exception here would kill the service too (#125). Degrade to an
+                // empty list instead.
+                Log.w(TAG, "loading commands failed", e)
+                emptyList()
             }
             _uiState.value = UiState.CommandList(commands)
         }
@@ -95,7 +105,10 @@ class ProcessTextViewModel(
         if (command.type == CommandType.TEXT_REPLACER) {
             inFlight.set(false)
             _uiState.value = UiState.Preview(command.prompt, canInsert = !selection.readOnly)
-            viewModelScope.launch { withContext(Dispatchers.IO) { statsManager.recordUsage(command.trigger) } }
+            viewModelScope.launch {
+                try { withContext(Dispatchers.IO) { statsManager.recordUsage(command.trigger) } }
+                catch (e: Exception) { Log.w(TAG, "recording usage failed", e) }
+            }
             return
         }
 
@@ -114,7 +127,8 @@ class ProcessTextViewModel(
                 }
                 when (outcome) {
                     is CommandOutcome.Success -> {
-                        withContext(Dispatchers.IO) { statsManager.recordUsage(command.trigger) }
+                        try { withContext(Dispatchers.IO) { statsManager.recordUsage(command.trigger) } }
+                        catch (e: Exception) { Log.w(TAG, "recording usage failed", e) }
                         UiState.Preview(outcome.text, canInsert = !selection.readOnly)
                     }
                     is CommandOutcome.Refusal ->
@@ -124,6 +138,11 @@ class ProcessTextViewModel(
                 }
             } catch (_: TimeoutCancellationException) {
                 UiState.Error(string(R.string.toast_request_timed_out), retry = command)
+            } catch (e: Exception) {
+                // Same-process safety net — never let an unexpected failure take the service
+                // down with this activity (#125).
+                Log.w(TAG, "running command failed unexpectedly", e)
+                UiState.Error(string(R.string.error_bad_request), retry = command)
             } finally {
                 inFlight.set(false)
             }

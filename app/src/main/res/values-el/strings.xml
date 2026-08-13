@@ -144,4 +144,7 @@
     <string name="settings_fetch_models_success">Φορτώθηκαν %1$d μοντέλα</string>
     <string name="settings_fetch_models_empty">Δεν βρέθηκαν μοντέλα. Μπορείτε να εισαγάγετε ένα μοντέλο χειροκίνητα.</string>
     <string name="settings_fetch_models_failed">Δεν ήταν δυνατή η λήψη των μοντέλων. Ελέγξτε τη διεύθυνση και το κλειδί API.</string>
+    <string name="dashboard_service_killed_title">Το SwiftSlate διακόπηκε</string>
+    <string name="dashboard_service_killed_message">Η υπηρεσία παρασκηνίου σταμάτησε απροσδόκητα. Ενεργοποιήστε την ξανά στις ρυθμίσεις προσβασιμότητας για να συνεχίσετε να χρησιμοποιείτε εντολές.</string>
+    <string name="dashboard_service_killed_dismiss">Απόρριψη</string>
 </resources>

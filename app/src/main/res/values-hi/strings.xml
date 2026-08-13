@@ -141,4 +141,7 @@
     <string name="settings_fetch_models_success">%1$d मॉडल लोड हुए</string>
     <string name="settings_fetch_models_empty">कोई मॉडल नहीं मिला। आप फिर भी मैन्युअल रूप से मॉडल दर्ज कर सकते हैं।</string>
     <string name="settings_fetch_models_failed">मॉडल नहीं लाए जा सके। एंडपॉइंट और API कुंजी जाँचें।</string>
+    <string name="dashboard_service_killed_title">SwiftSlate बाधित हो गया</string>
+    <string name="dashboard_service_killed_message">बैकग्राउंड सेवा अप्रत्याशित रूप से बंद हो गई। कमांड का उपयोग जारी रखने के लिए इसे सुलभता सेटिंग में फिर से सक्षम करें।</string>
+    <string name="dashboard_service_killed_dismiss">खारिज करें</string>
 </resources>

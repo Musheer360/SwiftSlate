@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">Laaditud: %1$d mudelit</string>
     <string name="settings_fetch_models_empty">Mudeleid ei leitud. Mudeli saad sisestada ka käsitsi.</string>
     <string name="settings_fetch_models_failed">Mudelite laadimine ebaõnnestus. Kontrolli aadressi ja API-võtit.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate katkes</string>
+    <string name="dashboard_service_killed_message">Taustateenus peatus ootamatult. Lülita see juurdepääsetavuse seadetes uuesti sisse, et käske edasi kasutada.</string>
+    <string name="dashboard_service_killed_dismiss">Loobu</string>
 </resources>

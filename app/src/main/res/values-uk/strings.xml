@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">Завантажено моделей: %1$d</string>
     <string name="settings_fetch_models_empty">Моделі не знайдено. Ви все одно можете ввести модель вручну.</string>
     <string name="settings_fetch_models_failed">Не вдалося отримати моделі. Перевірте адресу та ключ API.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate було перервано</string>
+    <string name="dashboard_service_killed_message">Фонова служба неочікувано зупинилася. Увімкніть її знову в налаштуваннях доступності, щоб продовжувати використовувати команди.</string>
+    <string name="dashboard_service_killed_dismiss">Закрити</string>
 </resources>

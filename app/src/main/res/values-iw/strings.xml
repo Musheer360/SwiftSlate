@@ -142,4 +142,7 @@
     <string name="settings_fetch_models_success">נטענו %1$d מודלים</string>
     <string name="settings_fetch_models_empty">לא נמצאו מודלים. עדיין ניתן להזין מודל ידנית.</string>
     <string name="settings_fetch_models_failed">לא ניתן לאחזר את המודלים. בדקו את הכתובת ואת מפתח ה-API.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate הופסק</string>
+    <string name="dashboard_service_killed_message">שירות הרקע נעצר באופן בלתי צפוי. הפעילו אותו שוב בהגדרות הנגישות כדי להמשיך להשתמש בפקודות.</string>
+    <string name="dashboard_service_killed_dismiss">ביטול</string>
 </resources>
