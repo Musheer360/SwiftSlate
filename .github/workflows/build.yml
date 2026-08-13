@@ -1,6 +1,11 @@
 name: Build & Release
 
 on:
+  # Manual trigger: lets a maintainer re-run the release pipeline on demand.
+  # The version job auto-bumps from the existing tags, so this also serves as
+  # the recovery path when a run was cancelled mid-release and left a tag
+  # behind (delete the orphan tag first, then dispatch).
+  workflow_dispatch:
   push:
     branches: [master]
     paths:
