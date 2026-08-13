@@ -1,0 +1,1 @@
+- feat(i18n): add Swedish translation
