@@ -135,4 +135,6 @@
     <string name="update_available_text">Palieskite, kad peržiūrėtumėte naujausią leidimą</string>
     <string name="error_input_too_long">Tekstas per ilgas šio modelio žetonų per minutę ribai. Bandykite dar kartą su trumpesniu tekstu.</string>
     <string name="note_response_truncated">[Pastaba: atsakymas gali būti nutrūkęs]</string>
+    <string name="error_provider_auth_required">Serveris atmetė užklausą. Jei tai debesies serveris, prisijunkite pačiame serveryje (pvz., „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Serveris pasiekiamas, bet adresas turi baigtis /v1 (pvz., http://host:11434/v1).</string>
 </resources>

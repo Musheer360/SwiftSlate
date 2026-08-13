@@ -179,6 +179,18 @@ class KeyManager internal constructor(
     }
 
     /**
+     * Clears any in-memory invalid/rate-limit marks for [key] so it is usable again on the
+     * next attempt. Called when the user re-adds a key: previously the UI's "already added"
+     * early-return skipped [addKey]'s un-benching, leaving the accessibility service benching
+     * the key for the full 15-minute TTL even after the user fixed it.
+     */
+    @Synchronized
+    fun clearMarks(key: String) {
+        invalidKeys.remove(key)
+        rateLimitedKeys.remove(key)
+    }
+
+    /**
      * Whether [key] is currently benched as invalid, expiring the mark if it is due.
      * Self-healing: without expiry a transient 403 killed the key until the process
      * restarted (see [INVALID_KEY_TTL_MS]).

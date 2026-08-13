@@ -135,4 +135,6 @@
     <string name="update_available_text">Koppintson a legújabb kiadás megtekintéséhez</string>
     <string name="error_input_too_long">A szöveg túl hosszú ennek a modellnek a percenkénti tokenkorlátjához. Próbáld újra rövidebb szöveggel.</string>
     <string name="note_response_truncated">[Megjegyzés: a válasz csonka lehet]</string>
+    <string name="error_provider_auth_required">A végpont elutasította a kérést. Felhőszerver esetén jelentkezzen be magán a szerveren (pl. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">A végpont elérhető, de az URL-nek /v1-re kell végződnie (pl. http://host:11434/v1).</string>
 </resources>

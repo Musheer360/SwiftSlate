@@ -135,4 +135,6 @@
     <string name="update_available_text">Tocca per visualizzare l\'ultima versione</string>
     <string name="error_input_too_long">Il testo è troppo lungo per il limite di token al minuto di questo modello. Riprova con un testo più corto.</string>
     <string name="note_response_truncated">[Nota: la risposta potrebbe essere troncata]</string>
+    <string name="error_provider_auth_required">L\'endpoint ha rifiutato la richiesta. Se è un server cloud, accedi direttamente sul server (es. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">L\'endpoint è raggiungibile, ma l\'URL deve terminare con /v1 (es. http://host:11434/v1).</string>
 </resources>

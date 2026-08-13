@@ -19,6 +19,14 @@ object ErrorMessages {
             lower.contains("invalid api key") || lower.contains("api key not valid") || lower.contains("api_key_invalid") ||
                 lower.contains("invalid_api_key") || lower.contains("incorrect api key") ->
                 R.string.error_invalid_key
+            // Ollama Cloud (`-cloud` models) and similar servers reject with a flat-string
+            // body about the SERVER's sign-in state, not the submitted key. Matched on the
+            // app's own marker (set when a signin_url is present) or Ollama's exact phrasing,
+            // deliberately NOT on bare "unauthorized" — other providers use that word for
+            // key/permission errors that the branches above must keep.
+            lower.contains("signin_required") || lower.contains("not currently signed in") ||
+                lower.contains("signin_url") ->
+                R.string.error_provider_auth_required
             lower.contains("rate limit") || lower.contains("resource_exhausted") || lower.contains("quota") ->
                 R.string.error_rate_limited
             // Must come AFTER the rate-limit branch is skipped for these: Groq's 413 body reads

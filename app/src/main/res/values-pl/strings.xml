@@ -135,4 +135,6 @@
     <string name="update_available_text">Dotknij, aby zobaczyć najnowszą wersję</string>
     <string name="error_input_too_long">Tekst jest zbyt długi dla limitu tokenów na minutę tego modelu. Spróbuj ponownie z krótszym tekstem.</string>
     <string name="note_response_truncated">[Uwaga: odpowiedź może być skrócona]</string>
+    <string name="error_provider_auth_required">Serwer odrzucił żądanie. Jeśli to serwer w chmurze, zaloguj się na samym serwerze (np. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Serwer jest osiągalny, ale adres musi kończyć się na /v1 (np. http://host:11434/v1).</string>
 </resources>

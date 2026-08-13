@@ -135,4 +135,6 @@
     <string name="update_available_text">Tik om de nieuwste release te bekijken</string>
     <string name="error_input_too_long">De tekst is te lang voor de tokenlimiet per minuut van dit model. Probeer het opnieuw met kortere tekst.</string>
     <string name="note_response_truncated">[Let op: antwoord is mogelijk afgekapt]</string>
+    <string name="error_provider_auth_required">De server heeft de aanvraag geweigerd. Bij een cloudserver moet je je aanmelden op de server zelf (bijv. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">De server is bereikbaar, maar de URL moet eindigen op /v1 (bijv. http://host:11434/v1).</string>
 </resources>

@@ -135,4 +135,6 @@
     <string name="update_available_text">En son sürümü görüntülemek için dokunun</string>
     <string name="error_input_too_long">Metin, bu modelin dakika başına token sınırı için çok uzun. Daha kısa bir metinle tekrar deneyin.</string>
     <string name="note_response_truncated">[Not: yanıt kesilmiş olabilir]</string>
+    <string name="error_provider_auth_required">Sunucu isteği reddetti. Bulut sunucusuysa sunucunun kendisinde oturum açın (örn. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Sunucuya erişilebiliyor, ancak adres /v1 ile bitmeli (örn. http://host:11434/v1).</string>
 </resources>

@@ -135,4 +135,6 @@
     <string name="update_available_text">点按以查看最新版本</string>
     <string name="error_input_too_long">文本超出了此模型每分钟的令牌上限。请使用更短的文本重试。</string>
     <string name="note_response_truncated">[注意：回复可能被截断]</string>
+    <string name="error_provider_auth_required">服务器拒绝了请求。如果是云服务器，请在服务器本身上登录（例如 ollama signin）。</string>
+    <string name="keys_endpoint_needs_v1">可以连接到服务器，但 URL 应以 /v1 结尾（例如 http://host:11434/v1）。</string>
 </resources>

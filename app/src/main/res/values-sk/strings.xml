@@ -135,4 +135,6 @@
     <string name="update_available_text">Ťuknutím zobrazíte najnovšiu verziu</string>
     <string name="error_input_too_long">Text je príliš dlhý pre limit tokenov za minútu tohto modelu. Skúste to znova s kratším textom.</string>
     <string name="note_response_truncated">[Poznámka: odpoveď môže byť skrátená]</string>
+    <string name="error_provider_auth_required">Koncový bod žiadosť zamietol. Ak ide o cloudový server, prihláste sa na samotnom serveri (napr. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Koncový bod je dostupný, ale adresa musí končiť /v1 (napr. http://host:11434/v1).</string>
 </resources>

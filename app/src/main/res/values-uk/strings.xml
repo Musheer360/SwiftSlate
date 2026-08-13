@@ -135,4 +135,6 @@
     <string name="update_available_text">Торкніться, щоб переглянути останній випуск</string>
     <string name="error_input_too_long">Текст задовгий для ліміту токенів на хвилину цієї моделі. Спробуйте ще раз із коротшим текстом.</string>
     <string name="note_response_truncated">[Примітка: відповідь може бути обрізана]</string>
+    <string name="error_provider_auth_required">Сервер відхилив запит. Якщо це хмарний сервер, увійдіть на самому сервері (наприклад, ollama signin).</string>
+    <string name="keys_endpoint_needs_v1">Сервер доступний, але адреса має закінчуватися на /v1 (наприклад, http://host:11434/v1).</string>
 </resources>

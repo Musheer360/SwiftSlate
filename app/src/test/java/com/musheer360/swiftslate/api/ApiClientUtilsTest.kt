@@ -148,4 +148,40 @@ class ApiClientUtilsTest {
     fun wrapUserText_fencesInputForBothProviders() {
         assertEquals("<input>\nhello\n</input>", ApiClientUtils.wrapUserText("hello"))
     }
+
+    // --- extractApiErrorMessage / extractSigninUrl ---
+
+    @Test
+    fun extractApiErrorMessage_readsNestedOpenAIShape() {
+        assertEquals(
+            "Invalid API key",
+            ApiClientUtils.extractApiErrorMessage("""{"error":{"message":"Invalid API key","type":"invalid_request_error"}}""")
+        )
+    }
+
+    @Test
+    fun extractApiErrorMessage_readsFlatStringShape() {
+        // Ollama and friends return {"error":"<string>"}, not the nested OpenAI shape.
+        assertEquals("unauthorized", ApiClientUtils.extractApiErrorMessage("""{"error":"unauthorized","signin_url":"https://x"}"""))
+        assertEquals("you are not currently signed in", ApiClientUtils.extractApiErrorMessage("""{"error":"you are not currently signed in"}"""))
+    }
+
+    @Test
+    fun extractApiErrorMessage_nonJsonAndBlankReturnEmpty() {
+        assertEquals("", ApiClientUtils.extractApiErrorMessage(""))
+        assertEquals("", ApiClientUtils.extractApiErrorMessage("not json"))
+        assertEquals("", ApiClientUtils.extractApiErrorMessage("""{"something":"else"}"""))
+    }
+
+    @Test
+    fun extractSigninUrl_readsTheFieldAndIgnoresOthers() {
+        assertEquals(
+            "https://ollama.com/signin/token",
+            ApiClientUtils.extractSigninUrl("""{"error":"unauthorized","signin_url":"https://ollama.com/signin/token"}""")
+        )
+        assertNull(ApiClientUtils.extractSigninUrl("""{"error":{"message":"Invalid API key"}}"""))
+        assertNull(ApiClientUtils.extractSigninUrl(""))
+        assertNull(ApiClientUtils.extractSigninUrl("not json"))
+    }
+
 }

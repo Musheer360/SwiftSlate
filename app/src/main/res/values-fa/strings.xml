@@ -135,4 +135,6 @@
     <string name="update_available_text">برای مشاهده آخرین نسخه ضربه بزنید</string>
     <string name="error_input_too_long">متن از محدودیت توکن در دقیقه این مدل بلندتر است. با متن کوتاه‌تری دوباره تلاش کنید.</string>
     <string name="note_response_truncated">[توجه: ممکن است پاسخ ناقص باشد]</string>
+    <string name="error_provider_auth_required">سرور درخواست را رد کرد. اگر سرور ابری است، در خود سرور وارد شوید (مثلاً ollama signin).</string>
+    <string name="keys_endpoint_needs_v1">سرور در دسترس است، اما آدرس باید به /v1 ختم شود (مثلاً http://host:11434/v1).</string>
 </resources>

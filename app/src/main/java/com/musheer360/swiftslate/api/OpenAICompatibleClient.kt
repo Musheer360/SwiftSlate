@@ -45,8 +45,26 @@ class OpenAICompatibleClient {
                 when (responseCode) {
                     429 -> Result.failure(Exception("Rate limited. Please try again later."))
                     401, 403 -> {
-                        val detail = if (apiMessage.isNotEmpty()) apiMessage else "Invalid API key"
+                        val signinUrl = ApiClientUtils.extractSigninUrl(errorBody)
+                        val detail = when {
+                            signinUrl != null || apiMessage.contains("not currently signed in", ignoreCase = true) ->
+                                "${ApiClientUtils.SIGNIN_REQUIRED_MARKER}: ${apiMessage.ifEmpty { "server sign-in required" }}"
+                            apiMessage.isNotEmpty() -> apiMessage
+                            else -> "Invalid API key"
+                        }
                         Result.failure(Exception(detail))
+                    }
+                    404 -> {
+                        // Some local servers (Ollama) only serve the OpenAI-compatible API
+                        // under /v1; the stored endpoint may just be missing that suffix.
+                        connection?.disconnect()
+                        connection = null
+                        if (probeModels("$baseUrl/v1/models", apiKey)) {
+                            Result.failure(Exception(ApiClientUtils.NEEDS_V1_MARKER))
+                        } else {
+                            val detail = if (apiMessage.isNotEmpty()) apiMessage else "Unexpected error"
+                            Result.failure(Exception("Error $responseCode: $detail"))
+                        }
                     }
                     else -> {
                         val detail = if (apiMessage.isNotEmpty()) apiMessage else "Unexpected error"
@@ -58,6 +76,33 @@ class OpenAICompatibleClient {
             Result.failure(e)
         } finally {
             connection?.disconnect()
+        }
+    }
+
+    /**
+     * GETs [url] and reports whether the server answered 2xx. Used by [validateKey]'s
+     * /v1 fallback probe — a 200 here proves the endpoint is reachable, nothing more.
+     */
+    private fun probeModels(url: String, apiKey: String): Boolean {
+        var probe: HttpURLConnection? = null
+        return try {
+            probe = URL(url).openConnection() as HttpURLConnection
+            probe.requestMethod = "GET"
+            probe.setRequestProperty("Authorization", "Bearer $apiKey")
+            probe.connectTimeout = 15_000
+            probe.readTimeout = 15_000
+            val code = probe.responseCode
+            if (code in 200..299) {
+                probe.inputStream?.use { stream ->
+                    val buf = ByteArray(1024)
+                    while (stream.read(buf) != -1) { /* drain */ }
+                }
+            }
+            code in 200..299
+        } catch (_: Exception) {
+            false
+        } finally {
+            probe?.disconnect()
         }
     }
 
@@ -224,7 +269,13 @@ class OpenAICompatibleClient {
             } else if (responseCode == 401 || responseCode == 403) {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
-                val detail = if (apiMessage.isNotEmpty()) apiMessage else "Invalid API key"
+                val signinUrl = ApiClientUtils.extractSigninUrl(errorBody)
+                val detail = when {
+                    signinUrl != null || apiMessage.contains("not currently signed in", ignoreCase = true) ->
+                        "${ApiClientUtils.SIGNIN_REQUIRED_MARKER}: ${apiMessage.ifEmpty { "server sign-in required" }}"
+                    apiMessage.isNotEmpty() -> apiMessage
+                    else -> "Invalid API key"
+                }
                 Result.failure(ApiException(ApiError.InvalidKey(detail), detail))
             } else {
                 val errorBody = ApiClientUtils.readErrorBody(connection)

@@ -137,4 +137,6 @@
     <!-- Command descriptions -->
     <string name="error_input_too_long">Text je příliš dlouhý pro limit tokenů za minutu tohoto modelu. Zkuste to znovu s kratším textem.</string>
     <string name="note_response_truncated">[Poznámka: odpověď může být zkrácena]</string>
+    <string name="error_provider_auth_required">Koncový bod požadavek odmítl. Pokud jde o cloudový server, přihlaste se přímo na něm (např. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Koncový bod je dostupný, ale adresa musí končit /v1 (např. http://host:11434/v1).</string>
 </resources>

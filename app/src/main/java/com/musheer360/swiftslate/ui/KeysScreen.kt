@@ -69,6 +69,8 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
     val validationFailedMsg = stringResource(R.string.keys_validation_failed)
     val keystoreErrorMsg = stringResource(R.string.keys_keystore_error)
     val customEndpointRequiredMsg = stringResource(R.string.keys_custom_endpoint_required)
+    val signinRequiredMsg = stringResource(R.string.error_provider_auth_required)
+    val endpointNeedsV1Msg = stringResource(R.string.keys_endpoint_needs_v1)
 
     Column(
         modifier = Modifier
@@ -108,6 +110,10 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                             val trimmedKey = newKey.trim()
                             if (withContext(Dispatchers.IO) { keyManager.getKeys() }.contains(trimmedKey)) {
                                 isTesting = false
+                                // Re-adding an existing key means the user is retrying it after a
+                                // failure — clear any invalid/rate-limit bench so the service can
+                                // use it again immediately instead of waiting out the 15-min TTL.
+                                withContext(Dispatchers.IO) { keyManager.clearMarks(trimmedKey) }
                                 testResult = alreadyAddedMsg
                                 testSuccess = false
                                 return@launch
@@ -151,9 +157,12 @@ fun KeysScreen(keyManager: KeyManager, prefs: SharedPreferences) {
                                 // raw provider message — the accessibility service maps every
                                 // message onto a localized string instead — so it is the one
                                 // path that has to strip secrets before displaying it.
-                                testResult = result.exceptionOrNull()?.message
-                                    ?.let { ApiClientUtils.redactSecrets(it) }
-                                    ?: validationFailedMsg
+                                val raw = result.exceptionOrNull()?.message ?: ""
+                                testResult = when {
+                                    raw.contains(ApiClientUtils.SIGNIN_REQUIRED_MARKER) -> signinRequiredMsg
+                                    raw.contains(ApiClientUtils.NEEDS_V1_MARKER) -> endpointNeedsV1Msg
+                                    else -> ApiClientUtils.redactSecrets(raw).ifEmpty { validationFailedMsg }
+                                }
                                 testSuccess = false
                             }
                         }

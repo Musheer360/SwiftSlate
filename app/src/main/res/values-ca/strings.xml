@@ -137,4 +137,6 @@
     <!-- Command descriptions -->
     <string name="error_input_too_long">El text és massa llarg per al límit de tokens per minut d\'aquest model. Torna-ho a provar amb un text més curt.</string>
     <string name="note_response_truncated">[Nota: la resposta pot estar tallada]</string>
+    <string name="error_provider_auth_required">El servidor ha rebutjat la sol·licitud. Si és un servidor al núvol, inicia la sessió al mateix servidor (p. ex. «ollama signin»).</string>
+    <string name="keys_endpoint_needs_v1">El servidor és accessible, però l\'adreça ha d\'acabar amb /v1 (p. ex. http://host:11434/v1).</string>
 </resources>

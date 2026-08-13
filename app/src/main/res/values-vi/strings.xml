@@ -135,4 +135,6 @@
     <string name="update_available_text">Nhấn để xem bản phát hành mới nhất</string>
     <string name="error_input_too_long">Văn bản quá dài so với giới hạn token mỗi phút của mô hình này. Hãy thử lại với văn bản ngắn hơn.</string>
     <string name="note_response_truncated">[Lưu ý: phản hồi có thể bị cắt]</string>
+    <string name="error_provider_auth_required">Máy chủ đã từ chối yêu cầu. Nếu là máy chủ đám mây, hãy đăng nhập trên chính máy chủ đó (ví dụ: ollama signin).</string>
+    <string name="keys_endpoint_needs_v1">Có thể kết nối máy chủ, nhưng URL phải kết thúc bằng /v1 (ví dụ: http://host:11434/v1).</string>
 </resources>

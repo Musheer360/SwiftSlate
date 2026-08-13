@@ -42,6 +42,7 @@ object EndpointValidator {
         if (ip[0] == 172 && ip[1] in 16..31) return true // RFC1918 172.16.0.0/12
         if (ip[0] == 192 && ip[1] == 168) return true // RFC1918 192.168.0.0/16
         if (ip[0] == 169 && ip[1] == 254) return true // link-local 169.254.0.0/16
+        if (ip[0] == 100 && ip[1] in 64..127) return true // CGNAT 100.64.0.0/10 (Tailscale/ZeroTier)
         return false
     }
 

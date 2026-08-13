@@ -135,4 +135,6 @@
     <string name="update_available_text">Tapnite za ogled najnovejše različice</string>
     <string name="error_input_too_long">Besedilo je predolgo za omejitev žetonov na minuto tega modela. Poskusite znova s krajšim besedilom.</string>
     <string name="note_response_truncated">[Opomba: odgovor je morda skrajšan]</string>
+    <string name="error_provider_auth_required">Končna točka je zahtevo zavrnila. Pri strežniku v oblaku se prijavite na samem strežniku (npr. »ollama signin«).</string>
+    <string name="keys_endpoint_needs_v1">Končna točka je dosegljiva, vendar se mora naslov končati z /v1 (npr. http://host:11434/v1).</string>
 </resources>

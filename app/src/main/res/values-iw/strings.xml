@@ -135,4 +135,6 @@
     <string name="update_available_text">הקש כדי להציג את המהדורה האחרונה</string>
     <string name="error_input_too_long">הטקסט ארוך מדי עבור מגבלת הטוקנים לדקה של המודל הזה. נסה שוב עם טקסט קצר יותר.</string>
     <string name="note_response_truncated">[הערה: התשובה עשויה להיות קטועה]</string>
+    <string name="error_provider_auth_required">השרת דחה את הבקשה. אם זה שרת ענן, היכנסו בשרת עצמו (למשל ollama signin).</string>
+    <string name="keys_endpoint_needs_v1">השרת נגיש, אבל הכתובת צריכה להסתיים ב־/v1 (למשל http://host:11434/v1).</string>
 </resources>

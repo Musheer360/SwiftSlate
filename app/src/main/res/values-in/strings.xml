@@ -135,4 +135,6 @@
     <string name="update_available_text">Ketuk untuk melihat rilis terbaru</string>
     <string name="error_input_too_long">Teks terlalu panjang untuk batas token per menit model ini. Coba lagi dengan teks yang lebih pendek.</string>
     <string name="note_response_truncated">[Catatan: respons mungkin terpotong]</string>
+    <string name="error_provider_auth_required">Server menolak permintaan. Jika ini server cloud, masuklah di server itu sendiri (mis. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Server dapat dijangkau, tetapi URL harus diakhiri dengan /v1 (mis. http://host:11434/v1).</string>
 </resources>

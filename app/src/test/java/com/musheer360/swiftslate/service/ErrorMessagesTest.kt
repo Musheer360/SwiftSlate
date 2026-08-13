@@ -27,6 +27,25 @@ class ErrorMessagesTest {
     }
 
     @Test
+    fun providerSignInRequiredVariants() {
+        // Composed by OpenAICompatibleClient when a signin_url accompanies the 401.
+        assertEquals(R.string.error_provider_auth_required, ErrorMessages.map("signin_required: unauthorized"))
+        assertEquals(R.string.error_provider_auth_required, ErrorMessages.map("you are not currently signed in"))
+        assertEquals(R.string.error_provider_auth_required, ErrorMessages.map("unauthorized [signin_url: https://ollama.com/signin/x]"))
+    }
+
+    /**
+     * Neutrality guard: a bare "unauthorized" from a non-Ollama provider must NOT be
+     * re-labelled as a server sign-in problem — it is usually a key/permission error
+     * and must keep falling through to the generic message.
+     */
+    @Test
+    fun bareUnauthorized_doesNotMapToSignInMessage() {
+        assertEquals(R.string.error_bad_request, ErrorMessages.map("Unauthorized"))
+        assertEquals(R.string.error_bad_request, ErrorMessages.map("401 Unauthorized"))
+    }
+
+    @Test
     fun permissionDeniedBeatsInvalidKey() {
         // A 403 is usually the model not being available to the project, not a bad key.
         assertEquals(R.string.error_no_model_access, ErrorMessages.map("PERMISSION_DENIED: invalid api key"))
@@ -108,7 +127,8 @@ class ErrorMessagesTest {
         val samples = listOf(
             "", "permission_denied", "invalid api key", "rate limit", "request too large",
             "model not found", "safety", "empty response", "timeout", "connection refused",
-            "unable to resolve host", "bad request", "totally unknown"
+            "unable to resolve host", "bad request", "totally unknown", "signin_required: unauthorized",
+            "you are not currently signed in", "Unauthorized"
         )
         for (s in samples) {
             assert(ErrorMessages.map(s) != 0) { "map(\"$s\") returned 0" }

@@ -137,4 +137,6 @@
     <!-- Command descriptions -->
     <string name="error_input_too_long">Текстът е твърде дълъг за лимита на токени в минута на този модел. Опитайте отново с по-кратък текст.</string>
     <string name="note_response_truncated">[Бележка: отговорът може да е отрязан]</string>
+    <string name="error_provider_auth_required">Крайната точка отхвърли заявката. Ако е облачен сървър, влезте на самия сървър (напр. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Крайната точка е достъпна, но адресът трябва да завършва на /v1 (напр. http://host:11434/v1).</string>
 </resources>

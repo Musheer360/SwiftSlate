@@ -134,4 +134,6 @@
     <string name="update_available_text">Toca para ver la última versión</string>
     <string name="error_input_too_long">El texto es demasiado largo para el límite de tokens por minuto de este modelo. Vuelve a intentarlo con un texto más corto.</string>
     <string name="note_response_truncated">[Nota: la respuesta puede estar cortada]</string>
+    <string name="error_provider_auth_required">El servidor rechazó la solicitud. Si es un servidor en la nube, inicia sesión en el propio servidor (p. ej. «ollama signin»).</string>
+    <string name="keys_endpoint_needs_v1">El servidor es accesible, pero la URL debe terminar en /v1 (p. ej. http://host:11434/v1).</string>
 </resources>

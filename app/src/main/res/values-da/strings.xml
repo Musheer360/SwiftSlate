@@ -137,4 +137,6 @@
     <!-- Command descriptions -->
     <string name="error_input_too_long">Teksten er for lang til denne models tokengrænse pr. minut. Prøv igen med kortere tekst.</string>
     <string name="note_response_truncated">[Bemærk: svaret kan være afkortet]</string>
+    <string name="error_provider_auth_required">Slutpunktet afviste anmodningen. Hvis det er en cloud-server, skal du logge ind på selve serveren (f.eks. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Slutpunktet er tilgængeligt, men adressen skal slutte med /v1 (f.eks. http://host:11434/v1).</string>
 </resources>

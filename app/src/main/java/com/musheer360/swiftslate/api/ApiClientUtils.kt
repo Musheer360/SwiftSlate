@@ -98,11 +98,44 @@ internal object ApiClientUtils {
         if (errorBody.isBlank()) return ""
         return try {
             val errorJson = JSONObject(errorBody)
-            errorJson.optJSONObject("error")?.optString("message", "") ?: ""
+            // OpenAI-style providers nest the message in an object; local servers (Ollama)
+            // put a plain string in "error". Reading only the nested shape dropped the
+            // latter, so every Ollama 401 degraded to the canned "Invalid API key".
+            when (val err = errorJson.opt("error")) {
+                is String -> err
+                is JSONObject -> err.optString("message", "")
+                else -> ""
+            }
         } catch (_: Exception) {
             ""
         }
     }
+
+    /**
+     * Ollama's cloud-auth 401s carry a `signin_url` field pointing at the server-side
+     * sign-in flow. Returns it (or null) so callers can label the failure accurately.
+     */
+    fun extractSigninUrl(errorBody: String): String? {
+        if (errorBody.isBlank()) return null
+        return try {
+            JSONObject(errorBody).optString("signin_url", "").takeIf { it.isNotBlank() }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    /**
+     * Marker prefixed to failures where the endpoint rejected the request for server-side
+     * sign-in reasons (Ollama Cloud / `-cloud` models), not because of the submitted key.
+     * Mapped to a localized message by ErrorMessages and KeysScreen.
+     */
+    const val SIGNIN_REQUIRED_MARKER = "signin_required"
+
+    /**
+     * Marker for key-validation failures where the endpoint answered 404 on /models but
+     * responded under /v1 — the stored endpoint is missing the version path.
+     */
+    const val NEEDS_V1_MARKER = "endpoint_needs_v1"
 
     fun sanitizeErrorForUser(responseCode: Int, errorBody: String, fallbackMessage: String): String {
         val apiMessage = extractApiErrorMessage(errorBody)

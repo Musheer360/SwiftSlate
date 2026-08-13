@@ -119,13 +119,26 @@ suspend fun runTextCommand(
             }
             is ApiError.InvalidKey -> {
                 lastErrorWasRateLimit = false
-                lastFailedKey = key
-                // Distinguish "this key is bad" from "this key may not use this model" (both
-                // arrive as 401/403) so the final message names the right fix.
-                val m = msg.lowercase(Locale.ROOT)
-                lastErrorWasPermission = m.contains("permission") ||
-                    m.contains("does not have access") || m.contains("not been used in project")
-                keyManager.markInvalid(key)
+                // Server-side sign-in failures (Ollama Cloud) are not the key's fault:
+                // don't bench it, don't record it as a failed key, and don't let an
+                // earlier iteration's permission verdict override the sign-in message.
+                if (msg.contains(ApiClientUtils.SIGNIN_REQUIRED_MARKER)) {
+                    lastFailedKey = null
+                    lastErrorWasPermission = false
+                } else {
+                    lastFailedKey = key
+                    // Distinguish "this key is bad" from "this key may not use this model" (both
+                    // arrive as 401/403) so the final message names the right fix.
+                    val m = msg.lowercase(Locale.ROOT)
+                    lastErrorWasPermission = m.contains("permission") ||
+                        m.contains("does not have access") || m.contains("not been used in project")
+                    // Never bench the last remaining key: with no fallback to rotate to, the
+                    // 15-minute invalid mark just turned every later trigger into "all keys
+                    // invalid" with no recovery path until a process restart.
+                    if (keyManager.getKeys().size > 1) {
+                        keyManager.markInvalid(key)
+                    }
+                }
             }
             // 5xx — try the next key.
             is ApiError.ServerError -> lastErrorWasRateLimit = false

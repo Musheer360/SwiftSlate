@@ -122,6 +122,8 @@
     <string name="error_no_model_access">Your API key doesn\'t have access to this model.</string>
     <string name="error_invalid_key">Invalid API key. Please check your key in Settings.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
+    <string name="error_provider_auth_required">Your endpoint rejected the request. If it is a cloud-based server, sign in on the server itself (e.g. `ollama signin`).</string>
+    <string name="keys_endpoint_needs_v1">Endpoint is reachable, but the URL should end with /v1 (e.g. http://host:11434/v1).</string>
     <string name="error_rate_limited">Rate limited. Try again shortly.</string>
     <string name="error_model_not_found">Model not found. Check your model selection in Settings.</string>
     <string name="error_safety_blocked">Response blocked by safety filters. Try rephrasing.</string>

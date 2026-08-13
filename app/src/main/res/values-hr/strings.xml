@@ -135,4 +135,6 @@
     <string name="update_available_text">Dodirnite za prikaz najnovijeg izdanja</string>
     <string name="error_input_too_long">Tekst je predug za ograničenje tokena po minuti ovog modela. Pokušajte ponovno s kraćim tekstom.</string>
     <string name="note_response_truncated">[Napomena: odgovor je možda skraćen]</string>
+    <string name="error_provider_auth_required">Krajnja točka odbila je zahtjev. Ako je riječ o cloud poslužitelju, prijavite se na samom poslužitelju (npr. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Krajnja točka je dostupna, ali adresa mora završavati s /v1 (npr. http://host:11434/v1).</string>
 </resources>

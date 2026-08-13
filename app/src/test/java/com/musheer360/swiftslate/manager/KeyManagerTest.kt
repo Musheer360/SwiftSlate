@@ -277,6 +277,24 @@ class KeyManagerTest {
     }
 
     @Test
+    fun clearMarks_releasesInvalidAndRateLimitedKeys() {
+        keyManager.addKey("a")
+        keyManager.markInvalid("a")
+        keyManager.reportRateLimit("a", 60)
+        assertNull(keyManager.getNextKey())
+        keyManager.clearMarks("a")
+        assertEquals("a", keyManager.getNextKey())
+    }
+
+    @Test
+    fun clearMarks_unknownKey_isANoOp() {
+        keyManager.addKey("a"); keyManager.addKey("b")
+        keyManager.clearMarks("never-added")
+        val seen = (1..4).mapNotNull { keyManager.getNextKey() }.toSet()
+        assertEquals(setOf("a", "b"), seen)
+    }
+
+    @Test
     fun removingKey_clearsItsRateLimitAndInvalidMark() {
         keyManager.addKey("a")
         keyManager.reportRateLimit("a", 600)

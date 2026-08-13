@@ -135,4 +135,6 @@
     <string name="update_available_text">Trykk for å se den nyeste utgivelsen</string>
     <string name="error_input_too_long">Teksten er for lang for denne modellens tokengrense per minutt. Prøv igjen med kortere tekst.</string>
     <string name="note_response_truncated">[Merk: svaret kan være avkuttet]</string>
+    <string name="error_provider_auth_required">Endepunktet avviste forespørselen. Hvis det er en skyserver, logg inn på selve serveren (f.eks. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Endepunktet er tilgjengelig, men adressen må slutte med /v1 (f.eks. http://host:11434/v1).</string>
 </resources>

@@ -135,4 +135,6 @@
     <string name="update_available_text">Napauta nähdäksesi uusimman version</string>
     <string name="error_input_too_long">Teksti on liian pitkä tämän mallin minuuttikohtaiselle token-rajalle. Yritä uudelleen lyhyemmällä tekstillä.</string>
     <string name="note_response_truncated">[Huomio: vastaus voi olla katkaistu]</string>
+    <string name="error_provider_auth_required">Päätepiste hylkäsi pyynnön. Pilvipalvelimella kirjaudu sisään itse palvelimelle (esim. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Päätepiste on käytettävissä, mutta osoitteen tulee päättyä /v1 (esim. http://host:11434/v1).</string>
 </resources>

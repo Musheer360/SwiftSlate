@@ -135,4 +135,6 @@
     <string name="update_available_text">Нажмите, чтобы посмотреть последнюю версию</string>
     <string name="error_input_too_long">Текст слишком длинный для лимита токенов в минуту у этой модели. Повторите попытку с более коротким текстом.</string>
     <string name="note_response_truncated">[Примечание: ответ может быть обрезан]</string>
+    <string name="error_provider_auth_required">Сервер отклонил запрос. Если это облачный сервер, войдите на самом сервере (например, ollama signin).</string>
+    <string name="keys_endpoint_needs_v1">Сервер доступен, но адрес должен заканчиваться на /v1 (например, http://host:11434/v1).</string>
 </resources>

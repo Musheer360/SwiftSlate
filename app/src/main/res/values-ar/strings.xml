@@ -137,4 +137,6 @@
     <!-- Command descriptions -->
     <string name="error_input_too_long">النص أطول من حد الرموز في الدقيقة لهذا الطراز. أعد المحاولة بنص أقصر.</string>
     <string name="note_response_truncated">[ملاحظة: قد تكون الإجابة مقطوعة]</string>
+    <string name="error_provider_auth_required">رفض الخادم الطلب. إذا كان خادماً سحابياً، فسجّل الدخول على الخادم نفسه (مثل: ollama signin).</string>
+    <string name="keys_endpoint_needs_v1">يمكن الوصول إلى الخادم، ولكن يجب أن ينتهي الرابط بـ /v1 (مثل: http://host:11434/v1).</string>
 </resources>

@@ -134,4 +134,6 @@
     <string name="update_available_text">Appuyez pour voir la dernière version</string>
     <string name="error_input_too_long">Le texte est trop long pour la limite de jetons par minute de ce modèle. Réessayez avec un texte plus court.</string>
     <string name="note_response_truncated">[Remarque : la réponse peut être tronquée]</string>
+    <string name="error_provider_auth_required">Le serveur a rejeté la requête. S\'il s\'agit d\'un serveur cloud, connectez-vous sur le serveur lui-même (ex. « ollama signin »).</string>
+    <string name="keys_endpoint_needs_v1">Le serveur est joignable, mais l\'URL doit se terminer par /v1 (ex. http://host:11434/v1).</string>
 </resources>

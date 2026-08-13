@@ -135,4 +135,6 @@
     <string name="update_available_text">Додирните да видите најновије издање</string>
     <string name="error_input_too_long">Текст је предуг за ограничење токена у минути овог модела. Пробајте поново са краћим текстом.</string>
     <string name="note_response_truncated">[Напомена: одговор је можда скраћен]</string>
+    <string name="error_provider_auth_required">Сервер је одбио захтев. Ако је у питању cloud сервер, пријавите се на самом серверу (нпр. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Сервер је доступан, али адреса мора да се завршава са /v1 (нпр. http://host:11434/v1).</string>
 </resources>

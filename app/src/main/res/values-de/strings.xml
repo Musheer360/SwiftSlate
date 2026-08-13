@@ -136,4 +136,6 @@
     <!-- Command descriptions -->
     <string name="error_input_too_long">Der Text ist zu lang für das Token-Limit pro Minute dieses Modells. Versuche es mit kürzerem Text erneut.</string>
     <string name="note_response_truncated">[Hinweis: Antwort ist möglicherweise abgeschnitten]</string>
+    <string name="error_provider_auth_required">Der Endpunkt hat die Anfrage abgelehnt. Bei einem Cloud-Server melde dich auf dem Server selbst an (z. B. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Der Endpunkt ist erreichbar, aber die URL sollte mit /v1 enden (z. B. http://host:11434/v1).</string>
 </resources>

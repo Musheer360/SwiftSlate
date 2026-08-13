@@ -135,4 +135,6 @@
     <string name="update_available_text">Ketik untuk melihat keluaran terkini</string>
     <string name="error_input_too_long">Teks terlalu panjang untuk had token seminit model ini. Cuba lagi dengan teks yang lebih pendek.</string>
     <string name="note_response_truncated">[Nota: respons mungkin dipotong]</string>
+    <string name="error_provider_auth_required">Pelayan menolak permintaan. Jika ia pelayan awan, log masuk pada pelayan itu sendiri (cth. „ollama signin“).</string>
+    <string name="keys_endpoint_needs_v1">Pelayan boleh dihubungi, tetapi URL perlu berakhir dengan /v1 (cth. http://host:11434/v1).</string>
 </resources>

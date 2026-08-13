@@ -135,4 +135,6 @@
     <string name="update_available_text">タップして最新リリースを表示</string>
     <string name="error_input_too_long">テキストがこのモデルの1分あたりのトークン上限を超えています。短いテキストでもう一度お試しください。</string>
     <string name="note_response_truncated">[注: 応答が途中で切れている可能性があります]</string>
+    <string name="error_provider_auth_required">エンドポイントがリクエストを拒否しました。クラウドサーバーの場合はサーバー自体でサインインしてください（例: ollama signin）。</string>
+    <string name="keys_endpoint_needs_v1">エンドポイントには接続できますが、URL は /v1 で終わる必要があります（例: http://host:11434/v1）。</string>
 </resources>

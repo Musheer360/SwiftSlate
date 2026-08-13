@@ -135,4 +135,6 @@
     <string name="update_available_text">แตะเพื่อดูรุ่นล่าสุด</string>
     <string name="error_input_too_long">ข้อความยาวเกินขีดจำกัดโทเค็นต่อนาทีของโมเดลนี้ ลองอีกครั้งด้วยข้อความที่สั้นลง</string>
     <string name="note_response_truncated">[หมายเหตุ: คำตอบอาจถูกตัดจบ]</string>
+    <string name="error_provider_auth_required">เซิร์ฟเวอร์ปฏิเสธคำขอ หากเป็นเซิร์ฟเวอร์บนคลาวด์ ให้ลงชื่อเข้าใช้ที่ตัวเซิร์ฟเวอร์เอง (เช่น ollama signin)</string>
+    <string name="keys_endpoint_needs_v1">เชื่อมต่อเซิร์ฟเวอร์ได้ แต่ URL ควรลงท้ายด้วย /v1 (เช่น http://host:11434/v1)</string>
 </resources>
