@@ -43,9 +43,12 @@ env:
 jobs:
   version:
     name: Determine Version
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      # Orphan-tag self-healing below deletes a stale tag from origin.
+      contents: write
     outputs:
       tag: ${{ steps.version.outputs.tag }}
       version_name: ${{ steps.version.outputs.version_name }}
@@ -66,6 +69,8 @@ jobs:
           # before bash sees it, so a tag containing shell metacharacters would be executed.
           GIT_REF: ${{ github.ref }}
           GIT_REF_NAME: ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           BASE_VERSION=$(grep 'val baseVersion' app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
 
@@ -77,6 +82,30 @@ jobs:
             NEXT=$((${PATCH:--1} + 1))
             TAG="v${BASE_VERSION}.${NEXT}"
             CREATE_TAG=true
+          fi
+
+          # Self-healing for cancelled release runs: a previous run on this branch can be
+          # cancelled (concurrency) AFTER its tag job created a tag but BEFORE build/release
+          # ran, leaving a tag with no release. That orphan would silently push every later
+          # release one version ahead — e.g. a cancelled v1.0.76 run made the next release
+          # skip to v1.0.77. When the orphan tag is part of this branch's history (it always
+          # is for the cancelled-run case) and has no GitHub release, delete it and take its
+          # version instead of skipping past it. Tags that DID get a release, or that sit on
+          # unrelated history, are left alone.
+          if [[ "$CREATE_TAG" == "true" && -n "$PATCH" ]]; then
+            PATCH_TAG="v${BASE_VERSION}.${PATCH}"
+            if git rev-parse -q --verify "refs/tags/$PATCH_TAG" >/dev/null; then
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+                -H "Authorization: Bearer $GITHUB_TOKEN" \
+                "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$PATCH_TAG")
+              if [[ "$HTTP_CODE" == "404" ]] && git merge-base --is-ancestor "$PATCH_TAG" HEAD; then
+                echo "::notice::Tag $PATCH_TAG has no release and is part of this branch — removing the orphan and reusing the version."
+                git push origin --delete "refs/tags/$PATCH_TAG"
+                PATCH=$(git tag -l "v${BASE_VERSION}.*" | grep -v beta | sed "s/v${BASE_VERSION}\.//" | sort -n | tail -1)
+                NEXT=$((${PATCH:--1} + 1))
+                TAG="v${BASE_VERSION}.${NEXT}"
+              fi
+            fi
           fi
 
           VERSION_NAME="${TAG#v}"
@@ -179,7 +208,7 @@ jobs:
   build:
     name: Build Signed APK
     needs: [version, lint, test, tag]
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -283,20 +312,20 @@ jobs:
   tag:
     name: Tag Release
     needs: [version, lint, test]
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
     steps:
-      # Defence in depth. The job-level `if` already restricts this to push events, but this
-      # job creates tags and pushes to master — if someone later loosens that condition, a
+      # Defence in depth. The job-level `if` already restricts this to push/manual events, but
+      # this job creates tags and pushes to master — if someone later loosens that condition, a
       # pull request must fail loudly here rather than cut a release.
       - name: Guard — releases only from a master push
         shell: bash
         run: |
-          if [ "$GITHUB_EVENT_NAME" != "push" ]; then
-            echo "::error::Refusing to release: event is '$GITHUB_EVENT_NAME', expected 'push'."
+          if [ "$GITHUB_EVENT_NAME" != "push" ] && [ "$GITHUB_EVENT_NAME" != "workflow_dispatch" ]; then
+            echo "::error::Refusing to release: event is '$GITHUB_EVENT_NAME', expected 'push' or 'workflow_dispatch'."
             exit 1
           fi
           case "$GITHUB_REF" in
@@ -390,7 +419,7 @@ jobs:
   release:
     name: Release
     needs: [version, tag, build]
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -501,7 +530,7 @@ jobs:
   notify-failure:
     name: Notify on Failure
     needs: [version, lint, test, tag, build, release]
-    if: failure() && github.event_name == 'push'
+    if: failure() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
