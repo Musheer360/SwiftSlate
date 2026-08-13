@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Lưu ý: phản hồi có thể bị cắt]</string>
     <string name="error_provider_auth_required">Máy chủ đã từ chối yêu cầu. Nếu là máy chủ đám mây, hãy đăng nhập trên chính máy chủ đó (ví dụ: ollama signin).</string>
     <string name="keys_endpoint_needs_v1">Có thể kết nối máy chủ, nhưng URL phải kết thúc bằng /v1 (ví dụ: http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Lấy danh sách mô hình</string>
+    <string name="settings_fetch_models_loading">Đang lấy…</string>
+    <string name="settings_fetch_models_success">Đã tải %1$d mô hình</string>
+    <string name="settings_fetch_models_empty">Không tìm thấy mô hình nào. Bạn vẫn có thể nhập tên mô hình theo cách thủ công.</string>
+    <string name="settings_fetch_models_failed">Không thể lấy danh sách mô hình. Kiểm tra địa chỉ và khóa API.</string>
 </resources>

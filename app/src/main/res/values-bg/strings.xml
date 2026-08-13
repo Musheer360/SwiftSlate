@@ -139,4 +139,9 @@
     <string name="note_response_truncated">[Бележка: отговорът може да е отрязан]</string>
     <string name="error_provider_auth_required">Крайната точка отхвърли заявката. Ако е облачен сървър, влезте на самия сървър (напр. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Крайната точка е достъпна, но адресът трябва да завършва на /v1 (напр. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Зареждане на модели</string>
+    <string name="settings_fetch_models_loading">Зареждане…</string>
+    <string name="settings_fetch_models_success">Заредени са %1$d модела</string>
+    <string name="settings_fetch_models_empty">Не са намерени модели. Все пак можете да въведете модел ръчно.</string>
+    <string name="settings_fetch_models_failed">Моделите не можаха да бъдат заредени. Проверете адреса и API ключа.</string>
 </resources>

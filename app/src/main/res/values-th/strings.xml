@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[หมายเหตุ: คำตอบอาจถูกตัดจบ]</string>
     <string name="error_provider_auth_required">เซิร์ฟเวอร์ปฏิเสธคำขอ หากเป็นเซิร์ฟเวอร์บนคลาวด์ ให้ลงชื่อเข้าใช้ที่ตัวเซิร์ฟเวอร์เอง (เช่น ollama signin)</string>
     <string name="keys_endpoint_needs_v1">เชื่อมต่อเซิร์ฟเวอร์ได้ แต่ URL ควรลงท้ายด้วย /v1 (เช่น http://host:11434/v1)</string>
+    <string name="settings_fetch_models">ดึงรายชื่อโมเดล</string>
+    <string name="settings_fetch_models_loading">กำลังดึง…</string>
+    <string name="settings_fetch_models_success">โหลดแล้ว %1$d โมเดล</string>
+    <string name="settings_fetch_models_empty">ไม่พบโมเดล คุณยังป้อนชื่อโมเดลด้วยตนเองได้</string>
+    <string name="settings_fetch_models_failed">ไม่สามารถดึงรายชื่อโมเดลได้ ตรวจสอบที่อยู่และคีย์ API</string>
 </resources>

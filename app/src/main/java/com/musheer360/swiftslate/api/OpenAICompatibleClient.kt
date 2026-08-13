@@ -106,6 +106,92 @@ class OpenAICompatibleClient {
         }
     }
 
+    /**
+     * Fetches the model list from a Custom (OpenAI-compatible) endpoint for the Settings
+     * model dropdown. Probes the paths local LLM servers actually implement, in coverage
+     * order: `/v1/models` (OpenAI/Ollama/LM Studio/vLLM/llama.cpp/LiteLLM), then `/models`,
+     * then Ollama's native `/api/tags`, then Open WebUI's `/api/models`. Stops at the first
+     * 2xx with a non-empty list.
+     *
+     *  - 401/403 stops the probe immediately: the server exists and rejected the key, and
+     *    every other path on it will reject too. The failure carries the same signin/raw
+     *    message handling as [validateKey].
+     *  - Connection failures stop the probe too — the endpoint is unreachable, not the path.
+     *  - Any 2xx (even an empty list) marks the server reachable: if no path yields model
+     *    ids, the result is an empty success list so the UI can show "No models found".
+     *    A failure is returned only when every path 404s/5xxes — the server is not serving
+     *    any known models path at all.
+     *
+     * [apiKey] may be null: local servers without a configured key (Ollama, LM Studio,
+     * llama.cpp) want no Authorization header at all, and sending a placeholder helps nobody.
+     */
+    suspend fun fetchModels(apiKey: String?, endpoint: String): Result<List<String>> = withContext(Dispatchers.IO) {
+        if (EndpointValidator.validate(endpoint) != EndpointValidator.Error.NONE) {
+            return@withContext Result.failure(Exception("Endpoint must be https:// or an http:// private-LAN address"))
+        }
+        val baseUrl = endpoint.trimEnd('/')
+        var lastDetail: String? = null
+        // Set on the first 2xx, whatever the body: a server that answered is reachable even
+        // when it lists no models, so "No models found" must win over a 404 seen elsewhere.
+        var reachable = false
+        for (path in listOf("$baseUrl/v1/models", "$baseUrl/models", "$baseUrl/api/tags", "$baseUrl/api/models")) {
+            val probe = try {
+                httpGet(path, apiKey)
+            } catch (e: Exception) {
+                return@withContext Result.failure(e)
+            }
+            when {
+                probe.code in 200..299 -> {
+                    reachable = true
+                    val ids = ApiClientUtils.parseModelIds(probe.body)
+                    if (ids.isNotEmpty()) return@withContext Result.success(ids)
+                    // Reachable but empty at this path — try the next one.
+                }
+                probe.code == 401 || probe.code == 403 -> {
+                    val apiMessage = ApiClientUtils.extractApiErrorMessage(probe.body)
+                    val signinUrl = ApiClientUtils.extractSigninUrl(probe.body)
+                    val detail = when {
+                        signinUrl != null || apiMessage.contains("not currently signed in", ignoreCase = true) ->
+                            "${ApiClientUtils.SIGNIN_REQUIRED_MARKER}: ${apiMessage.ifEmpty { "server sign-in required" }}"
+                        apiMessage.isNotEmpty() -> apiMessage
+                        else -> "Invalid API key"
+                    }
+                    return@withContext Result.failure(Exception(detail))
+                }
+                else -> {
+                    // 404/405/5xx — this path is not served here; remember the detail and
+                    // try the next one.
+                    val apiMessage = ApiClientUtils.extractApiErrorMessage(probe.body)
+                    lastDetail = if (apiMessage.isNotEmpty()) apiMessage else "Unexpected error"
+                }
+            }
+        }
+        if (lastDetail != null && !reachable) Result.failure(Exception(lastDetail))
+        else Result.success(emptyList())
+    }
+
+    private data class Probe(val code: Int, val body: String)
+
+    /** GETs [url], returning the status code and the (bounded) body on either stream. */
+    private fun httpGet(url: String, apiKey: String?): Probe {
+        var connection: HttpURLConnection? = null
+        return try {
+            connection = URL(url).openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            if (!apiKey.isNullOrBlank()) {
+                connection.setRequestProperty("Authorization", "Bearer $apiKey")
+            }
+            connection.connectTimeout = 15_000
+            connection.readTimeout = 15_000
+            val code = connection.responseCode
+            val body = if (code in 200..299) ApiClientUtils.readResponseBounded(connection)
+            else ApiClientUtils.readErrorBody(connection)
+            Probe(code, body)
+        } finally {
+            connection?.disconnect()
+        }
+    }
+
     suspend fun generate(
         prompt: String,
         text: String,

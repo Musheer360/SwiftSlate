@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[참고: 응답이 잘렸을 수 있습니다]</string>
     <string name="error_provider_auth_required">엔드포인트가 요청을 거부했습니다. 클라우드 서버라면 서버 자체에서 로그인하세요(예: ollama signin).</string>
     <string name="keys_endpoint_needs_v1">엔드포인트에 연결할 수 있지만 URL은 /v1으로 끝나야 합니다(예: http://host:11434/v1).</string>
+    <string name="settings_fetch_models">모델 가져오기</string>
+    <string name="settings_fetch_models_loading">가져오는 중…</string>
+    <string name="settings_fetch_models_success">%1$d개 모델 로드됨</string>
+    <string name="settings_fetch_models_empty">모델을 찾지 못했습니다. 모델을 수동으로 입력할 수 있습니다.</string>
+    <string name="settings_fetch_models_failed">모델을 가져오지 못했습니다. 주소와 API 키를 확인하세요.</string>
 </resources>

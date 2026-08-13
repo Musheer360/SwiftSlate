@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Uwaga: odpowiedź może być skrócona]</string>
     <string name="error_provider_auth_required">Serwer odrzucił żądanie. Jeśli to serwer w chmurze, zaloguj się na samym serwerze (np. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Serwer jest osiągalny, ale adres musi kończyć się na /v1 (np. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Pobierz modele</string>
+    <string name="settings_fetch_models_loading">Pobieranie…</string>
+    <string name="settings_fetch_models_success">Wczytano modeli: %1$d</string>
+    <string name="settings_fetch_models_empty">Nie znaleziono modeli. Nadal możesz wpisać model ręcznie.</string>
+    <string name="settings_fetch_models_failed">Nie udało się pobrać modeli. Sprawdź adres i klucz API.</string>
 </resources>

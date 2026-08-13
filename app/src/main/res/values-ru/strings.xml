@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Примечание: ответ может быть обрезан]</string>
     <string name="error_provider_auth_required">Сервер отклонил запрос. Если это облачный сервер, войдите на самом сервере (например, ollama signin).</string>
     <string name="keys_endpoint_needs_v1">Сервер доступен, но адрес должен заканчиваться на /v1 (например, http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Загрузить модели</string>
+    <string name="settings_fetch_models_loading">Загрузка…</string>
+    <string name="settings_fetch_models_success">Загружено моделей: %1$d</string>
+    <string name="settings_fetch_models_empty">Модели не найдены. Вы всё равно можете ввести модель вручную.</string>
+    <string name="settings_fetch_models_failed">Не удалось загрузить модели. Проверьте адрес и ключ API.</string>
 </resources>

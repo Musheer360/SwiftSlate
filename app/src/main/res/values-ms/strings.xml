@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Nota: respons mungkin dipotong]</string>
     <string name="error_provider_auth_required">Pelayan menolak permintaan. Jika ia pelayan awan, log masuk pada pelayan itu sendiri (cth. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Pelayan boleh dihubungi, tetapi URL perlu berakhir dengan /v1 (cth. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Dapatkan model</string>
+    <string name="settings_fetch_models_loading">Mendapatkan…</string>
+    <string name="settings_fetch_models_success">%1$d model dimuatkan</string>
+    <string name="settings_fetch_models_empty">Tiada model ditemui. Anda masih boleh memasukkan model secara manual.</string>
+    <string name="settings_fetch_models_failed">Model tidak dapat diperoleh. Semak alamat dan kunci API.</string>
 </resources>

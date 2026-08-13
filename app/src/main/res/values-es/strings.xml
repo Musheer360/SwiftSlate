@@ -136,4 +136,9 @@
     <string name="note_response_truncated">[Nota: la respuesta puede estar cortada]</string>
     <string name="error_provider_auth_required">El servidor rechazó la solicitud. Si es un servidor en la nube, inicia sesión en el propio servidor (p. ej. «ollama signin»).</string>
     <string name="keys_endpoint_needs_v1">El servidor es accesible, pero la URL debe terminar en /v1 (p. ej. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Obtener modelos</string>
+    <string name="settings_fetch_models_loading">Obteniendo…</string>
+    <string name="settings_fetch_models_success">%1$d modelos cargados</string>
+    <string name="settings_fetch_models_empty">No se encontraron modelos. Puedes introducir uno manualmente.</string>
+    <string name="settings_fetch_models_failed">No se pudieron obtener los modelos. Revisa la dirección y la clave API.</string>
 </resources>

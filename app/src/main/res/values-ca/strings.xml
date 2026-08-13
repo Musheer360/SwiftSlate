@@ -139,4 +139,9 @@
     <string name="note_response_truncated">[Nota: la resposta pot estar tallada]</string>
     <string name="error_provider_auth_required">El servidor ha rebutjat la sol·licitud. Si és un servidor al núvol, inicia la sessió al mateix servidor (p. ex. «ollama signin»).</string>
     <string name="keys_endpoint_needs_v1">El servidor és accessible, però l\'adreça ha d\'acabar amb /v1 (p. ex. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Obtén els models</string>
+    <string name="settings_fetch_models_loading">S\'obtenen…</string>
+    <string name="settings_fetch_models_success">S\'han carregat %1$d models</string>
+    <string name="settings_fetch_models_empty">No s\'ha trobat cap model. Podeu introduir-ne un manualment.</string>
+    <string name="settings_fetch_models_failed">No s\'han pogut obtenir els models. Comproveu l\'adreça i la clau d\'API.</string>
 </resources>

@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Notă: răspunsul poate fi trunchiat]</string>
     <string name="error_provider_auth_required">Endpointul a respins cererea. Dacă este un server cloud, conectați-vă pe serverul însuși (ex. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Endpointul este accesibil, dar adresa trebuie să se termine cu /v1 (ex. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Obține modelele</string>
+    <string name="settings_fetch_models_loading">Se obțin…</string>
+    <string name="settings_fetch_models_success">S-au încărcat %1$d modele</string>
+    <string name="settings_fetch_models_empty">Nu s-au găsit modele. Puteți introduce totuși un model manual.</string>
+    <string name="settings_fetch_models_failed">Nu s-au putut obține modelele. Verificați adresa și cheia API.</string>
 </resources>

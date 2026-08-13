@@ -136,4 +136,9 @@
     <string name="note_response_truncated">[नोट: जवाब अधूरा हो सकता है]</string>
     <string name="error_provider_auth_required">एंडपॉइंट ने अनुरोध अस्वीकार कर दिया। अगर यह क्लाउड सर्वर है, तो सर्वर पर ही साइन इन करें (जैसे ollama signin)।</string>
     <string name="keys_endpoint_needs_v1">एंडपॉइंट उपलब्ध है, लेकिन URL /v1 पर समाप्त होना चाहिए (जैसे http://host:11434/v1)।</string>
+    <string name="settings_fetch_models">मॉडल लाएँ</string>
+    <string name="settings_fetch_models_loading">लाया जा रहा है…</string>
+    <string name="settings_fetch_models_success">%1$d मॉडल लोड हुए</string>
+    <string name="settings_fetch_models_empty">कोई मॉडल नहीं मिला। आप फिर भी मैन्युअल रूप से मॉडल दर्ज कर सकते हैं।</string>
+    <string name="settings_fetch_models_failed">मॉडल नहीं लाए जा सके। एंडपॉइंट और API कुंजी जाँचें।</string>
 </resources>

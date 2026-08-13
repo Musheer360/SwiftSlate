@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Megjegyzés: a válasz csonka lehet]</string>
     <string name="error_provider_auth_required">A végpont elutasította a kérést. Felhőszerver esetén jelentkezzen be magán a szerveren (pl. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">A végpont elérhető, de az URL-nek /v1-re kell végződnie (pl. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Modellek lekérése</string>
+    <string name="settings_fetch_models_loading">Lekérés…</string>
+    <string name="settings_fetch_models_success">%1$d modell betöltve</string>
+    <string name="settings_fetch_models_empty">Nem találhatók modellek. Kézzel is megadhat egy modellt.</string>
+    <string name="settings_fetch_models_failed">Nem sikerült lekérni a modelleket. Ellenőrizze a címet és az API-kulcsot.</string>
 </resources>

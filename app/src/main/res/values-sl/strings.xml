@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Opomba: odgovor je morda skrajšan]</string>
     <string name="error_provider_auth_required">Končna točka je zahtevo zavrnila. Pri strežniku v oblaku se prijavite na samem strežniku (npr. »ollama signin«).</string>
     <string name="keys_endpoint_needs_v1">Končna točka je dosegljiva, vendar se mora naslov končati z /v1 (npr. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Pridobi modele</string>
+    <string name="settings_fetch_models_loading">Pridobivanje…</string>
+    <string name="settings_fetch_models_success">Naloženih modelov: %1$d</string>
+    <string name="settings_fetch_models_empty">Ni najdenih modelov. Model lahko vseeno vnesete ročno.</string>
+    <string name="settings_fetch_models_failed">Modelov ni bilo mogoče pridobiti. Preverite naslov in ključ API.</string>
 </resources>

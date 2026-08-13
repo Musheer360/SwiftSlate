@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Piezīme: atbilde var būt saīsināta]</string>
     <string name="error_provider_auth_required">Serveris noraidīja pieprasījumu. Ja tas ir mākoņa serveris, piesakieties pašā serverī (piem., „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Serveris ir sasniedzams, bet adresei jābeidzas ar /v1 (piem., http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Iegūt modeļus</string>
+    <string name="settings_fetch_models_loading">Iegūst…</string>
+    <string name="settings_fetch_models_success">Ielādēti %1$d modeļi</string>
+    <string name="settings_fetch_models_empty">Nav atrasts neviens modelis. Modeli varat ievadīt manuāli.</string>
+    <string name="settings_fetch_models_failed">Neizdevās iegūt modeļus. Pārbaudiet adresi un API atslēgu.</string>
 </resources>

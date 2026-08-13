@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Let op: antwoord is mogelijk afgekapt]</string>
     <string name="error_provider_auth_required">De server heeft de aanvraag geweigerd. Bij een cloudserver moet je je aanmelden op de server zelf (bijv. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">De server is bereikbaar, maar de URL moet eindigen op /v1 (bijv. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Modellen ophalen</string>
+    <string name="settings_fetch_models_loading">Ophalen…</string>
+    <string name="settings_fetch_models_success">%1$d modellen geladen</string>
+    <string name="settings_fetch_models_empty">Geen modellen gevonden. Je kunt nog steeds handmatig een model invoeren.</string>
+    <string name="settings_fetch_models_failed">Modellen konden niet worden opgehaald. Controleer het adres en de API-sleutel.</string>
 </resources>

@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Not: yanıt kesilmiş olabilir]</string>
     <string name="error_provider_auth_required">Sunucu isteği reddetti. Bulut sunucusuysa sunucunun kendisinde oturum açın (örn. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Sunucuya erişilebiliyor, ancak adres /v1 ile bitmeli (örn. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Modelleri getir</string>
+    <string name="settings_fetch_models_loading">Getiriliyor…</string>
+    <string name="settings_fetch_models_success">%1$d model yüklendi</string>
+    <string name="settings_fetch_models_empty">Model bulunamadı. Yine de manuel olarak model girebilirsiniz.</string>
+    <string name="settings_fetch_models_failed">Modeller getirilemedi. Adresi ve API anahtarını kontrol edin.</string>
 </resources>

@@ -119,7 +119,7 @@ fun SwiftSlateMainScreen(vm: SwiftSlateViewModel = viewModel()) {
                         Tab.Dashboard -> DashboardScreen(vm.keyManager, vm.commandManager, vm.statsManager)
                         Tab.Keys -> KeysScreen(vm.keyManager, vm.prefs)
                         Tab.Commands -> CommandsScreen(vm.commandManager)
-                        Tab.Settings -> SettingsScreen(vm.commandManager, vm.prefs)
+                        Tab.Settings -> SettingsScreen(vm.commandManager, vm.prefs, vm.keyManager)
                     }
                 }
             }

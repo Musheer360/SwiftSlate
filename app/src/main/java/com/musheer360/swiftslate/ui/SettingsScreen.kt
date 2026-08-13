@@ -23,12 +23,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.BuildConfig
 import com.musheer360.swiftslate.R
+import com.musheer360.swiftslate.api.ApiClientUtils
+import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.musheer360.swiftslate.manager.CommandManager
+import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.model.GeminiModels
 import com.musheer360.swiftslate.model.GroqModels
 import com.musheer360.swiftslate.model.PrefKeys
@@ -41,7 +44,7 @@ import com.musheer360.swiftslate.ui.components.SlateTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
+fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, keyManager: KeyManager) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val uriHandler = LocalUriHandler.current
@@ -64,6 +67,15 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     var customEndpoint by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "") }
     var customModel by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_MODEL, "") ?: "") }
     var endpointError by remember { mutableStateOf<String?>(null) }
+    // Fetched model ids for the Custom provider dropdown. Session state only — refetched on
+    // demand, never persisted (the stored pref stays the plain custom_model string).
+    var customModels by remember { mutableStateOf<List<String>>(emptyList()) }
+    var customModelExpanded by remember { mutableStateOf(false) }
+    var isFetchingModels by remember { mutableStateOf(false) }
+    var fetchMessage by remember { mutableStateOf<String?>(null) }
+    var fetchSuccess by remember { mutableStateOf(false) }
+    var apiKeys by remember { mutableStateOf<List<String>>(emptyList()) }
+    val openAIClient = remember { OpenAICompatibleClient() }
 
     var triggerPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
     var prefixError by remember { mutableStateOf<String?>(null) }
@@ -74,6 +86,19 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
     val prefixErrorAlphanumeric = stringResource(R.string.settings_prefix_error_alphanumeric)
     val endpointErrorScheme = stringResource(R.string.settings_endpoint_error_scheme)
     val endpointErrorSpaces = stringResource(R.string.settings_endpoint_error_spaces)
+    val fetchModelsMsg = stringResource(R.string.settings_fetch_models)
+    val fetchingModelsMsg = stringResource(R.string.settings_fetch_models_loading)
+    val modelsLoadedMsg = stringResource(R.string.settings_fetch_models_success)
+    val modelsEmptyMsg = stringResource(R.string.settings_fetch_models_empty)
+    val modelsFailedMsg = stringResource(R.string.settings_fetch_models_failed)
+    val signinRequiredMsg = stringResource(R.string.error_provider_auth_required)
+
+    // Registered keys are decrypted through the Keystore — load off the main thread, as
+    // KeysScreen does. The first key is sent as Bearer when fetching models; keyless local
+    // servers get no header at all.
+    LaunchedEffect(Unit) {
+        apiKeys = withContext(Dispatchers.IO) { keyManager.getKeys() }
+    }
 
     var backupMessage by remember { mutableStateOf<String?>(null) }
     var backupSuccess by remember { mutableStateOf(false) }
@@ -301,6 +326,10 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     value = customEndpoint,
                     onValueChange = {
                         customEndpoint = it
+                        // The endpoint changed — a previously fetched model list no longer
+                        // describes this server.
+                        customModels = emptyList()
+                        fetchMessage = null
                         endpointError = when {
                             it.isBlank() -> null
                             it.contains(" ") -> endpointErrorSpaces
@@ -334,19 +363,114 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                SlateTextField(
-                    value = customModel,
-                    onValueChange = {
-                        customModel = it
-                        saveModelJob?.cancel()
-                        saveModelJob = scope.launch {
-                            delay(500)
-                            prefs.edit().putString(PrefKeys.CUSTOM_MODEL, it).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                if (customModels.isNotEmpty()) {
+                    ExposedDropdownMenuBox(
+                        expanded = customModelExpanded,
+                        onExpandedChange = { customModelExpanded = !customModelExpanded }
+                    ) {
+                        SlateTextField(
+                            value = customModel,
+                            onValueChange = {
+                                customModel = it
+                                saveModelJob?.cancel()
+                                saveModelJob = scope.launch {
+                                    delay(500)
+                                    prefs.edit().putString(PrefKeys.CUSTOM_MODEL, it).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                                }
+                            },
+                            placeholder = { Text(stringResource(R.string.settings_model_placeholder)) },
+                            
+                            // Editable anchor: the fetched list is a convenience, not a
+                            // restriction — cloud models and off-list ids stay typeable.
+                            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+                        )
+                        ExposedDropdownMenu(
+                            containerColor = MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(10.dp),
+                            expanded = customModelExpanded,
+                            onDismissRequest = { customModelExpanded = false }
+                        ) {
+                            customModels.forEach { id ->
+                                DropdownMenuItem(
+                                    text = { Text(id) },
+                                    onClick = {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        customModel = id
+                                        // Cancel any pending debounce so a half-typed value
+                                        // cannot overwrite the selection 500ms later.
+                                        saveModelJob?.cancel()
+                                        prefs.edit().putString(PrefKeys.CUSTOM_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                                        customModelExpanded = false
+                                    }
+                                )
+                            }
                         }
-                    },
-                    placeholder = { Text(stringResource(R.string.settings_model_placeholder)) },
-                    
-                )
+                    }
+                } else {
+                    SlateTextField(
+                        value = customModel,
+                        onValueChange = {
+                            customModel = it
+                            saveModelJob?.cancel()
+                            saveModelJob = scope.launch {
+                                delay(500)
+                                prefs.edit().putString(PrefKeys.CUSTOM_MODEL, it).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                            }
+                        },
+                        placeholder = { Text(stringResource(R.string.settings_model_placeholder)) },
+                        
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            isFetchingModels = true
+                            fetchMessage = null
+                            scope.launch {
+                                val result = withContext(Dispatchers.IO) {
+                                    openAIClient.fetchModels(apiKeys.firstOrNull(), customEndpoint)
+                                }
+                                isFetchingModels = false
+                                result.onSuccess { ids ->
+                                    if (ids.isEmpty()) {
+                                        customModels = emptyList()
+                                        fetchMessage = modelsEmptyMsg
+                                        fetchSuccess = false
+                                    } else {
+                                        customModels = ids
+                                        customModelExpanded = false
+                                        fetchMessage = String.format(modelsLoadedMsg, ids.size)
+                                        fetchSuccess = true
+                                    }
+                                }.onFailure { e ->
+                                    customModels = emptyList()
+                                    val raw = e.message ?: ""
+                                    fetchMessage = if (raw.contains(ApiClientUtils.SIGNIN_REQUIRED_MARKER)) {
+                                        signinRequiredMsg
+                                    } else {
+                                        modelsFailedMsg
+                                    }
+                                    fetchSuccess = false
+                                }
+                            }
+                        },
+                        enabled = customEndpoint.isNotBlank() && endpointError == null && !isFetchingModels
+                    ) {
+                        Text(if (isFetchingModels) fetchingModelsMsg else fetchModelsMsg)
+                    }
+                }
+                fetchMessage?.let { msg ->
+                    Text(
+                        text = msg,
+                        color = if (fetchSuccess) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 13.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(8.dp))
             Row(

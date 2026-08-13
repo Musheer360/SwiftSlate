@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[הערה: התשובה עשויה להיות קטועה]</string>
     <string name="error_provider_auth_required">השרת דחה את הבקשה. אם זה שרת ענן, היכנסו בשרת עצמו (למשל ollama signin).</string>
     <string name="keys_endpoint_needs_v1">השרת נגיש, אבל הכתובת צריכה להסתיים ב־/v1 (למשל http://host:11434/v1).</string>
+    <string name="settings_fetch_models">אחזור מודלים</string>
+    <string name="settings_fetch_models_loading">מאחזר…</string>
+    <string name="settings_fetch_models_success">נטענו %1$d מודלים</string>
+    <string name="settings_fetch_models_empty">לא נמצאו מודלים. עדיין ניתן להזין מודל ידנית.</string>
+    <string name="settings_fetch_models_failed">לא ניתן לאחזר את המודלים. בדקו את הכתובת ואת מפתח ה-API.</string>
 </resources>

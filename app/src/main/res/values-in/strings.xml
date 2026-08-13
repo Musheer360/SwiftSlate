@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Catatan: respons mungkin terpotong]</string>
     <string name="error_provider_auth_required">Server menolak permintaan. Jika ini server cloud, masuklah di server itu sendiri (mis. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Server dapat dijangkau, tetapi URL harus diakhiri dengan /v1 (mis. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Ambil model</string>
+    <string name="settings_fetch_models_loading">Mengambil…</string>
+    <string name="settings_fetch_models_success">%1$d model dimuat</string>
+    <string name="settings_fetch_models_empty">Tidak ada model ditemukan. Anda tetap bisa memasukkan model secara manual.</string>
+    <string name="settings_fetch_models_failed">Gagal mengambil model. Periksa alamat dan kunci API.</string>
 </resources>

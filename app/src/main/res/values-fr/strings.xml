@@ -136,4 +136,9 @@
     <string name="note_response_truncated">[Remarque : la réponse peut être tronquée]</string>
     <string name="error_provider_auth_required">Le serveur a rejeté la requête. S\'il s\'agit d\'un serveur cloud, connectez-vous sur le serveur lui-même (ex. « ollama signin »).</string>
     <string name="keys_endpoint_needs_v1">Le serveur est joignable, mais l\'URL doit se terminer par /v1 (ex. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Récupérer les modèles</string>
+    <string name="settings_fetch_models_loading">Récupération…</string>
+    <string name="settings_fetch_models_success">%1$d modèles chargés</string>
+    <string name="settings_fetch_models_empty">Aucun modèle trouvé. Vous pouvez quand même saisir un modèle manuellement.</string>
+    <string name="settings_fetch_models_failed">Impossible de récupérer les modèles. Vérifiez l\'adresse et la clé API.</string>
 </resources>

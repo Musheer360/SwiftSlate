@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[توجه: ممکن است پاسخ ناقص باشد]</string>
     <string name="error_provider_auth_required">سرور درخواست را رد کرد. اگر سرور ابری است، در خود سرور وارد شوید (مثلاً ollama signin).</string>
     <string name="keys_endpoint_needs_v1">سرور در دسترس است، اما آدرس باید به /v1 ختم شود (مثلاً http://host:11434/v1).</string>
+    <string name="settings_fetch_models">دریافت مدلها</string>
+    <string name="settings_fetch_models_loading">در حال دریافت…</string>
+    <string name="settings_fetch_models_success">%1$d مدل بارگیری شد</string>
+    <string name="settings_fetch_models_empty">مدلی پیدا نشد. همچنان میتوانید نام مدل را دستی وارد کنید.</string>
+    <string name="settings_fetch_models_failed">دریافت مدلها ممکن نشد. آدرس و کلید API را بررسی کنید.</string>
 </resources>

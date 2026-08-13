@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Примітка: відповідь може бути обрізана]</string>
     <string name="error_provider_auth_required">Сервер відхилив запит. Якщо це хмарний сервер, увійдіть на самому сервері (наприклад, ollama signin).</string>
     <string name="keys_endpoint_needs_v1">Сервер доступний, але адреса має закінчуватися на /v1 (наприклад, http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Отримати моделі</string>
+    <string name="settings_fetch_models_loading">Отримання…</string>
+    <string name="settings_fetch_models_success">Завантажено моделей: %1$d</string>
+    <string name="settings_fetch_models_empty">Моделі не знайдено. Ви все одно можете ввести модель вручну.</string>
+    <string name="settings_fetch_models_failed">Не вдалося отримати моделі. Перевірте адресу та ключ API.</string>
 </resources>

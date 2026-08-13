@@ -143,4 +143,9 @@
     <string name="update_available_title">SwiftSlate update available</string>
     <string name="update_available_text">Tap to view the latest release</string>
 
+    <string name="settings_fetch_models">Fetch models</string>
+    <string name="settings_fetch_models_loading">Fetching…</string>
+    <string name="settings_fetch_models_success">%1$d models loaded</string>
+    <string name="settings_fetch_models_empty">No models found. You can still enter a model manually.</string>
+    <string name="settings_fetch_models_failed">Could not fetch models. Check your endpoint and API key.</string>
 </resources>

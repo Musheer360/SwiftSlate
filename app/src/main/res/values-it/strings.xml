@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Nota: la risposta potrebbe essere troncata]</string>
     <string name="error_provider_auth_required">L\'endpoint ha rifiutato la richiesta. Se è un server cloud, accedi direttamente sul server (es. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">L\'endpoint è raggiungibile, ma l\'URL deve terminare con /v1 (es. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Recupera modelli</string>
+    <string name="settings_fetch_models_loading">Recupero…</string>
+    <string name="settings_fetch_models_success">Caricati %1$d modelli</string>
+    <string name="settings_fetch_models_empty">Nessun modello trovato. Puoi comunque inserirne uno manualmente.</string>
+    <string name="settings_fetch_models_failed">Impossibile recuperare i modelli. Controlla l\'indirizzo e la chiave API.</string>
 </resources>

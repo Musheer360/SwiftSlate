@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Poznámka: odpoveď môže byť skrátená]</string>
     <string name="error_provider_auth_required">Koncový bod žiadosť zamietol. Ak ide o cloudový server, prihláste sa na samotnom serveri (napr. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Koncový bod je dostupný, ale adresa musí končiť /v1 (napr. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Načítať modely</string>
+    <string name="settings_fetch_models_loading">Načítavanie…</string>
+    <string name="settings_fetch_models_success">Načítaných modelov: %1$d</string>
+    <string name="settings_fetch_models_empty">Nenašli sa žiadne modely. Model môžete zadať ručne.</string>
+    <string name="settings_fetch_models_failed">Modely sa nepodarilo načítať. Skontrolujte adresu a kľúč API.</string>
 </resources>

@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Nota: a resposta pode estar cortada]</string>
     <string name="error_provider_auth_required">O endpoint rejeitou o pedido. Se for um servidor na nuvem, inicie sessão no próprio servidor (ex.: „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">O endpoint está acessível, mas o URL deve terminar com /v1 (ex.: http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Obter modelos</string>
+    <string name="settings_fetch_models_loading">A obter…</string>
+    <string name="settings_fetch_models_success">%1$d modelos carregados</string>
+    <string name="settings_fetch_models_empty">Nenhum modelo encontrado. Ainda pode introduzir um modelo manualmente.</string>
+    <string name="settings_fetch_models_failed">Não foi possível obter os modelos. Verifique o endereço e a chave da API.</string>
 </resources>

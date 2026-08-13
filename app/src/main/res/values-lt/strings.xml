@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Pastaba: atsakymas gali būti nutrūkęs]</string>
     <string name="error_provider_auth_required">Serveris atmetė užklausą. Jei tai debesies serveris, prisijunkite pačiame serveryje (pvz., „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Serveris pasiekiamas, bet adresas turi baigtis /v1 (pvz., http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Gauti modelius</string>
+    <string name="settings_fetch_models_loading">Gaunama…</string>
+    <string name="settings_fetch_models_success">Įkelta modelių: %1$d</string>
+    <string name="settings_fetch_models_empty">Modelių nerasta. Modelį vis tiek galite įvesti rankiniu būdu.</string>
+    <string name="settings_fetch_models_failed">Nepavyko gauti modelių. Patikrinkite adresą ir API raktą.</string>
 </resources>

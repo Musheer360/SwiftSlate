@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Napomena: odgovor je možda skraćen]</string>
     <string name="error_provider_auth_required">Krajnja točka odbila je zahtjev. Ako je riječ o cloud poslužitelju, prijavite se na samom poslužitelju (npr. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Krajnja točka je dostupna, ali adresa mora završavati s /v1 (npr. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Dohvati modele</string>
+    <string name="settings_fetch_models_loading">Dohvaćanje…</string>
+    <string name="settings_fetch_models_success">Učitano modela: %1$d</string>
+    <string name="settings_fetch_models_empty">Nema pronađenih modela. Ipak možete ručno unijeti model.</string>
+    <string name="settings_fetch_models_failed">Modele nije moguće dohvatiti. Provjerite adresu i API ključ.</string>
 </resources>

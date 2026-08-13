@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[注: 応答が途中で切れている可能性があります]</string>
     <string name="error_provider_auth_required">エンドポイントがリクエストを拒否しました。クラウドサーバーの場合はサーバー自体でサインインしてください（例: ollama signin）。</string>
     <string name="keys_endpoint_needs_v1">エンドポイントには接続できますが、URL は /v1 で終わる必要があります（例: http://host:11434/v1）。</string>
+    <string name="settings_fetch_models">モデルを取得</string>
+    <string name="settings_fetch_models_loading">取得中…</string>
+    <string name="settings_fetch_models_success">%1$d 件のモデルを読み込みました</string>
+    <string name="settings_fetch_models_empty">モデルが見つかりません。手動でモデルを入力することもできます。</string>
+    <string name="settings_fetch_models_failed">モデルを取得できませんでした。アドレスと API キーを確認してください。</string>
 </resources>

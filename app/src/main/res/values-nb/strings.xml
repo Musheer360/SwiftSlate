@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Merk: svaret kan være avkuttet]</string>
     <string name="error_provider_auth_required">Endepunktet avviste forespørselen. Hvis det er en skyserver, logg inn på selve serveren (f.eks. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Endepunktet er tilgjengelig, men adressen må slutte med /v1 (f.eks. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Hent modeller</string>
+    <string name="settings_fetch_models_loading">Henter…</string>
+    <string name="settings_fetch_models_success">%1$d modeller lastet</string>
+    <string name="settings_fetch_models_empty">Ingen modeller funnet. Du kan fortsatt skrive inn en modell manuelt.</string>
+    <string name="settings_fetch_models_failed">Kunne ikke hente modeller. Sjekk adressen og API-nøkkelen.</string>
 </resources>

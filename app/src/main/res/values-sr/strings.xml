@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Напомена: одговор је можда скраћен]</string>
     <string name="error_provider_auth_required">Сервер је одбио захтев. Ако је у питању cloud сервер, пријавите се на самом серверу (нпр. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Сервер је доступан, али адреса мора да се завршава са /v1 (нпр. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Преузми моделе</string>
+    <string name="settings_fetch_models_loading">Преузимање…</string>
+    <string name="settings_fetch_models_success">Учитано модела: %1$d</string>
+    <string name="settings_fetch_models_empty">Нису пронађени модели. Ипак можете ручно унети модел.</string>
+    <string name="settings_fetch_models_failed">Није било могуће преузети моделе. Проверите адресу и API кључ.</string>
 </resources>

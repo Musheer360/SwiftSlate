@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Märkus: vastus võib olla poolik]</string>
     <string name="error_provider_auth_required">Lõpp-punkt lükkas päringu tagasi. Pilveserveri puhul logi sisse serveris endas (nt „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Lõpp-punkt on kättesaadav, kuid aadress peaks lõppema osaga /v1 (nt http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Lae mudelid</string>
+    <string name="settings_fetch_models_loading">Laadimine…</string>
+    <string name="settings_fetch_models_success">Laaditud: %1$d mudelit</string>
+    <string name="settings_fetch_models_empty">Mudeleid ei leitud. Mudeli saad sisestada ka käsitsi.</string>
+    <string name="settings_fetch_models_failed">Mudelite laadimine ebaõnnestus. Kontrolli aadressi ja API-võtit.</string>
 </resources>

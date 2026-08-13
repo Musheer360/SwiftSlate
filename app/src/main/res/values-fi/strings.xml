@@ -137,4 +137,9 @@
     <string name="note_response_truncated">[Huomio: vastaus voi olla katkaistu]</string>
     <string name="error_provider_auth_required">Päätepiste hylkäsi pyynnön. Pilvipalvelimella kirjaudu sisään itse palvelimelle (esim. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Päätepiste on käytettävissä, mutta osoitteen tulee päättyä /v1 (esim. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Hae mallit</string>
+    <string name="settings_fetch_models_loading">Haetaan…</string>
+    <string name="settings_fetch_models_success">%1$d mallia ladattu</string>
+    <string name="settings_fetch_models_empty">Malleja ei löytynyt. Voit silti syöttää mallin käsin.</string>
+    <string name="settings_fetch_models_failed">Malleja ei voitu hakea. Tarkista osoite ja API-avain.</string>
 </resources>

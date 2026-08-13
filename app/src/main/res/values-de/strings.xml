@@ -138,4 +138,9 @@
     <string name="note_response_truncated">[Hinweis: Antwort ist möglicherweise abgeschnitten]</string>
     <string name="error_provider_auth_required">Der Endpunkt hat die Anfrage abgelehnt. Bei einem Cloud-Server melde dich auf dem Server selbst an (z. B. „ollama signin“).</string>
     <string name="keys_endpoint_needs_v1">Der Endpunkt ist erreichbar, aber die URL sollte mit /v1 enden (z. B. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Modelle abrufen</string>
+    <string name="settings_fetch_models_loading">Wird abgerufen…</string>
+    <string name="settings_fetch_models_success">%1$d Modelle geladen</string>
+    <string name="settings_fetch_models_empty">Keine Modelle gefunden. Du kannst ein Modell trotzdem manuell eingeben.</string>
+    <string name="settings_fetch_models_failed">Modelle konnten nicht abgerufen werden. Prüfe die Adresse und den API-Schlüssel.</string>
 </resources>

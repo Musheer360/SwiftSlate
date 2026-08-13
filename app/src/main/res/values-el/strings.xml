@@ -139,4 +139,9 @@
     <string name="note_response_truncated">[Σημείωση: η απάντηση μπορεί να έχει αποκοπεί]</string>
     <string name="error_provider_auth_required">Το endpoint απέρριψε το αίτημα. Αν πρόκειται για διακομιστή cloud, συνδεθείτε στον ίδιο τον διακομιστή (π.χ. «ollama signin»).</string>
     <string name="keys_endpoint_needs_v1">Το endpoint είναι προσβάσιμο, αλλά η διεύθυνση πρέπει να τελειώνει σε /v1 (π.χ. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Λήψη μοντέλων</string>
+    <string name="settings_fetch_models_loading">Λήψη…</string>
+    <string name="settings_fetch_models_success">Φορτώθηκαν %1$d μοντέλα</string>
+    <string name="settings_fetch_models_empty">Δεν βρέθηκαν μοντέλα. Μπορείτε να εισαγάγετε ένα μοντέλο χειροκίνητα.</string>
+    <string name="settings_fetch_models_failed">Δεν ήταν δυνατή η λήψη των μοντέλων. Ελέγξτε τη διεύθυνση και το κλειδί API.</string>
 </resources>

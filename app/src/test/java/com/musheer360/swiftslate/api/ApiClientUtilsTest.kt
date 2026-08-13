@@ -184,4 +184,56 @@ class ApiClientUtilsTest {
         assertNull(ApiClientUtils.extractSigninUrl("not json"))
     }
 
+    // --- parseModelIds ---
+
+    @Test
+    fun parseModelIds_readsOpenAIShape() {
+        assertEquals(
+            listOf("gpt-4o", "gpt-4o-mini"),
+            ApiClientUtils.parseModelIds("""{"object":"list","data":[{"id":"gpt-4o"},{"id":"gpt-4o-mini"}]}""")
+        )
+    }
+
+    @Test
+    fun parseModelIds_readsOllamaNativeTagsShape() {
+        assertEquals(
+            listOf("qwen2.5:7b", "llama3.2:latest"),
+            ApiClientUtils.parseModelIds("""{"models":[{"name":"qwen2.5:7b"},{"name":"llama3.2:latest"}]}""")
+        )
+    }
+
+    @Test
+    fun parseModelIds_readsVllmModelFieldShape() {
+        assertEquals(
+            listOf("meta-llama/Meta-Llama-3-8B-Instruct"),
+            ApiClientUtils.parseModelIds("""{"data":[{"model":"meta-llama/Meta-Llama-3-8B-Instruct"}]}""")
+        )
+    }
+
+    @Test
+    fun parseModelIds_keepsIdsVerbatimColonsSlashesSpaces() {
+        assertEquals(
+            listOf("hf.co/user/my model.gguf", "xai/grok-2-1212"),
+            ApiClientUtils.parseModelIds(
+                """{"data":[{"id":"hf.co/user/my model.gguf"},{"id":"xai/grok-2-1212"}]}""")
+        )
+    }
+
+    @Test
+    fun parseModelIds_deduplicatesTrimsAndSkipsBlank() {
+        assertEquals(
+            listOf("a", "b"),
+            ApiClientUtils.parseModelIds(
+                """{"data":[{"id":"a"},{"id":"  a  "},{"id":""},{"id":"b"},{"name":"a"}]}""")
+        )
+    }
+
+    @Test
+    fun parseModelIds_nonJsonHtmlAndBlankReturnEmpty() {
+        assertEquals(emptyList<String>(), ApiClientUtils.parseModelIds(""))
+        assertEquals(emptyList<String>(), ApiClientUtils.parseModelIds("not json"))
+        assertEquals(emptyList<String>(), ApiClientUtils.parseModelIds("<html><body>web ui</body></html>"))
+        assertEquals(emptyList<String>(), ApiClientUtils.parseModelIds("""{"data":[]}"""))
+        assertEquals(emptyList<String>(), ApiClientUtils.parseModelIds("""{"something":"else"}"""))
+    }
 }

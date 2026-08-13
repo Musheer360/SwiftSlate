@@ -137,6 +137,48 @@ internal object ApiClientUtils {
      */
     const val NEEDS_V1_MARKER = "endpoint_needs_v1"
 
+    /**
+     * Extracts model ids from a model-list response body, tolerating the shapes served by
+     * local LLM servers:
+     *  - OpenAI style        {"data":[{"id":...}]}   (OpenAI, Ollama /v1/models, LM Studio, vLLM, llama.cpp)
+     *  - vLLM/llama variants {"data":[{"model":...}]}
+     *  - Ollama native       {"models":[{"name":...}]} (GET /api/tags)
+     *
+     * Ids are kept verbatim (they legitimately contain ':', '/', '.', even spaces), trimmed,
+     * de-duplicated and returned in first-seen order. Blank/absent ids are skipped, and any
+     * non-JSON body yields an empty list — the caller decides what an empty result means.
+     */
+    fun parseModelIds(json: String): List<String> {
+        if (json.isBlank()) return emptyList()
+        return try {
+            val root = JSONObject(json)
+            val out = LinkedHashSet<String>()
+            root.optJSONArray("data")?.let { arr ->
+                for (i in 0 until arr.length()) {
+                    val obj = arr.optJSONObject(i) ?: continue
+                    listOf(obj.optString("id"), obj.optString("name"), obj.optString("model"))
+                        .firstOrNull { it.isNotBlank() }
+                        ?.trim()?.let { out.add(it) }
+                }
+            }
+            root.optJSONArray("models")?.let { arr ->
+                for (i in 0 until arr.length()) {
+                    val obj = arr.optJSONObject(i)
+                    if (obj != null) {
+                        listOf(obj.optString("name"), obj.optString("id"), obj.optString("model"))
+                            .firstOrNull { it.isNotBlank() }
+                            ?.trim()?.let { out.add(it) }
+                    } else {
+                        arr.optString(i).takeIf { it.isNotBlank() }?.trim()?.let { out.add(it) }
+                    }
+                }
+            }
+            out.toList()
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
     fun sanitizeErrorForUser(responseCode: Int, errorBody: String, fallbackMessage: String): String {
         val apiMessage = extractApiErrorMessage(errorBody)
         return if (apiMessage.isNotEmpty()) apiMessage else fallbackMessage
