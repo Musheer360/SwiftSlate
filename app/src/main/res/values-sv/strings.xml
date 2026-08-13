@@ -139,4 +139,14 @@
     <string name="update_available_title">SwiftSlate-uppdatering tillgänglig</string>
     <string name="update_available_text">Tryck för att visa den senaste versionen</string>
 
+    <string name="error_provider_auth_required">Din slutpunkt avvisade begäran. Om det är en molnbaserad server, logga in på själva servern (t.ex. `ollama signin`).</string>
+    <string name="keys_endpoint_needs_v1">Slutpunkten är nåbar, men webbadressen ska sluta med /v1 (t.ex. http://host:11434/v1).</string>
+    <string name="settings_fetch_models">Hämta modeller</string>
+    <string name="settings_fetch_models_loading">Hämtar…</string>
+    <string name="settings_fetch_models_success">%1$d modeller inlästa</string>
+    <string name="settings_fetch_models_empty">Inga modeller hittades. Du kan fortfarande ange en modell manuellt.</string>
+    <string name="settings_fetch_models_failed">Det gick inte att hämta modeller. Kontrollera slutpunkten och API-nyckeln.</string>
+    <string name="dashboard_service_killed_title">SwiftSlate avbröts</string>
+    <string name="dashboard_service_killed_message">Bakgrundstjänsten stoppades oväntat. Aktivera den igen i tillgänglighetsinställningarna för att fortsätta använda kommandon.</string>
+    <string name="dashboard_service_killed_dismiss">Avfärda</string>
 </resources>
