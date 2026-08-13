@@ -8,13 +8,16 @@ on:
   workflow_dispatch:
   push:
     branches: [master]
+    # Deliberately excludes '.github/workflows/**': the pipeline cuts a release
+    # on every matching push, and a CI-only commit must not burn a version
+    # number for zero app changes. Workflow changes made via PR still get
+    # lint/test through the pull_request trigger below.
     paths:
       - 'app/**'
       - 'build.gradle.kts'
       - 'settings.gradle.kts'
       - 'gradle/**'
       - 'gradle.properties'
-      - '.github/workflows/**'
     tags: ['v*']
   # Contributor pull requests previously ran no CI at all: the workflow only
   # triggered on pushes to master, so #104 (50 locale files) was merged without
