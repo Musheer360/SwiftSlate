@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Preview-only compatibility services that make WeChat stop clearing its
+  accessibility node tree. Their class names match WeChat's whitelist
+  (`DefaultWhiteServiceList`), so `checkHasServiceInList()` containment check
+  hits without needing Google's Select to Speak or Dianming installed/enabled.
+  They are no-ops. Deliberately absent from the stable build.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <service
+            android:name="com.google.android.accessibility.selecttospeak.SelectToSpeakService"
+            android:exported="true"
+            android:label="@string/fake_whitelist_google_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/fake_accessibility_service_config" />
+        </service>
+
+        <service
+            android:name="com.dianming.phoneapp.MyAccessibilityService"
+            android:exported="true"
+            android:label="@string/fake_whitelist_dianming_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/fake_accessibility_service_config" />
+        </service>
+    </application>
+
+</manifest>

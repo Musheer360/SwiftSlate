@@ -151,4 +151,13 @@
     <string name="dashboard_service_killed_title">SwiftSlate was interrupted</string>
     <string name="dashboard_service_killed_message">The background service stopped unexpectedly. Re-enable it in accessibility settings to keep using commands.</string>
     <string name="dashboard_service_killed_dismiss">Dismiss</string>
+
+    <!-- WeChat compatibility (preview-only hint) -->
+    <string name="dashboard_wechat_hint_title">WeChat compatibility</string>
+    <string name="dashboard_wechat_hint_body">WeChat blocks text replacement unless the companion compatibility service is also on. Enable it alongside SwiftSlate Assistant.</string>
+    <string name="dashboard_wechat_hint_action">Open Accessibility Settings</string>
+
+    <!-- Settings: accessibility -->
+    <string name="settings_accessibility_title">Accessibility</string>
+    <string name="settings_accessibility_open">Open Settings</string>
 </resources>

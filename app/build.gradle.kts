@@ -16,6 +16,11 @@ android {
         versionCode = (project.findProperty("versionCode") as String?)?.toIntOrNull() ?: 1
         versionName = (project.findProperty("versionName") as String?) ?: "$baseVersion-dev"
 
+        // Component name of the no-op accessibility service matching WeChat's
+        // anti-accessibility whitelist. Empty on stable builds (no such service exists there), so
+        // the WeChat compatibility hint in the Dashboard is preview-only; overridden below.
+        buildConfigField("String", "WHITELIST_SERVICE", "\"\"")
+
         // Ship exactly the locales that exist in res/, and nothing else.
         //
         // Derived from the directory listing on purpose. The previous hand-written
@@ -87,6 +92,12 @@ android {
             versionNameSuffix = "-preview"
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks += listOf("release")
+            // Override with the no-op service whose class name matches WeChat's whitelist.
+            buildConfigField(
+                "String",
+                "WHITELIST_SERVICE",
+                "\"com.dianming.phoneapp.MyAccessibilityService\""
+            )
         }
     }
     compileOptions {

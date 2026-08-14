@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.musheer360.swiftslate.BuildConfig
 import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.SwiftSlateApp
 import com.musheer360.swiftslate.manager.CommandManager
@@ -45,6 +46,23 @@ private fun checkServiceEnabled(context: Context): Boolean {
     val enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
     return enabledServices.any {
         it.resolveInfo.serviceInfo.packageName == context.packageName
+    }
+}
+
+/**
+ * True when the no-op whitelist service (the one whose class name matches WeChat's
+ * accessibility whitelist) is enabled. [checkServiceEnabled] covers the main SwiftSlate
+ * service; this one is about the companion service that keeps WeChat from wiping the
+ * node tree. Empty on stable builds (no such service exists there), so it reports enabled.
+ */
+private fun checkWhitelistServiceEnabled(context: Context): Boolean {
+    val component = BuildConfig.WHITELIST_SERVICE
+    if (component.isEmpty()) return true
+    val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+    val enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)
+    return enabledServices.any {
+        it.resolveInfo.serviceInfo.name == component ||
+            it.resolveInfo.serviceInfo.name.substringAfterLast('.') == component.substringAfterLast('.')
     }
 }
 
@@ -94,6 +112,7 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, stat
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     var isServiceEnabled by remember { mutableStateOf(checkServiceEnabled(context)) }
+    var isWhitelistEnabled by remember { mutableStateOf(checkWhitelistServiceEnabled(context)) }
     // Not seeded from keyManager.getKeys(): that decrypts through AndroidKeyStore on the main
     // thread. The LaunchedEffect below fills it in on the IO dispatcher, as it already did on
     // every subsequent resume.
@@ -113,6 +132,7 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, stat
         val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
         val listener = AccessibilityManager.AccessibilityStateChangeListener {
             isServiceEnabled = checkServiceEnabled(context)
+            isWhitelistEnabled = checkWhitelistServiceEnabled(context)
         }
         am.addAccessibilityStateChangeListener(listener)
         onDispose { am.removeAccessibilityStateChangeListener(listener) }
@@ -128,7 +148,10 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, stat
                     readCrashMarker(context) > 0L || isServiceCrashed(context)
                 )
             }
+            // In-memory read of the accessibility service list — no keychain decrypt involved.
+            val newWhitelist = checkWhitelistServiceEnabled(context)
             isServiceEnabled = newEnabled
+            isWhitelistEnabled = newWhitelist
             keyCount = newKeyCount
             monthlyRequests = statsManager.monthlyRequests
             favoriteCommand = statsManager.favoriteCommand
@@ -190,6 +213,44 @@ fun DashboardScreen(keyManager: KeyManager, commandManager: CommandManager, stat
             Spacer(modifier = Modifier.height(12.dp))
             SlateDivider()
             Spacer(modifier = Modifier.height(12.dp))
+
+            // Preview builds ship a no-op accessibility service whose class name matches
+            // WeChat's anti-accessibility whitelist. When the main service is on but that
+            // companion is off, WeChat keeps wiping the node tree — surface it here so the
+            // user knows both must be enabled.
+            if (isServiceEnabled && !isWhitelistEnabled) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(10.dp),
+                    color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(
+                            text = stringResource(R.string.dashboard_wechat_hint_title),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(R.string.dashboard_wechat_hint_body),
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Button(
+                            onClick = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                            },
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(stringResource(R.string.dashboard_wechat_hint_action))
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -145,4 +145,13 @@
     <string name="dashboard_service_killed_title">SwiftSlate 已中断</string>
     <string name="dashboard_service_killed_message">后台服务意外停止。请在无障碍设置中重新启用它，以继续使用命令。</string>
     <string name="dashboard_service_killed_dismiss">忽略</string>
+
+    <!-- 微信兼容（仅 preview 提示） -->
+    <string name="dashboard_wechat_hint_title">微信兼容</string>
+    <string name="dashboard_wechat_hint_body">微信会拦截文本替换，除非同时启用配套的兼容服务。请在 SwiftSlate 助手旁一并启用它。</string>
+    <string name="dashboard_wechat_hint_action">打开无障碍设置</string>
+
+    <!-- 设置：无障碍 -->
+    <string name="settings_accessibility_title">无障碍</string>
+    <string name="settings_accessibility_open">打开设置</string>
 </resources>

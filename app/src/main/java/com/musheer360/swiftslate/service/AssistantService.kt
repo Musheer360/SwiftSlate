@@ -110,6 +110,9 @@ class AssistantService : AccessibilityService() {
 
     private companion object {
         const val TAG = "SwiftSlateService"
+        // Fork: field-debugging diagnostics (Log.e so R8 keeps them, see proguard-rules.pro).
+        // Filter with: adb logcat -s SwiftSlateDiag:E
+        const val DIAG_TAG = "SwiftSlateDiag"
         const val TRIGGER_REFRESH_INTERVAL_MS = 5_000L
         const val PROCESSING_WATCHDOG_MS = 120_000L
         const val FOCUS_FALLBACK_MIN_INTERVAL_MS = 300L
@@ -130,6 +133,56 @@ class AssistantService : AccessibilityService() {
             // event path and command path already handle an uninitialized manager (#125).
             Log.w(TAG, "onServiceConnected failed; service will stay inert until re-enabled", e)
         }
+        // A/B test: dump loop disabled — it forces rootInActiveWindow + full-tree walk every
+        // 3s, which keeps poking WeChat's accessibility delegate and makes the IME candidate
+        // bar jump. See WECHAT_COMPAT debug notes. Re-enable by uncommenting.
+        // startWindowDump()
+    }
+
+    private var dumpRunnable: Runnable? = null
+
+    private fun startWindowDump() {
+        dumpRunnable?.let { handler.removeCallbacks(it) }
+        val runnable = object : Runnable {
+            override fun run() {
+                dumpActiveWindow()
+                handler.postDelayed(this, 3000)
+            }
+        }
+        dumpRunnable = runnable
+        handler.postDelayed(runnable, 1500)
+    }
+
+    private fun dumpActiveWindow() {
+        try {
+            val root = rootInActiveWindow ?: run {
+                Log.e(DIAG_TAG, "dump: rootInActiveWindow null")
+                return
+            }
+            val pkg = root.packageName?.toString() ?: "?"
+            Log.e(DIAG_TAG, "== dump window pkg=$pkg winId=${root.windowId} rootCls=${root.className}")
+            if (pkg == "com.tencent.mm") {
+                dumpNode(root, 0)
+            }
+        } catch (e: Exception) {
+            Log.e(DIAG_TAG, "dump failed: ${e.message}")
+        }
+    }
+
+    private fun dumpNode(node: AccessibilityNodeInfo, depth: Int) {
+        try {
+            val cls = node.className?.toString() ?: "?"
+            val isEdit = cls.contains("EditText") || node.isEditable
+            if (isEdit || node.isFocused || depth < 2) {
+                Log.e(DIAG_TAG, "node[$depth] cls=$cls editable=${node.isEditable} imp=${node.isImportantForAccessibility} foc=${node.isFocused} text=${node.text} id=${node.viewIdResourceName}")
+            }
+            for (i in 0 until node.childCount) {
+                try {
+                    val child = node.getChild(i) ?: continue
+                    dumpNode(child, depth + 1)
+                } catch (_: Exception) {}
+            }
+        } catch (_: Exception) {}
     }
 
     private fun updateTriggers() {
@@ -191,28 +244,35 @@ class AssistantService : AccessibilityService() {
 
     private fun handleAccessibilityEvent(event: AccessibilityEvent?) {
         if (event?.eventType != AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) return
+        Log.e(DIAG_TAG, "TEXT_CHANGED pkg=${event.packageName} srcNull=${event.source == null}")
         if (event.packageName?.toString() == packageName) return
         if (!::keyManager.isInitialized) return
 
         // Some hosts (WeChat-style editors, WebView fields) emit text-changed events whose
-        // source node is null or already recycled. Fall back to the focused input node of the
-        // active window before giving up — see #125 / #131. The root lookup is a binder call on
-        // the main thread, so it is throttled: hosts that flood null-source events are rare, and
-        // skipping an occasional event is harmless for trigger detection.
+        // source node is null or already recycled. Fall back to the focused editable input node
+        // of the active window before giving up — see #125 / #131. The root lookup is a binder
+        // call on the main thread, so it is throttled: hosts that flood null-source events are
+        // rare, and skipping an occasional event is harmless for trigger detection.
         val source = event.source ?: run {
             val now = SystemClock.elapsedRealtime()
             if (now - lastFocusFallbackAt < FOCUS_FALLBACK_MIN_INTERVAL_MS) return
             lastFocusFallbackAt = now
             findFocusedEditableSource()
-        } ?: return
+        } ?: run {
+            Log.e(DIAG_TAG, "source null, abort")
+            return
+        }
         if (source.isPassword) {
+            Log.e(DIAG_TAG, "password field, skip")
             source.safeRecycle()
             return
         }
         val text = source.text?.toString() ?: run {
+            Log.e(DIAG_TAG, "text is NULL (wechat fake/clear info?), class=${source.className}")
             source.safeRecycle()
             return
         }
+        Log.e(DIAG_TAG, "text=[$text] class=${source.className} editable=${source.isEditable}")
         if (handlePendingProcessTextReplacement(event, source, text)) return
         if (isProcessing.get()) {
             source.safeRecycle()
@@ -244,13 +304,16 @@ class AssistantService : AccessibilityService() {
 
         val lastChar = text[text.length - 1]
         if (!triggerLastChars.contains(lastChar)) {
+            Log.e(DIAG_TAG, "lastChar=[$lastChar] not in triggers=$triggerLastChars")
             if (!lastChar.isLetterOrDigit() || !text.contains(cachedTranslatePrefix)) {
                 source.safeRecycle()
                 return
             }
         }
 
-        val command = commandManager.findCommand(text) ?: run {
+        val command = commandManager.findCommand(text)
+        Log.e(DIAG_TAG, "findCommand result=${command?.trigger}")
+        if (command == null) {
             source.safeRecycle()
             return
         }
@@ -348,6 +411,11 @@ class AssistantService : AccessibilityService() {
      * node of the active window. Returns null when unavailable; the caller treats the result
      * exactly like a null event.source and recycles it like one. All node access is guarded —
      * the root can be stale the moment we ask (#125).
+     *
+     * Fork: instead of findFocus(FOCUS_INPUT) (which returns the WebView/container node for
+     * WebView-based editors — not editable), walk the tree for the node that is both editable
+     * and focused. The walk recycles every node it visits, so callers must treat the result
+     * exactly like an event source.
      */
     private fun findFocusedEditableSource(): AccessibilityNodeInfo? {
         val root = try {
@@ -356,16 +424,32 @@ class AssistantService : AccessibilityService() {
             Log.w(TAG, "focused-node fallback: root unavailable", e)
             null
         } ?: return null
-        try {
-            val focused = root.findFocus(AccessibilityNodeInfo.FOCUS_INPUT)
-            if (focused === root) return root
-            root.safeRecycle()
-            return focused
+        return try {
+            findFocusedEditable(root)
         } catch (e: Exception) {
             Log.w(TAG, "focused-node fallback failed", e)
             root.safeRecycle()
+            null
+        }
+    }
+
+    private fun findFocusedEditable(node: AccessibilityNodeInfo): AccessibilityNodeInfo? {
+        val edit = runCatching { node.isEditable }.getOrElse { false }
+        if (edit && runCatching { node.isFocused }.getOrElse { false }) return node
+        if (node.childCount == 0) {
+            node.safeRecycle()
             return null
         }
+        for (i in 0 until node.childCount) {
+            val child = node.getChild(i) ?: continue
+            val found = findFocusedEditable(child)
+            if (found != null) {
+                node.safeRecycle()
+                return found
+            }
+        }
+        node.safeRecycle()
+        return null
     }
 
     private fun handlePendingProcessTextReplacement(
@@ -781,11 +865,15 @@ class AssistantService : AccessibilityService() {
         // must not restore or clear it — that destroyed the very clip the command just placed.
         callerOwnsClipboard: Boolean = false
     ): Boolean = withContext(Dispatchers.Main) {
-        if (!source.refresh()) return@withContext false
+        if (!source.refresh()) {
+            Log.e(DIAG_TAG, "replaceText: refresh failed")
+            return@withContext false
+        }
         val bundle = Bundle()
         bundle.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, newText)
 
         val success = source.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, bundle)
+        Log.e(DIAG_TAG, "replaceText: ACTION_SET_TEXT=$success text=[$newText]")
 
         if (success) {
             // Verify the text actually persisted — some apps (Firefox, Google Keep)
@@ -798,6 +886,7 @@ class AssistantService : AccessibilityService() {
                 return@withContext false
             }
             val currentText = source.text?.toString()
+            Log.e(DIAG_TAG, "replaceText: verify after SET_TEXT=[$currentText]")
             if (currentText == newText) {
                 scheduleTextVerification(source, newText)
                 return@withContext true // Text persisted
@@ -838,6 +927,7 @@ class AssistantService : AccessibilityService() {
         source.performAction(AccessibilityNodeInfo.ACTION_SET_SELECTION, selectAllArgs)
 
         val pasted = source.performAction(AccessibilityNodeInfo.ACTION_PASTE)
+        Log.e(DIAG_TAG, "replaceText: clipboard fallback PASTE=$pasted")
 
         scheduleTextVerification(source, newText)
 

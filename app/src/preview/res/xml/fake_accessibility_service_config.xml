@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Preview-only minimal config for the whitelist-name compatibility services.
+
+  A/B experiment for the WeChat candidate-bar jumping issue:
+  the shared main config declares `canRetrieveWindowContent="true"` and subscribes
+  to `typeViewTextChanged`, which WeChat/its IME reacts to by repeatedly refreshing
+  the candidate bar even though the compatibility services perform no work.
+
+  These services exist only to make WeChat's `checkHasServiceInList()` string
+  containment check pass (the whitelist is matched purely on the fully-qualified
+  class name), so they need neither window content retrieval nor event delivery.
+  If removing both capabilities stops the candidate-bar jumping, the root cause is
+  confirmed to be "enabling a window-reading accessibility service", not SwiftSlate
+  code, and this config becomes the permanent fix.
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeNotificationStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:description="@string/accessibility_service_desc" />

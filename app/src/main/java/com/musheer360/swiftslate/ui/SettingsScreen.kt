@@ -1,6 +1,8 @@
 package com.musheer360.swiftslate.ui
 
+import android.content.Intent
 import android.content.SharedPreferences
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -596,6 +598,34 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 ) {
                     Text(stringResource(R.string.backup_import))
                 }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                    },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_accessibility_title),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = stringResource(R.string.settings_accessibility_open),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "›",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
             backupMessage?.let { msg ->
                 Text(

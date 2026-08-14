@@ -8,4 +8,6 @@
 <resources>
     <string name="app_name">SwiftSlate Preview</string>
     <string name="accessibility_service_label">SwiftSlate Preview</string>
+    <string name="fake_whitelist_google_label">SwiftSlate 微信适配（备选）</string>
+    <string name="fake_whitelist_dianming_label">SwiftSlate 微信适配</string>
 </resources>
