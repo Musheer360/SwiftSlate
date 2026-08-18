@@ -2,7 +2,6 @@ package com.musheer360.swiftslate.manager
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
@@ -16,8 +15,7 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 class KeyManager(context: Context) {
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("secure_keys_prefs", Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences = context.getSharedPreferences("secure_keys_prefs", Context.MODE_PRIVATE)
 
     companion object {
         private const val KEY_ALIAS = "typeslate_secure_key"
@@ -26,23 +24,21 @@ class KeyManager(context: Context) {
         private const val IV_SEPARATOR = "]"
         private const val PREF_KEY_ARRAY = "keys_array"
         private const val CACHE_TTL_MS = 5_000L
+        // Invalid-key marks expire. A 403 is not always the key's fault (e.g. selecting a
+        // model the key's project can't access returns 403 for every key), and marks used
+        // to last for the whole process lifetime — so one bad model choice permanently
+        // killed every key with no recovery except re-adding them all.
         private const val INVALID_KEY_TTL_MS = 900_000L // 15 min
     }
 
-    private val rateLimitedKeys =
-        java.util.concurrent.ConcurrentHashMap<String, Long>()
-
-    private val invalidKeys =
-        java.util.concurrent.ConcurrentHashMap<String, Long>()
-
+    private val rateLimitedKeys = java.util.concurrent.ConcurrentHashMap<String, Long>()
+    /** key -> timestamp after which the invalid mark is forgotten. */
+    private val invalidKeys = java.util.concurrent.ConcurrentHashMap<String, Long>()
     private val roundRobinIndex = AtomicInteger(0)
-
     @Volatile
     private var cachedKeys: List<String>? = null
-
     @Volatile
     private var cacheTimestamp = 0L
-
     @Volatile
     var keystoreAvailable: Boolean = true
         private set
@@ -51,13 +47,8 @@ class KeyManager(context: Context) {
         try {
             val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
             keyStore.load(null)
-
             if (!keyStore.containsAlias(KEY_ALIAS)) {
-                val keyGenerator = KeyGenerator.getInstance(
-                    KeyProperties.KEY_ALGORITHM_AES,
-                    ANDROID_KEYSTORE
-                )
-
+                val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
                 val keyGenParameterSpec = KeyGenParameterSpec.Builder(
                     KEY_ALIAS,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
@@ -66,12 +57,11 @@ class KeyManager(context: Context) {
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                     .setKeySize(256)
                     .apply {
-                        // resolves Android 12–14 bug
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM)
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) {
                             setUnlockedDeviceRequired(true)
+                        }
                     }
                     .build()
-
                 keyGenerator.init(keyGenParameterSpec)
                 keyGenerator.generateKey()
             }
@@ -95,43 +85,30 @@ class KeyManager(context: Context) {
     private fun encrypt(plainText: String): String {
         val secretKey = getSecretKey()
             ?: throw IllegalStateException("Keystore unavailable")
-
         val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-
-        val iv = Base64.encodeToString(cipher.iv, Base64.NO_WRAP)
-        val cipherText = Base64.encodeToString(
-            cipher.doFinal(plainText.toByteArray(StandardCharsets.UTF_8)),
-            Base64.NO_WRAP
-        )
-
-        return "$iv$IV_SEPARATOR$cipherText"
+        val iv = cipher.iv
+        val cipherText = cipher.doFinal(plainText.toByteArray(StandardCharsets.UTF_8))
+        val ivString = Base64.encodeToString(iv, Base64.NO_WRAP)
+        val cipherTextString = Base64.encodeToString(cipherText, Base64.NO_WRAP)
+        return "$ivString$IV_SEPARATOR$cipherTextString"
     }
 
     private fun decrypt(encryptedString: String): String? {
         if (!encryptedString.contains(IV_SEPARATOR)) {
-            return null
+            return null // corrupted or legacy plaintext — no longer supported
         }
-
         val parts = encryptedString.split(IV_SEPARATOR)
         if (parts.size != 2) return null
-
         return try {
             val iv = Base64.decode(parts[0], Base64.NO_WRAP)
             val cipherText = Base64.decode(parts[1], Base64.NO_WRAP)
             val secretKey = getSecretKey() ?: return null
-
             val cipher = Cipher.getInstance(TRANSFORMATION)
-            cipher.init(
-                Cipher.DECRYPT_MODE,
-                secretKey,
-                GCMParameterSpec(128, iv)
-            )
-
-            String(
-                cipher.doFinal(cipherText),
-                StandardCharsets.UTF_8
-            )
+            val spec = GCMParameterSpec(128, iv)
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, spec)
+            val plainTextBytes = cipher.doFinal(cipherText)
+            String(plainTextBytes, StandardCharsets.UTF_8)
         } catch (_: Exception) {
             null
         }
@@ -144,67 +121,39 @@ class KeyManager(context: Context) {
     fun getKeys(): List<String> {
         val now = System.currentTimeMillis()
         val cached = cachedKeys
-
-        if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) {
-            return cached
-        }
-
-        val encryptedStr =
-            prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
-
-        // Legacy plaintext migration.
+        if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
+        val encryptedStr = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
+        // Legacy plaintext migration — can be removed once all users are on v1.3+
         if (!encryptedStr.contains(IV_SEPARATOR)) {
             return try {
                 val encrypted = encrypt(encryptedStr)
-
-                prefs.edit()
-                    .putString(PREF_KEY_ARRAY, encrypted)
-                    .commit()
-
+                prefs.edit().putString(PREF_KEY_ARRAY, encrypted).commit()
                 val jsonStr = decrypt(encrypted) ?: return emptyList()
                 val list = JSONArray(jsonStr).toStringList()
-
                 cachedKeys = list
                 cacheTimestamp = System.currentTimeMillis()
-
                 list
             } catch (_: Exception) {
-                // Do not discard legacy plaintext if encryption is unavailable.
-                try {
-                    JSONArray(encryptedStr).toStringList()
-                } catch (_: Exception) {
-                    emptyList()
-                }
+                // Encryption failed (e.g. keystore invalidated) — return plaintext keys so user doesn't lose access
+                try { JSONArray(encryptedStr).toStringList() } catch (_: Exception) { emptyList() }
             }
         }
-
         val jsonStr = decrypt(encryptedStr) ?: run {
             cachedKeys = emptyList()
             cacheTimestamp = System.currentTimeMillis()
             return emptyList()
         }
-
-        val list = try {
-            JSONArray(jsonStr).toStringList()
-        } catch (_: Exception) {
-            emptyList()
-        }
-
+        val list = try { JSONArray(jsonStr).toStringList() } catch (_: Exception) { emptyList() }
         cachedKeys = list
         cacheTimestamp = System.currentTimeMillis()
-
         return list
     }
 
     @Synchronized
     private fun saveKeys(keys: List<String>): Boolean {
         val arr = JSONArray(keys)
-
         return try {
-            prefs.edit()
-                .putString(PREF_KEY_ARRAY, encrypt(arr.toString()))
-                .apply()
-
+            prefs.edit().putString(PREF_KEY_ARRAY, encrypt(arr.toString())).apply()
             cachedKeys = keys
             cacheTimestamp = System.currentTimeMillis()
             true
@@ -218,17 +167,11 @@ class KeyManager(context: Context) {
     @Synchronized
     fun addKey(key: String): Boolean {
         if (key.isBlank() || key.length > 256) return false
-
         val keys = getKeys().toMutableList()
-
         if (!keys.contains(key)) {
             keys.add(key)
-
-            if (!saveKeys(keys)) {
-                return false
-            }
+            if (!saveKeys(keys)) return false
         }
-
         invalidKeys.remove(key)
         return true
     }
@@ -237,76 +180,74 @@ class KeyManager(context: Context) {
     fun removeKey(key: String): Boolean {
         val keys = getKeys().toMutableList()
         keys.remove(key)
-
         val saved = saveKeys(keys)
-
         rateLimitedKeys.remove(key)
         invalidKeys.remove(key)
-
         return saved
     }
 
+    // All @Synchronized methods use `this` as monitor (reentrant).
+    // getNextKey() intentionally calls getKeys() while holding the lock.
+    /**
+     * Next usable key, skipping benched ones and anything in [alreadyTried].
+     *
+     * [alreadyTried] exists because a monotonic round-robin index modulo a *shrinking* list is
+     * not a permutation: with keys [A,B,C] and the counter at 1, a 5xx on B followed by a 429 on
+     * C mapped attempt 3 back to B — re-sending a byte-identical request while A was never tried
+     * at all, so the command could fail with a healthy key sitting idle.
+     */
     @Synchronized
     fun getNextKey(alreadyTried: Set<String> = emptySet()): String? {
         val keys = getKeys()
         if (keys.isEmpty()) return null
-
+        
         val now = System.currentTimeMillis()
-
         val validKeys = keys.filter { key ->
             if (key in alreadyTried) return@filter false
             if (isInvalid(key)) return@filter false
-
             val limitTime = rateLimitedKeys[key] ?: 0L
             now > limitTime
         }
-
+        
         if (validKeys.isEmpty()) return null
-
-        val idx =
-            (roundRobinIndex.getAndIncrement() and Int.MAX_VALUE) % validKeys.size
-
+        
+        val idx = (roundRobinIndex.getAndIncrement() and Int.MAX_VALUE) % validKeys.size
         return validKeys[idx]
     }
 
     fun reportRateLimit(key: String, retryAfterSeconds: Long = 60) {
         val cooldown = retryAfterSeconds.coerceIn(1, 600)
-
-        rateLimitedKeys[key] =
-            System.currentTimeMillis() + cooldown * 1_000
+        rateLimitedKeys[key] = System.currentTimeMillis() + cooldown * 1_000
     }
 
     fun markInvalid(key: String) {
-        invalidKeys[key] =
-            System.currentTimeMillis() + INVALID_KEY_TTL_MS
+        invalidKeys[key] = System.currentTimeMillis() + INVALID_KEY_TTL_MS
     }
 
+    /**
+     * Whether [key] is currently benched as invalid, expiring the mark if it is due.
+     * Self-healing: without expiry a transient 403 killed the key until the process
+     * restarted (see [INVALID_KEY_TTL_MS]).
+     */
     private fun isInvalid(key: String): Boolean {
         val until = invalidKeys[key] ?: return false
-
         if (System.currentTimeMillis() >= until) {
             invalidKeys.remove(key)
             return false
         }
-
         return true
     }
 
     fun getShortestWaitTimeMs(): Long? {
         val keys = getKeys()
         if (keys.isEmpty()) return null
-
         val now = System.currentTimeMillis()
-
-        return keys
-            .filter { !isInvalid(it) }
+        val waits = keys.filter { !isInvalid(it) }
             .mapNotNull { key ->
-                val limitTime =
-                    rateLimitedKeys[key] ?: return@mapNotNull null
-
+                val limitTime = rateLimitedKeys[key] ?: return@mapNotNull null
                 val remaining = limitTime - now
                 if (remaining > 0) remaining else null
             }
-            .minOrNull()
+        return waits.minOrNull()
     }
 }
