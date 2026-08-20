@@ -254,7 +254,7 @@ jobs:
             // GitHub's comment API is eventually consistent — a just-created comment may not
             // appear for a few seconds, which caused duplicate creation when two workflow_runs
             // fired close together (PR144). Retry up to 3 times with backoff.
-            const marker = '<!-- preview-apk -->';
+            const marker = '<!-- preview-apk';
             let existing = null;
             let comments = [];
             for (let attempt = 1; attempt <= 3; attempt++) {
