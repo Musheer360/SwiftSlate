@@ -101,6 +101,7 @@
     <!-- TODO translate: new contextual-reply strings intentionally fall back to English until
          reviewed translations are available. Do not machine-translate these at build time. -->
     <string name="toast_reply_no_context" translatable="false">Could not find a readable incoming message in this app</string>
+    <string name="toast_reply_needs_empty" translatable="false">Use ?answer for inline replies; ?reply must be alone</string>
 
     <!-- Text-selection (PROCESS_TEXT) flow -->
     <string name="process_text_title">Apply a command</string>

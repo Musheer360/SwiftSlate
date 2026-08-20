@@ -162,7 +162,8 @@ SwiftSlate ships with **9 AI-powered commands**, dynamic translation, and **5 bu
 | **`?casual`** | Rewrite in friendly tone | `Please confirm your attendance at the event` → `Hey, you coming to the event? Let me know!` |
 | **`?emoji`** | Add relevant emojis | `I love this new feature` → `I love this new feature! 🎉❤️✨` |
 | **`?human`** | Humanize AI-generated text | `I hope this email finds you well. I wanted to delve into...` → `Hope you're doing well. I wanted to dig into...` |
-| **`?reply`** | Generate a contextual reply | `Do you want to grab lunch tomorrow?` → `Sure, I'd love to! What time works for you?` |
+| **`?answer`** | Generate a reply to typed text | `Do you want to grab lunch tomorrow??answer` → `Sure, I'd love to! What time works for you?` |
+| **`?reply`** | Reply to chat on screen (reads latest messages) | `?reply` alone in any chat → replies to the last incoming message (no typing needed) |
 | **`?undo`** | Restore text from before the last replacement | Reverts to your original text before AI modified it |
 | **`?translate:XX`** | Translate to any language | `Hello, how are you?` **`?translate:es`** → `Hola, ¿cómo estás?` |
 

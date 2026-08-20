@@ -68,6 +68,10 @@ class CommandManager(context: Context) {
     )
 
     // Default AI commands — seeded into custom commands on first run so users can edit/delete them
+    // `answer` is inline: "text?answer" replies to the typed text.
+    // `reply` is contextual: "?reply" alone reads the visible chat and replies to the latest incoming message.
+    // No auto-migration: fresh installs seed both; existing users keep their old `?reply` inline and get `?answer`
+    // auto-seeded (new trigger name), while `?reply` contextual must be recreated manually (see commit notes).
     private val defaultAiDefinitions = listOf(
         "fix" to "Fix grammar, spelling, and punctuation errors.",
         "improve" to "Rewrite to improve clarity, flow, and coherence.",
@@ -77,7 +81,8 @@ class CommandManager(context: Context) {
         "casual" to "Rewrite in a casual, friendly tone.",
         "emoji" to "Add relevant emojis throughout.",
         "human" to "Rewrite to sound naturally human, not AI-generated. Never use emdashes or semicolons, use commas or periods instead. Drop AI clichés and filler phrases. Use contractions, everyday words, and varied sentence lengths. Keep all facts, names, and numbers intact.",
-        "reply" to "Generate a contextual reply to this message."
+        "answer" to "Generate a reply to this message.",
+        "reply" to "Generate one concise, natural reply to the latest incoming message."
     )
 
     /** Drops the cache and its validity key so the next [getCommands] rebuilds from prefs. */

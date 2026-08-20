@@ -328,12 +328,27 @@ class AssistantService : AccessibilityService() {
                 }
             }
             CommandType.AI -> {
-                if (cleanText.isEmpty()) {
-                    if (isContextualReplyTrigger(command)) {
-                        handleContextualReply(source, text, command.prompt)
-                    } else {
+                val isReply = command.trigger == "${cachedPrefix}reply"
+                val isAnswer = command.trigger == "${cachedPrefix}answer"
+                // reply is contextual-only (empty), answer is inline-only (needs text)
+                if (isReply) {
+                    if (cleanText.isNotEmpty()) {
+                        // Don't waste a snapshot or tokens: guide user to ?answer for inline
+                        handler.post { overlayToast.show(getString(R.string.toast_reply_needs_empty)) }
                         source.safeRecycle()
+                        return
                     }
+                    handleContextualReply(source, text, command.prompt)
+                    return
+                }
+                if (isAnswer) {
+                    if (cleanText.isEmpty()) {
+                        source.safeRecycle()
+                        return
+                    }
+                    // fall through to inline processing
+                } else if (cleanText.isEmpty()) {
+                    source.safeRecycle()
                     return
                 }
                 if (!isProcessing.compareAndSet(false, true)) {
@@ -347,9 +362,6 @@ class AssistantService : AccessibilityService() {
             }
         }
     }
-
-    private fun isContextualReplyTrigger(command: Command): Boolean =
-        command.trigger == "${cachedPrefix}reply"
 
     /**
      * Handles `?reply` with no typed message. Context is captured once from the active window;
