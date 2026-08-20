@@ -1,0 +1,256 @@
+name: Comment Preview APK
+
+on:
+  workflow_run:
+    workflows: ["Build & Release"]
+    types: [completed]
+  # Manual test: allows a maintainer to trigger the comment for a past run.
+  # Kept after validation for future recovery (e.g. transient API failure).
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Workflow run ID to test (leave empty to use latest successful PR run)"
+        required: false
+        type: string
+
+concurrency:
+  group: preview-comment-${{ github.event.workflow_run.id || github.run_id }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: write
+
+jobs:
+  comment:
+    # workflow_run fires for push/master too (no PR). Only proceed when a PR is involved
+    # and the source workflow succeeded (preview APK only on success).
+    # workflow_dispatch always runs so manual tests work.
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' ||
+          (github.event.workflow_run.event == 'pull_request' &&
+           github.event.workflow_run.conclusion == 'success') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Resolve PR number and artifact
+        id: resolve
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          script: |
+            // Resolve workflow run (either the triggering run or a manual run_id)
+            let run;
+            let prNumber = null;
+
+            if (context.eventName === 'workflow_dispatch') {
+              const inputRunId = '${{ inputs.run_id }}';
+              if (inputRunId) {
+                const { data } = await github.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}', {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: parseInt(inputRunId, 10),
+                });
+                run = data;
+                core.info(`Manual dispatch: using run ${run.id} (${run.head_branch} ${run.head_sha.slice(0,7)})`);
+              } else {
+                // No run_id supplied: pick latest successful Build & Release run that has a preview artifact
+                const { data } = await github.request('GET /repos/{owner}/{repo}/actions/runs', {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  per_page: 10,
+                  // status success handled after fetch
+                });
+                // This endpoint without workflow_id lists runs for all workflows; filter to Build & Release
+                // Instead, list for the workflow id 239854478 if available
+                core.info('No run_id supplied for manual dispatch — please supply one');
+                core.setFailed('run_id required for manual dispatch without auto-resolve yet');
+                return;
+              }
+            } else {
+              run = context.payload.workflow_run;
+              if (!run) {
+                core.setFailed('No workflow_run payload');
+                return;
+              }
+              core.info(`workflow_run ${run.id} event=${run.event} conclusion=${run.conclusion} sha=${run.head_sha.slice(0,7)} branch=${run.head_branch} repo=${run.head_repository.full_name}`);
+              // Ignore non-PR events (push to master) — they have no PR to comment on
+              if (run.event !== 'pull_request') {
+                core.info(`Skipping: event is ${run.event}, not pull_request`);
+                return;
+              }
+              if (run.conclusion !== 'success') {
+                core.info(`Skipping: conclusion is ${run.conclusion}`);
+                return;
+              }
+            }
+
+            // 1) Try direct pull_requests array (populated for same-repo PRs like #145)
+            if (run.pull_requests && run.pull_requests.length > 0) {
+              prNumber = run.pull_requests[0].number;
+              core.info(`Found PR via run.pull_requests: #${prNumber}`);
+            }
+
+            // 2) Try commits/{sha}/pulls — works for same-repo PRs where SHA exists in base repo
+            if (!prNumber) {
+              try {
+                const { data: prs } = await github.request('GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls', {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  commit_sha: run.head_sha,
+                });
+                if (prs && prs.length > 0) {
+                  // Prefer open PR
+                  const open = prs.find(p => p.state === 'open') || prs[0];
+                  prNumber = open.number;
+                  core.info(`Found PR via commits/${run.head_sha.slice(0,7)}/pulls: #${prNumber}`);
+                }
+              } catch (e) {
+                core.info(`commits/pulls lookup failed: ${e.message}`);
+              }
+            }
+
+            // 3) Try pulls?head=owner:branch — works for fork PRs (#144 guoxpeng:refactor/...)
+            if (!prNumber) {
+              try {
+                const headLabel = `${run.head_repository.owner.login}:${run.head_branch}`;
+                core.info(`Trying pulls?head=${headLabel}`);
+                const { data: prs } = await github.request('GET /repos/{owner}/{repo}/pulls', {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  head: headLabel,
+                  state: 'open',
+                });
+                if (prs && prs.length > 0) {
+                  prNumber = prs[0].number;
+                  core.info(`Found PR via pulls?head: #${prNumber}`);
+                } else {
+                  // Fallback: also check closed? For workflow_run after merge, PR may be closed
+                  const { data: prs2 } = await github.request('GET /repos/{owner}/{repo}/pulls', {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    head: headLabel,
+                    state: 'all',
+                    sort: 'updated',
+                    direction: 'desc',
+                  });
+                  if (prs2 && prs2.length > 0) {
+                    // Pick the one whose head.sha matches run.head_sha if possible
+                    const match = prs2.find(p => p.head.sha === run.head_sha) || prs2[0];
+                    prNumber = match.number;
+                    core.info(`Found PR via pulls?head (all): #${prNumber} state=${match.state}`);
+                    if (match.state !== 'open') {
+                      core.info(`PR #${prNumber} is not open — skipping comment (no point commenting on closed PR)`);
+                      // Still set output but later job will skip if not open; we check PR state again
+                      // For now, only comment on open PRs
+                      const { data: prDetails } = await github.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        pull_number: prNumber,
+                      });
+                      if (prDetails.state !== 'open') {
+                        core.info(`Skipping comment for closed PR #${prNumber}`);
+                        return;
+                      }
+                    }
+                  }
+                }
+              } catch (e) {
+                core.info(`pulls?head lookup failed: ${e.message}`);
+              }
+            }
+
+            if (!prNumber) {
+              core.info('Could not resolve PR number — skipping comment. This happens for push/master runs with no PR.');
+              return;
+            }
+
+            // 4) Fetch artifacts for the run
+            const { data: artData } = await github.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: run.id,
+            });
+            const artifacts = artData.artifacts || [];
+            core.info(`Found ${artifacts.length} artifacts for run ${run.id}: ${artifacts.map(a=>a.name).join(', ')}`);
+            const preview = artifacts.find(a => a.name.startsWith('SwiftSlate-preview-pr'));
+            if (!preview) {
+              core.info('No SwiftSlate-preview-pr* artifact found — skipping. Lint/test-only runs or expired artifact.');
+              // Check if any artifact at all
+              if (artifacts.length === 0) {
+                core.info('No artifacts — workflow may not have produced preview APK (e.g. paths filter excluded it)');
+              }
+              return;
+            }
+
+            if (preview.expired) {
+              core.info(`Artifact ${preview.name} is expired — skipping comment`);
+              return;
+            }
+
+            const sizeMB = (preview.size_in_bytes / 1048576).toFixed(2);
+            const shortSha = run.head_sha.slice(0, 7);
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${run.id}`;
+
+            core.info(`Resolved PR #${prNumber}, artifact ${preview.name} (${sizeMB} MB), run ${runUrl}`);
+
+            core.setOutput('pr', String(prNumber));
+            core.setOutput('run_id', String(run.id));
+            core.setOutput('artifact', preview.name);
+            core.setOutput('size_mb', sizeMB);
+            core.setOutput('size_bytes', String(preview.size_in_bytes));
+            core.setOutput('short_sha', shortSha);
+            core.setOutput('run_url', runUrl);
+            core.setOutput('head_sha', run.head_sha);
+
+      - name: Find existing comment
+        id: find
+        if: steps.resolve.outputs.pr != ''
+        uses: peter-evans/find-comment@3eae4d37986fb5a8592848f6a574fdf654e61f9e # v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ steps.resolve.outputs.pr }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- preview-apk -->'
+
+      - name: Create or update comment
+        if: steps.resolve.outputs.pr != ''
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ steps.resolve.outputs.pr }}
+          comment-id: ${{ steps.find.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ### 📦 Preview APK ready — PR #${{ steps.resolve.outputs.pr }}
+
+            | | |
+            |---|---|
+            | **Artifact** | `${{ steps.resolve.outputs.artifact }}.apk` inside `${{ steps.resolve.outputs.artifact }}.zip` |
+            | **Size** | `${{ steps.resolve.outputs.size_mb }} MB` (`${{ steps.resolve.outputs.size_bytes }}` bytes) |
+            | **Commit** | `${{ steps.resolve.outputs.short_sha }}` (`${{ steps.resolve.outputs.head_sha }}`) |
+            | **Expires** | 14 days from build |
+
+            **Download:** 👉 [Open run artifacts](${{ steps.resolve.outputs.run_url }}) → scroll to **Artifacts** → download `${{ steps.resolve.outputs.artifact }}.zip` (GitHub login required) → unzip to get the `.apk`.
+
+            <details>
+            <summary>Install notes</summary>
+
+            * Installs as a **separate app** (`com.musheer360.swiftslate.preview`, launcher label **SwiftSlate Preview**) — won't touch your stable install, API keys, commands, or accessibility setting.
+            * Enable it separately: **Settings → Accessibility → SwiftSlate Preview**.
+            * Uninstall the preview when done. A newer push on this PR updates this comment in place.
+
+            </details>
+
+            <details>
+            <summary>Need a direct `gh` download?</summary>
+
+            ```bash
+            gh run download ${{ steps.resolve.outputs.run_id }} -n ${{ steps.resolve.outputs.artifact }} -R ${{ github.repository }}
+            # or via API
+            gh api repos/${{ github.repository }}/actions/runs/${{ steps.resolve.outputs.run_id }}/artifacts --jq '.artifacts[] | select(.name=="${{ steps.resolve.outputs.artifact }}")'
+            ```
+
+            </details>
+
+            <!-- preview-apk pr=${{ steps.resolve.outputs.pr }} run=${{ steps.resolve.outputs.run_id }} sha=${{ steps.resolve.outputs.head_sha }} -->
