@@ -221,37 +221,11 @@ jobs:
             const runUrl = '${{ steps.resolve.outputs.run_url }}';
             const artifactUrl = '${{ steps.resolve.outputs.artifact_url }}';
 
-            const body = `### 📦 Preview APK ready — PR #${pr}
+            const body = `### 📦 Preview APK — PR #${pr} · \`${shortSha}\` · \`${sizeMB} MB\`
 
-            | | |
-            |---|---|
-            | **Artifact** | \`${artifact}.zip\` → single \`${artifact}-*.apk\` at root (unzips to **only the APK**, no folders) |
-            | **Size** | \`${sizeMB} MB\` (\`${sizeBytes} bytes\`, zip size) |
-            | **Commit** | \`${shortSha}\` (\`${headSha}\`) |
-            | **Expires** | 14 days from build (artifact retention) |
+            [Direct download](${artifactUrl}) · [Run](${runUrl}) · \`${artifact}.zip\` → single \`.apk\`, no folders · expires 14d
 
-            **Download:** 👉 [Direct artifact link](${artifactUrl}) or [Open run artifacts](${runUrl}) → download \`${artifact}.zip\` (GitHub login required) → unzip → you get a single \`.apk\` file (e.g. \`SwiftSlate-preview-pr${pr}-${shortSha}.apk\`) at the root, ready to install.
-            > This is the same URL the “Upload Preview APK” step logs as \`Artifact download URL: ${artifactUrl}\` – one click to the artifact, no scrolling.
-
-            <details>
-            <summary>Install notes</summary>
-
-            * Installs as a **separate app** (\`com.musheer360.swiftslate.preview\`, launcher label **SwiftSlate Preview**) — won't touch your stable install, API keys, commands, or accessibility setting.
-            * Enable it separately: **Settings → Accessibility → SwiftSlate Preview**.
-            * Uninstall the preview when done. A newer push on this PR updates this comment in place.
-
-            </details>
-
-            <details>
-            <summary>Need a direct \`gh\` download?</summary>
-
-            \`\`\`bash
-            gh run download ${runId} -n ${artifact} -R ${{ github.repository }}
-            # or via API
-            gh api repos/${{ github.repository }}/actions/runs/${runId}/artifacts --jq '.artifacts[] | select(.name=="${artifact}")'
-            \`\`\`
-
-            </details>
+            Unzip → installs as **SwiftSlate Preview** (\`com.musheer360.swiftslate.preview\`), separate from stable. Enable in Settings → Accessibility.
 
             <!-- preview-apk pr=${pr} run=${runId} sha=${headSha} -->`;
 
