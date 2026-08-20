@@ -190,16 +190,19 @@ jobs:
             const sizeMB = (preview.size_in_bytes / 1048576).toFixed(2);
             const shortSha = run.head_sha.slice(0, 7);
             const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${run.id}`;
+            const artifactUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${run.id}/artifacts/${preview.id}`;
 
-            core.info(`Resolved PR #${prNumber}, artifact ${preview.name} (${sizeMB} MB), run ${runUrl}`);
+            core.info(`Resolved PR #${prNumber}, artifact ${preview.name} (id ${preview.id}, ${sizeMB} MB), run ${runUrl}, artifactUrl ${artifactUrl}`);
 
             core.setOutput('pr', String(prNumber));
             core.setOutput('run_id', String(run.id));
             core.setOutput('artifact', preview.name);
+            core.setOutput('artifact_id', String(preview.id));
             core.setOutput('size_mb', sizeMB);
             core.setOutput('size_bytes', String(preview.size_in_bytes));
             core.setOutput('short_sha', shortSha);
             core.setOutput('run_url', runUrl);
+            core.setOutput('artifact_url', artifactUrl);
             core.setOutput('head_sha', run.head_sha);
 
       - name: Create or update comment (idempotent)
@@ -210,11 +213,13 @@ jobs:
             const pr = parseInt('${{ steps.resolve.outputs.pr }}', 10);
             const runId = '${{ steps.resolve.outputs.run_id }}';
             const artifact = '${{ steps.resolve.outputs.artifact }}';
+            const artifactId = '${{ steps.resolve.outputs.artifact_id }}';
             const sizeMB = '${{ steps.resolve.outputs.size_mb }}';
             const sizeBytes = '${{ steps.resolve.outputs.size_bytes }}';
             const shortSha = '${{ steps.resolve.outputs.short_sha }}';
             const headSha = '${{ steps.resolve.outputs.head_sha }}';
             const runUrl = '${{ steps.resolve.outputs.run_url }}';
+            const artifactUrl = '${{ steps.resolve.outputs.artifact_url }}';
 
             const body = `### 📦 Preview APK ready — PR #${pr}
 
@@ -225,7 +230,8 @@ jobs:
             | **Commit** | \`${shortSha}\` (\`${headSha}\`) |
             | **Expires** | 14 days from build (artifact retention) |
 
-            **Download:** 👉 [Open run artifacts](${runUrl}) → scroll to **Artifacts** → download \`${artifact}.zip\` (GitHub login required) → unzip → you get a single \`.apk\` file (e.g. \`SwiftSlate-preview-pr${pr}-${shortSha}.apk\`) at the root, ready to install.
+            **Download:** 👉 [Direct artifact link](${artifactUrl}) or [Open run artifacts](${runUrl}) → download \`${artifact}.zip\` (GitHub login required) → unzip → you get a single \`.apk\` file (e.g. \`SwiftSlate-preview-pr${pr}-${shortSha}.apk\`) at the root, ready to install.
+            > This is the same URL the “Upload Preview APK” step logs as \`Artifact download URL: ${artifactUrl}\` – one click to the artifact, no scrolling.
 
             <details>
             <summary>Install notes</summary>
