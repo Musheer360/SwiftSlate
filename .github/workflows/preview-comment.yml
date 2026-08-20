@@ -226,12 +226,12 @@ jobs:
 
             | | |
             |---|---|
-            | **Artifact** | `${{ steps.resolve.outputs.artifact }}.apk` inside `${{ steps.resolve.outputs.artifact }}.zip` |
+            | **Artifact** | `${{ steps.resolve.outputs.artifact }}.zip` → single `${{ steps.resolve.outputs.artifact }}-*.apk` at root (unzips to **only the APK**, no folders) |
             | **Size** | `${{ steps.resolve.outputs.size_mb }} MB` (`${{ steps.resolve.outputs.size_bytes }}` bytes) |
             | **Commit** | `${{ steps.resolve.outputs.short_sha }}` (`${{ steps.resolve.outputs.head_sha }}`) |
             | **Expires** | 14 days from build |
 
-            **Download:** 👉 [Open run artifacts](${{ steps.resolve.outputs.run_url }}) → scroll to **Artifacts** → download `${{ steps.resolve.outputs.artifact }}.zip` (GitHub login required) → unzip to get the `.apk`.
+            **Download:** 👉 [Open run artifacts](${{ steps.resolve.outputs.run_url }}) → scroll to **Artifacts** → download `${{ steps.resolve.outputs.artifact }}.zip` (GitHub login required) → unzip → you get a single `.apk` file (e.g. `SwiftSlate-preview-pr${{ steps.resolve.outputs.pr }}-${{ steps.resolve.outputs.short_sha }}.apk`) at the root, ready to install.
 
             <details>
             <summary>Install notes</summary>
