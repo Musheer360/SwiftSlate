@@ -125,6 +125,13 @@ class ApiClientUtilsTest {
         assertTrue(parseFailed)
     }
 
+    @Test
+    fun normalizeStructuredText_trimsAndEnforcesBounds() {
+        assertEquals("hello", ApiClientUtils.normalizeStructuredText("  hello  ", 10))
+        assertNull(ApiClientUtils.normalizeStructuredText("   ", 10))
+        assertNull(ApiClientUtils.normalizeStructuredText("123456", 5))
+    }
+
     // --- redactSecrets ---
 
     @Test

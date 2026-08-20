@@ -302,6 +302,12 @@ internal object ApiClientUtils {
             Pair(null, true) // parseFailed = true: not valid JSON, caller should fall back to plain text
         }
     }
+
+    /** Normalizes a reply already extracted from a strict provider response. */
+    fun normalizeStructuredText(text: String, maxChars: Int): String? {
+        val normalized = text.trim()
+        return normalized.takeIf { it.isNotBlank() && it.length <= maxChars }
+    }
 }
 
 internal fun Throwable?.isTransientNetwork(): Boolean = when (this) {

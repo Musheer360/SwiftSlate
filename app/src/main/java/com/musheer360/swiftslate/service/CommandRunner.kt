@@ -25,6 +25,13 @@ sealed interface CommandOutcome {
 
 private const val DEFAULT_TEMPERATURE = 0.5f
 private const val STRUCTURED_OUTPUT_RETRY_MS = 86_400_000L // re-try structured output after 24h
+private const val MAX_CONTEXTUAL_REPLY_CHARS = 1_000
+private const val CONTEXTUAL_REPLY_PROMPT =
+    "Generate one concise, natural reply to the latest incoming message. " +
+        "Use the nearby conversation only as context. Do not invent facts, commitments, " +
+        "dates, names, or actions. Match the conversation's language and tone. " +
+        "Return exactly one JSON object with one non-empty string field named text. " +
+        "Return no markdown, explanation, or additional fields."
 
 /**
  * Everything a trigger command does between "user asked" and "text came back": provider
@@ -45,7 +52,8 @@ suspend fun runTextCommand(
     openAIClient: OpenAICompatibleClient,
     prompt: String,
     text: String,
-    onFirstAttempt: () -> Unit = {}
+    onFirstAttempt: () -> Unit = {},
+    strictStructuredOutput: Boolean = false
 ): CommandOutcome {
     // keys_keystore_error rather than a "reinstall" message: the usual cause is the Keystore key
     // being invalidated by a lock-screen change, where re-adding the keys is enough.
@@ -61,7 +69,7 @@ suspend fun runTextCommand(
         return CommandOutcome.Unavailable(context.getString(R.string.toast_custom_not_configured))
     }
     val temperature = prefs.getFloat(PrefKeys.TEMPERATURE, DEFAULT_TEMPERATURE).toDouble()
-    val useStructuredOutput = System.currentTimeMillis() -
+    val useStructuredOutput = strictStructuredOutput || System.currentTimeMillis() -
         prefs.getLong(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT, 0L) > STRUCTURED_OUTPUT_RETRY_MS
 
     var lastErrorMsg: String? = null
@@ -93,7 +101,34 @@ suspend fun runTextCommand(
         }
 
         result.onSuccess { generated ->
-            if (ApiClientUtils.isModelRefusal(generated.text)) return CommandOutcome.Refusal
+            if (strictStructuredOutput && generated.structuredOutputFailed) {
+                return CommandOutcome.Failure(context.getString(R.string.error_reply_invalid_response))
+            }
+            if (strictStructuredOutput && generated.truncated) {
+                return CommandOutcome.Failure(context.getString(R.string.error_reply_invalid_response))
+            }
+
+            // Custom OpenAI-compatible endpoints do not advertise JSON mode through the
+            // provider registry. They can still return the requested object in ordinary text,
+            // but a plain response is never accepted for a contextual reply.
+            val outputText = if (strictStructuredOutput &&
+                provider.transport == Transport.OPENAI_COMPAT &&
+                !provider.useJsonObjectMode(true)
+            ) {
+                ApiClientUtils.tryExtractStructuredText(generated.text).first
+                    ?: return CommandOutcome.Failure(context.getString(R.string.error_reply_invalid_response))
+            } else {
+                generated.text
+            }
+
+            val normalizedOutput = if (strictStructuredOutput) {
+                ApiClientUtils.normalizeStructuredText(outputText, MAX_CONTEXTUAL_REPLY_CHARS)
+                    ?: return CommandOutcome.Failure(context.getString(R.string.error_reply_invalid_response))
+            } else {
+                outputText
+            }
+
+            if (ApiClientUtils.isModelRefusal(normalizedOutput)) return CommandOutcome.Refusal
             if (generated.structuredOutputFailed) {
                 prefs.edit()
                     .putLong(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT, System.currentTimeMillis())
@@ -101,12 +136,12 @@ suspend fun runTextCommand(
             }
             // Keep the truncation warning localized and shared by both entry points rather than
             // leaving callers to duplicate it (or clients to inject an English-only string).
-            val outputText = if (generated.truncated) {
-                generated.text + "\n\n" + context.getString(R.string.note_response_truncated)
+            val finalText = if (generated.truncated) {
+                normalizedOutput + "\n\n" + context.getString(R.string.note_response_truncated)
             } else {
-                generated.text
+                normalizedOutput
             }
-            return CommandOutcome.Success(outputText)
+            return CommandOutcome.Success(finalText)
         }
 
         val error = result.exceptionOrNull()
@@ -179,3 +214,22 @@ suspend fun runTextCommand(
         }
     )
 }
+
+/** Runs the explicit `?reply`-alone contextual flow with strict structured-output validation. */
+suspend fun runContextualReplyCommand(
+    context: Context,
+    keyManager: KeyManager,
+    geminiClient: GeminiClient,
+    openAIClient: OpenAICompatibleClient,
+    conversation: String,
+    onFirstAttempt: () -> Unit = {}
+): CommandOutcome = runTextCommand(
+    context = context,
+    keyManager = keyManager,
+    geminiClient = geminiClient,
+    openAIClient = openAIClient,
+    prompt = CONTEXTUAL_REPLY_PROMPT,
+    text = conversation,
+    onFirstAttempt = onFirstAttempt,
+    strictStructuredOutput = true
+)

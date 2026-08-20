@@ -64,6 +64,7 @@ class AssistantService : AccessibilityService() {
     )
     private val isProcessing = java.util.concurrent.atomic.AtomicBoolean(false)
     private val handler = Handler(Looper.getMainLooper())
+    private val conversationContextExtractor = ConversationContextExtractor()
     private var triggerLastChars = setOf<Char>()
     private var cachedPrefix = CommandManager.DEFAULT_PREFIX
     private var cachedTranslatePrefix = ""
@@ -328,7 +329,11 @@ class AssistantService : AccessibilityService() {
             }
             CommandType.AI -> {
                 if (cleanText.isEmpty()) {
-                    source.safeRecycle()
+                    if (isContextualReplyTrigger(command)) {
+                        handleContextualReply(source, text)
+                    } else {
+                        source.safeRecycle()
+                    }
                     return
                 }
                 if (!isProcessing.compareAndSet(false, true)) {
@@ -341,6 +346,51 @@ class AssistantService : AccessibilityService() {
                 processCommand(source, cleanText, command)
             }
         }
+    }
+
+    private fun isContextualReplyTrigger(command: Command): Boolean =
+        command.trigger == "${cachedPrefix}reply"
+
+    /**
+     * Handles `?reply` with no typed message. Context is captured once from the active window;
+     * the framework nodes are detached and recycled before any network request begins.
+     */
+    private fun handleContextualReply(source: AccessibilityNodeInfo, originalText: String) {
+        val root = try {
+            rootInActiveWindow
+        } catch (e: Exception) {
+            Log.w(TAG, "contextual reply: active root unavailable", e)
+            null
+        }
+        val snapshot = if (root == null) {
+            null
+        } else {
+            try {
+                conversationContextExtractor.extract(
+                    snapshotAccessibilityTree(root),
+                    source.packageName?.toString() ?: ""
+                )
+            } catch (e: Exception) {
+                Log.w(TAG, "contextual reply: tree extraction failed", e)
+                null
+            } finally {
+                if (root !== source) root.safeRecycle()
+            }
+        }
+
+        if (snapshot == null) {
+            handler.post { overlayToast.show(getString(R.string.toast_reply_no_context)) }
+            source.safeRecycle()
+            return
+        }
+        if (!isProcessing.compareAndSet(false, true)) {
+            source.safeRecycle()
+            return
+        }
+        startWatchdog()
+        cancelPendingProcessingReset()
+        currentJob?.cancel()
+        processContextualReply(source, originalText, snapshot)
     }
 
     /**
@@ -450,6 +500,33 @@ class AssistantService : AccessibilityService() {
     }
 
     private fun processCommand(source: AccessibilityNodeInfo, text: String, command: Command) {
+        processGeneratedCommand(source, text, command.trigger) { onFirstAttempt ->
+            runTextCommand(
+                applicationContext, keyManager, client, openAIClient,
+                command.prompt, text, onFirstAttempt
+            )
+        }
+    }
+
+    private fun processContextualReply(
+        source: AccessibilityNodeInfo,
+        originalText: String,
+        snapshot: ConversationSnapshot
+    ) {
+        processGeneratedCommand(source, originalText, "${cachedPrefix}reply") { onFirstAttempt ->
+            runContextualReplyCommand(
+                applicationContext, keyManager, client, openAIClient,
+                snapshot.text, onFirstAttempt
+            )
+        }
+    }
+
+    private fun processGeneratedCommand(
+        source: AccessibilityNodeInfo,
+        text: String,
+        usageTrigger: String,
+        execute: suspend (onFirstAttempt: () -> Unit) -> CommandOutcome
+    ) {
         if (!keyManager.keystoreAvailable) {
             // keys_keystore_error rather than toast_keystore_unavailable: the latter tells the
             // user to reinstall, which destroys every key, command and setting, and does not
@@ -468,10 +545,7 @@ class AssistantService : AccessibilityService() {
             var spinnerJob: Job? = null
             try {
                 val outcome = withTimeout(90_000) {
-                    runTextCommand(
-                        applicationContext, keyManager, client, openAIClient,
-                        command.prompt, text
-                    ) { spinnerJob = startInlineSpinner(source, originalText) }
+                    execute { spinnerJob = startInlineSpinner(source, originalText) }
                 }
                 // From the first attempt onward the field holds the spinner glyph instead of the
                 // user's text, so every outcome below starts by taking it back out. No spinner
@@ -493,7 +567,7 @@ class AssistantService : AccessibilityService() {
                             lastOriginalText = originalText
                             lastUndoSourceId = sourceId(source)
                             performHapticFeedback(HapticFeedbackConstants.CONFIRM)
-                            statsManager.recordUsage(command.trigger)
+                            statsManager.recordUsage(usageTrigger)
                         }
                     }
                     is CommandOutcome.Refusal -> {
