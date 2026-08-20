@@ -203,54 +203,103 @@ jobs:
             core.setOutput('run_url', runUrl);
             core.setOutput('head_sha', run.head_sha);
 
-      - name: Find existing comment
-        id: find
+      - name: Create or update comment (idempotent)
         if: steps.resolve.outputs.pr != ''
-        uses: peter-evans/find-comment@3eae4d37986fb5a8592848f6a574fdf654e61f9e # v3
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ steps.resolve.outputs.pr }}
-          comment-author: 'github-actions[bot]'
-          body-includes: '<!-- preview-apk -->'
+          script: |
+            const pr = parseInt('${{ steps.resolve.outputs.pr }}', 10);
+            const runId = '${{ steps.resolve.outputs.run_id }}';
+            const artifact = '${{ steps.resolve.outputs.artifact }}';
+            const sizeMB = '${{ steps.resolve.outputs.size_mb }}';
+            const sizeBytes = '${{ steps.resolve.outputs.size_bytes }}';
+            const shortSha = '${{ steps.resolve.outputs.short_sha }}';
+            const headSha = '${{ steps.resolve.outputs.head_sha }}';
+            const runUrl = '${{ steps.resolve.outputs.run_url }}';
 
-      - name: Create or update comment
-        if: steps.resolve.outputs.pr != ''
-        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ steps.resolve.outputs.pr }}
-          comment-id: ${{ steps.find.outputs.comment-id }}
-          edit-mode: replace
-          body: |
-            ### 📦 Preview APK ready — PR #${{ steps.resolve.outputs.pr }}
+            const body = `### 📦 Preview APK ready — PR #${pr}
 
             | | |
             |---|---|
-            | **Artifact** | `${{ steps.resolve.outputs.artifact }}.zip` → single `${{ steps.resolve.outputs.artifact }}-*.apk` at root (unzips to **only the APK**, no folders) |
-            | **Size** | `${{ steps.resolve.outputs.size_mb }} MB` (`${{ steps.resolve.outputs.size_bytes }}` bytes) |
-            | **Commit** | `${{ steps.resolve.outputs.short_sha }}` (`${{ steps.resolve.outputs.head_sha }}`) |
+            | **Artifact** | \`${artifact}.zip\` → single \`${artifact}-*.apk\` at root (unzips to **only the APK**, no folders) |
+            | **Size** | \`${sizeMB} MB\` (\`${sizeBytes} bytes\`) |
+            | **Commit** | \`${shortSha}\` (\`${headSha}\`) |
             | **Expires** | 14 days from build |
 
-            **Download:** 👉 [Open run artifacts](${{ steps.resolve.outputs.run_url }}) → scroll to **Artifacts** → download `${{ steps.resolve.outputs.artifact }}.zip` (GitHub login required) → unzip → you get a single `.apk` file (e.g. `SwiftSlate-preview-pr${{ steps.resolve.outputs.pr }}-${{ steps.resolve.outputs.short_sha }}.apk`) at the root, ready to install.
+            **Download:** 👉 [Open run artifacts](${runUrl}) → scroll to **Artifacts** → download \`${artifact}.zip\` (GitHub login required) → unzip → you get a single \`.apk\` file (e.g. \`SwiftSlate-preview-pr${pr}-${shortSha}.apk\`) at the root, ready to install.
 
             <details>
             <summary>Install notes</summary>
 
-            * Installs as a **separate app** (`com.musheer360.swiftslate.preview`, launcher label **SwiftSlate Preview**) — won't touch your stable install, API keys, commands, or accessibility setting.
+            * Installs as a **separate app** (\`com.musheer360.swiftslate.preview\`, launcher label **SwiftSlate Preview**) — won't touch your stable install, API keys, commands, or accessibility setting.
             * Enable it separately: **Settings → Accessibility → SwiftSlate Preview**.
             * Uninstall the preview when done. A newer push on this PR updates this comment in place.
 
             </details>
 
             <details>
-            <summary>Need a direct `gh` download?</summary>
+            <summary>Need a direct \`gh\` download?</summary>
 
-            ```bash
-            gh run download ${{ steps.resolve.outputs.run_id }} -n ${{ steps.resolve.outputs.artifact }} -R ${{ github.repository }}
+            \`\`\`bash
+            gh run download ${runId} -n ${artifact} -R ${{ github.repository }}
             # or via API
-            gh api repos/${{ github.repository }}/actions/runs/${{ steps.resolve.outputs.run_id }}/artifacts --jq '.artifacts[] | select(.name=="${{ steps.resolve.outputs.artifact }}")'
-            ```
+            gh api repos/${{ github.repository }}/actions/runs/${runId}/artifacts --jq '.artifacts[] | select(.name=="${artifact}")'
+            \`\`\`
 
             </details>
 
-            <!-- preview-apk pr=${{ steps.resolve.outputs.pr }} run=${{ steps.resolve.outputs.run_id }} sha=${{ steps.resolve.outputs.head_sha }} -->
+            <!-- preview-apk pr=${pr} run=${runId} sha=${headSha} -->`;
+
+            // Find existing bot comment (handles pagination, avoids duplicate on re-run)
+            const marker = '<!-- preview-apk -->';
+            let existing = null;
+            // paginate through all issue comments
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr,
+              per_page: 100,
+            });
+            for (const c of comments) {
+              if (c.user && c.user.login === 'github-actions[bot]' && c.body && c.body.includes(marker)) {
+                existing = c;
+                break;
+              }
+            }
+            // If duplicates exist (legacy peter-evans runs), clean them: keep the first, delete the rest
+            const dups = comments.filter(c => c.user && c.user.login === 'github-actions[bot]' && c.body && c.body.includes(marker));
+            if (dups.length > 1) {
+              core.info(`Found ${dups.length} duplicate preview comments — cleaning up, keeping ${dups[0].id}`);
+              for (let i = 1; i < dups.length; i++) {
+                try {
+                  await github.rest.issues.deleteComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: dups[i].id,
+                  });
+                  core.info(`Deleted duplicate comment ${dups[i].id}`);
+                } catch (e) {
+                  core.warning(`Failed to delete duplicate ${dups[i].id}: ${e.message}`);
+                }
+              }
+              // Reuse the first one as existing
+              existing = dups[0];
+            }
+
+            if (existing) {
+              core.info(`Updating existing comment ${existing.id} on PR #${pr}`);
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              core.info(`Creating new comment on PR #${pr}`);
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr,
+                body,
+              });
+            }
