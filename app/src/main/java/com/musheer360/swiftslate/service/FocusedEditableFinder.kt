@@ -11,6 +11,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 internal interface FocusNode {
     val isEditable: Boolean
     val isFocused: Boolean
+    val isPassword: Boolean
     val childCount: Int
 
     /** May return null for a recycled/gone child; may throw like the real API. */
@@ -31,12 +32,19 @@ internal interface FocusNode {
  * thread: at most [NODE_BUDGET] nodes are visited and the recursion never goes deeper than
  * [MAX_DEPTH]. Every visited node is recycled on the way out — including when a node method
  * throws mid-walk — except the node returned as the match, which the caller takes ownership of.
+ *
+ * Must be called on the main thread. The underlying [AccessibilityNodeInfo] accessors are
+ * Binder IPCs that block on the app's UI thread; calling off the main thread is unsafe and
+ * violates the service's threading contract. `remaining` is per-invocation state, so concurrent
+ * calls do not share mutable state, but the service already serializes calls via
+ * [AssistantService.FOCUS_FALLBACK_MIN_INTERVAL_MS].
  */
 internal object FocusedEditableFinder {
 
     const val NODE_BUDGET = 500
     const val MAX_DEPTH = 32
 
+    /** Must be called on the main thread — see class KDoc. */
     fun find(root: FocusNode): FocusNode? {
         var remaining = NODE_BUDGET
 
@@ -47,7 +55,13 @@ internal object FocusedEditableFinder {
             try {
                 if (remaining <= 0 || depth > MAX_DEPTH) return null
                 remaining--
-                if (node.isEditable && node.isFocused) {
+                // Defense-in-depth: password fields are also editable+focused but must never be
+                // returned as a typing target. The caller in AssistantService also checks
+                // isPassword after the fallback, but filtering here prevents future reuse from
+                // leaking password nodes if that check is ever forgotten.
+                if (node.isPassword) {
+                    // Fall through to child scan — do not keep this node, recycle in finally.
+                } else if (node.isEditable && node.isFocused) {
                     keep = true
                     return node
                 }
@@ -75,6 +89,7 @@ internal object FocusedEditableFinder {
 internal class AccessibilityFocusNode(val node: AccessibilityNodeInfo) : FocusNode {
     override val isEditable: Boolean get() = node.isEditable
     override val isFocused: Boolean get() = node.isFocused
+    override val isPassword: Boolean get() = node.isPassword
     override val childCount: Int get() = node.childCount
     override fun getChild(index: Int): FocusNode? =
         node.getChild(index)?.let(::AccessibilityFocusNode)

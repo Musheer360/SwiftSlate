@@ -353,6 +353,13 @@ class AssistantService : AccessibilityService() {
      * accepts), and a bounded recursive search for an editable+focused node runs only when
      * `findFocus` reports nothing — some hosts expose the input deeper in the tree than
      * `findFocus` reaches.
+     *
+     * Ownership: when `findFocus` returns non-null, this method recycles `root` and returns the
+     * focused node. When `findFocus` returns null, ownership of `root` is transferred to
+     * [FocusedEditableFinder] which recycles every visited node except the match it returns
+     * (or all on miss). The outer catch's `safeRecycle` is a safety net for the rare case where
+     * an exception escapes before the finder takes ownership; double-recycle is benign
+     * (`safeRecycle` catches `IllegalStateException`, and on API 33+ `recycle()` is a no-op).
      */
     private fun findFocusedEditableSource(): AccessibilityNodeInfo? {
         val root = try {

@@ -14,13 +14,38 @@ import org.junit.Test
  */
 private class FakeNode(
     val name: String,
-    override val isEditable: Boolean = false,
-    override val isFocused: Boolean = false,
+    isEditable: Boolean = false,
+    isFocused: Boolean = false,
+    isPassword: Boolean = false,
     val children: MutableList<FakeNode> = mutableListOf(),
     val throwOnChildAccess: Boolean = false,
+    val throwOnIsEditable: Boolean = false,
+    val throwOnIsFocused: Boolean = false,
+    val throwOnIsPassword: Boolean = false,
 ) : FocusNode {
+    private val editableValue = isEditable
+    private val focusedValue = isFocused
+    private val passwordValue = isPassword
     var recycled = false
         private set
+
+    override val isEditable: Boolean
+        get() {
+            if (throwOnIsEditable) throw IllegalStateException("stale isEditable: $name")
+            return editableValue
+        }
+
+    override val isFocused: Boolean
+        get() {
+            if (throwOnIsFocused) throw IllegalStateException("stale isFocused: $name")
+            return focusedValue
+        }
+
+    override val isPassword: Boolean
+        get() {
+            if (throwOnIsPassword) throw IllegalStateException("stale isPassword: $name")
+            return passwordValue
+        }
 
     override val childCount: Int
         get() {
@@ -76,13 +101,17 @@ class FocusedEditableFinderTest {
     @Test
     fun budgetCap_stopsBeforeAChainLongerThanTheBudget() {
         // One node past the budget, with the only match at the far end of a linear chain.
-        val chain = (0..FocusedEditableFinder.NODE_BUDGET).map { i ->
-            val last = i == FocusedEditableFinder.NODE_BUDGET
-            FakeNode("n$i", isEditable = last, isFocused = last)
+        // Note: depth also caps at 32, so a deep chain hits depth first. To isolate budget,
+        // use a wide shallow tree where all children are at depth 1.
+        val root = FakeNode("root")
+        repeat(FocusedEditableFinder.NODE_BUDGET + 1) { i ->
+            val isLast = i == FocusedEditableFinder.NODE_BUDGET
+            root.children.add(FakeNode("n$i", isEditable = isLast, isFocused = isLast))
         }
-        for (i in 0 until chain.size - 1) chain[i].children.add(chain[i + 1])
-
-        assertNull(FocusedEditableFinder.find(chain.first()))
+        assertNull(FocusedEditableFinder.find(root))
+        // Verify no leak — root and all visited children must be recycled on miss.
+        assertTrue(root.recycled)
+        for (i in 0 until FocusedEditableFinder.NODE_BUDGET + 1) assertTrue("n$i not recycled", root.children[i].recycled)
     }
 
     @Test
@@ -112,5 +141,76 @@ class FocusedEditableFinderTest {
         assertTrue(root.recycled)
         assertTrue(healthy.recycled)
         assertTrue(stale.recycled)
+    }
+
+    @Test
+    fun isEditableThrows_recyclesNode() {
+        val throwing = FakeNode("throwEditable", throwOnIsEditable = true, isFocused = true)
+        val root = FakeNode("root", children = mutableListOf(throwing))
+        assertNull(FocusedEditableFinder.find(root))
+        assertTrue(root.recycled)
+        assertTrue(throwing.recycled)
+    }
+
+    @Test
+    fun isFocusedThrows_recyclesNode() {
+        val throwing = FakeNode("throwFocused", isEditable = true, throwOnIsFocused = true)
+        val root = FakeNode("root", children = mutableListOf(throwing))
+        assertNull(FocusedEditableFinder.find(root))
+        assertTrue(root.recycled)
+        assertTrue(throwing.recycled)
+    }
+
+    @Test
+    fun isPasswordThrows_recyclesNode() {
+        val throwing = FakeNode("throwPassword", throwOnIsPassword = true, isEditable = true, isFocused = true)
+        val root = FakeNode("root", children = mutableListOf(throwing))
+        assertNull(FocusedEditableFinder.find(root))
+        assertTrue(root.recycled)
+        assertTrue(throwing.recycled)
+    }
+
+    @Test
+    fun getChildReturnsNull_skipsAndFindsSibling() {
+        val leaf = FakeNode("leaf", isEditable = true, isFocused = true)
+        val holeParent = object : FocusNode {
+            override val isEditable = false
+            override val isFocused = false
+            override val isPassword = false
+            override val childCount = 2
+            var recycled = false
+            override fun getChild(index: Int): FocusNode? = if (index == 0) null else leaf
+            override fun recycle() { recycled = true }
+        }
+        val customRoot = object : FocusNode {
+            override val isEditable = false
+            override val isFocused = false
+            override val isPassword = false
+            override val childCount = 1
+            var recycled = false
+            override fun getChild(index: Int): FocusNode? = holeParent
+            override fun recycle() { recycled = true }
+        }
+        assertSame(leaf, FocusedEditableFinder.find(customRoot))
+        assertFalse(leaf.recycled)
+    }
+
+    @Test
+    fun wideTree_respectsBudgetAndFindsMatch() {
+        val match = FakeNode("match", isEditable = true, isFocused = true)
+        val root = FakeNode("root", children = mutableListOf())
+        repeat(100) { root.children.add(FakeNode("noise$it")) }
+        root.children.add(match)
+        assertSame(match, FocusedEditableFinder.find(root))
+        assertFalse(match.recycled)
+    }
+
+    @Test
+    fun passwordNode_isNotReturnedEvenIfEditableAndFocused() {
+        val password = FakeNode("pwd", isEditable = true, isFocused = true, isPassword = true)
+        val root = FakeNode("root", children = mutableListOf(password))
+        assertNull(FocusedEditableFinder.find(root))
+        assertTrue(root.recycled)
+        assertTrue(password.recycled)
     }
 }
