@@ -348,6 +348,18 @@ class AssistantService : AccessibilityService() {
      * node of the active window. Returns null when unavailable; the caller treats the result
      * exactly like a null event.source and recycles it like one. All node access is guarded —
      * the root can be stale the moment we ask (#125).
+     *
+     * Two-stage: `findFocus(FOCUS_INPUT)` keeps precedence (it surfaces sources upstream
+     * accepts), and a bounded recursive search for an editable+focused node runs only when
+     * `findFocus` reports nothing — some hosts expose the input deeper in the tree than
+     * `findFocus` reaches.
+     *
+     * Ownership: when `findFocus` returns non-null, this method recycles `root` and returns the
+     * focused node. When `findFocus` returns null, ownership of `root` is transferred to
+     * [FocusedEditableFinder] which recycles every visited node except the match it returns
+     * (or all on miss). The outer catch's `safeRecycle` is a safety net for the rare case where
+     * an exception escapes before the finder takes ownership; double-recycle is benign
+     * (`safeRecycle` catches `IllegalStateException`, and on API 33+ `recycle()` is a no-op).
      */
     private fun findFocusedEditableSource(): AccessibilityNodeInfo? {
         val root = try {
@@ -359,8 +371,14 @@ class AssistantService : AccessibilityService() {
         try {
             val focused = root.findFocus(AccessibilityNodeInfo.FOCUS_INPUT)
             if (focused === root) return root
-            root.safeRecycle()
-            return focused
+            if (focused != null) {
+                root.safeRecycle()
+                return focused
+            }
+            // Second stage: findFocus found nothing, so walk the tree for an editable+focused
+            // node. The walk recycles every visited node except the match it returns.
+            val found = FocusedEditableFinder.find(AccessibilityFocusNode(root)) as? AccessibilityFocusNode
+            return found?.node
         } catch (e: Exception) {
             Log.w(TAG, "focused-node fallback failed", e)
             root.safeRecycle()
