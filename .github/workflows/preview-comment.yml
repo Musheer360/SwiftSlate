@@ -251,22 +251,36 @@ jobs:
             <!-- preview-apk pr=${pr} run=${runId} sha=${headSha} -->`;
 
             // Find existing bot comment (handles pagination, avoids duplicate on re-run)
+            // GitHub's comment API is eventually consistent — a just-created comment may not
+            // appear for a few seconds, which caused duplicate creation when two workflow_runs
+            // fired close together (PR144). Retry up to 3 times with backoff.
             const marker = '<!-- preview-apk -->';
             let existing = null;
-            // paginate through all issue comments
-            const comments = await github.paginate(github.rest.issues.listComments, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: pr,
-              per_page: 100,
-            });
-            for (const c of comments) {
-              if (c.user && c.user.login === 'github-actions[bot]' && c.body && c.body.includes(marker)) {
-                existing = c;
+            let comments = [];
+            for (let attempt = 1; attempt <= 3; attempt++) {
+              comments = await github.paginate(github.rest.issues.listComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr,
+                per_page: 100,
+              });
+              core.info(`Attempt ${attempt}: found ${comments.length} total comments on PR #${pr}`);
+              for (const c of comments) {
+                if (c.user && c.user.login === 'github-actions[bot]' && c.body && c.body.includes(marker)) {
+                  existing = c;
+                  break;
+                }
+              }
+              if (existing) {
+                core.info(`Found existing preview comment ${existing.id} on attempt ${attempt}`);
                 break;
               }
+              if (attempt < 3) {
+                core.info(`No existing preview comment found yet (attempt ${attempt}), waiting 5s before retry...`);
+                await new Promise(r => setTimeout(r, 5000));
+              }
             }
-            // If duplicates exist (legacy peter-evans runs), clean them: keep the first, delete the rest
+            // If duplicates exist (legacy peter-evans runs or race), clean them: keep the first, delete the rest
             const dups = comments.filter(c => c.user && c.user.login === 'github-actions[bot]' && c.body && c.body.includes(marker));
             if (dups.length > 1) {
               core.info(`Found ${dups.length} duplicate preview comments — cleaning up, keeping ${dups[0].id}`);
