@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: ["Build & Release"]
     types: [completed]
+    branches: [master]
   # Manual test: allows a maintainer to trigger the comment for a past run.
   # Kept after validation for future recovery (e.g. transient API failure).
   workflow_dispatch:
@@ -18,7 +19,6 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: read
   actions: read
   pull-requests: write
 
@@ -222,9 +222,9 @@ jobs:
             | | |
             |---|---|
             | **Artifact** | \`${artifact}.zip\` → single \`${artifact}-*.apk\` at root (unzips to **only the APK**, no folders) |
-            | **Size** | \`${sizeMB} MB\` (\`${sizeBytes} bytes\`) |
+            | **Size** | \`${sizeMB} MB\` (\`${sizeBytes} bytes\`, zip size) |
             | **Commit** | \`${shortSha}\` (\`${headSha}\`) |
-            | **Expires** | 14 days from build |
+            | **Expires** | 14 days from build (artifact retention) |
 
             **Download:** 👉 [Open run artifacts](${runUrl}) → scroll to **Artifacts** → download \`${artifact}.zip\` (GitHub login required) → unzip → you get a single \`.apk\` file (e.g. \`SwiftSlate-preview-pr${pr}-${shortSha}.apk\`) at the root, ready to install.
 
