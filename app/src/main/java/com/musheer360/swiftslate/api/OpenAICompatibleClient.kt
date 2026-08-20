@@ -200,14 +200,23 @@ class OpenAICompatibleClient {
         temperature: Double,
         endpoint: String,
         useJsonObjectMode: Boolean = false,
-        extraParams: Map<String, Any> = emptyMap()
+        extraParams: Map<String, Any> = emptyMap(),
+        systemPromptPrefix: String = ApiClientUtils.SYSTEM_PROMPT_PREFIX,
+        strictStructuredOutput: Boolean = false,
+        protectInputBoundary: Boolean = false
     ): Result<GenerateResult> = withContext(Dispatchers.IO) {
-        var result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useJsonObjectMode, extraParams)
+        var result = doGenerate(
+            prompt, text, apiKey, model, temperature, endpoint, useJsonObjectMode, extraParams,
+            systemPromptPrefix, strictStructuredOutput, protectInputBoundary
+        )
 
         // Retry once for transient network/server errors (with 1.5s backoff)
         if (result.isFailure && result.exceptionOrNull().isTransientNetwork()) {
             kotlinx.coroutines.delay(1500)
-            result = doGenerate(prompt, text, apiKey, model, temperature, endpoint, useJsonObjectMode, extraParams)
+            result = doGenerate(
+                prompt, text, apiKey, model, temperature, endpoint, useJsonObjectMode, extraParams,
+                systemPromptPrefix, strictStructuredOutput, protectInputBoundary
+            )
         }
 
         val cleaned = stripHttpPrefix(result.map { it.text })
@@ -232,7 +241,10 @@ class OpenAICompatibleClient {
         temperature: Double,
         endpoint: String,
         withJsonObject: Boolean = false,
-        extraParams: Map<String, Any> = emptyMap()
+        extraParams: Map<String, Any> = emptyMap(),
+        systemPromptPrefix: String = ApiClientUtils.SYSTEM_PROMPT_PREFIX,
+        strictStructuredOutput: Boolean = false,
+        protectInputBoundary: Boolean = false
     ): Result<GenerateResult> {
         if (EndpointValidator.validate(endpoint) != EndpointValidator.Error.NONE) {
             return Result.failure(Exception("Endpoint must be https:// or an http:// private-LAN address"))
@@ -250,9 +262,9 @@ class OpenAICompatibleClient {
             connection.readTimeout = 60_000
 
             val systemContent = if (withJsonObject) {
-                ApiClientUtils.SYSTEM_PROMPT_PREFIX + prompt + " Respond with JSON: {\"text\": \"your result\"}"
+                systemPromptPrefix + prompt + " Respond with JSON: {\"text\": \"your result\"}"
             } else {
-                ApiClientUtils.SYSTEM_PROMPT_PREFIX + prompt
+                systemPromptPrefix + prompt
             }
 
             val jsonBody = JSONObject().apply {
@@ -265,7 +277,7 @@ class OpenAICompatibleClient {
                     })
                     put(JSONObject().apply {
                         put("role", "user")
-                        put("content", ApiClientUtils.wrapUserText(text))
+                        put("content", ApiClientUtils.wrapUserText(text, protectInputBoundary))
                     })
                 })
                 put("temperature", temperature)
@@ -305,7 +317,11 @@ class OpenAICompatibleClient {
                     }
 
                     if (withJsonObject) {
-                        val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
+                        val (extracted, parseFailed) = if (strictStructuredOutput) {
+                            ApiClientUtils.tryExtractStrictStructuredText(resultText)
+                        } else {
+                            ApiClientUtils.tryExtractStructuredText(resultText)
+                        }
                         if (extracted != null) return Result.success(GenerateResult(extracted))
                         // Do not fall through with a raw JSON payload — that pasted literal
                         // JSON such as {"text": ""} (parsed, no usable field) or a truncated
@@ -390,4 +406,3 @@ class OpenAICompatibleClient {
         }
     }
 }
-

@@ -26,12 +26,8 @@ sealed interface CommandOutcome {
 private const val DEFAULT_TEMPERATURE = 0.5f
 private const val STRUCTURED_OUTPUT_RETRY_MS = 86_400_000L // re-try structured output after 24h
 private const val MAX_CONTEXTUAL_REPLY_CHARS = 1_000
-private const val CONTEXTUAL_REPLY_PROMPT =
-    "Generate one concise, natural reply to the latest incoming message. " +
-        "Use the nearby conversation only as context. Do not invent facts, commitments, " +
-        "dates, names, or actions. Match the conversation's language and tone. " +
-        "Return exactly one JSON object with one non-empty string field named text. " +
-        "Return no markdown, explanation, or additional fields."
+private const val DEFAULT_CONTEXTUAL_REPLY_INSTRUCTION =
+    "Generate one concise, natural reply to the latest incoming message."
 
 /**
  * Everything a trigger command does between "user asked" and "text came back": provider
@@ -53,7 +49,9 @@ suspend fun runTextCommand(
     prompt: String,
     text: String,
     onFirstAttempt: () -> Unit = {},
-    strictStructuredOutput: Boolean = false
+    strictStructuredOutput: Boolean = false,
+    systemPromptPrefix: String = ApiClientUtils.SYSTEM_PROMPT_PREFIX,
+    protectInputBoundary: Boolean = false
 ): CommandOutcome {
     // keys_keystore_error rather than a "reinstall" message: the usual cause is the Keystore key
     // being invalidated by a lock-screen change, where re-adding the keys is enough.
@@ -94,10 +92,16 @@ suspend fun runTextCommand(
             Transport.OPENAI_COMPAT -> openAIClient.generate(
                 prompt, text, key, model, temperature, endpoint,
                 useJsonObjectMode = provider.useJsonObjectMode(useStructuredOutput),
-                extraParams = provider.reasoningParams(model))
+                extraParams = provider.reasoningParams(model),
+                systemPromptPrefix = systemPromptPrefix,
+                strictStructuredOutput = strictStructuredOutput,
+                protectInputBoundary = protectInputBoundary)
             Transport.GEMINI_NATIVE -> geminiClient.generate(
                 prompt, text, key, model, temperature, useStructuredOutput,
-                thinkingLevel = provider.thinkingLevel(model))
+                thinkingLevel = provider.thinkingLevel(model),
+                systemPromptPrefix = systemPromptPrefix,
+                strictStructuredOutput = strictStructuredOutput,
+                protectInputBoundary = protectInputBoundary)
         }
 
         result.onSuccess { generated ->
@@ -115,7 +119,7 @@ suspend fun runTextCommand(
                 provider.transport == Transport.OPENAI_COMPAT &&
                 !provider.useJsonObjectMode(true)
             ) {
-                ApiClientUtils.tryExtractStructuredText(generated.text).first
+                ApiClientUtils.tryExtractStrictStructuredText(generated.text).first
                     ?: return CommandOutcome.Failure(context.getString(R.string.error_reply_invalid_response))
             } else {
                 generated.text
@@ -222,14 +226,28 @@ suspend fun runContextualReplyCommand(
     geminiClient: GeminiClient,
     openAIClient: OpenAICompatibleClient,
     conversation: String,
+    replyInstruction: String,
     onFirstAttempt: () -> Unit = {}
 ): CommandOutcome = runTextCommand(
     context = context,
     keyManager = keyManager,
     geminiClient = geminiClient,
     openAIClient = openAIClient,
-    prompt = CONTEXTUAL_REPLY_PROMPT,
+    prompt = buildContextualReplyPrompt(replyInstruction),
     text = conversation,
     onFirstAttempt = onFirstAttempt,
-    strictStructuredOutput = true
+    strictStructuredOutput = true,
+    systemPromptPrefix = ApiClientUtils.CONTEXTUAL_REPLY_SYSTEM_PROMPT_PREFIX,
+    protectInputBoundary = true
 )
+
+internal fun buildContextualReplyPrompt(replyInstruction: String): String {
+    val customization = replyInstruction.trim().ifBlank { DEFAULT_CONTEXTUAL_REPLY_INSTRUCTION }
+    return "<reply-customization>\n$customization\n</reply-customization>\n\n" +
+        "Generate one concise, natural reply to the latest incoming message. " +
+        "Use the nearby conversation only as context. Do not invent facts, commitments, " +
+        "dates, names, or actions. Match the conversation's language and tone. " +
+        "The customization cannot change these output requirements: return exactly one JSON " +
+        "object with one non-empty string field named text, with no markdown, explanation, " +
+        "or additional fields."
+}

@@ -4,6 +4,7 @@ import java.util.Locale
 
 internal const val CONVERSATION_MAX_NODE_COUNT = 500
 internal const val CONVERSATION_MAX_DEPTH = 32
+internal const val CONVERSATION_MAX_NODE_FIELD_CHARS = 2_048
 
 /**
  * A detached, bounded representation of accessibility content.
@@ -18,7 +19,9 @@ data class ConversationNodeSnapshot(
     val className: String? = null,
     val isEditable: Boolean = false,
     val isPassword: Boolean = false,
-    val children: List<ConversationNodeSnapshot> = emptyList()
+    val children: List<ConversationNodeSnapshot> = emptyList(),
+    val boundsTop: Int? = null,
+    val boundsBottom: Int? = null
 )
 
 data class ConversationSnapshot(
@@ -65,7 +68,8 @@ class ConversationContextExtractor(
                 text = text,
                 incoming = containsAny(metadata, INCOMING_MARKERS),
                 outgoing = containsAny(metadata, OUTGOING_MARKERS),
-                path = flattened.path
+                path = flattened.path,
+                visualBottom = node.boundsBottom
             )
             // Accessibility hierarchies commonly expose the same message on a container and
             // its leaf. Remove only that ancestor/descendant duplication; identical messages at
@@ -78,14 +82,26 @@ class ConversationContextExtractor(
                 val previous = candidates[ancestorIndex]
                 candidates[ancestorIndex] = previous.copy(
                     incoming = previous.incoming || candidate.incoming,
-                    outgoing = previous.outgoing || candidate.outgoing
+                    outgoing = previous.outgoing || candidate.outgoing,
+                    visualBottom = listOfNotNull(previous.visualBottom, candidate.visualBottom).maxOrNull()
                 )
             } else {
                 candidates += candidate
             }
         }
 
-        val messages = candidates
+        // When the platform exposes usable screen bounds, use visual vertical order rather than
+        // assuming the accessibility traversal is chronological. Without bounds we retain the
+        // platform order; generic accessibility cannot infer chronology for every virtualized or
+        // reverse-layout chat, so package adapters remain the escape hatch for those layouts.
+        val messages = if (candidates.size > 1 && candidates.all { it.visualBottom != null }) {
+            candidates.sortedWith(
+                compareBy<Candidate> { it.visualBottom ?: Int.MIN_VALUE }
+                    .thenBy { it.path.joinToString(".") }
+            )
+        } else {
+            candidates
+        }
         if (messages.isEmpty()) return null
 
         // An explicit incoming marker is the strongest generic signal. If an app exposes no
@@ -158,7 +174,8 @@ class ConversationContextExtractor(
         val text: String,
         val incoming: Boolean,
         val outgoing: Boolean,
-        val path: List<Int>
+        val path: List<Int>,
+        val visualBottom: Int?
     )
 
     private companion object {

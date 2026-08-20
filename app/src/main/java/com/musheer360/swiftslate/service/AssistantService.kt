@@ -330,7 +330,7 @@ class AssistantService : AccessibilityService() {
             CommandType.AI -> {
                 if (cleanText.isEmpty()) {
                     if (isContextualReplyTrigger(command)) {
-                        handleContextualReply(source, text)
+                        handleContextualReply(source, text, command.prompt)
                     } else {
                         source.safeRecycle()
                     }
@@ -355,21 +355,32 @@ class AssistantService : AccessibilityService() {
      * Handles `?reply` with no typed message. Context is captured once from the active window;
      * the framework nodes are detached and recycled before any network request begins.
      */
-    private fun handleContextualReply(source: AccessibilityNodeInfo, originalText: String) {
+    private fun handleContextualReply(
+        source: AccessibilityNodeInfo,
+        originalText: String,
+        replyInstruction: String
+    ) {
+        val sourcePackage = runCatching { source.packageName?.toString() }.getOrNull().orEmpty()
         val root = try {
             rootInActiveWindow
         } catch (e: Exception) {
             Log.w(TAG, "contextual reply: active root unavailable", e)
             null
         }
-        val snapshot = if (root == null) {
+        val snapshot = if (root == null || sourcePackage.isBlank()) {
             null
         } else {
             try {
-                conversationContextExtractor.extract(
-                    snapshotAccessibilityTree(root),
-                    source.packageName?.toString() ?: ""
-                )
+                val rootPackage = runCatching { root.packageName?.toString() }.getOrNull()
+                if (rootPackage != sourcePackage) {
+                    Log.w(TAG, "contextual reply: active root changed app")
+                    null
+                } else {
+                    conversationContextExtractor.extract(
+                        snapshotAccessibilityTree(root),
+                        sourcePackage
+                    )
+                }
             } catch (e: Exception) {
                 Log.w(TAG, "contextual reply: tree extraction failed", e)
                 null
@@ -390,7 +401,7 @@ class AssistantService : AccessibilityService() {
         startWatchdog()
         cancelPendingProcessingReset()
         currentJob?.cancel()
-        processContextualReply(source, originalText, snapshot)
+        processContextualReply(source, originalText, snapshot, replyInstruction)
     }
 
     /**
@@ -511,12 +522,13 @@ class AssistantService : AccessibilityService() {
     private fun processContextualReply(
         source: AccessibilityNodeInfo,
         originalText: String,
-        snapshot: ConversationSnapshot
+        snapshot: ConversationSnapshot,
+        replyInstruction: String
     ) {
         processGeneratedCommand(source, originalText, "${cachedPrefix}reply") { onFirstAttempt ->
             runContextualReplyCommand(
                 applicationContext, keyManager, client, openAIClient,
-                snapshot.text, onFirstAttempt
+                snapshot.text, replyInstruction, onFirstAttempt
             )
         }
     }

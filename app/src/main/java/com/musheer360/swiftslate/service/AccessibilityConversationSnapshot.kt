@@ -1,6 +1,7 @@
 package com.musheer360.swiftslate.service
 
 import android.view.accessibility.AccessibilityNodeInfo
+import android.graphics.Rect
 
 /**
  * Copies an accessibility tree into detached data. Child nodes are recycled here; the caller
@@ -8,27 +9,36 @@ import android.view.accessibility.AccessibilityNodeInfo
  */
 @Suppress("DEPRECATION")
 fun snapshotAccessibilityTree(root: AccessibilityNodeInfo): ConversationNodeSnapshot {
+    fun copyMetadata(node: AccessibilityNodeInfo): ConversationNodeSnapshot {
+        val bounds = runCatching {
+            Rect().also { node.getBoundsInScreen(it) }
+        }.getOrNull()
+        val usableBounds = bounds?.takeIf { it.bottom > it.top }
+        fun readText(value: () -> CharSequence?): String? = runCatching {
+            value()?.let { text ->
+                text.subSequence(0, minOf(text.length, CONVERSATION_MAX_NODE_FIELD_CHARS)).toString()
+            }
+        }.getOrNull()
+
+        return ConversationNodeSnapshot(
+            text = readText { node.text },
+            contentDescription = readText { node.contentDescription },
+            viewIdResourceName = runCatching { node.viewIdResourceName }.getOrNull(),
+            className = runCatching { node.className?.toString() }.getOrNull(),
+            isEditable = runCatching { node.isEditable }.getOrDefault(false),
+            isPassword = runCatching { node.isPassword }.getOrDefault(false),
+            boundsTop = usableBounds?.top,
+            boundsBottom = usableBounds?.bottom
+        )
+    }
+
     fun copy(node: AccessibilityNodeInfo, depth: Int, budget: IntArray): ConversationNodeSnapshot {
         if (budget[0] >= CONVERSATION_MAX_NODE_COUNT) {
-            return ConversationNodeSnapshot(
-                text = runCatching { node.text?.toString() }.getOrNull(),
-                contentDescription = runCatching { node.contentDescription?.toString() }.getOrNull(),
-                viewIdResourceName = runCatching { node.viewIdResourceName }.getOrNull(),
-                className = runCatching { node.className?.toString() }.getOrNull(),
-                isEditable = runCatching { node.isEditable }.getOrDefault(false),
-                isPassword = runCatching { node.isPassword }.getOrDefault(false)
-            )
+            return copyMetadata(node)
         }
         if (depth > CONVERSATION_MAX_DEPTH) {
             budget[0]++
-            return ConversationNodeSnapshot(
-                text = runCatching { node.text?.toString() }.getOrNull(),
-                contentDescription = runCatching { node.contentDescription?.toString() }.getOrNull(),
-                viewIdResourceName = runCatching { node.viewIdResourceName }.getOrNull(),
-                className = runCatching { node.className?.toString() }.getOrNull(),
-                isEditable = runCatching { node.isEditable }.getOrDefault(false),
-                isPassword = runCatching { node.isPassword }.getOrDefault(false)
-            )
+            return copyMetadata(node)
         }
         budget[0]++
         val children = ArrayList<ConversationNodeSnapshot>()
@@ -42,15 +52,7 @@ fun snapshotAccessibilityTree(root: AccessibilityNodeInfo): ConversationNodeSnap
                 try { child.recycle() } catch (_: Exception) {}
             }
         }
-        return ConversationNodeSnapshot(
-            text = runCatching { node.text?.toString() }.getOrNull(),
-            contentDescription = runCatching { node.contentDescription?.toString() }.getOrNull(),
-            viewIdResourceName = runCatching { node.viewIdResourceName }.getOrNull(),
-            className = runCatching { node.className?.toString() }.getOrNull(),
-            isEditable = runCatching { node.isEditable }.getOrDefault(false),
-            isPassword = runCatching { node.isPassword }.getOrDefault(false),
-            children = children
-        )
+        return copyMetadata(node).copy(children = children)
     }
 
     return copy(root, 0, intArrayOf(0))

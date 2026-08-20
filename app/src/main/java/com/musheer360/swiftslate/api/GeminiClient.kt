@@ -63,14 +63,23 @@ class GeminiClient {
         model: String,
         temperature: Double,
         useStructuredOutput: Boolean = false,
-        thinkingLevel: String? = null
+        thinkingLevel: String? = null,
+        systemPromptPrefix: String = ApiClientUtils.SYSTEM_PROMPT_PREFIX,
+        strictStructuredOutput: Boolean = false,
+        protectInputBoundary: Boolean = false
     ): Result<GenerateResult> = withContext(Dispatchers.IO) {
-        var result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, thinkingLevel)
+        var result = doGenerate(
+            prompt, text, apiKey, model, temperature, useStructuredOutput, thinkingLevel,
+            systemPromptPrefix, strictStructuredOutput, protectInputBoundary
+        )
 
         // Retry once for transient network/server errors (with 1.5s backoff)
         if (result.isFailure && result.exceptionOrNull().isTransientNetwork()) {
             kotlinx.coroutines.delay(1500)
-            result = doGenerate(prompt, text, apiKey, model, temperature, useStructuredOutput, thinkingLevel)
+            result = doGenerate(
+                prompt, text, apiKey, model, temperature, useStructuredOutput, thinkingLevel,
+                systemPromptPrefix, strictStructuredOutput, protectInputBoundary
+            )
         }
 
         val cleaned = stripHttpPrefix(result.map { it.text })
@@ -94,7 +103,10 @@ class GeminiClient {
         model: String,
         temperature: Double,
         withStructured: Boolean,
-        thinkingLevel: String? = null
+        thinkingLevel: String? = null,
+        systemPromptPrefix: String = ApiClientUtils.SYSTEM_PROMPT_PREFIX,
+        strictStructuredOutput: Boolean = false,
+        protectInputBoundary: Boolean = false
     ): Result<GenerateResult> {
         var connection: HttpURLConnection? = null
         return try {
@@ -112,7 +124,7 @@ class GeminiClient {
                 put("systemInstruction", JSONObject().apply {
                     put("parts", JSONArray().apply {
                         put(JSONObject().apply {
-                            put("text", ApiClientUtils.SYSTEM_PROMPT_PREFIX + prompt)
+                            put("text", systemPromptPrefix + prompt)
                         })
                     })
                 })
@@ -120,7 +132,7 @@ class GeminiClient {
                     put(JSONObject().apply {
                         put("parts", JSONArray().apply {
                             put(JSONObject().apply {
-                                put("text", ApiClientUtils.wrapUserText(text))
+                                put("text", ApiClientUtils.wrapUserText(text, protectInputBoundary))
                             })
                         })
                     })
@@ -184,7 +196,11 @@ class GeminiClient {
                         }
 
                         if (withStructured) {
-                            val (extracted, parseFailed) = ApiClientUtils.tryExtractStructuredText(resultText)
+                            val (extracted, parseFailed) = if (strictStructuredOutput) {
+                                ApiClientUtils.tryExtractStrictStructuredText(resultText)
+                            } else {
+                                ApiClientUtils.tryExtractStructuredText(resultText)
+                            }
                             if (extracted != null) return Result.success(GenerateResult(extracted))
                             // Same guard as the OpenAI-compatible client: never paste a raw
                             // JSON payload into the user's field when the structured response

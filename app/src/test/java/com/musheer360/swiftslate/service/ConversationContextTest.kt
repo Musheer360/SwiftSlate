@@ -48,6 +48,20 @@ class ConversationContextTest {
     }
 
     @Test
+    fun extract_usesVisualOrderWhenAccessibilityTraversalIsReversed() {
+        val root = ConversationNodeSnapshot(
+            children = listOf(
+                node("Newest visible message", boundsBottom = 200),
+                node("Older visible message", boundsBottom = 100)
+            )
+        )
+
+        val result = extractor.extract(root, "com.example.chat")
+
+        assertEquals("Newest visible message", result?.latestIncoming)
+    }
+
+    @Test
     fun extract_preservesRepeatedSiblingMessages_butRemovesAncestorDuplicate() {
         val repeated = ConversationNodeSnapshot(
             text = "OK",
@@ -126,11 +140,13 @@ class ConversationContextTest {
         text: String,
         viewId: String? = null,
         contentDescription: String? = null,
-        className: String? = "android.widget.TextView"
+        className: String? = "android.widget.TextView",
+        boundsBottom: Int? = null
     ) = ConversationNodeSnapshot(
         text = text,
         viewIdResourceName = viewId,
         contentDescription = contentDescription,
-        className = className
+        className = className,
+        boundsBottom = boundsBottom
     )
 }
