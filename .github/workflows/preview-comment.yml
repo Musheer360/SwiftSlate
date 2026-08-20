@@ -4,7 +4,6 @@ on:
   workflow_run:
     workflows: ["Build & Release"]
     types: [completed]
-    branches: [master]
   # Manual test: allows a maintainer to trigger the comment for a past run.
   # Kept after validation for future recovery (e.g. transient API failure).
   workflow_dispatch:
