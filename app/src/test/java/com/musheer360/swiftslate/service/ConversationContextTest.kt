@@ -48,6 +48,35 @@ class ConversationContextTest {
     }
 
     @Test
+    fun extract_preservesRepeatedSiblingMessages_butRemovesAncestorDuplicate() {
+        val repeated = ConversationNodeSnapshot(
+            text = "OK",
+            viewIdResourceName = "incoming_message",
+            className = "android.widget.TextView",
+            children = listOf(
+                ConversationNodeSnapshot(
+                    text = "OK",
+                    viewIdResourceName = "incoming_message",
+                    className = "android.widget.TextView"
+                )
+            )
+        )
+        val root = ConversationNodeSnapshot(
+            children = listOf(
+                repeated,
+                node("Sure", viewId = "outgoing_message"),
+                node("OK", viewId = "incoming_message")
+            )
+        )
+
+        val result = extractor.extract(root, "com.example.chat")
+        val okLines = result?.text?.lines()?.count { it == "Incoming: OK" }
+
+        assertEquals("OK", result?.latestIncoming)
+        assertEquals(2, okLines)
+    }
+
+    @Test
     fun extract_withOnlyOutgoingMessages_returnsNull() {
         val root = ConversationNodeSnapshot(
             children = listOf(

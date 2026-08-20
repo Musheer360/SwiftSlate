@@ -9,7 +9,18 @@ import android.view.accessibility.AccessibilityNodeInfo
 @Suppress("DEPRECATION")
 fun snapshotAccessibilityTree(root: AccessibilityNodeInfo): ConversationNodeSnapshot {
     fun copy(node: AccessibilityNodeInfo, depth: Int, budget: IntArray): ConversationNodeSnapshot {
-        if (depth > 32 || budget[0] >= 500) {
+        if (budget[0] >= CONVERSATION_MAX_NODE_COUNT) {
+            return ConversationNodeSnapshot(
+                text = runCatching { node.text?.toString() }.getOrNull(),
+                contentDescription = runCatching { node.contentDescription?.toString() }.getOrNull(),
+                viewIdResourceName = runCatching { node.viewIdResourceName }.getOrNull(),
+                className = runCatching { node.className?.toString() }.getOrNull(),
+                isEditable = runCatching { node.isEditable }.getOrDefault(false),
+                isPassword = runCatching { node.isPassword }.getOrDefault(false)
+            )
+        }
+        if (depth > CONVERSATION_MAX_DEPTH) {
+            budget[0]++
             return ConversationNodeSnapshot(
                 text = runCatching { node.text?.toString() }.getOrNull(),
                 contentDescription = runCatching { node.contentDescription?.toString() }.getOrNull(),
@@ -23,7 +34,7 @@ fun snapshotAccessibilityTree(root: AccessibilityNodeInfo): ConversationNodeSnap
         val children = ArrayList<ConversationNodeSnapshot>()
         val childCount = runCatching { node.childCount }.getOrDefault(0)
         for (index in 0 until childCount) {
-            if (budget[0] >= 500) break
+            if (budget[0] >= CONVERSATION_MAX_NODE_COUNT) break
             val child = runCatching { node.getChild(index) }.getOrNull() ?: continue
             try {
                 children += copy(child, depth + 1, budget)

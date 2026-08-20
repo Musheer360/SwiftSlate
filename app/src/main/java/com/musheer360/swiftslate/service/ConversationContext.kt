@@ -2,6 +2,9 @@ package com.musheer360.swiftslate.service
 
 import java.util.Locale
 
+internal const val CONVERSATION_MAX_NODE_COUNT = 500
+internal const val CONVERSATION_MAX_DEPTH = 32
+
 /**
  * A detached, bounded representation of accessibility content.
  *
@@ -46,8 +49,9 @@ class ConversationContextExtractor(
     }
 
     private fun extractGeneric(root: ConversationNodeSnapshot): ConversationSnapshot? {
-        val candidates = linkedMapOf<String, Candidate>()
-        flatten(root).forEach { node ->
+        val candidates = ArrayList<Candidate>()
+        flatten(root).forEach { flattened ->
+            val node = flattened.node
             val text = (node.text ?: node.contentDescription)?.trim() ?: return@forEach
             if (!isMessageCandidate(node, text)) return@forEach
 
@@ -57,19 +61,31 @@ class ConversationContextExtractor(
                 node.className
             ).joinToString(" ").lowercase(Locale.ROOT)
             val candidate = Candidate(
+                key = text.lowercase(Locale.ROOT),
                 text = text,
                 incoming = containsAny(metadata, INCOMING_MARKERS),
-                outgoing = containsAny(metadata, OUTGOING_MARKERS)
+                outgoing = containsAny(metadata, OUTGOING_MARKERS),
+                path = flattened.path
             )
-            val key = text.lowercase(Locale.ROOT)
-            val previous = candidates[key]
-            candidates[key] = if (previous == null) candidate else previous.copy(
-                incoming = previous.incoming || candidate.incoming,
-                outgoing = previous.outgoing || candidate.outgoing
-            )
+            // Accessibility hierarchies commonly expose the same message on a container and
+            // its leaf. Remove only that ancestor/descendant duplication; identical messages at
+            // separate sibling positions are real conversation entries and must be preserved.
+            val ancestorIndex = candidates.indices.reversed().firstOrNull { index ->
+                val previous = candidates[index]
+                previous.key == candidate.key && isAncestor(previous.path, candidate.path)
+            }
+            if (ancestorIndex != null) {
+                val previous = candidates[ancestorIndex]
+                candidates[ancestorIndex] = previous.copy(
+                    incoming = previous.incoming || candidate.incoming,
+                    outgoing = previous.outgoing || candidate.outgoing
+                )
+            } else {
+                candidates += candidate
+            }
         }
 
-        val messages = candidates.values.toList()
+        val messages = candidates
         if (messages.isEmpty()) return null
 
         // An explicit incoming marker is the strongest generic signal. If an app exposes no
@@ -99,16 +115,21 @@ class ConversationContextExtractor(
         )
     }
 
-    private fun flatten(root: ConversationNodeSnapshot): List<ConversationNodeSnapshot> {
-        val result = ArrayList<ConversationNodeSnapshot>(MAX_NODE_COUNT)
-        fun visit(node: ConversationNodeSnapshot, depth: Int) {
-            if (result.size >= MAX_NODE_COUNT || depth > MAX_DEPTH) return
-            result += node
-            node.children.forEach { child -> visit(child, depth + 1) }
+    private fun flatten(root: ConversationNodeSnapshot): List<FlattenedNode> {
+        val result = ArrayList<FlattenedNode>(CONVERSATION_MAX_NODE_COUNT)
+        fun visit(node: ConversationNodeSnapshot, depth: Int, path: List<Int>) {
+            if (result.size >= CONVERSATION_MAX_NODE_COUNT || depth > CONVERSATION_MAX_DEPTH) return
+            result += FlattenedNode(node, path)
+            node.children.forEachIndexed { index, child ->
+                visit(child, depth + 1, path + index)
+            }
         }
-        visit(root, 0)
+        visit(root, 0, emptyList())
         return result
     }
+
+    private fun isAncestor(ancestor: List<Int>, descendant: List<Int>): Boolean =
+        descendant.size > ancestor.size && ancestor.indices.all { ancestor[it] == descendant[it] }
 
     private fun isMessageCandidate(node: ConversationNodeSnapshot, text: String): Boolean {
         if (node.isEditable || node.isPassword) return false
@@ -127,15 +148,20 @@ class ConversationContextExtractor(
     private fun containsAny(value: String, markers: List<String>): Boolean =
         markers.any { marker -> value.contains(marker) }
 
+    private data class FlattenedNode(
+        val node: ConversationNodeSnapshot,
+        val path: List<Int>
+    )
+
     private data class Candidate(
+        val key: String,
         val text: String,
         val incoming: Boolean,
-        val outgoing: Boolean
+        val outgoing: Boolean,
+        val path: List<Int>
     )
 
     private companion object {
-        const val MAX_NODE_COUNT = 500
-        const val MAX_DEPTH = 32
         const val MAX_NEARBY_MESSAGES = 5
         const val MAX_MESSAGE_CHARS = 600
         const val MAX_CONTEXT_CHARS = 3_000
