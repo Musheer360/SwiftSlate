@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nie skonfigurowano kluczy API</string>
     <string name="toast_all_keys_invalid">Wszystkie klucze API są nieprawidłowe. Sprawdź swoje klucze</string>
     <string name="toast_request_timed_out">Upłynął limit czasu żądania</string>
+
+    <string name="toast_reply_no_context">Nie znaleziono czytelnej wiadomości przychodzącej w tej aplikacji</string>
+    <string name="toast_reply_needs_empty">Użyj ?answer do odpowiedzi w tekście; ?reply musi być samo</string>
     <string name="process_text_title">Zastosuj polecenie</string>
     <string name="process_text_replace">Zastąp</string>
     <string name="process_text_copy">Kopiuj</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Nie znaleziono modelu. Sprawdź wybór modelu w Ustawieniach.</string>
     <string name="error_safety_blocked">Odpowiedź zablokowana przez filtry bezpieczeństwa. Spróbuj sformułować inaczej.</string>
     <string name="error_empty_response">Model zwrócił pustą odpowiedź. Spróbuj ponownie.</string>
+
+    <string name="error_reply_invalid_response">Dostawca zwrócił nieprawidłową odpowiedź. Nic nie zostało wstawione.</string>
     <string name="error_timeout_connection">Upłynął limit czasu żądania. Sprawdź swoje połączenie.</string>
     <string name="error_no_internet">Brak połączenia z internetem.</string>
     <string name="error_endpoint_unreachable">Nie można połączyć się z API. Sprawdź adres URL endpointu.</string>

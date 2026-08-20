@@ -99,6 +99,9 @@
     <string name="toast_no_keys">هیچ کلید API پیکربندی نشده است</string>
     <string name="toast_all_keys_invalid">همه کلیدهای API نامعتبر هستند. لطفاً کلیدهای خود را بررسی کنید</string>
     <string name="toast_request_timed_out">مهلت درخواست به پایان رسید</string>
+
+    <string name="toast_reply_no_context">هیچ پیام ورودی قابل خواندنی در این برنامه یافت نشد</string>
+    <string name="toast_reply_needs_empty">از ?answer برای پاسخ‌های درون‌متنی استفاده کنید؛ ?reply باید تنها باشد</string>
     <string name="process_text_title">اعمال یک فرمان</string>
     <string name="process_text_replace">جایگزینی</string>
     <string name="process_text_copy">کپی</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">مدل پیدا نشد. انتخاب مدل خود را در تنظیمات بررسی کنید.</string>
     <string name="error_safety_blocked">پاسخ توسط فیلترهای ایمنی مسدود شد. سعی کنید عبارت را بازنویسی کنید.</string>
     <string name="error_empty_response">مدل پاسخ خالی برگرداند. دوباره تلاش کنید.</string>
+
+    <string name="error_reply_invalid_response">ارائه‌دهنده پاسخ نامعتبری برگرداند. چیزی درج نشد.</string>
     <string name="error_timeout_connection">مهلت درخواست به پایان رسید. اتصال خود را بررسی کنید.</string>
     <string name="error_no_internet">اتصال اینترنت وجود ندارد.</string>
     <string name="error_endpoint_unreachable">اتصال به API ممکن نشد. آدرس URL نقطه پایانی خود را بررسی کنید.</string>

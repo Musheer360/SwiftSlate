@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nincsenek API-kulcsok beállítva</string>
     <string name="toast_all_keys_invalid">Minden API-kulcs érvénytelen. Kérjük, ellenőrizze a kulcsait</string>
     <string name="toast_request_timed_out">A kérés időtúllépést okozott</string>
+
+    <string name="toast_reply_no_context">Nem található olvasható bejövő üzenet ebben az alkalmazásban</string>
+    <string name="toast_reply_needs_empty">Használd a ?answer-t soron belüli válaszokhoz; a ?reply-nak egyedül kell állnia</string>
     <string name="process_text_title">Parancs alkalmazása</string>
     <string name="process_text_replace">Csere</string>
     <string name="process_text_copy">Másolás</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">A modell nem található. Ellenőrizze a modellválasztást a Beállításokban.</string>
     <string name="error_safety_blocked">A választ biztonsági szűrők blokkolták. Próbálja átfogalmazni.</string>
     <string name="error_empty_response">A modell üres választ adott. Próbálja újra.</string>
+
+    <string name="error_reply_invalid_response">A szolgáltató érvénytelen választ adott vissza. Semmi sem lett beillesztve.</string>
     <string name="error_timeout_connection">A kérés időtúllépést okozott. Ellenőrizze a kapcsolatát.</string>
     <string name="error_no_internet">Nincs internetkapcsolat.</string>
     <string name="error_endpoint_unreachable">Nem sikerült elérni az API-t. Ellenőrizze a végpont URL-jét.</string>

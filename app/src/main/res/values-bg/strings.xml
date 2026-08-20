@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Няма конфигурирани API ключове</string>
     <string name="toast_all_keys_invalid">Всички API ключове са невалидни. Моля, проверете ключовете си</string>
     <string name="toast_request_timed_out">Времето за заявката изтече</string>
+
+    <string name="toast_reply_no_context">Не можах да намеря четимо входящо съобщение в това приложение</string>
+    <string name="toast_reply_needs_empty">Използвайте ?answer за вградени отговори; ?reply трябва да е самостоятелно</string>
     <string name="process_text_title">Прилагане на команда</string>
     <string name="process_text_replace">Замяна</string>
     <string name="process_text_copy">Копиране</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Моделът не е намерен. Проверете избора на модел в Настройки.</string>
     <string name="error_safety_blocked">Отговорът е блокиран от филтрите за безопасност. Опитайте да префразирате.</string>
     <string name="error_empty_response">Моделът върна празен отговор. Опитайте отново.</string>
+
+    <string name="error_reply_invalid_response">Доставчикът върна невалиден отговор. Нищо не беше вмъкнато.</string>
     <string name="error_timeout_connection">Времето за заявката изтече. Проверете връзката си.</string>
     <string name="error_no_internet">Няма интернет връзка.</string>
     <string name="error_endpoint_unreachable">API не можа да бъде достигнат. Проверете URL адреса на крайната точка.</string>

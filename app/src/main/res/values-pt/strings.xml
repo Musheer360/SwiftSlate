@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nenhuma chave API configurada</string>
     <string name="toast_all_keys_invalid">Todas as chaves API são inválidas. Verifique as suas chaves</string>
     <string name="toast_request_timed_out">O pedido excedeu o tempo limite</string>
+
+    <string name="toast_reply_no_context">Não foi encontrada nenhuma mensagem recebida legível nesta aplicação</string>
+    <string name="toast_reply_needs_empty">Use ?answer para respostas inline; ?reply deve estar sozinho</string>
     <string name="process_text_title">Aplicar um comando</string>
     <string name="process_text_replace">Substituir</string>
     <string name="process_text_copy">Copiar</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Modelo não encontrado. Verifique a seleção do modelo nas Definições.</string>
     <string name="error_safety_blocked">Resposta bloqueada por filtros de segurança. Tente reformular.</string>
     <string name="error_empty_response">O modelo devolveu uma resposta vazia. Tente novamente.</string>
+
+    <string name="error_reply_invalid_response">O fornecedor devolveu uma resposta inválida. Nada foi inserido.</string>
     <string name="error_timeout_connection">O pedido excedeu o tempo limite. Verifique a sua ligação.</string>
     <string name="error_no_internet">Sem ligação à internet.</string>
     <string name="error_endpoint_unreachable">Não foi possível contactar a API. Verifique o URL do endpoint.</string>

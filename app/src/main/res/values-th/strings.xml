@@ -99,6 +99,9 @@
     <string name="toast_no_keys">ยังไม่ได้กำหนดค่าคีย์ API</string>
     <string name="toast_all_keys_invalid">คีย์ API ทั้งหมดไม่ถูกต้อง โปรดตรวจสอบคีย์ของคุณ</string>
     <string name="toast_request_timed_out">คำขอหมดเวลา</string>
+
+    <string name="toast_reply_no_context">ไม่พบข้อความขาเข้าที่อ่านได้ในแอปนี้</string>
+    <string name="toast_reply_needs_empty">ใช้ ?answer สำหรับการตอบแบบ inline; ?reply ต้องอยู่ตามลำพัง</string>
     <string name="process_text_title">ใช้คำสั่ง</string>
     <string name="process_text_replace">แทนที่</string>
     <string name="process_text_copy">คัดลอก</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">ไม่พบโมเดล ตรวจสอบการเลือกโมเดลของคุณในการตั้งค่า</string>
     <string name="error_safety_blocked">การตอบกลับถูกบล็อกโดยตัวกรองความปลอดภัย ลองเรียบเรียงใหม่</string>
     <string name="error_empty_response">โมเดลส่งคืนการตอบกลับที่ว่างเปล่า ลองอีกครั้ง</string>
+
+    <string name="error_reply_invalid_response">ผู้ให้บริการส่งการตอบกลับที่ไม่ถูกต้อง ไม่มีการแทรกข้อมูล</string>
     <string name="error_timeout_connection">คำขอหมดเวลา ตรวจสอบการเชื่อมต่อของคุณ</string>
     <string name="error_no_internet">ไม่มีการเชื่อมต่ออินเทอร์เน็ต</string>
     <string name="error_endpoint_unreachable">ไม่สามารถเข้าถึง API ได้ ตรวจสอบ URL เอนด์พอยต์ของคุณ</string>

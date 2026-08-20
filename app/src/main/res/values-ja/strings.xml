@@ -99,6 +99,9 @@
     <string name="toast_no_keys">API キーが設定されていません</string>
     <string name="toast_all_keys_invalid">すべての API キーが無効です。キーを確認してください</string>
     <string name="toast_request_timed_out">リクエストがタイムアウトしました</string>
+
+    <string name="toast_reply_no_context">このアプリで読み取り可能な受信メッセージが見つかりませんでした</string>
+    <string name="toast_reply_needs_empty">インライン返信には ?answer を使用してください。?reply は単独で入力する必要があります</string>
     <string name="process_text_title">コマンドを適用</string>
     <string name="process_text_replace">置換</string>
     <string name="process_text_copy">コピー</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">モデルが見つかりません。設定でモデルの選択を確認してください。</string>
     <string name="error_safety_blocked">安全フィルターによって応答がブロックされました。表現を変えてお試しください。</string>
     <string name="error_empty_response">モデルが空の応答を返しました。再試行してください。</string>
+
+    <string name="error_reply_invalid_response">プロバイダーから無効な返信が返されました。何も挿入されませんでした。</string>
     <string name="error_timeout_connection">リクエストがタイムアウトしました。接続を確認してください。</string>
     <string name="error_no_internet">インターネット接続がありません。</string>
     <string name="error_endpoint_unreachable">API に到達できませんでした。エンドポイント URL を確認してください。</string>

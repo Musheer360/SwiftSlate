@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nav konfigurēta neviena API atslēga</string>
     <string name="toast_all_keys_invalid">Visas API atslēgas ir nederīgas. Lūdzu, pārbaudiet savas atslēgas</string>
     <string name="toast_request_timed_out">Pieprasījuma noildze</string>
+
+    <string name="toast_reply_no_context">Šajā lietotnē netika atrasts neviens lasāms ienākošais ziņojums</string>
+    <string name="toast_reply_needs_empty">Izmantojiet ?answer iekļautajām atbildēm; ?reply jābūt vienam pašam</string>
     <string name="process_text_title">Lietot komandu</string>
     <string name="process_text_replace">Aizstāt</string>
     <string name="process_text_copy">Kopēt</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Modelis nav atrasts. Pārbaudiet modeļa izvēli Iestatījumos.</string>
     <string name="error_safety_blocked">Atbildi bloķēja drošības filtri. Mēģiniet pārformulēt.</string>
     <string name="error_empty_response">Modelis atgrieza tukšu atbildi. Mēģiniet vēlreiz.</string>
+
+    <string name="error_reply_invalid_response">Pakalpojumu sniedzējs atgrieza nederīgu atbildi. Nekas netika ievietots.</string>
     <string name="error_timeout_connection">Pieprasījuma noildze. Pārbaudiet savienojumu.</string>
     <string name="error_no_internet">Nav interneta savienojuma.</string>
     <string name="error_endpoint_unreachable">Nevarēja sasniegt API. Pārbaudiet sava galapunkta URL.</string>

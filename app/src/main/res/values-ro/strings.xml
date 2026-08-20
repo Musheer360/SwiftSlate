@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nicio cheie API configurată</string>
     <string name="toast_all_keys_invalid">Toate cheile API sunt invalide. Verifică-ți cheile</string>
     <string name="toast_request_timed_out">Solicitarea a expirat</string>
+
+    <string name="toast_reply_no_context">Nu a fost găsit niciun mesaj primit lizibil în această aplicație</string>
+    <string name="toast_reply_needs_empty">Folosește ?answer pentru răspunsuri inline; ?reply trebuie să fie singur</string>
     <string name="process_text_title">Aplică o comandă</string>
     <string name="process_text_replace">Înlocuiește</string>
     <string name="process_text_copy">Copiază</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Modelul nu a fost găsit. Verifică selecția modelului în Setări.</string>
     <string name="error_safety_blocked">Răspuns blocat de filtrele de siguranță. Încearcă să reformulezi.</string>
     <string name="error_empty_response">Modelul a returnat un răspuns gol. Încearcă din nou.</string>
+
+    <string name="error_reply_invalid_response">Furnizorul a returnat un răspuns nevalid. Nimic nu a fost inserat.</string>
     <string name="error_timeout_connection">Solicitarea a expirat. Verifică-ți conexiunea.</string>
     <string name="error_no_internet">Fără conexiune la internet.</string>
     <string name="error_endpoint_unreachable">Nu s-a putut contacta API-ul. Verifică URL-ul endpoint-ului.</string>

@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Ingen API-nøkler konfigurert</string>
     <string name="toast_all_keys_invalid">Alle API-nøkler er ugyldige. Kontroller nøklene dine</string>
     <string name="toast_request_timed_out">Forespørselen fikk tidsavbrudd</string>
+
+    <string name="toast_reply_no_context">Fant ingen lesbar innkommende melding i denne appen</string>
+    <string name="toast_reply_needs_empty">Bruk ?answer for inline-svar; ?reply må stå alene</string>
     <string name="process_text_title">Bruk en kommando</string>
     <string name="process_text_replace">Erstatt</string>
     <string name="process_text_copy">Kopier</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Modell ikke funnet. Kontroller modellvalget ditt i Innstillinger.</string>
     <string name="error_safety_blocked">Svaret ble blokkert av sikkerhetsfiltre. Prøv å omformulere.</string>
     <string name="error_empty_response">Modellen returnerte et tomt svar. Prøv igjen.</string>
+
+    <string name="error_reply_invalid_response">Leverandøren returnerte et ugyldig svar. Ingenting ble satt inn.</string>
     <string name="error_timeout_connection">Forespørselen fikk tidsavbrudd. Kontroller tilkoblingen din.</string>
     <string name="error_no_internet">Ingen internettforbindelse.</string>
     <string name="error_endpoint_unreachable">Kunne ikke nå API-et. Kontroller endepunkt-URL-en din.</string>

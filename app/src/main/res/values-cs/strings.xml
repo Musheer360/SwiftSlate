@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nejsou nakonfigurovány žádné API klíče</string>
     <string name="toast_all_keys_invalid">Všechny API klíče jsou neplatné. Zkontrolujte prosím své klíče</string>
     <string name="toast_request_timed_out">Časový limit požadavku vypršel</string>
+
+    <string name="toast_reply_no_context">V této aplikaci nebyla nalezena žádná čitelná příchozí zpráva</string>
+    <string name="toast_reply_needs_empty">Použijte ?answer pro vložené odpovědi; ?reply musí být samostatně</string>
     <string name="process_text_title">Použít příkaz</string>
     <string name="process_text_replace">Nahradit</string>
     <string name="process_text_copy">Kopírovat</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Model nenalezen. Zkontrolujte výběr modelu v Nastavení.</string>
     <string name="error_safety_blocked">Odpověď byla zablokována bezpečnostními filtry. Zkuste to přeformulovat.</string>
     <string name="error_empty_response">Model vrátil prázdnou odpověď. Zkuste to znovu.</string>
+
+    <string name="error_reply_invalid_response">Poskytovatel vrátil neplatnou odpověď. Nic nebylo vloženo.</string>
     <string name="error_timeout_connection">Časový limit požadavku vypršel. Zkontrolujte připojení.</string>
     <string name="error_no_internet">Žádné připojení k internetu.</string>
     <string name="error_endpoint_unreachable">Nepodařilo se dosáhnout API. Zkontrolujte URL koncového bodu.</string>

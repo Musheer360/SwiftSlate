@@ -98,6 +98,9 @@
     <string name="toast_no_keys">Keine API-Schlüssel konfiguriert</string>
     <string name="toast_all_keys_invalid">Alle API-Schlüssel sind ungültig. Bitte überprüfe deine Schlüssel</string>
     <string name="toast_request_timed_out">Zeitüberschreitung der Anfrage</string>
+
+    <string name="toast_reply_no_context">Keine lesbare eingehende Nachricht in dieser App gefunden</string>
+    <string name="toast_reply_needs_empty">Verwende ?answer für Inline-Antworten; ?reply muss allein stehen</string>
     <string name="process_text_title">Befehl anwenden</string>
     <string name="process_text_replace">Ersetzen</string>
     <string name="process_text_copy">Kopieren</string>
@@ -122,6 +125,8 @@
     <string name="error_model_not_found">Modell nicht gefunden. Überprüfe deine Modellauswahl in den Einstellungen.</string>
     <string name="error_safety_blocked">Antwort durch Sicherheitsfilter blockiert. Versuche, es umzuformulieren.</string>
     <string name="error_empty_response">Das Modell hat eine leere Antwort zurückgegeben. Versuche es erneut.</string>
+
+    <string name="error_reply_invalid_response">Der Anbieter hat eine ungültige Antwort zurückgegeben. Es wurde nichts eingefügt.</string>
     <string name="error_timeout_connection">Zeitüberschreitung der Anfrage. Überprüfe deine Verbindung.</string>
     <string name="error_no_internet">Keine Internetverbindung.</string>
     <string name="error_endpoint_unreachable">Die API konnte nicht erreicht werden. Überprüfe deine Endpoint-URL.</string>

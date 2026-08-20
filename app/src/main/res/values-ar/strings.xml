@@ -99,6 +99,9 @@
     <string name="toast_no_keys">لم يتم تكوين أي مفاتيح API</string>
     <string name="toast_all_keys_invalid">جميع مفاتيح API غير صالحة. يُرجى التحقق من مفاتيحك</string>
     <string name="toast_request_timed_out">انتهت مهلة الطلب</string>
+
+    <string name="toast_reply_no_context">تعذر العثور على رسالة واردة قابلة للقراءة في هذا التطبيق</string>
+    <string name="toast_reply_needs_empty">استخدم ?answer للردود المضمنة؛ يجب أن يكون ?reply وحده</string>
     <string name="process_text_title">تطبيق أمر</string>
     <string name="process_text_replace">استبدال</string>
     <string name="process_text_copy">نسخ</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">لم يتم العثور على النموذج. تحقق من اختيار النموذج في الإعدادات.</string>
     <string name="error_safety_blocked">تم حظر الاستجابة بواسطة عوامل تصفية الأمان. حاول إعادة الصياغة.</string>
     <string name="error_empty_response">أعاد النموذج استجابة فارغة. أعد المحاولة.</string>
+
+    <string name="error_reply_invalid_response">أعاد المزود ردًا غير صالح. لم يتم إدراج أي شيء.</string>
     <string name="error_timeout_connection">انتهت مهلة الطلب. تحقق من اتصالك.</string>
     <string name="error_no_internet">لا يوجد اتصال بالإنترنت.</string>
     <string name="error_endpoint_unreachable">تعذّر الوصول إلى API. تحقق من رابط نقطة النهاية.</string>

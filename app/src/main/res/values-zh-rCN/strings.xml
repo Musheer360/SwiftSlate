@@ -98,6 +98,9 @@
     <string name="toast_no_keys">未配置 API 密钥</string>
     <string name="toast_all_keys_invalid">所有 API 密钥均无效。请检查您的密钥</string>
     <string name="toast_request_timed_out">请求超时</string>
+
+    <string name="toast_reply_no_context">在此应用中未找到可读的收件消息</string>
+    <string name="toast_reply_needs_empty">行内回复请使用 ?answer；?reply 必须单独输入</string>
     <string name="process_text_title">应用命令</string>
     <string name="process_text_replace">替换</string>
     <string name="process_text_copy">复制</string>
@@ -122,6 +125,8 @@
     <string name="error_model_not_found">未找到模型。请在设置中检查您的模型选择。</string>
     <string name="error_safety_blocked">响应被安全过滤器拦截。请尝试重新表述。</string>
     <string name="error_empty_response">模型返回了空响应。请重试。</string>
+
+    <string name="error_reply_invalid_response">提供方返回了无效回复，未插入任何内容。</string>
     <string name="error_timeout_connection">请求超时。请检查您的网络连接。</string>
     <string name="error_no_internet">无网络连接。</string>
     <string name="error_endpoint_unreachable">无法连接到 API。请检查您的接入点 URL。</string>

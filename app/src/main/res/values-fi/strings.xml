@@ -99,6 +99,9 @@
     <string name="toast_no_keys">API-avaimia ei ole määritetty</string>
     <string name="toast_all_keys_invalid">Kaikki API-avaimet ovat virheellisiä. Tarkista avaimesi</string>
     <string name="toast_request_timed_out">Pyyntö aikakatkaistiin</string>
+
+    <string name="toast_reply_no_context">Tästä sovelluksesta ei löytynyt luettavaa saapuvaa viestiä</string>
+    <string name="toast_reply_needs_empty">Käytä ?answer inline-vastauksiin; ?reply on oltava yksin</string>
     <string name="process_text_title">Käytä komentoa</string>
     <string name="process_text_replace">Korvaa</string>
     <string name="process_text_copy">Kopioi</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Mallia ei löytynyt. Tarkista mallin valinta Asetuksissa.</string>
     <string name="error_safety_blocked">Vastaus estettiin turvasuodattimilla. Yritä muotoilla uudelleen.</string>
     <string name="error_empty_response">Malli palautti tyhjän vastauksen. Yritä uudelleen.</string>
+
+    <string name="error_reply_invalid_response">Palveluntarjoaja palautti virheellisen vastauksen. Mitään ei lisätty.</string>
     <string name="error_timeout_connection">Pyyntö aikakatkaistiin. Tarkista yhteytesi.</string>
     <string name="error_no_internet">Ei internetyhteyttä.</string>
     <string name="error_endpoint_unreachable">API:in ei saatu yhteyttä. Tarkista päätepisteen URL-osoite.</string>

@@ -100,6 +100,8 @@
     <string name="toast_all_keys_invalid">Alla API-nycklar är ogiltiga. Kontrollera dina nycklar</string>
     <string name="toast_request_timed_out">Tidsgränsen för begäran överskreds</string>
 
+    <string name="toast_reply_no_context">Inget läsbart inkommande meddelande hittades i den här appen</string>
+    <string name="toast_reply_needs_empty">Använd ?answer för inline-svar; ?reply måste stå ensamt</string>
     <!-- Text-selection (PROCESS_TEXT) flow -->
     <string name="process_text_title">Tillämpa ett kommando</string>
     <string name="process_text_replace">Ersätt</string>
@@ -127,6 +129,8 @@
     <string name="error_model_not_found">Modellen hittades inte. Kontrollera modellvalet i Inställningar.</string>
     <string name="error_safety_blocked">Svaret blockerades av säkerhetsfilter. Försök formulera om texten.</string>
     <string name="error_empty_response">Modellen returnerade ett tomt svar. Försök igen.</string>
+
+    <string name="error_reply_invalid_response">Leverantören returnerade ett ogiltigt svar. Inget infogades.</string>
     <string name="error_timeout_connection">Tidsgränsen för begäran överskreds. Kontrollera anslutningen.</string>
     <string name="error_no_internet">Ingen internetanslutning.</string>
     <string name="error_endpoint_unreachable">Det gick inte att nå API:et. Kontrollera slutpunktsadressen.</string>

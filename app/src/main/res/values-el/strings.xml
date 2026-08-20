@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Δεν έχουν διαμορφωθεί κλειδιά API</string>
     <string name="toast_all_keys_invalid">Όλα τα κλειδιά API είναι μη έγκυρα. Παρακαλούμε ελέγξτε τα κλειδιά σας</string>
     <string name="toast_request_timed_out">Το αίτημα έληξε</string>
+
+    <string name="toast_reply_no_context">Δεν βρέθηκε αναγνώσιμο εισερχόμενο μήνυμα σε αυτή την εφαρμογή</string>
+    <string name="toast_reply_needs_empty">Χρησιμοποιήστε το ?answer για ενσωματωμένες απαντήσεις· το ?reply πρέπει να είναι μόνο του</string>
     <string name="process_text_title">Εφαρμογή εντολής</string>
     <string name="process_text_replace">Αντικατάσταση</string>
     <string name="process_text_copy">Αντιγραφή</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Το μοντέλο δεν βρέθηκε. Ελέγξτε την επιλογή μοντέλου στις Ρυθμίσεις.</string>
     <string name="error_safety_blocked">Η απάντηση αποκλείστηκε από τα φίλτρα ασφαλείας. Δοκιμάστε να την αναδιατυπώσετε.</string>
     <string name="error_empty_response">Το μοντέλο επέστρεψε κενή απάντηση. Δοκιμάστε ξανά.</string>
+
+    <string name="error_reply_invalid_response">Ο πάροχος επέστρεψε μη έγκυρη απάντηση. Δεν εισήχθη τίποτα.</string>
     <string name="error_timeout_connection">Το αίτημα έληξε. Ελέγξτε τη σύνδεσή σας.</string>
     <string name="error_no_internet">Δεν υπάρχει σύνδεση στο διαδίκτυο.</string>
     <string name="error_endpoint_unreachable">Δεν ήταν δυνατή η προσέγγιση του API. Ελέγξτε τη διεύθυνση URL του τελικού σημείου.</string>

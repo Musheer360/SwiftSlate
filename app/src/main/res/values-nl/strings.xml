@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Geen API-sleutels geconfigureerd</string>
     <string name="toast_all_keys_invalid">Alle API-sleutels zijn ongeldig. Controleer uw sleutels</string>
     <string name="toast_request_timed_out">Aanvraag verlopen</string>
+
+    <string name="toast_reply_no_context">Geen leesbaar inkomend bericht gevonden in deze app</string>
+    <string name="toast_reply_needs_empty">Gebruik ?answer voor inline-antwoorden; ?reply moet alleen staan</string>
     <string name="process_text_title">Opdracht toepassen</string>
     <string name="process_text_replace">Vervangen</string>
     <string name="process_text_copy">Kopiëren</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Model niet gevonden. Controleer uw modelselectie bij Instellingen.</string>
     <string name="error_safety_blocked">Reactie geblokkeerd door veiligheidsfilters. Probeer het te herformuleren.</string>
     <string name="error_empty_response">Model gaf een lege reactie terug. Probeer het opnieuw.</string>
+
+    <string name="error_reply_invalid_response">De provider gaf een ongeldig antwoord. Er is niets ingevoegd.</string>
     <string name="error_timeout_connection">Aanvraag verlopen. Controleer uw verbinding.</string>
     <string name="error_no_internet">Geen internetverbinding.</string>
     <string name="error_endpoint_unreachable">Kon de API niet bereiken. Controleer uw endpoint-URL.</string>

@@ -13,8 +13,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
+import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
 import com.musheer360.swiftslate.ui.components.SlateToastTokens
 
 /**
@@ -89,8 +89,10 @@ class OverlayToast(private val context: Context, private val handler: Handler) {
             val runnable = Runnable { dismissAnimated() }
             dismissRunnable = runnable
             handler.postDelayed(runnable, TOAST_DURATION_MS)
-        } catch (_: Exception) {
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            // Never fall back to platform Toast — the app renders all transient UI itself
+            // (TYPE_ACCESSIBILITY_OVERLAY / SlateToast). Log and drop instead.
+            Log.w("OverlayToast", "overlay add failed; dropping toast: $msg", e)
         }
     }
 

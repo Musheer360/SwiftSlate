@@ -99,6 +99,9 @@
     <string name="toast_no_keys">No hi ha cap clau API configurada</string>
     <string name="toast_all_keys_invalid">Totes les claus API no són vàlides. Comprova les teves claus</string>
     <string name="toast_request_timed_out">La sol·licitud ha esgotat el temps d’espera</string>
+
+    <string name="toast_reply_no_context">No s\'ha trobat cap missatge d\'entrada llegible en aquesta aplicació</string>
+    <string name="toast_reply_needs_empty">Utilitza ?answer per a respostes en línia; ?reply ha d\'estar sol</string>
     <string name="process_text_title">Aplica una ordre</string>
     <string name="process_text_replace">Substitueix</string>
     <string name="process_text_copy">Copia</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">No s’ha trobat el model. Comprova la selecció de model a Configuració.</string>
     <string name="error_safety_blocked">Resposta bloquejada pels filtres de seguretat. Prova de reformular-la.</string>
     <string name="error_empty_response">El model ha retornat una resposta buida. Torna-ho a provar.</string>
+
+    <string name="error_reply_invalid_response">El proveïdor ha retornat una resposta no vàlida. No s\'ha inserit res.</string>
     <string name="error_timeout_connection">La sol·licitud ha esgotat el temps d’espera. Comprova la connexió.</string>
     <string name="error_no_internet">No hi ha connexió a internet.</string>
     <string name="error_endpoint_unreachable">No s’ha pogut accedir a l’API. Comprova l’URL del punt final.</string>

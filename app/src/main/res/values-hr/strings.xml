@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nema konfiguriranih API ključeva</string>
     <string name="toast_all_keys_invalid">Svi API ključevi su nevažeći. Provjerite svoje ključeve</string>
     <string name="toast_request_timed_out">Isteklo je vrijeme zahtjeva</string>
+
+    <string name="toast_reply_no_context">Nije pronađena čitljiva dolazna poruka u ovoj aplikaciji</string>
+    <string name="toast_reply_needs_empty">Koristite ?answer za ugrađene odgovore; ?reply mora biti sam</string>
     <string name="process_text_title">Primijeni naredbu</string>
     <string name="process_text_replace">Zamijeni</string>
     <string name="process_text_copy">Kopiraj</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Model nije pronađen. Provjerite odabir modela u Postavkama.</string>
     <string name="error_safety_blocked">Odgovor je blokiran sigurnosnim filtrima. Pokušajte preformulirati.</string>
     <string name="error_empty_response">Model je vratio prazan odgovor. Pokušajte ponovno.</string>
+
+    <string name="error_reply_invalid_response">Pružatelj je vratio nevažeći odgovor. Ništa nije umetnuto.</string>
     <string name="error_timeout_connection">Isteklo je vrijeme zahtjeva. Provjerite svoju vezu.</string>
     <string name="error_no_internet">Nema internetske veze.</string>
     <string name="error_endpoint_unreachable">Nije moguće doći do API-ja. Provjerite URL krajnje točke.</string>

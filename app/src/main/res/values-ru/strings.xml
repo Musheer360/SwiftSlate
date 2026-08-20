@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Ключи API не настроены</string>
     <string name="toast_all_keys_invalid">Все ключи API недействительны. Проверьте свои ключи</string>
     <string name="toast_request_timed_out">Время ожидания запроса истекло</string>
+
+    <string name="toast_reply_no_context">Не удалось найти читаемое входящее сообщение в этом приложении</string>
+    <string name="toast_reply_needs_empty">Используйте ?answer для встроенных ответов; ?reply должен быть отдельно</string>
     <string name="process_text_title">Применить команду</string>
     <string name="process_text_replace">Заменить</string>
     <string name="process_text_copy">Копировать</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Модель не найдена. Проверьте выбор модели в Настройках.</string>
     <string name="error_safety_blocked">Ответ заблокирован фильтрами безопасности. Попробуйте переформулировать.</string>
     <string name="error_empty_response">Модель вернула пустой ответ. Повторите попытку.</string>
+
+    <string name="error_reply_invalid_response">Провайдер вернул недействительный ответ. Ничего не вставлено.</string>
     <string name="error_timeout_connection">Время ожидания запроса истекло. Проверьте подключение.</string>
     <string name="error_no_internet">Нет подключения к интернету.</string>
     <string name="error_endpoint_unreachable">Не удалось связаться с API. Проверьте URL конечной точки.</string>

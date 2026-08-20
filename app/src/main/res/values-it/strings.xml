@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nessuna chiave API configurata</string>
     <string name="toast_all_keys_invalid">Tutte le chiavi API non sono valide. Controlla le tue chiavi</string>
     <string name="toast_request_timed_out">Richiesta scaduta</string>
+
+    <string name="toast_reply_no_context">Nessun messaggio in arrivo leggibile trovato in questa app</string>
+    <string name="toast_reply_needs_empty">Usa ?answer per le risposte inline; ?reply deve essere da solo</string>
     <string name="process_text_title">Applica un comando</string>
     <string name="process_text_replace">Sostituisci</string>
     <string name="process_text_copy">Copia</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Modello non trovato. Controlla la selezione del modello nelle Impostazioni.</string>
     <string name="error_safety_blocked">Risposta bloccata dai filtri di sicurezza. Prova a riformulare.</string>
     <string name="error_empty_response">Il modello ha restituito una risposta vuota. Riprova.</string>
+
+    <string name="error_reply_invalid_response">Il provider ha restituito una risposta non valida. Non è stato inserito nulla.</string>
     <string name="error_timeout_connection">Richiesta scaduta. Controlla la tua connessione.</string>
     <string name="error_no_internet">Nessuna connessione a Internet.</string>
     <string name="error_endpoint_unreachable">Impossibile raggiungere l\'API. Controlla l\'URL dell\'endpoint.</string>

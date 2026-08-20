@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Ingen API-nøgler konfigureret</string>
     <string name="toast_all_keys_invalid">Alle API-nøgler er ugyldige. Tjek venligst dine nøgler</string>
     <string name="toast_request_timed_out">Anmodningen fik timeout</string>
+
+    <string name="toast_reply_no_context">Kunne ikke finde en læsbar indkommende besked i denne app</string>
+    <string name="toast_reply_needs_empty">Brug ?answer til inline-svar; ?reply skal stå alene</string>
     <string name="process_text_title">Anvend en kommando</string>
     <string name="process_text_replace">Erstat</string>
     <string name="process_text_copy">Kopiér</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Model ikke fundet. Tjek dit modelvalg i Indstillinger.</string>
     <string name="error_safety_blocked">Svar blokeret af sikkerhedsfiltre. Prøv at omformulere.</string>
     <string name="error_empty_response">Modellen returnerede et tomt svar. Prøv igen.</string>
+
+    <string name="error_reply_invalid_response">Udbyderen returnerede et ugyldigt svar. Intet blev indsat.</string>
     <string name="error_timeout_connection">Anmodningen fik timeout. Tjek din forbindelse.</string>
     <string name="error_no_internet">Ingen internetforbindelse.</string>
     <string name="error_endpoint_unreachable">Kunne ikke nå API\'et. Tjek din endpoint-URL.</string>

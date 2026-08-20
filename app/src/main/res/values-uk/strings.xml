@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Ключі API не налаштовано</string>
     <string name="toast_all_keys_invalid">Усі ключі API недійсні. Будь ласка, перевірте свої ключі</string>
     <string name="toast_request_timed_out">Час очікування запиту вичерпано</string>
+
+    <string name="toast_reply_no_context">Не вдалося знайти читабельне вхідне повідомлення в цьому застосунку</string>
+    <string name="toast_reply_needs_empty">Використовуйте ?answer для вбудованих відповідей; ?reply має бути окремо</string>
     <string name="process_text_title">Застосувати команду</string>
     <string name="process_text_replace">Замінити</string>
     <string name="process_text_copy">Копіювати</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Модель не знайдено. Перевірте вибір моделі у налаштуваннях.</string>
     <string name="error_safety_blocked">Відповідь заблоковано фільтрами безпеки. Спробуйте перефразувати.</string>
     <string name="error_empty_response">Модель повернула порожню відповідь. Спробуйте ще раз.</string>
+
+    <string name="error_reply_invalid_response">Провайдер повернув недійсну відповідь. Нічого не вставлено.</string>
     <string name="error_timeout_connection">Час очікування запиту вичерпано. Перевірте з’єднання.</string>
     <string name="error_no_internet">Немає підключення до Інтернету.</string>
     <string name="error_endpoint_unreachable">Не вдалося зв’язатися з API. Перевірте URL кінцевої точки.</string>

@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Yapılandırılmış API anahtarı yok</string>
     <string name="toast_all_keys_invalid">Tüm API anahtarları geçersiz. Lütfen anahtarlarınızı kontrol edin</string>
     <string name="toast_request_timed_out">İstek zaman aşımına uğradı</string>
+
+    <string name="toast_reply_no_context">Bu uygulamada okunabilir bir gelen mesaj bulunamadı</string>
+    <string name="toast_reply_needs_empty">Satır içi yanıtlar için ?answer kullanın; ?reply tek başına olmalıdır</string>
     <string name="process_text_title">Bir komut uygula</string>
     <string name="process_text_replace">Değiştir</string>
     <string name="process_text_copy">Kopyala</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Model bulunamadı. Ayarlar\'da model seçiminizi kontrol edin.</string>
     <string name="error_safety_blocked">Yanıt güvenlik filtreleri tarafından engellendi. Yeniden ifade etmeyi deneyin.</string>
     <string name="error_empty_response">Model boş bir yanıt döndürdü. Tekrar deneyin.</string>
+
+    <string name="error_reply_invalid_response">Sağlayıcı geçersiz bir yanıt döndürdü. Hiçbir şey eklenmedi.</string>
     <string name="error_timeout_connection">İstek zaman aşımına uğradı. Bağlantınızı kontrol edin.</string>
     <string name="error_no_internet">İnternet bağlantısı yok.</string>
     <string name="error_endpoint_unreachable">API\'ye ulaşılamadı. Uç nokta URL\'nizi kontrol edin.</string>

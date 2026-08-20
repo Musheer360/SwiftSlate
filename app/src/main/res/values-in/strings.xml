@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Tidak ada kunci API yang dikonfigurasi</string>
     <string name="toast_all_keys_invalid">Semua kunci API tidak valid. Harap periksa kunci Anda</string>
     <string name="toast_request_timed_out">Permintaan kehabisan waktu</string>
+
+    <string name="toast_reply_no_context">Tidak dapat menemukan pesan masuk yang dapat dibaca di aplikasi ini</string>
+    <string name="toast_reply_needs_empty">Gunakan ?answer untuk balasan sebaris; ?reply harus berdiri sendiri</string>
     <string name="process_text_title">Terapkan perintah</string>
     <string name="process_text_replace">Ganti</string>
     <string name="process_text_copy">Salin</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Model tidak ditemukan. Periksa pilihan model Anda di Pengaturan.</string>
     <string name="error_safety_blocked">Respons diblokir oleh filter keamanan. Coba ubah kalimatnya.</string>
     <string name="error_empty_response">Model mengembalikan respons kosong. Coba lagi.</string>
+
+    <string name="error_reply_invalid_response">Penyedia mengembalikan balasan tidak valid. Tidak ada yang disisipkan.</string>
     <string name="error_timeout_connection">Permintaan kehabisan waktu. Periksa koneksi Anda.</string>
     <string name="error_no_internet">Tidak ada koneksi internet.</string>
     <string name="error_endpoint_unreachable">Tidak dapat menjangkau API. Periksa URL endpoint Anda.</string>

@@ -98,10 +98,8 @@
     <string name="toast_no_keys">No API keys configured</string>
     <string name="toast_all_keys_invalid">All API keys are invalid. Please check your keys</string>
     <string name="toast_request_timed_out">Request timed out</string>
-    <!-- TODO translate: new contextual-reply strings intentionally fall back to English until
-         reviewed translations are available. Do not machine-translate these at build time. -->
-    <string name="toast_reply_no_context" translatable="false">Could not find a readable incoming message in this app</string>
-    <string name="toast_reply_needs_empty" translatable="false">Use ?answer for inline replies; ?reply must be alone</string>
+    <string name="toast_reply_no_context">Could not find a readable incoming message in this app</string>
+    <string name="toast_reply_needs_empty">Use ?answer for inline replies; ?reply must be alone</string>
 
     <!-- Text-selection (PROCESS_TEXT) flow -->
     <string name="process_text_title">Apply a command</string>
@@ -132,7 +130,7 @@
     <string name="error_model_not_found">Model not found. Check your model selection in Settings.</string>
     <string name="error_safety_blocked">Response blocked by safety filters. Try rephrasing.</string>
     <string name="error_empty_response">Model returned an empty response. Try again.</string>
-    <string name="error_reply_invalid_response" translatable="false">The provider returned an invalid reply. Nothing was inserted.</string>
+    <string name="error_reply_invalid_response">The provider returned an invalid reply. Nothing was inserted.</string>
     <string name="error_timeout_connection">Request timed out. Check your connection.</string>
     <string name="error_no_internet">No internet connection.</string>
     <string name="error_endpoint_unreachable">Could not reach the API. Check your endpoint URL.</string>

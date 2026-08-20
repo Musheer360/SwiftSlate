@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Chưa cấu hình khóa API nào</string>
     <string name="toast_all_keys_invalid">Tất cả khóa API đều không hợp lệ. Vui lòng kiểm tra khóa của bạn</string>
     <string name="toast_request_timed_out">Yêu cầu đã hết thời gian chờ</string>
+
+    <string name="toast_reply_no_context">Không tìm thấy tin nhắn đến có thể đọc được trong ứng dụng này</string>
+    <string name="toast_reply_needs_empty">Dùng ?answer cho trả lời nội tuyến; ?reply phải đứng một mình</string>
     <string name="process_text_title">Áp dụng lệnh</string>
     <string name="process_text_replace">Thay thế</string>
     <string name="process_text_copy">Sao chép</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Không tìm thấy mô hình. Kiểm tra lựa chọn mô hình của bạn trong Cài đặt.</string>
     <string name="error_safety_blocked">Phản hồi bị chặn bởi bộ lọc an toàn. Thử diễn đạt lại.</string>
     <string name="error_empty_response">Mô hình trả về phản hồi trống. Thử lại.</string>
+
+    <string name="error_reply_invalid_response">Nhà cung cấp trả về phản hồi không hợp lệ. Không có gì được chèn.</string>
     <string name="error_timeout_connection">Yêu cầu đã hết thời gian chờ. Kiểm tra kết nối của bạn.</string>
     <string name="error_no_internet">Không có kết nối internet.</string>
     <string name="error_endpoint_unreachable">Không thể kết nối tới API. Kiểm tra URL điểm cuối của bạn.</string>

@@ -98,6 +98,9 @@
     <string name="toast_no_keys">कोई API कुंजी कॉन्फ़िगर नहीं है</string>
     <string name="toast_all_keys_invalid">सभी API कुंजियाँ अमान्य हैं। कृपया अपनी कुंजियाँ जाँचें</string>
     <string name="toast_request_timed_out">अनुरोध का समय समाप्त हो गया</string>
+
+    <string name="toast_reply_no_context">इस ऐप में कोई पठनीय इनकमिंग संदेश नहीं मिला</string>
+    <string name="toast_reply_needs_empty">इनलाइन उत्तरों के लिए ?answer का उपयोग करें; ?reply अकेला होना चाहिए</string>
     <string name="process_text_title">कोई कमांड लागू करें</string>
     <string name="process_text_replace">बदलें</string>
     <string name="process_text_copy">कॉपी करें</string>
@@ -122,6 +125,8 @@
     <string name="error_model_not_found">मॉडल नहीं मिला। सेटिंग्स में अपने मॉडल चयन की जाँच करें।</string>
     <string name="error_safety_blocked">सुरक्षा फ़िल्टर द्वारा प्रतिक्रिया अवरुद्ध। पुनः शब्दों में कहने का प्रयास करें।</string>
     <string name="error_empty_response">मॉडल ने खाली प्रतिक्रिया दी। पुनः प्रयास करें।</string>
+
+    <string name="error_reply_invalid_response">प्रदाता ने अमान्य उत्तर दिया। कुछ भी डाला नहीं गया।</string>
     <string name="error_timeout_connection">अनुरोध का समय समाप्त हो गया। अपना कनेक्शन जाँचें।</string>
     <string name="error_no_internet">कोई इंटरनेट कनेक्शन नहीं।</string>
     <string name="error_endpoint_unreachable">API तक नहीं पहुँचा जा सका। अपना एंडपॉइंट URL जाँचें।</string>

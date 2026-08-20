@@ -99,6 +99,9 @@
     <string name="toast_no_keys">Nesukonfigūruota jokių API raktų</string>
     <string name="toast_all_keys_invalid">Visi API raktai negalioja. Patikrinkite savo raktus</string>
     <string name="toast_request_timed_out">Baigėsi užklausos laikas</string>
+
+    <string name="toast_reply_no_context">Šioje programoje nerasta jokio įskaitomo gaunamo pranešimo</string>
+    <string name="toast_reply_needs_empty">Naudokite ?answer įterptiesiems atsakymams; ?reply turi būti vienas</string>
     <string name="process_text_title">Taikyti komandą</string>
     <string name="process_text_replace">Pakeisti</string>
     <string name="process_text_copy">Kopijuoti</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Modelis nerastas. Patikrinkite modelio pasirinkimą Nustatymuose.</string>
     <string name="error_safety_blocked">Atsakymą užblokavo saugumo filtrai. Pabandykite performuluoti.</string>
     <string name="error_empty_response">Modelis grąžino tuščią atsakymą. Bandykite dar kartą.</string>
+
+    <string name="error_reply_invalid_response">Teikėjas grąžino netinkamą atsakymą. Nieko nebuvo įterpta.</string>
     <string name="error_timeout_connection">Baigėsi užklausos laikas. Patikrinkite ryšį.</string>
     <string name="error_no_internet">Nėra interneto ryšio.</string>
     <string name="error_endpoint_unreachable">Nepavyko pasiekti API. Patikrinkite galinio taško URL.</string>

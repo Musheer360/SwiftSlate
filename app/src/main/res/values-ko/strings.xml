@@ -99,6 +99,9 @@
     <string name="toast_no_keys">구성된 API 키가 없습니다</string>
     <string name="toast_all_keys_invalid">모든 API 키가 유효하지 않습니다. 키를 확인하세요</string>
     <string name="toast_request_timed_out">요청 시간이 초과되었습니다</string>
+
+    <string name="toast_reply_no_context">이 앱에서 읽을 수 있는 수신 메시지를 찾을 수 없습니다</string>
+    <string name="toast_reply_needs_empty">인라인 답장에는 ?answer를 사용하세요. ?reply는 단독으로 입력해야 합니다</string>
     <string name="process_text_title">명령 적용</string>
     <string name="process_text_replace">바꾸기</string>
     <string name="process_text_copy">복사</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">모델을 찾을 수 없습니다. 설정에서 모델 선택을 확인하세요.</string>
     <string name="error_safety_blocked">안전 필터에 의해 응답이 차단되었습니다. 다시 표현해 보세요.</string>
     <string name="error_empty_response">모델이 빈 응답을 반환했습니다. 다시 시도하세요.</string>
+
+    <string name="error_reply_invalid_response">제공업체가 잘못된 응답을 반환했습니다. 아무것도 삽입되지 않았습니다.</string>
     <string name="error_timeout_connection">요청 시간이 초과되었습니다. 연결을 확인하세요.</string>
     <string name="error_no_internet">인터넷 연결이 없습니다.</string>
     <string name="error_endpoint_unreachable">API에 연결할 수 없습니다. 엔드포인트 URL을 확인하세요.</string>

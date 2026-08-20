@@ -98,6 +98,9 @@
     <string name="toast_no_keys">Aucune clé API configurée</string>
     <string name="toast_all_keys_invalid">Toutes les clés API sont invalides. Veuillez vérifier vos clés</string>
     <string name="toast_request_timed_out">La requête a expiré</string>
+
+    <string name="toast_reply_no_context">Aucun message entrant lisible trouvé dans cette application</string>
+    <string name="toast_reply_needs_empty">Utilisez ?answer pour les réponses intégrées ; ?reply doit être seul</string>
     <string name="process_text_title">Appliquer une commande</string>
     <string name="process_text_replace">Remplacer</string>
     <string name="process_text_copy">Copier</string>
@@ -122,6 +125,8 @@
     <string name="error_model_not_found">Modèle introuvable. Vérifiez la sélection du modèle dans les Paramètres.</string>
     <string name="error_safety_blocked">Réponse bloquée par les filtres de sécurité. Essayez de reformuler.</string>
     <string name="error_empty_response">Le modèle a renvoyé une réponse vide. Réessayez.</string>
+
+    <string name="error_reply_invalid_response">Le fournisseur a renvoyé une réponse invalide. Rien n\'a été inséré.</string>
     <string name="error_timeout_connection">La requête a expiré. Vérifiez votre connexion.</string>
     <string name="error_no_internet">Aucune connexion internet.</string>
     <string name="error_endpoint_unreachable">Impossible de joindre l\'API. Vérifiez l\'URL de votre endpoint.</string>

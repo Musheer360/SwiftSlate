@@ -99,6 +99,9 @@
     <string name="toast_no_keys">API võtmeid pole seadistatud</string>
     <string name="toast_all_keys_invalid">Kõik API võtmed on kehtetud. Palun kontrolli oma võtmeid</string>
     <string name="toast_request_timed_out">Päring aegus</string>
+
+    <string name="toast_reply_no_context">Selles rakenduses ei leitud ühtegi loetavat saabunud sõnumit</string>
+    <string name="toast_reply_needs_empty">Kasuta ?answer reasiseste vastuste jaoks; ?reply peab olema üksi</string>
     <string name="process_text_title">Rakenda käsku</string>
     <string name="process_text_replace">Asenda</string>
     <string name="process_text_copy">Kopeeri</string>
@@ -123,6 +126,8 @@
     <string name="error_model_not_found">Mudelit ei leitud. Kontrolli mudeli valikut Seadetes.</string>
     <string name="error_safety_blocked">Vastus blokeeriti turvafiltrite poolt. Proovi ümber sõnastada.</string>
     <string name="error_empty_response">Mudel tagastas tühja vastuse. Proovi uuesti.</string>
+
+    <string name="error_reply_invalid_response">Teenusepakkuja tagastas kehtetu vastuse. Midagi ei lisatud.</string>
     <string name="error_timeout_connection">Päring aegus. Kontrolli oma ühendust.</string>
     <string name="error_no_internet">Interneti-ühendus puudub.</string>
     <string name="error_endpoint_unreachable">API-ga ei õnnestunud ühendust luua. Kontrolli oma lõpp-punkti URL-i.</string>
