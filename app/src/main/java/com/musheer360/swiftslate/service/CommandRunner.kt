@@ -105,6 +105,12 @@ suspend fun runTextCommand(
         }
 
         result.onSuccess { generated ->
+            // For contextual replies the model may refuse with plain text (not JSON).
+            // Detect that before strict JSON extraction so the user sees the dedicated
+            // safety message instead of the generic "invalid reply".
+            if (strictStructuredOutput && ApiClientUtils.isModelRefusal(generated.text)) {
+                return CommandOutcome.Refusal
+            }
             if (strictStructuredOutput && generated.structuredOutputFailed) {
                 return CommandOutcome.Failure(context.getString(R.string.error_reply_invalid_response))
             }
