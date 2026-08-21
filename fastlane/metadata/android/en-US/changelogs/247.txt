@@ -1,0 +1,1 @@
+- chore(deps): bump gradle-wrapper from 9.6.1 to 9.7.0
