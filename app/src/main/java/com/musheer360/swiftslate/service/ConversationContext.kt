@@ -21,7 +21,9 @@ data class ConversationNodeSnapshot(
     val isPassword: Boolean = false,
     val children: List<ConversationNodeSnapshot> = emptyList(),
     val boundsTop: Int? = null,
-    val boundsBottom: Int? = null
+    val boundsBottom: Int? = null,
+    val boundsLeft: Int? = null,
+    val boundsRight: Int? = null
 )
 
 data class ConversationSnapshot(
@@ -63,11 +65,17 @@ class ConversationContextExtractor(
                 node.viewIdResourceName,
                 node.className
             ).joinToString(" ").lowercase(Locale.ROOT)
+            val boundsLeft = node.boundsLeft
+            // WhatsApp/Telegram bubble heuristic: left edge near 0 => incoming, offset to the right => outgoing.
+            // Absolute threshold 150px works for 1080p (incoming ~49, outgoing 400+). Relative would be better but
+            // this is a safe generic fallback when no resource-id markers exist. Verified on Baddie chat dump.
+            val incomingByBounds = boundsLeft != null && boundsLeft < 150
+            val outgoingByBounds = boundsLeft != null && boundsLeft >= 150
             val candidate = Candidate(
                 key = text.lowercase(Locale.ROOT),
                 text = text,
-                incoming = containsAny(metadata, INCOMING_MARKERS),
-                outgoing = containsAny(metadata, OUTGOING_MARKERS),
+                incoming = containsAny(metadata, INCOMING_MARKERS) || incomingByBounds,
+                outgoing = containsAny(metadata, OUTGOING_MARKERS) || outgoingByBounds,
                 path = flattened.path,
                 visualBottom = node.boundsBottom
             )

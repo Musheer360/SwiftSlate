@@ -28,7 +28,9 @@ fun snapshotAccessibilityTree(root: AccessibilityNodeInfo): ConversationNodeSnap
             isEditable = runCatching { node.isEditable }.getOrDefault(false),
             isPassword = runCatching { node.isPassword }.getOrDefault(false),
             boundsTop = usableBounds?.top,
-            boundsBottom = usableBounds?.bottom
+            boundsBottom = usableBounds?.bottom,
+            boundsLeft = usableBounds?.left,
+            boundsRight = usableBounds?.right
         )
     }
 

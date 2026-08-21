@@ -328,6 +328,7 @@ class AssistantService : AccessibilityService() {
                 }
             }
             CommandType.AI -> {
+                Log.i(TAG, "AI command ${command.trigger} text=${text.take(100)} clean=${cleanText.take(100)}")
                 val isReply = command.trigger == "${cachedPrefix}reply"
                 val isAnswer = command.trigger == "${cachedPrefix}answer"
                 // reply is contextual-only (empty), answer is inline-only (needs text)
@@ -402,10 +403,14 @@ class AssistantService : AccessibilityService() {
         }
 
         if (snapshot == null) {
+            Log.i(TAG, "contextual reply: no snapshot (package=$sourcePackage)")
             handler.post { overlayToast.show(getString(R.string.toast_reply_no_context)) }
             source.safeRecycle()
             return
         }
+        // DEBUG: log what the app sees (package, snapshot text, latestIncoming) — only for you/Baddie testing
+        Log.i(TAG, "contextual reply: package=$sourcePackage snapshotText=${snapshot.text.take(4000)}")
+        Log.i(TAG, "contextual reply: latestIncoming=${snapshot.latestIncoming.take(1000)}")
         if (!isProcessing.compareAndSet(false, true)) {
             source.safeRecycle()
             return
