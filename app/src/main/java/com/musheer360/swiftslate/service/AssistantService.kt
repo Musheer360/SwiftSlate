@@ -328,7 +328,6 @@ class AssistantService : AccessibilityService() {
                 }
             }
             CommandType.AI -> {
-                Log.i(TAG, "AI command ${command.trigger} text=${text.take(100)} clean=${cleanText.take(100)}")
                 val isReply = command.trigger == "${cachedPrefix}reply"
                 val isAnswer = command.trigger == "${cachedPrefix}answer"
                 // reply is contextual-only (empty), answer is inline-only (needs text)
