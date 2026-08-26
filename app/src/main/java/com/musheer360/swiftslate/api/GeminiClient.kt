@@ -8,6 +8,7 @@ import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
+import java.net.URLEncoder
 import java.net.UnknownHostException
 
 class GeminiClient {
@@ -111,7 +112,10 @@ class GeminiClient {
         try {
             var pages = 0
             while (true) {
-                val pageSuffix = if (pageToken.isNullOrEmpty()) "" else "&pageToken=$pageToken"
+                // Opaque tokens may contain '+', '/' or '=' — raw interpolation corrupts
+                // the query string ('+' decodes to a space server-side), so encode it.
+                val pageSuffix = if (pageToken.isNullOrEmpty()) ""
+                    else "&pageToken=" + URLEncoder.encode(pageToken, "UTF-8")
                 var connection: HttpURLConnection? = null
                 val responseCode: Int
                 val body: String

@@ -148,8 +148,6 @@
     <string name="settings_fetch_models_success">%1$d models loaded</string>
     <string name="settings_fetch_models_empty">No models found. You can still enter a model manually.</string>
     <string name="settings_fetch_models_failed">Could not fetch models. Check your endpoint and API key.</string>
-    <!-- TODO translate: new strings for the dynamic Gemini/Groq model dropdowns; they fall
-         back to English in the other locales until translated. -->
     <string name="settings_models_refresh">Refresh</string>
     <string name="settings_models_need_key">Add an API key above to load the model list.</string>
     <string name="settings_models_load_failed">Couldn\'t load models. Check your connection and API key.</string>
