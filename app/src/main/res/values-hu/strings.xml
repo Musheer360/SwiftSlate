@@ -142,6 +142,10 @@
     <string name="settings_fetch_models_success">%1$d modell betöltve</string>
     <string name="settings_fetch_models_empty">Nem találhatók modellek. Kézzel is megadhat egy modellt.</string>
     <string name="settings_fetch_models_failed">Nem sikerült lekérni a modelleket. Ellenőrizze a címet és az API-kulcsot.</string>
+    <string name="settings_models_refresh">Frissítés</string>
+    <string name="settings_models_need_key">Adj meg fentebb egy API-kulcsot a modelllista betöltéséhez.</string>
+    <string name="settings_models_load_failed">A modelleket nem sikerült betölteni. Ellenőrizd a kapcsolatot és az API-kulcsot.</string>
+    <string name="settings_models_empty_provider">Ehhez az API-kulcshoz nincsenek elérhető modellek.</string>
     <string name="dashboard_service_killed_title">A SwiftSlate megszakadt</string>
     <string name="dashboard_service_killed_message">A háttérszolgáltatás váratlanul leállt. Engedélyezze újra a kisegítő lehetőségek beállításaiban a parancsok további használatához.</string>
     <string name="dashboard_service_killed_dismiss">Elvetés</string>

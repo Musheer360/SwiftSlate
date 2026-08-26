@@ -142,6 +142,10 @@
     <string name="settings_fetch_models_success">Načítaných modelov: %1$d</string>
     <string name="settings_fetch_models_empty">Nenašli sa žiadne modely. Model môžete zadať ručne.</string>
     <string name="settings_fetch_models_failed">Modely sa nepodarilo načítať. Skontrolujte adresu a kľúč API.</string>
+    <string name="settings_models_refresh">Obnoviť</string>
+    <string name="settings_models_need_key">Pre načítanie zoznamu modelov pridajte vyššie kľúč API.</string>
+    <string name="settings_models_load_failed">Modely sa nepodarilo načítať. Skontrolujte pripojenie a kľúč API.</string>
+    <string name="settings_models_empty_provider">Pre tento kľúč API nie sú dostupné žiadne modely.</string>
     <string name="dashboard_service_killed_title">SwiftSlate bol prerušený</string>
     <string name="dashboard_service_killed_message">Služba na pozadí sa nečakane zastavila. Znova ju povoľte v nastaveniach dostupnosti, aby ste mohli naďalej používať príkazy.</string>
     <string name="dashboard_service_killed_dismiss">Zavrieť</string>

@@ -1,14 +1,18 @@
 package com.musheer360.swiftslate.model
 
 /**
- * Single source of truth for the Groq models SwiftSlate offers and how each one
+ * Single source of truth for the Groq models SwiftSlate curates and how each one
  * is driven with respect to reasoning ("thinking").
  *
- * Each offered model is defined once in [SPECS] together with the reasoning
- * parameters it needs. The dropdown list, the default, validation, and the
- * per-model reasoning params all derive from that single table, so adding or
- * removing a model is a one-line change that forces you to state its reasoning
- * behavior right there.
+ * Each curated model is defined once in [SPECS] together with the reasoning
+ * parameters it needs. The default, display labels, and the per-model reasoning
+ * params all derive from that single table, so adding or removing a model is a
+ * one-line change that forces you to state its reasoning behavior right there.
+ * Since issue #148 the Settings dropdown no longer renders from this table — it
+ * lists whatever Groq's /models endpoint returns (see [ProviderModelsCache]);
+ * SPECS remains the source for defaults, friendly names, and reasoning params.
+ * Off-catalog models picked from that dynamic list send no reasoning params
+ * ([reasoningParams] returns empty for unknown ids), which every model accepts.
  *
  * Reasoning support on Groq is per-model and strictly validated by the API:
  * sending an unsupported reasoning parameter (or an unsupported value) returns
@@ -60,14 +64,40 @@ object GroqModels {
     /** Model IDs, in display order (used for validation and by the provider config). */
     val ALL: List<String> = SPECS.map { it.id }
 
-    /** (id, label) pairs for the Settings dropdown — shows a friendly name, stores the id. */
-    val OPTIONS: List<Pair<String, String>> = SPECS.map { it.id to it.label }
+    /**
+     * Ids Groq has decommissioned; they must migrate to [DEFAULT] rather than pass
+     * through, because requests with them always fail. Unknown ids NOT listed here
+     * come from the dynamic /models list (issue #148) and are kept verbatim.
+     */
+    private val RETIRED_IDS: Set<String> = setOf(
+        "llama-3.3-70b-versatile",
+        "llama-4-scout",
+        "meta-llama/llama-4-scout-17b-16e-instruct"
+    )
+
+    /**
+     * Groq's /models endpoint also serves entries that cannot run text-transforming
+     * chat completions: Whisper transcription, PlayAI TTS, and Llama Guard safety
+     * classifiers. Conservative substring exclusions, verified against the live
+     * catalog; anything unrecognized stays listed (fail-open).
+     */
+    private val NON_CHAT_SUBSTRINGS = listOf("whisper", "-tts", "guard", "playai")
+
+    fun isChatCandidate(id: String): Boolean =
+        NON_CHAT_SUBSTRINGS.none { id.contains(it, ignoreCase = true) }
 
     /** Friendly display label for [model]; falls back to the id if unknown. */
     fun label(model: String): String = SPECS.firstOrNull { it.id == model }?.label ?: model
 
-    /** Coerce a stored/selected model to a currently-supported one. */
-    fun sanitize(value: String?): String = if (value in ALL) value!! else DEFAULT
+    /**
+     * Normalize a stored/selected model value. Dynamic selection (issue #148) means
+     * any id the API accepts may be stored, so unknown ids pass through trimmed;
+     * only blank values and known-retired ids coerce to [DEFAULT].
+     */
+    fun sanitize(value: String?): String {
+        val trimmed = value?.trim().orEmpty()
+        return if (trimmed.isEmpty() || trimmed in RETIRED_IDS) DEFAULT else trimmed
+    }
 
     /**
      * Reasoning parameters to merge into a Groq chat-completions request body for

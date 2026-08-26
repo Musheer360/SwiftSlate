@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.musheer360.swiftslate.BuildConfig
 import com.musheer360.swiftslate.R
 import com.musheer360.swiftslate.api.ApiClientUtils
+import com.musheer360.swiftslate.api.GeminiClient
 import com.musheer360.swiftslate.api.OpenAICompatibleClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,11 +33,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
+import com.musheer360.swiftslate.manager.ProviderModelsCache
 import com.musheer360.swiftslate.model.GeminiModels
 import com.musheer360.swiftslate.model.GroqModels
 import com.musheer360.swiftslate.model.PrefKeys
 import com.musheer360.swiftslate.model.ProviderType
 import com.musheer360.swiftslate.provider.EndpointValidator
+import com.musheer360.swiftslate.provider.GroqConfig
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
 import com.musheer360.swiftslate.ui.components.SlateDivider
@@ -58,11 +61,13 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
 
     var selectedModel by remember { mutableStateOf(GeminiModels.sanitize(prefs.getString(PrefKeys.GEMINI_MODEL, GeminiModels.DEFAULT))) }
     var modelExpanded by remember { mutableStateOf(false) }
-    val geminiModels = GeminiModels.OPTIONS
+    // Dynamic model lists (issue #148): fetched from each provider's live /models
+    // endpoint, seeded from the process-lifetime cache so tab switches don't refetch.
+    var geminiModelList by remember { mutableStateOf(ProviderModelsCache.get(ProviderType.GEMINI)?.models ?: emptyList()) }
 
     var groqModel by remember { mutableStateOf(GroqModels.sanitize(prefs.getString(PrefKeys.GROQ_MODEL, GroqModels.DEFAULT))) }
     var groqModelExpanded by remember { mutableStateOf(false) }
-    val groqModels = GroqModels.OPTIONS
+    var groqModelList by remember { mutableStateOf(ProviderModelsCache.get(ProviderType.GROQ)?.models ?: emptyList()) }
 
     var customEndpoint by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "") }
     var customModel by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_MODEL, "") ?: "") }
@@ -74,8 +79,15 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
     var isFetchingModels by remember { mutableStateOf(false) }
     var fetchMessage by remember { mutableStateOf<String?>(null) }
     var fetchSuccess by remember { mutableStateOf(false) }
+    var isFetchingGeminiModels by remember { mutableStateOf(false) }
+    var geminiFetchMessage by remember { mutableStateOf<String?>(null) }
+    var geminiFetchSuccess by remember { mutableStateOf(false) }
+    var isFetchingGroqModels by remember { mutableStateOf(false) }
+    var groqFetchMessage by remember { mutableStateOf<String?>(null) }
+    var groqFetchSuccess by remember { mutableStateOf(false) }
     var apiKeys by remember { mutableStateOf<List<String>>(emptyList()) }
     val openAIClient = remember { OpenAICompatibleClient() }
+    val geminiClient = remember { GeminiClient() }
 
     var triggerPrefix by remember { mutableStateOf(commandManager.getTriggerPrefix()) }
     var prefixError by remember { mutableStateOf<String?>(null) }
@@ -92,12 +104,75 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
     val modelsEmptyMsg = stringResource(R.string.settings_fetch_models_empty)
     val modelsFailedMsg = stringResource(R.string.settings_fetch_models_failed)
     val signinRequiredMsg = stringResource(R.string.error_provider_auth_required)
+    val modelsRefreshMsg = stringResource(R.string.settings_models_refresh)
+    val modelsNeedKeyMsg = stringResource(R.string.settings_models_need_key)
+    val modelsLoadFailedMsg = stringResource(R.string.settings_models_load_failed)
+    val modelsEmptyProviderMsg = stringResource(R.string.settings_models_empty_provider)
 
     // Registered keys are decrypted through the Keystore — load off the main thread, as
     // KeysScreen does. The first key is sent as Bearer when fetching models; keyless local
     // servers get no header at all.
     LaunchedEffect(Unit) {
         apiKeys = withContext(Dispatchers.IO) { keyManager.getKeys() }
+    }
+
+    // Fetches one provider's live model list (issue #148). Groq rides the existing
+    // OpenAI-compatible prober against its fixed endpoint; Gemini gets a native
+    // listing call. Results land in [ProviderModelsCache] plus local state so the
+    // dropdown renders without refetching on every visit.
+    fun startModelFetch(type: String) {
+        val isGemini = type == ProviderType.GEMINI
+        if (!isGemini && type != ProviderType.GROQ) return
+        if (isGemini && isFetchingGeminiModels) return
+        if (!isGemini && isFetchingGroqModels) return
+
+        val key = apiKeys.firstOrNull() ?: return
+
+        if (isGemini) isFetchingGeminiModels = true else isFetchingGroqModels = true
+        scope.launch {
+            val result = withContext(Dispatchers.IO) {
+                if (isGemini) {
+                    geminiClient.fetchModels(key)
+                } else {
+                    openAIClient.fetchModels(key, GroqConfig.ENDPOINT).map { ids ->
+                        ids.filter { GroqModels.isChatCandidate(it) }
+                    }
+                }
+            }
+            val models = result.getOrNull().orEmpty()
+            val success = result.isSuccess && models.isNotEmpty()
+            val message = when {
+                result.isSuccess && models.isEmpty() -> modelsEmptyProviderMsg
+                result.isSuccess -> String.format(modelsLoadedMsg, models.size)
+                else -> modelsLoadFailedMsg
+            }
+            // Attempted=true even on failure: the automatic fetch must not re-fire;
+            // only an explicit Refresh/Retry (or a fresh session) tries again.
+            ProviderModelsCache.put(type, ProviderModelsCache.Entry(models, attempted = true))
+            if (isGemini) {
+                isFetchingGeminiModels = false
+                geminiModelList = models
+                geminiFetchSuccess = success
+                geminiFetchMessage = message
+            } else {
+                isFetchingGroqModels = false
+                groqModelList = models
+                groqFetchSuccess = success
+                groqFetchMessage = message
+            }
+        }
+    }
+
+    // Auto-fetch once per session per provider (issue #148): fires when Settings shows
+    // a Gemini/Groq provider whose list has never been fetched this process — including
+    // the no-key case, so it runs automatically once a first key is added.
+    LaunchedEffect(providerType, apiKeys) {
+        if (providerType == ProviderType.GEMINI || providerType == ProviderType.GROQ) {
+            val cached = ProviderModelsCache.get(providerType)
+            if (apiKeys.isNotEmpty() && (cached == null || !cached.attempted)) {
+                startModelFetch(providerType)
+            }
+        }
     }
 
     var backupMessage by remember { mutableStateOf<String?>(null) }
@@ -248,36 +323,36 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                ExposedDropdownMenuBox(
+                // Dynamic list (issue #148): fetched from the live /models endpoint.
+                DynamicModelDropdown(
+                    selectedLabel = GeminiModels.label(selectedModel),
+                    enabled = apiKeys.isNotEmpty(),
                     expanded = modelExpanded,
-                    onExpandedChange = { modelExpanded = !modelExpanded }
-                ) {
-                    SlateTextField(
-                        value = GeminiModels.label(selectedModel),
-                        onValueChange = {},
-                        readOnly = true,
-                        
-                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                    )
-                    ExposedDropdownMenu(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(10.dp),
-                        expanded = modelExpanded,
-                        onDismissRequest = { modelExpanded = false }
-                    ) {
-                        geminiModels.forEach { (id, label) ->
-                            DropdownMenuItem(
-                                text = { Text(label) },
-                                onClick = {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    selectedModel = id
-                                    prefs.edit().putString(PrefKeys.GEMINI_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
-                                    modelExpanded = false
-                                }
-                            )
-                        }
+                    onExpandedChange = { modelExpanded = it },
+                    models = geminiModelList,
+                    labelFor = { GeminiModels.label(it) },
+                    onSelect = { id ->
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        selectedModel = id
+                        prefs.edit().putString(PrefKeys.GEMINI_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                        modelExpanded = false
+                    },
+                    onDismiss = { modelExpanded = false },
+                    isFetching = isFetchingGeminiModels
+                )
+                ModelFetchStatusRow(
+                    enabled = apiKeys.isNotEmpty(),
+                    isFetching = isFetchingGeminiModels,
+                    fetchingText = fetchingModelsMsg,
+                    needKeyText = modelsNeedKeyMsg,
+                    refreshText = modelsRefreshMsg,
+                    message = geminiFetchMessage,
+                    success = geminiFetchSuccess,
+                    onRefresh = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        startModelFetch(ProviderType.GEMINI)
                     }
-                }
+                )
             } else if (providerType == ProviderType.GROQ) {
                 Text(
                     text = stringResource(R.string.settings_model_title),
@@ -285,36 +360,36 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                ExposedDropdownMenuBox(
+                DynamicModelDropdown(
+                    selectedLabel = GroqModels.label(groqModel),
+                    enabled = apiKeys.isNotEmpty(),
                     expanded = groqModelExpanded,
-                    onExpandedChange = { groqModelExpanded = !groqModelExpanded }
-                ) {
-                    SlateTextField(
-                        value = GroqModels.label(groqModel),
-                        onValueChange = {},
-                        readOnly = true,
-                        
-                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                    )
-                    ExposedDropdownMenu(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(10.dp),
-                        expanded = groqModelExpanded,
-                        onDismissRequest = { groqModelExpanded = false }
-                    ) {
-                        groqModels.forEach { (id, label) ->
-                            DropdownMenuItem(
-                                text = { Text(label) },
-                                onClick = {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    groqModel = id
-                                    prefs.edit().putString(PrefKeys.GROQ_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
-                                    groqModelExpanded = false
-                                }
-                            )
-                        }
+                    onExpandedChange = { groqModelExpanded = it },
+                    models = groqModelList,
+                    labelFor = { GroqModels.label(it) },
+                    onSelect = { id ->
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        groqModel = id
+                        prefs.edit().putString(PrefKeys.GROQ_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                        groqModelExpanded = false
+                    },
+                    onDismiss = { groqModelExpanded = false },
+                    isFetching = isFetchingGroqModels
+                )
+                ModelFetchStatusRow(
+                    enabled = apiKeys.isNotEmpty(),
+                    isFetching = isFetchingGroqModels,
+                    fetchingText = fetchingModelsMsg,
+                    needKeyText = modelsNeedKeyMsg,
+                    refreshText = modelsRefreshMsg,
+                    message = groqFetchMessage,
+                    success = groqFetchSuccess,
+                    onRefresh = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        startModelFetch(ProviderType.GROQ)
                     }
-                }
+                )
+
             } else {
                 Text(
                     text = stringResource(R.string.settings_endpoint_title),
@@ -663,6 +738,102 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     Text(stringResource(R.string.backup_import_cancel))
                 }
             }
+        )
+    }
+}
+
+/**
+ * Read-only dropdown listing one provider's dynamically fetched model ids
+ * (issue #148). Opens only when a key exists, no fetch is in flight, and at
+ * least one model was fetched; the menu caps its height and scrolls so long
+ * provider catalogs stay usable.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DynamicModelDropdown(
+    selectedLabel: String,
+    enabled: Boolean,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    models: List<String>,
+    labelFor: (String) -> String,
+    onSelect: (String) -> Unit,
+    onDismiss: () -> Unit,
+    isFetching: Boolean
+) {
+    val openable = enabled && !isFetching && models.isNotEmpty()
+    ExposedDropdownMenuBox(
+        expanded = expanded && openable,
+        onExpandedChange = { if (openable) onExpandedChange(it) }
+    ) {
+        SlateTextField(
+            value = selectedLabel,
+            onValueChange = {},
+            readOnly = true,
+            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+        )
+        ExposedDropdownMenu(
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(10.dp),
+            expanded = expanded && openable,
+            onDismissRequest = onDismiss,
+            // Provider catalogs can exceed a hundred entries — cap and scroll.
+            modifier = Modifier.heightIn(max = 320.dp)
+        ) {
+            models.forEach { id ->
+                DropdownMenuItem(
+                    text = { Text(labelFor(id)) },
+                    onClick = { onSelect(id) }
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Status + action row under a dynamic model dropdown: a hint when no API key is
+ * registered, a fetching indicator while the list loads, and a Refresh button to
+ * re-pull on demand; any completed-fetch message renders beneath it.
+ */
+@Composable
+private fun ModelFetchStatusRow(
+    enabled: Boolean,
+    isFetching: Boolean,
+    fetchingText: String,
+    needKeyText: String,
+    refreshText: String,
+    message: String?,
+    success: Boolean,
+    onRefresh: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val statusText = when {
+            !enabled -> needKeyText
+            isFetching -> fetchingText
+            else -> null
+        }
+        if (statusText != null) {
+            Text(
+                text = statusText,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 13.sp,
+                modifier = Modifier.weight(1f)
+            )
+        }
+        TextButton(onClick = onRefresh, enabled = enabled && !isFetching) {
+            Text(refreshText)
+        }
+    }
+    message?.let { msg ->
+        Text(
+            text = msg,
+            color = if (success) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 13.sp,
+            modifier = Modifier.padding(top = 4.dp)
         )
     }
 }
