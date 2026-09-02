@@ -51,7 +51,8 @@ fun CommandsScreen(commandManager: CommandManager) {
     var commands by remember { mutableStateOf(commandManager.getCommands()) }
     val displayCommands = remember(commands) {
         val (builtIn, custom) = commands.partition { it.isBuiltIn }
-        builtIn + custom
+        val (translateCmd, otherBuiltIns) = builtIn.partition { it.trigger.endsWith("translate:xx") }
+        otherBuiltIns + translateCmd + custom
     }
     var trigger by rememberSaveable { mutableStateOf("") }
     var prompt by rememberSaveable { mutableStateOf("") }

@@ -141,6 +141,10 @@
     <string name="settings_fetch_models_success">%1$d modèles chargés</string>
     <string name="settings_fetch_models_empty">Aucun modèle trouvé. Vous pouvez quand même saisir un modèle manuellement.</string>
     <string name="settings_fetch_models_failed">Impossible de récupérer les modèles. Vérifiez l\'adresse et la clé API.</string>
+    <string name="settings_models_refresh">Actualiser</string>
+    <string name="settings_models_need_key">Ajoute une clé API ci-dessus pour charger la liste des modèles.</string>
+    <string name="settings_models_load_failed">Impossible de charger les modèles. Vérifie ta connexion et ta clé API.</string>
+    <string name="settings_models_empty_provider">Aucun modèle disponible pour cette clé API.</string>
     <string name="dashboard_service_killed_title">SwiftSlate a été interrompu</string>
     <string name="dashboard_service_killed_message">Le service en arrière-plan s\'est arrêté de manière inattendue. Réactivez-le dans les paramètres d\'accessibilité pour continuer à utiliser les commandes.</string>
     <string name="dashboard_service_killed_dismiss">Ignorer</string>

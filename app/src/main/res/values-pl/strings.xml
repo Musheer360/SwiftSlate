@@ -142,6 +142,10 @@
     <string name="settings_fetch_models_success">Wczytano modeli: %1$d</string>
     <string name="settings_fetch_models_empty">Nie znaleziono modeli. Nadal możesz wpisać model ręcznie.</string>
     <string name="settings_fetch_models_failed">Nie udało się pobrać modeli. Sprawdź adres i klucz API.</string>
+    <string name="settings_models_refresh">Odśwież</string>
+    <string name="settings_models_need_key">Dodaj powyżej klucz API, aby wczytać listę modeli.</string>
+    <string name="settings_models_load_failed">Nie udało się wczytać modeli. Sprawdź połączenie i klucz API.</string>
+    <string name="settings_models_empty_provider">Brak dostępnych modeli dla tego klucza API.</string>
     <string name="dashboard_service_killed_title">Aplikacja SwiftSlate została przerwana</string>
     <string name="dashboard_service_killed_message">Usługa działająca w tle nieoczekiwanie się zatrzymała. Włącz ją ponownie w ustawieniach ułatwień dostępu, aby nadal używać poleceń.</string>
     <string name="dashboard_service_killed_dismiss">Zamknij</string>

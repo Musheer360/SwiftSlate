@@ -142,6 +142,10 @@
     <string name="settings_fetch_models_success">Đã tải %1$d mô hình</string>
     <string name="settings_fetch_models_empty">Không tìm thấy mô hình nào. Bạn vẫn có thể nhập tên mô hình theo cách thủ công.</string>
     <string name="settings_fetch_models_failed">Không thể lấy danh sách mô hình. Kiểm tra địa chỉ và khóa API.</string>
+    <string name="settings_models_refresh">Làm mới</string>
+    <string name="settings_models_need_key">Thêm khóa API ở phía trên để tải danh sách mô hình.</string>
+    <string name="settings_models_load_failed">Không thể tải mô hình. Kiểm tra kết nối và khóa API của bạn.</string>
+    <string name="settings_models_empty_provider">Không có mô hình nào khả dụng cho khóa API này.</string>
     <string name="dashboard_service_killed_title">SwiftSlate đã bị gián đoạn</string>
     <string name="dashboard_service_killed_message">Dịch vụ nền đã dừng bất ngờ. Hãy bật lại trong cài đặt trợ năng để tiếp tục sử dụng lệnh.</string>
     <string name="dashboard_service_killed_dismiss">Bỏ qua</string>

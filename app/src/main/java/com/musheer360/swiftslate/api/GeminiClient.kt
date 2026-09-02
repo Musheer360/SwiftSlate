@@ -8,12 +8,56 @@ import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
+import java.net.URLEncoder
 import java.net.UnknownHostException
 
 class GeminiClient {
 
     companion object {
         private val HTTP_PREFIX_REGEX = Regex("^HTTP_\\d+:\\s*")
+        private const val MODELS_URL = "https://generativelanguage.googleapis.com/v1beta/models"
+        // The listing paginates; pageSize caps at 1000. Three pages is far beyond any
+        // realistic catalog — a bound so a hostile/broken nextPageToken loop cannot spin.
+        private const val MAX_LIST_PAGES = 3
+
+        /**
+         * Extracts chat-capable model ids from a v1beta/models response page. An entry
+         * is kept when either documented capability array names "generateContent";
+         * entries carrying neither array are kept (fail-open: a renamed field must not
+         * empty the whole dropdown). The leading "models/" path prefix is stripped;
+         * ids are de-duplicated in first-seen order; non-JSON bodies yield an empty list.
+         *
+         * Exposed for unit tests — the network path around it is not JVM-testable.
+         */
+        internal fun parseModelsJson(json: String): List<String> {
+            if (json.isBlank()) return emptyList()
+            return try {
+                val arr = JSONObject(json).optJSONArray("models") ?: return emptyList()
+                val out = LinkedHashSet<String>()
+                for (i in 0 until arr.length()) {
+                    val obj = arr.optJSONObject(i) ?: continue
+                    val methods = obj.optJSONArray("supportedGenerationMethods")
+                    val actions = obj.optJSONArray("supportedActions")
+                    if (methods != null || actions != null) {
+                        val supportsChat = arrayContains(methods, "generateContent") ||
+                            arrayContains(actions, "generateContent")
+                        if (!supportsChat) continue
+                    }
+                    obj.optString("name").trim()
+                        .takeIf { it.isNotBlank() }
+                        ?.let { out.add(it.removePrefix("models/")) }
+                }
+                out.toList()
+            } catch (_: Exception) {
+                emptyList()
+            }
+        }
+
+        private fun arrayContains(arr: JSONArray?, value: String): Boolean {
+            if (arr == null) return false
+            for (i in 0 until arr.length()) if (arr.optString(i) == value) return true
+            return false
+        }
     }
 
     suspend fun validateKey(apiKey: String): Result<String> = withContext(Dispatchers.IO) {
@@ -53,6 +97,69 @@ class GeminiClient {
             Result.failure(e)
         } finally {
             connection?.disconnect()
+        }
+    }
+
+    /**
+     * Lists the chat-capable models available to [apiKey] via GET v1beta/models,
+     * powering the Settings screen's dynamic model dropdown (issue #148). Follows
+     * nextPageToken for up to [MAX_LIST_PAGES] pages; non-chat entries are dropped
+     * by [parseModelsJson]. Error mapping mirrors [validateKey].
+     */
+    suspend fun fetchModels(apiKey: String): Result<List<String>> = withContext(Dispatchers.IO) {
+        val collected = LinkedHashSet<String>()
+        var pageToken: String? = null
+        try {
+            var pages = 0
+            while (true) {
+                // Opaque tokens may contain '+', '/' or '=' — raw interpolation corrupts
+                // the query string ('+' decodes to a space server-side), so encode it.
+                val pageSuffix = if (pageToken.isNullOrEmpty()) ""
+                    else "&pageToken=" + URLEncoder.encode(pageToken, "UTF-8")
+                var connection: HttpURLConnection? = null
+                val responseCode: Int
+                val body: String
+                try {
+                    connection = URL("$MODELS_URL?pageSize=1000$pageSuffix")
+                        .openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("x-goog-api-key", apiKey)
+                    connection.connectTimeout = 15_000
+                    connection.readTimeout = 15_000
+
+                    responseCode = connection.responseCode
+                    body = if (responseCode in 200..299) {
+                        ApiClientUtils.readResponseBounded(connection)
+                    } else {
+                        ApiClientUtils.readErrorBody(connection)
+                    }
+                } finally {
+                    connection?.disconnect()
+                }
+
+                if (responseCode !in 200..299) {
+                    val apiMessage = ApiClientUtils.extractApiErrorMessage(body)
+                    return@withContext when (responseCode) {
+                        429 -> Result.failure(Exception("Rate limited. Please try again later."))
+                        400, 403 -> Result.failure(Exception(
+                            apiMessage.ifEmpty { "Invalid API key" }))
+                        else -> Result.failure(Exception(
+                            "Error $responseCode: ${apiMessage.ifEmpty { "Unexpected error" }}"))
+                    }
+                }
+
+                collected.addAll(parseModelsJson(body))
+                pages++
+                pageToken = try {
+                    JSONObject(body).optString("nextPageToken", "")
+                } catch (_: Exception) {
+                    ""
+                }
+                if (pageToken.isNullOrEmpty() || pages >= MAX_LIST_PAGES) break
+            }
+            Result.success(collected.toList())
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 

@@ -15,11 +15,19 @@ class CatalogTest {
     }
 
     @Test
-    fun groq_sanitize_coerces_unknown_and_null_to_default() {
+    fun groq_sanitize_blank_and_retired_to_default_unknown_passes_through() {
         assertEquals(GroqModels.DEFAULT, GroqModels.sanitize(null))
         assertEquals(GroqModels.DEFAULT, GroqModels.sanitize(""))
-        assertEquals(GroqModels.DEFAULT, GroqModels.sanitize("llama-3.3-70b-versatile")) // retired
-        assertEquals(GroqModels.DEFAULT, GroqModels.sanitize("meta-llama/llama-4-scout-17b-16e-instruct")) // removed
+        assertEquals(GroqModels.DEFAULT, GroqModels.sanitize("   "))
+        // Decommissioned by Groq: requests always fail, so migrate.
+        assertEquals(GroqModels.DEFAULT, GroqModels.sanitize("llama-3.3-70b-versatile"))
+        assertEquals(
+            GroqModels.DEFAULT,
+            GroqModels.sanitize(" meta-llama/llama-4-scout-17b-16e-instruct ")
+        )
+        // Dynamic selection (issue #148): off-catalog but live ids pass through trimmed.
+        assertEquals("llama-3.1-8b-instant", GroqModels.sanitize("llama-3.1-8b-instant"))
+        assertEquals("custom/new-model", GroqModels.sanitize(" custom/new-model "))
     }
 
     @Test
@@ -41,15 +49,22 @@ class CatalogTest {
     }
 
     @Test
-    fun groq_labels_present_and_fallback() {
-        for (id in GroqModels.ALL) assertTrue(GroqModels.label(id).isNotBlank())
-        assertEquals("unknown-model", GroqModels.label("unknown-model"))
+    fun groq_isChatCandidate_excludes_non_chat_entries() {
+        assertTrue(GroqModels.isChatCandidate("llama-3.1-8b-instant"))
+        assertTrue(GroqModels.isChatCandidate("openai/gpt-oss-120b"))
+        assertTrue(GroqModels.isChatCandidate("qwen/qwen3.6-27b"))
+        assertFalse(GroqModels.isChatCandidate("whisper-large-v3"))
+        assertFalse(GroqModels.isChatCandidate("distil-whisper-en"))
+        assertFalse(GroqModels.isChatCandidate("playai-tts"))
+        assertFalse(GroqModels.isChatCandidate("groq/playai-tts-qwen"))
+        assertFalse(GroqModels.isChatCandidate("llama-guard-3-8b-8192"))
+        assertFalse(GroqModels.isChatCandidate("meta-llama/llama-guard-4-12b"))
     }
 
     @Test
-    fun groq_options_match_all_ids_in_order() {
-        assertEquals(GroqModels.ALL, GroqModels.OPTIONS.map { it.first })
-        assertTrue(GroqModels.OPTIONS.all { it.second.isNotBlank() })
+    fun groq_labels_present_and_fallback() {
+        for (id in GroqModels.ALL) assertTrue(GroqModels.label(id).isNotBlank())
+        assertEquals("unknown-model", GroqModels.label("unknown-model"))
     }
 
     // ---------- GeminiModels ----------
@@ -61,10 +76,12 @@ class CatalogTest {
     }
 
     @Test
-    fun gemini_sanitize_coerces_unknown_to_default() {
+    fun gemini_sanitize_blank_and_retired_to_default_unknown_passes_through() {
         assertEquals(GeminiModels.DEFAULT, GeminiModels.sanitize(null))
+        assertEquals(GeminiModels.DEFAULT, GeminiModels.sanitize("  "))
         assertEquals(GeminiModels.DEFAULT, GeminiModels.sanitize("gemini-2.5-flash-lite")) // retired (issue #113)
-        for (id in GeminiModels.ALL) assertEquals(id, GeminiModels.sanitize(id))
+        // Dynamic selection (issue #148): unknown-but-live ids pass through trimmed.
+        assertEquals("gemini-3.7-pro-preview", GeminiModels.sanitize(" gemini-3.7-pro-preview "))
     }
 
     @Test
@@ -73,11 +90,5 @@ class CatalogTest {
         assertEquals("low", GeminiModels.thinkingLevel("gemini-3.5-flash-lite"))
         assertEquals("minimal", GeminiModels.thinkingLevel("gemini-3.6-flash"))
         assertNull(GeminiModels.thinkingLevel("gemini-9-ultra"))
-    }
-
-    @Test
-    fun gemini_options_match_all_ids() {
-        assertEquals(GeminiModels.ALL, GeminiModels.OPTIONS.map { it.first })
-        assertTrue(GeminiModels.OPTIONS.all { it.second.isNotBlank() })
     }
 }

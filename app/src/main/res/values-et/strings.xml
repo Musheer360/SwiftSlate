@@ -142,6 +142,10 @@
     <string name="settings_fetch_models_success">Laaditud: %1$d mudelit</string>
     <string name="settings_fetch_models_empty">Mudeleid ei leitud. Mudeli saad sisestada ka käsitsi.</string>
     <string name="settings_fetch_models_failed">Mudelite laadimine ebaõnnestus. Kontrolli aadressi ja API-võtit.</string>
+    <string name="settings_models_refresh">Värskenda</string>
+    <string name="settings_models_need_key">Mudelite loendi laadimiseks lisage ülalpool API-võti.</string>
+    <string name="settings_models_load_failed">Mudeleid ei õnnestunud laadida. Kontrollige ühendust ja API-võtit.</string>
+    <string name="settings_models_empty_provider">Selle API-võtme jaoks pole ühtegi mudelit saadaval.</string>
     <string name="dashboard_service_killed_title">SwiftSlate katkes</string>
     <string name="dashboard_service_killed_message">Taustateenus peatus ootamatult. Lülita see juurdepääsetavuse seadetes uuesti sisse, et käske edasi kasutada.</string>
     <string name="dashboard_service_killed_dismiss">Loobu</string>

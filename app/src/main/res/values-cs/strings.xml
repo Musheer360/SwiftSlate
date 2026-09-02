@@ -144,6 +144,10 @@
     <string name="settings_fetch_models_success">Načteno modelů: %1$d</string>
     <string name="settings_fetch_models_empty">Nebyly nalezeny žádné modely. Model můžete zadat ručně.</string>
     <string name="settings_fetch_models_failed">Modely nelze načíst. Zkontrolujte adresu a klíč API.</string>
+    <string name="settings_models_refresh">Obnovit</string>
+    <string name="settings_models_need_key">Pro načtení seznamu modelů přidejte výše klíč API.</string>
+    <string name="settings_models_load_failed">Modely se nepodařilo načíst. Zkontrolujte připojení a klíč API.</string>
+    <string name="settings_models_empty_provider">Pro tento klíč API nejsou dostupné žádné modely.</string>
     <string name="dashboard_service_killed_title">Aplikace SwiftSlate byla přerušena</string>
     <string name="dashboard_service_killed_message">Služba na pozadí se neočekávaně zastavila. Znovu ji povolte v nastavení usnadnění, abyste mohli dál používat příkazy.</string>
     <string name="dashboard_service_killed_dismiss">Zavřít</string>

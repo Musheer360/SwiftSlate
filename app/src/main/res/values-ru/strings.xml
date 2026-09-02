@@ -142,6 +142,10 @@
     <string name="settings_fetch_models_success">Загружено моделей: %1$d</string>
     <string name="settings_fetch_models_empty">Модели не найдены. Вы всё равно можете ввести модель вручную.</string>
     <string name="settings_fetch_models_failed">Не удалось загрузить модели. Проверьте адрес и ключ API.</string>
+    <string name="settings_models_refresh">Обновить</string>
+    <string name="settings_models_need_key">Добавьте выше API-ключ, чтобы загрузить список моделей.</string>
+    <string name="settings_models_load_failed">Не удалось загрузить модели. Проверьте соединение и API-ключ.</string>
+    <string name="settings_models_empty_provider">Для этого API-ключа нет доступных моделей.</string>
     <string name="dashboard_service_killed_title">SwiftSlate был прерван</string>
     <string name="dashboard_service_killed_message">Фоновая служба неожиданно остановилась. Снова включите её в настройках специальных возможностей, чтобы продолжить использовать команды.</string>
     <string name="dashboard_service_killed_dismiss">Скрыть</string>
