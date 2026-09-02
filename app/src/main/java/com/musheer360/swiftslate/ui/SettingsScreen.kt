@@ -251,7 +251,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
         ScreenTitle(stringResource(R.string.settings_title))
 
         // Card 1: Provider + Model
-        SlateCard(contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)) {
+        SlateCard {
             Text(
                 text = stringResource(R.string.settings_provider_title),
                 fontSize = 13.sp,
@@ -564,13 +564,12 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     inactiveTrackColor = MaterialTheme.colorScheme.outline
                 )
             )
-            Spacer(modifier = Modifier.height(4.dp))
         }
 
         Spacer(modifier = Modifier.height(6.dp))
 
         // Card 2: Trigger Prefix
-        SlateCard(contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)) {
+        SlateCard {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -615,7 +614,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
         Spacer(modifier = Modifier.height(6.dp))
 
         // Card 3: Backup
-        SlateCard(contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)) {
+        SlateCard {
             Text(
                 text = stringResource(R.string.backup_desc),
                 fontSize = 13.sp,
@@ -662,18 +661,14 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
         Spacer(modifier = Modifier.height(6.dp))
 
         // Card 4: About
-        SlateCard(
-            modifier = Modifier.weight(1f),
-            fillHeight = true,
-            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)
-        ) {
+        SlateCard(modifier = Modifier.weight(1f), fillHeight = true) {
             Text(
                 text = stringResource(R.string.app_name) + " v" + BuildConfig.VERSION_NAME,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = stringResource(R.string.settings_check_updates),
                 fontSize = 13.sp,
@@ -682,17 +677,15 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     uriHandler.openUri("https://github.com/Musheer360/SwiftSlate/releases/latest")
                 }
             )
-            Spacer(modifier = Modifier.weight(1f, fill = false))
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.weight(1f))
             SlateDivider()
-            Spacer(modifier = Modifier.height(4.dp))
-            Spacer(modifier = Modifier.weight(1f, fill = false))
+            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = stringResource(R.string.settings_made_by),
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = stringResource(R.string.settings_sponsor),
                 fontSize = 13.sp,

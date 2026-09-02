@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.sp
 fun SlateCard(
     modifier: Modifier = Modifier,
     fillHeight: Boolean = false,
-    contentPadding: PaddingValues = PaddingValues(13.dp),
+    contentPadding: PaddingValues = PaddingValues(12.dp),
     content: @Composable ColumnScope.() -> Unit
 ) {
     Surface(
