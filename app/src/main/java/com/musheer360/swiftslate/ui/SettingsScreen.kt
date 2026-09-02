@@ -146,9 +146,9 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 result.isSuccess -> String.format(modelsLoadedMsg, models.size)
                 else -> modelsLoadFailedMsg
             }
-            if (success) {
-                ProviderModelsCache.put(type, ProviderModelsCache.Entry(models, attempted = true))
-            }
+            val currentModels = if (isGemini) geminiModelList else groqModelList
+            val toCache = if (success) models else (ProviderModelsCache.get(type)?.models ?: currentModels)
+            ProviderModelsCache.put(type, ProviderModelsCache.Entry(toCache, attempted = true))
             if (isGemini) {
                 isFetchingGeminiModels = false
                 if (success) geminiModelList = models
@@ -824,7 +824,7 @@ private fun DynamicModelDropdown(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = if (!enabled) needKeyText else stringResource(R.string.settings_fetch_models_empty),
+                            text = if (!enabled) needKeyText else stringResource(R.string.settings_models_empty_provider),
                             fontSize = 13.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
