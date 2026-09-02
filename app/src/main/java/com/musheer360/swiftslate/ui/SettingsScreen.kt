@@ -524,7 +524,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -542,7 +542,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Slider(
                 value = temperature,
                 onValueChange = {
@@ -557,13 +557,14 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 },
                 valueRange = 0f..2f,
                 steps = 19,
-                modifier = Modifier.fillMaxWidth().height(24.dp),
+                modifier = Modifier.fillMaxWidth().height(26.dp),
                 colors = SliderDefaults.colors(
                     thumbColor = MaterialTheme.colorScheme.primary,
                     activeTrackColor = MaterialTheme.colorScheme.primary,
                     inactiveTrackColor = MaterialTheme.colorScheme.outline
                 )
             )
+            Spacer(modifier = Modifier.height(6.dp))
         }
 
         Spacer(modifier = Modifier.height(6.dp))
