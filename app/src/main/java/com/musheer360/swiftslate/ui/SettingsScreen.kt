@@ -62,12 +62,12 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
     var selectedModel by remember { mutableStateOf(GeminiModels.sanitize(prefs.getString(PrefKeys.GEMINI_MODEL, GeminiModels.DEFAULT))) }
     var modelExpanded by remember { mutableStateOf(false) }
     // Dynamic model lists (issue #148): fetched from each provider's live /models
-    // endpoint, seeded from the process-lifetime cache so tab switches don't refetch.
-    var geminiModelList by remember { mutableStateOf(ProviderModelsCache.get(ProviderType.GEMINI)?.models ?: emptyList()) }
+    // endpoint, seeded from the process-lifetime cache or curated defaults as initial fallback.
+    var geminiModelList by remember { mutableStateOf(ProviderModelsCache.get(ProviderType.GEMINI)?.models ?: GeminiModels.ALL) }
 
     var groqModel by remember { mutableStateOf(GroqModels.sanitize(prefs.getString(PrefKeys.GROQ_MODEL, GroqModels.DEFAULT))) }
     var groqModelExpanded by remember { mutableStateOf(false) }
-    var groqModelList by remember { mutableStateOf(ProviderModelsCache.get(ProviderType.GROQ)?.models ?: emptyList()) }
+    var groqModelList by remember { mutableStateOf(ProviderModelsCache.get(ProviderType.GROQ)?.models ?: GroqModels.ALL) }
 
     var customEndpoint by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "") }
     var customModel by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_MODEL, "") ?: "") }
@@ -146,17 +146,17 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 result.isSuccess -> String.format(modelsLoadedMsg, models.size)
                 else -> modelsLoadFailedMsg
             }
-            // Attempted=true even on failure: the automatic fetch must not re-fire;
-            // only an explicit Refresh/Retry (or a fresh session) tries again.
-            ProviderModelsCache.put(type, ProviderModelsCache.Entry(models, attempted = true))
+            if (success) {
+                ProviderModelsCache.put(type, ProviderModelsCache.Entry(models, attempted = true))
+            }
             if (isGemini) {
                 isFetchingGeminiModels = false
-                geminiModelList = models
+                if (success) geminiModelList = models
                 geminiFetchSuccess = success
                 geminiFetchMessage = message
             } else {
                 isFetchingGroqModels = false
-                groqModelList = models
+                if (success) groqModelList = models
                 groqFetchSuccess = success
                 groqFetchMessage = message
             }
@@ -328,7 +328,12 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     selectedLabel = GeminiModels.label(selectedModel),
                     enabled = apiKeys.isNotEmpty(),
                     expanded = modelExpanded,
-                    onExpandedChange = { modelExpanded = it },
+                    onExpandedChange = { isOpening ->
+                        modelExpanded = isOpening
+                        if (isOpening && apiKeys.isNotEmpty() && !isFetchingGeminiModels) {
+                            startModelFetch(ProviderType.GEMINI)
+                        }
+                    },
                     models = geminiModelList,
                     labelFor = { GeminiModels.label(it) },
                     onSelect = { id ->
@@ -338,7 +343,9 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                         modelExpanded = false
                     },
                     onDismiss = { modelExpanded = false },
-                    isFetching = isFetchingGeminiModels
+                    isFetching = isFetchingGeminiModels,
+                    fetchingText = fetchingModelsMsg,
+                    needKeyText = modelsNeedKeyMsg
                 )
                 ModelFetchStatusRow(
                     enabled = apiKeys.isNotEmpty(),
@@ -364,7 +371,12 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     selectedLabel = GroqModels.label(groqModel),
                     enabled = apiKeys.isNotEmpty(),
                     expanded = groqModelExpanded,
-                    onExpandedChange = { groqModelExpanded = it },
+                    onExpandedChange = { isOpening ->
+                        groqModelExpanded = isOpening
+                        if (isOpening && apiKeys.isNotEmpty() && !isFetchingGroqModels) {
+                            startModelFetch(ProviderType.GROQ)
+                        }
+                    },
                     models = groqModelList,
                     labelFor = { GroqModels.label(it) },
                     onSelect = { id ->
@@ -374,7 +386,9 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                         groqModelExpanded = false
                     },
                     onDismiss = { groqModelExpanded = false },
-                    isFetching = isFetchingGroqModels
+                    isFetching = isFetchingGroqModels,
+                    fetchingText = fetchingModelsMsg,
+                    needKeyText = modelsNeedKeyMsg
                 )
                 ModelFetchStatusRow(
                     enabled = apiKeys.isNotEmpty(),
@@ -744,9 +758,9 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
 
 /**
  * Read-only dropdown listing one provider's dynamically fetched model ids
- * (issue #148). Opens only when a key exists, no fetch is in flight, and at
- * least one model was fetched; the menu caps its height and scrolls so long
- * provider catalogs stay usable.
+ * (issue #148). Opens immediately showing cached or fallback models,
+ * triggers a real-time fetch when opened, and caps its height with vertical
+ * scroll so long provider catalogs stay usable.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -759,12 +773,13 @@ private fun DynamicModelDropdown(
     labelFor: (String) -> String,
     onSelect: (String) -> Unit,
     onDismiss: () -> Unit,
-    isFetching: Boolean
+    isFetching: Boolean,
+    fetchingText: String,
+    needKeyText: String
 ) {
-    val openable = enabled && !isFetching && models.isNotEmpty()
     ExposedDropdownMenuBox(
-        expanded = expanded && openable,
-        onExpandedChange = { if (openable) onExpandedChange(it) }
+        expanded = expanded,
+        onExpandedChange = onExpandedChange
     ) {
         SlateTextField(
             value = selectedLabel,
@@ -775,16 +790,65 @@ private fun DynamicModelDropdown(
         ExposedDropdownMenu(
             containerColor = MaterialTheme.colorScheme.surface,
             shape = RoundedCornerShape(10.dp),
-            expanded = expanded && openable,
+            expanded = expanded,
             onDismissRequest = onDismiss,
             // Provider catalogs can exceed a hundred entries — cap and scroll.
-            modifier = Modifier.heightIn(max = 320.dp)
+            modifier = Modifier.heightIn(max = 300.dp)
         ) {
-            models.forEach { id ->
+            if (isFetching) {
                 DropdownMenuItem(
-                    text = { Text(labelFor(id)) },
-                    onClick = { onSelect(id) }
+                    text = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(16.dp),
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = fetchingText,
+                                fontSize = 13.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    },
+                    onClick = {},
+                    enabled = false
                 )
+                SlateDivider()
+            }
+            if (models.isEmpty() && !isFetching) {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = if (!enabled) needKeyText else stringResource(R.string.settings_fetch_models_empty),
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    },
+                    onClick = {},
+                    enabled = false
+                )
+            } else {
+                models.forEach { id ->
+                    val displayLabel = labelFor(id)
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = displayLabel,
+                                color = if (displayLabel == selectedLabel || id == selectedLabel) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurface
+                                }
+                            )
+                        },
+                        onClick = { onSelect(id) }
+                    )
+                }
             }
         }
     }
