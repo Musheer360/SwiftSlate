@@ -98,7 +98,7 @@ class CommandManagerTest {
     @Test
     fun getCommands_systemCommandsHaveIsBuiltInTrue() {
         val commands = commandManager.getCommands()
-        val systemTriggers = listOf("?undo", "?copy", "?cut", "?paste", "?replace", "?translate:XX")
+        val systemTriggers = listOf("?undo", "?copy", "?cut", "?paste", "?replace", "?translate:xx")
         val systemCommands = commands.filter { it.trigger in systemTriggers }
         assertEquals(6, systemCommands.size)
         assertTrue(systemCommands.all { it.isBuiltIn })

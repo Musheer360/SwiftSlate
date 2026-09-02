@@ -65,7 +65,7 @@ class CommandManager(context: Context) {
         "cut" to "Cut the text to clipboard.",
         "paste" to "Paste from clipboard.",
         "replace" to "Replace text with clipboard content.",
-        "translate:XX" to "Translate text to any language code (e.g. ?translate:es, ?translate:fr)."
+        "translate:xx" to "Translate text to any language code (e.g. ?translate:es, ?translate:fr)."
     )
 
     // Default AI commands — seeded into custom commands on first run so users can edit/delete them
@@ -312,7 +312,7 @@ class CommandManager(context: Context) {
     fun findCommand(text: String): Command? {
         val commands = getCommands()
         for (cmd in commands) {  // Already sorted by trigger length in getCommands()
-            if (cmd.trigger.endsWith("translate:XX")) continue
+            if (cmd.trigger.endsWith("translate:xx")) continue
             if (text.endsWith(cmd.trigger)) {
                 return cmd
             }
