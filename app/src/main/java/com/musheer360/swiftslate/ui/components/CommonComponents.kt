@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -33,13 +34,13 @@ fun SlateCard(
 }
 
 @Composable
-fun ScreenTitle(title: String) {
+fun ScreenTitle(title: String, bottomPadding: Dp = 12.dp) {
     Text(
         text = title,
         fontSize = 32.sp,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier.padding(bottom = 12.dp)
+        modifier = Modifier.padding(bottom = bottomPadding)
     )
 }
 

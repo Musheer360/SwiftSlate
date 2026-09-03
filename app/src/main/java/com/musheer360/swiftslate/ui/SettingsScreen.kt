@@ -242,22 +242,30 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
         }
     }
 
-    Column(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .graphicsLayer { }
-            .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
-        ScreenTitle(stringResource(R.string.settings_title))
+        val isCompact = maxHeight < 760.dp
+        val cardSpacing = if (isCompact) 6.dp else 16.dp
+        val cardPadding = if (isCompact) PaddingValues(12.dp) else PaddingValues(16.dp)
 
-        // Card 1: Provider + Model
-        SlateCard {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+        ) {
+            ScreenTitle(stringResource(R.string.settings_title), bottomPadding = if (isCompact) 8.dp else 16.dp)
+
+            // Card 1: Provider + Model
+            SlateCard(contentPadding = cardPadding) {
             Text(
                 text = stringResource(R.string.settings_provider_title),
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(if (isCompact) 4.dp else 8.dp))
             ExposedDropdownMenuBox(
                 expanded = providerExpanded,
                 onExpandedChange = { providerExpanded = !providerExpanded }
@@ -308,14 +316,14 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(if (isCompact) 6.dp else 8.dp))
             if (providerType == ProviderType.GEMINI) {
                 Text(
                     text = stringResource(R.string.settings_model_title),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(if (isCompact) 4.dp else 8.dp))
                 DynamicModelDropdown(
                     selectedLabel = if (apiKeys.isEmpty() || selectedModel.isBlank()) "" else GeminiModels.label(selectedModel),
                     enabled = apiKeys.isNotEmpty(),
@@ -524,7 +532,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(if (isCompact) 6.dp else 10.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -542,7 +550,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(if (isCompact) 6.dp else 12.dp))
             Slider(
                 value = temperature,
                 onValueChange = {
@@ -557,20 +565,20 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 },
                 valueRange = 0f..2f,
                 steps = 19,
-                modifier = Modifier.fillMaxWidth().height(26.dp),
+                modifier = Modifier.fillMaxWidth().height(if (isCompact) 24.dp else 26.dp),
                 colors = SliderDefaults.colors(
                     thumbColor = MaterialTheme.colorScheme.primary,
                     activeTrackColor = MaterialTheme.colorScheme.primary,
                     inactiveTrackColor = MaterialTheme.colorScheme.outline
                 )
             )
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(if (isCompact) 4.dp else 8.dp))
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(cardSpacing))
 
         // Card 2: Trigger Prefix
-        SlateCard {
+        SlateCard(contentPadding = cardPadding) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -612,16 +620,16 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
             }
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(cardSpacing))
 
         // Card 3: Backup
-        SlateCard {
+        SlateCard(contentPadding = cardPadding) {
             Text(
                 text = stringResource(R.string.backup_desc),
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(if (isCompact) 8.dp else 16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -633,7 +641,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                         exportLauncher.launch("swiftslate-commands.json")
                     },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.weight(1f).heightIn(min = 40.dp)
+                    modifier = Modifier.weight(1f).heightIn(min = if (isCompact) 42.dp else 48.dp)
                 ) {
                     Text(stringResource(R.string.backup_export))
                 }
@@ -644,7 +652,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                         showImportConfirm = true
                     },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.weight(1f).heightIn(min = 40.dp)
+                    modifier = Modifier.weight(1f).heightIn(min = if (isCompact) 42.dp else 48.dp)
                 ) {
                     Text(stringResource(R.string.backup_import))
                 }
@@ -659,17 +667,17 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
             }
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(cardSpacing))
 
         // Card 4: About
-        SlateCard(modifier = Modifier.weight(1f), fillHeight = true) {
+        SlateCard(modifier = Modifier.weight(1f), fillHeight = true, contentPadding = cardPadding) {
             Text(
                 text = stringResource(R.string.app_name) + " v" + BuildConfig.VERSION_NAME,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(if (isCompact) 2.dp else 4.dp))
             Text(
                 text = stringResource(R.string.settings_check_updates),
                 fontSize = 13.sp,
@@ -686,7 +694,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(if (isCompact) 2.dp else 4.dp))
             Text(
                 text = stringResource(R.string.settings_sponsor),
                 fontSize = 13.sp,
@@ -697,6 +705,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
             )
         }
     }
+}
 
     if (showImportConfirm) {
         AlertDialog(
