@@ -257,7 +257,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             ExposedDropdownMenuBox(
                 expanded = providerExpanded,
                 onExpandedChange = { providerExpanded = !providerExpanded }
@@ -308,14 +308,14 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             if (providerType == ProviderType.GEMINI) {
                 Text(
                     text = stringResource(R.string.settings_model_title),
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 DynamicModelDropdown(
                     selectedLabel = if (apiKeys.isEmpty() || selectedModel.isBlank()) "" else GeminiModels.label(selectedModel),
                     enabled = apiKeys.isNotEmpty(),
@@ -344,7 +344,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 DynamicModelDropdown(
                     selectedLabel = if (apiKeys.isEmpty() || groqModel.isBlank()) "" else GroqModels.label(groqModel),
                     enabled = apiKeys.isNotEmpty(),
@@ -542,7 +542,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Slider(
                 value = temperature,
                 onValueChange = {
@@ -564,10 +564,10 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     inactiveTrackColor = MaterialTheme.colorScheme.outline
                 )
             )
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(4.dp))
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         // Card 2: Trigger Prefix
         SlateCard {
@@ -612,7 +612,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
             }
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         // Card 3: Backup
         SlateCard {
@@ -621,7 +621,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -633,7 +633,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                         exportLauncher.launch("swiftslate-commands.json")
                     },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.weight(1f).heightIn(min = 40.dp)
+                    modifier = Modifier.weight(1f).heightIn(min = 48.dp)
                 ) {
                     Text(stringResource(R.string.backup_export))
                 }
@@ -644,7 +644,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                         showImportConfirm = true
                     },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.weight(1f).heightIn(min = 40.dp)
+                    modifier = Modifier.weight(1f).heightIn(min = 48.dp)
                 ) {
                     Text(stringResource(R.string.backup_import))
                 }
@@ -659,7 +659,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
             }
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         // Card 4: About
         SlateCard(modifier = Modifier.weight(1f), fillHeight = true) {
@@ -669,7 +669,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.settings_check_updates),
                 fontSize = 13.sp,
@@ -686,7 +686,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.settings_sponsor),
                 fontSize = 13.sp,

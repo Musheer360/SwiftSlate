@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.sp
 fun SlateCard(
     modifier: Modifier = Modifier,
     fillHeight: Boolean = false,
-    contentPadding: PaddingValues = PaddingValues(12.dp),
     content: @Composable ColumnScope.() -> Unit
 ) {
     Surface(
@@ -25,7 +24,7 @@ fun SlateCard(
     ) {
         Column(
             modifier = Modifier
-                .padding(contentPadding)
+                .padding(14.dp)
                 .then(if (fillHeight) Modifier.fillMaxHeight() else Modifier),
             content = content
         )
@@ -39,7 +38,7 @@ fun ScreenTitle(title: String) {
         fontSize = 32.sp,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier.padding(bottom = 12.dp)
+        modifier = Modifier.padding(bottom = 20.dp)
     )
 }
 
