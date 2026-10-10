@@ -8,6 +8,8 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.musheer360.swiftslate.bridge.ModuleBridge
+import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.worker.UpdateCheckWorker
 import java.util.concurrent.TimeUnit
@@ -41,6 +43,10 @@ class SwiftSlateApp : Application() {
 
         installCrashMarker()
         scheduleUpdateCheck()
+
+        // LSPosed integration: publish triggers to the keyboard hook whenever they change.
+        CommandManager.onChanged = { ModuleBridge.publishSnapshot() }
+        ModuleBridge.init(this)
     }
 
     /**
