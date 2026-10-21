@@ -11,7 +11,8 @@ android {
 
     defaultConfig {
         applicationId = "com.musheer360.swiftslate"
-        minSdk = 23
+        // 26: the libxposed service library and LSPosed itself both require it.
+        minSdk = 26
         targetSdk = 36
         versionCode = (project.findProperty("versionCode") as String?)?.toIntOrNull() ?: 1
         versionName = (project.findProperty("versionName") as String?) ?: "$baseVersion-dev"
@@ -68,7 +69,8 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.findByName("release")
+            // No keystore secrets? Fall back to the debug key so the APK is still installable.
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         // Installable side by side with a stable release: a different applicationId means
@@ -137,6 +139,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.work:work-runtime:2.11.2")
+
+    // LSPosed (libxposed modern API). The API is provided by the framework at runtime, so it is
+    // compile-only; the service library is how the app talks to LSPosed (scope, remote prefs).
+    compileOnly("io.github.libxposed:api:102.0.0")
+    implementation("io.github.libxposed:service:101.0.0")
+    testImplementation("io.github.libxposed:api:102.0.0")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.16.1")

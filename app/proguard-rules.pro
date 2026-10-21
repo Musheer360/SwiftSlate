@@ -1,7 +1,13 @@
 # SwiftSlate ProGuard Rules
 
-# Keep the accessibility service (instantiated by Android framework via reflection)
--keep class com.musheer360.swiftslate.service.AssistantService { <init>(); }
+# LSPosed entry point: loaded by name from META-INF/xposed/java_init.list
+-keep class com.musheer360.swiftslate.xposed.MainHook { public <init>(); }
+-adaptresourcefilecontents META-INF/xposed/java_init.list
+-dontwarn io.github.libxposed.api.**
+-dontwarn io.github.libxposed.annotation.**
+
+# Bound by the keyboard through an explicit intent
+-keep class com.musheer360.swiftslate.service.HookBridgeService { <init>(); }
 
 # Keep enum values used in JSON serialization via CommandType.valueOf()
 -keepclassmembers enum com.musheer360.swiftslate.model.CommandType {
