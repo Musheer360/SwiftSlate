@@ -1,6 +1,16 @@
 package com.musheer360.swiftslate.service
 
 import android.accessibilityservice.AccessibilityService
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import com.musheer360.swiftslate.MainActivity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -114,6 +124,10 @@ class AssistantService : AccessibilityService() {
         const val PROCESSING_WATCHDOG_MS = 120_000L
         const val FOCUS_FALLBACK_MIN_INTERVAL_MS = 300L
         val SPINNER_FRAMES = arrayOf("◐", "◓", "◑", "◒")
+        const val CHANNEL_ID_SERVICE_STATUS = "service_status_channel"
+        const val NOTIFICATION_ID_SERVICE_STATUS = 9002
+        const val NOTIFICATION_AUTO_DISMISS_MS = 3500L
+        val REJECT_DOUBLE_BUZZ_TIMINGS = longArrayOf(0L, 50L, 70L, 50L)
     }
 
     override fun onServiceConnected() {
@@ -123,6 +137,7 @@ class AssistantService : AccessibilityService() {
             commandManager = CommandManager(applicationContext)
             statsManager = StatsManager(applicationContext)
             updateTriggers()
+            showServiceStatusNotification(enabled = true)
         } catch (e: Exception) {
             // This callback runs on the binder thread with no framework guard: an exception
             // here propagates to AccessibilityManagerService, which drops the service into the
@@ -1007,34 +1022,136 @@ class AssistantService : AccessibilityService() {
     }
 
     @Suppress("DEPRECATION")
-    private fun performHapticFeedback(feedbackType: Int) {
-        handler.post {
+    private fun showServiceStatusNotification(enabled: Boolean) {
+        val appContext = applicationContext
+        val contentText = appContext.getString(
+            if (enabled) R.string.service_status_notification_enabled
+            else R.string.service_status_notification_disabled
+        )
+
+        val feedbackType = if (enabled) HapticFeedbackConstants.CONFIRM else HapticFeedbackConstants.REJECT
+        performHapticFeedback(feedbackType)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(appContext, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-                    val vibrator = vibratorManager.defaultVibrator
-                    when (feedbackType) {
-                        HapticFeedbackConstants.CONFIRM ->
-                            vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
-                        HapticFeedbackConstants.REJECT ->
-                            vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_DOUBLE_CLICK))
+                Toast.makeText(appContext, contentText, Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Log.w(TAG, "failed to show fallback toast", e)
+            }
+            return
+        }
+
+        try {
+            val notificationManager =
+                appContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager ?: return
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    CHANNEL_ID_SERVICE_STATUS,
+                    appContext.getString(R.string.service_status_channel_name),
+                    NotificationManager.IMPORTANCE_HIGH
+                ).apply {
+                    description = appContext.getString(R.string.service_status_channel_desc)
+                    setSound(null, null)
+                    enableVibration(false)
+                }
+                notificationManager.createNotificationChannel(channel)
+            }
+
+            val intent = Intent(appContext, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+            val pendingIntent = PendingIntent.getActivity(
+                appContext,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val builder = NotificationCompat.Builder(appContext, CHANNEL_ID_SERVICE_STATUS)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(appContext.getString(R.string.app_name))
+                .setContentText(contentText)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setSilent(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setTimeoutAfter(NOTIFICATION_AUTO_DISMISS_MS)
+
+            notificationManager.notify(NOTIFICATION_ID_SERVICE_STATUS, builder.build())
+        } catch (e: Exception) {
+            Log.w(TAG, "failed to show service status notification", e)
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun performHapticFeedback(feedbackType: Int) {
+        val appContext = applicationContext
+        val action = Runnable {
+            try {
+                val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val vm = appContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
+                    vm?.defaultVibrator
+                } else {
+                    appContext.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+                } ?: return@Runnable
+
+                if (!vibrator.hasVibrator()) return@Runnable
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val effect = if (feedbackType == HapticFeedbackConstants.CONFIRM) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                            (Build.VERSION.SDK_INT < Build.VERSION_CODES.R ||
+                             vibrator.areAllEffectsSupported(VibrationEffect.EFFECT_TICK) == Vibrator.VIBRATION_EFFECT_SUPPORT_YES)
+                        ) {
+                            VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+                        } else {
+                            VibrationEffect.createOneShot(35L, VibrationEffect.DEFAULT_AMPLITUDE)
+                        }
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                            vibrator.areAllEffectsSupported(VibrationEffect.EFFECT_DOUBLE_CLICK) == Vibrator.VIBRATION_EFFECT_SUPPORT_YES
+                        ) {
+                            VibrationEffect.createPredefined(VibrationEffect.EFFECT_DOUBLE_CLICK)
+                        } else {
+                            VibrationEffect.createWaveform(REJECT_DOUBLE_BUZZ_TIMINGS, -1)
+                        }
                     }
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    @Suppress("DEPRECATION")
-                    val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                    when (feedbackType) {
-                        HapticFeedbackConstants.CONFIRM ->
-                            vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
-                        HapticFeedbackConstants.REJECT ->
-                            vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_DOUBLE_CLICK))
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val attrs = android.os.VibrationAttributes.Builder()
+                            .setUsage(android.os.VibrationAttributes.USAGE_HARDWARE_FEEDBACK)
+                            .build()
+                        vibrator.vibrate(effect, attrs)
+                    } else {
+                        vibrator.vibrate(effect)
                     }
                 } else {
-                    @Suppress("DEPRECATION")
-                    val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                    vibrator.vibrate(50)
+                    if (feedbackType == HapticFeedbackConstants.CONFIRM) {
+                        vibrator.vibrate(35L)
+                    } else {
+                        vibrator.vibrate(REJECT_DOUBLE_BUZZ_TIMINGS, -1)
+                    }
                 }
             } catch (_: Exception) {}
         }
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            action.run()
+        } else {
+            handler.post(action)
+        }
+    }
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        try {
+            showServiceStatusNotification(enabled = false)
+        } catch (e: Exception) {
+            Log.w(TAG, "failed to show service status notification during unbind", e)
+        }
+        return super.onUnbind(intent)
     }
 
     override fun onInterrupt() {

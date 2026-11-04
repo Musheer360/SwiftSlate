@@ -149,4 +149,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate is onderbroken</string>
     <string name="dashboard_service_killed_message">De achtergrondservice is onverwacht gestopt. Schakel deze opnieuw in bij de toegankelijkheidsinstellingen om opdrachten te blijven gebruiken.</string>
     <string name="dashboard_service_killed_dismiss">Sluiten</string>
+    <string name="service_status_channel_name">Servicestatus</string>
+    <string name="service_status_channel_desc">Meldt wanneer SwiftSlate wordt in- of uitgeschakeld</string>
+    <string name="service_status_notification_enabled">SwiftSlate ingeschakeld</string>
+    <string name="service_status_notification_disabled">SwiftSlate uitgeschakeld</string>
 </resources>

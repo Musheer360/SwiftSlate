@@ -148,4 +148,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate 已中断</string>
     <string name="dashboard_service_killed_message">后台服务意外停止。请在无障碍设置中重新启用它，以继续使用命令。</string>
     <string name="dashboard_service_killed_dismiss">忽略</string>
+    <string name="service_status_channel_name">服务状态</string>
+    <string name="service_status_channel_desc">在 SwiftSlate 启用或停用时发出通知</string>
+    <string name="service_status_notification_enabled">已启用 SwiftSlate</string>
+    <string name="service_status_notification_disabled">已停用 SwiftSlate</string>
 </resources>

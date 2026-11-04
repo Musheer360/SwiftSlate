@@ -149,4 +149,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate ถูกขัดจังหวะ</string>
     <string name="dashboard_service_killed_message">บริการพื้นหลังหยุดทำงานโดยไม่คาดคิด เปิดใช้งานอีกครั้งในการตั้งค่าการเข้าถึงเพื่อใช้คำสั่งต่อไป</string>
     <string name="dashboard_service_killed_dismiss">ปิด</string>
+    <string name="service_status_channel_name">สถานะบริการ</string>
+    <string name="service_status_channel_desc">แจ้งเตือนเมื่อเปิดหรือปิดใช้งาน SwiftSlate</string>
+    <string name="service_status_notification_enabled">เปิดใช้งาน SwiftSlate แล้ว</string>
+    <string name="service_status_notification_disabled">ปิดใช้งาน SwiftSlate แล้ว</string>
 </resources>

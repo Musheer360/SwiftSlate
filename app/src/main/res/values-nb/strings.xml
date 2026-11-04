@@ -149,4 +149,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate ble avbrutt</string>
     <string name="dashboard_service_killed_message">Bakgrunnstjenesten stoppet uventet. Slå den på igjen i tilgjengelighetsinnstillingene for å fortsette å bruke kommandoer.</string>
     <string name="dashboard_service_killed_dismiss">Lukk</string>
+    <string name="service_status_channel_name">Tjenestestatus</string>
+    <string name="service_status_channel_desc">Varsler når SwiftSlate aktiveres eller deaktiveres</string>
+    <string name="service_status_notification_enabled">SwiftSlate aktivert</string>
+    <string name="service_status_notification_disabled">SwiftSlate deaktivert</string>
 </resources>

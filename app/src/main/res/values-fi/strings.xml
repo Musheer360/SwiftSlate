@@ -149,4 +149,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate keskeytyi</string>
     <string name="dashboard_service_killed_message">Taustapalvelu pysähtyi odottamatta. Ota se uudelleen käyttöön esteettömyysasetuksista, jotta voit jatkaa komentojen käyttöä.</string>
     <string name="dashboard_service_killed_dismiss">Sulje</string>
+    <string name="service_status_channel_name">Palvelun tila</string>
+    <string name="service_status_channel_desc">Ilmoittaa, kun SwiftSlate otetaan käyttöön tai poistetaan käytöstä</string>
+    <string name="service_status_notification_enabled">SwiftSlate otettu käyttöön</string>
+    <string name="service_status_notification_disabled">SwiftSlate poistettu käytöstä</string>
 </resources>
