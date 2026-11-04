@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -124,9 +125,11 @@ class AssistantService : AccessibilityService() {
         const val PROCESSING_WATCHDOG_MS = 120_000L
         const val FOCUS_FALLBACK_MIN_INTERVAL_MS = 300L
         val SPINNER_FRAMES = arrayOf("◐", "◓", "◑", "◒")
-        const val CHANNEL_ID_SERVICE_STATUS = "service_status_channel"
+        const val CHANNEL_ID_SERVICE_STATUS_ENABLED = "service_status_enabled_v2"
+        const val CHANNEL_ID_SERVICE_STATUS_DISABLED = "service_status_disabled_v2"
         const val NOTIFICATION_ID_SERVICE_STATUS = 9002
         const val NOTIFICATION_AUTO_DISMISS_MS = 3500L
+        val ENABLE_TICK_TIMINGS = longArrayOf(0L, 40L)
         val REJECT_DOUBLE_BUZZ_TIMINGS = longArrayOf(0L, 50L, 70L, 50L)
     }
 
@@ -1032,6 +1035,9 @@ class AssistantService : AccessibilityService() {
         val feedbackType = if (enabled) HapticFeedbackConstants.CONFIRM else HapticFeedbackConstants.REJECT
         performHapticFeedback(feedbackType)
 
+        val channelId = if (enabled) CHANNEL_ID_SERVICE_STATUS_ENABLED else CHANNEL_ID_SERVICE_STATUS_DISABLED
+        val vibrationTimings = if (enabled) ENABLE_TICK_TIMINGS else REJECT_DOUBLE_BUZZ_TIMINGS
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(appContext, Manifest.permission.POST_NOTIFICATIONS)
             != PackageManager.PERMISSION_GRANTED
@@ -1049,14 +1055,20 @@ class AssistantService : AccessibilityService() {
                 appContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager ?: return
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val audioAttributes = AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build()
+
                 val channel = NotificationChannel(
-                    CHANNEL_ID_SERVICE_STATUS,
+                    channelId,
                     appContext.getString(R.string.service_status_channel_name),
                     NotificationManager.IMPORTANCE_HIGH
                 ).apply {
                     description = appContext.getString(R.string.service_status_channel_desc)
-                    setSound(null, null)
-                    enableVibration(false)
+                    setSound(null, audioAttributes)
+                    enableVibration(true)
+                    vibrationPattern = vibrationTimings
                 }
                 notificationManager.createNotificationChannel(channel)
             }
@@ -1071,13 +1083,13 @@ class AssistantService : AccessibilityService() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            val builder = NotificationCompat.Builder(appContext, CHANNEL_ID_SERVICE_STATUS)
+            val builder = NotificationCompat.Builder(appContext, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(appContext.getString(R.string.app_name))
                 .setContentText(contentText)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .setSilent(true)
+                .setVibrate(vibrationTimings)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setTimeoutAfter(NOTIFICATION_AUTO_DISMISS_MS)
 
