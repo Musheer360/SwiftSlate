@@ -1,3 +1,25 @@
+# ⚠️ LSPosed edition: no accessibility service
+
+This fork runs SwiftSlate as an **LSPosed module** instead of an Android accessibility service.
+
+**Setup**
+1. Install SwiftSlate, then enable it in LSPosed (Modules → SwiftSlate).
+2. Tick your keyboard in the module's scope (Gboard, SwiftKey, Samsung Keyboard, Fleksy, FlorisBoard, ...).
+3. Force-stop the keyboard (or reboot). The Dashboard turns **Active** once a keyboard has loaded the hook.
+
+**How it works**
+- `xposed/MainHook` hooks `InputMethodService.onUpdateSelection` inside the keyboard process, reads the text before the caret through the keyboard's own `InputConnection`, and writes results back through it (no `ACTION_SET_TEXT`, no clipboard trick, no accessibility events).
+- `xposed/TriggerSnapshot` decides locally, with no IPC, whether a keystroke completed a trigger. The app publishes the trigger list through LSPosed remote preferences.
+- `service/HookBridgeService` (in the SwiftSlate app) runs the command: API keys, prompts, provider selection, undo state, stats and all localized strings stay in the app process. The keyboard only receives a small "plan" to apply.
+- Requests carry a per-install token that is only distributed through LSPosed remote preferences, so a random app that binds the exported service cannot spend your API keys.
+
+**Troubleshooting**
+- Dashboard says *Module enabled* forever: the keyboard has not loaded the hook. Check the scope, then force-stop the keyboard.
+- Toast "could not reach the app": on Android 11+ the keyboard may be unable to see SwiftSlate (package visibility). Reinstall with `adb install --force-queryable SwiftSlate.apk`.
+- Behavioural differences from the accessibility version: triggers work in any field the keyboard types into, but not in fields filled by other means (voice typing without the keyboard, hardware keyboards); password fields are skipped; the select-text popup still works through `PROCESS_TEXT`, but the old accessibility workaround for hosts that append instead of replace is gone.
+
+---
+
 <div align="center">
 
 <br>
@@ -555,7 +577,7 @@ Adding a translation is a single directory: drop `values-<locale>/strings.xml` i
 ```
 com.musheer360.swiftslate/
 ├── service/
-│   ├── AssistantService.kt      # Core accessibility service — event listening, trigger
+│   ├── HookBridgeService.kt     # LSPosed bridge service — runs commands for the keyboard hook, trigger
 │   │                            # detection, text replacement, undo, inline spinner
 │   ├── CommandRunner.kt         # Shared request policy (key rotation, rate-limit backoff,
 │   │                            # error mapping) used by both the accessibility service and

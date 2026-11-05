@@ -38,6 +38,10 @@ class CommandManager(context: Context) {
         try { prefs.getBoolean("ai_commands_seeded", false) } catch (_: Exception) { false }
 
     companion object {
+        /** Called after any change to commands or the trigger prefix. */
+        @Volatile
+        var onChanged: (() -> Unit)? = null
+
         const val DEFAULT_PREFIX = "?"
         const val PREF_TRIGGER_PREFIX = "trigger_prefix"
         private const val CACHE_TTL_MS = 5_000L
@@ -86,6 +90,8 @@ class CommandManager(context: Context) {
         cachedCommands = null
         cachedCommandsJson = null
         cachedPrefix = null
+        // Lets the LSPosed bridge republish the trigger snapshot the keyboard hook reads.
+        onChanged?.invoke()
     }
 
     fun getTriggerPrefix(): String {

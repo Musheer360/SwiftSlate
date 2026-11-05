@@ -70,18 +70,30 @@
             </intent-filter>
         </activity>
 
+        <!--
+            Bridge between the LSPosed hook (running inside the keyboard app) and this app.
+            Exported because the caller lives in another uid; every message must carry the
+            per-install token that only hooked processes can read (see ModuleBridge.token).
+            Replaces the former AccessibilityService, which is no longer declared.
+        -->
         <service
-            android:name=".service.AssistantService"
-            android:exported="true"
-            android:label="@string/accessibility_service_label"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:name=".service.HookBridgeService"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
+                <action android:name="${applicationId}.BRIDGE" />
             </intent-filter>
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility_service_config" />
         </service>
+
+        <!-- LSPosed module registration (the authoritative descriptors are in META-INF/xposed) -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="Run SwiftSlate trigger commands inside your keyboard, without the accessibility service." />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="100" />
     </application>
 
 </manifest>

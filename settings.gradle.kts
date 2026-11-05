@@ -16,6 +16,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // libxposed artifacts (also on Maven Central; this is the fallback mirror)
+        maven("https://api.xposed.info/") {
+            content { includeGroupByRegex("io\\.github\\.libxposed.*") }
+        }
     }
 }
 

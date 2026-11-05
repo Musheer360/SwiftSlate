@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    New LSPosed strings. Only English exists so far; locales fall back to this file.
+    MissingTranslation is ignored here on purpose so release lint does not fail on the ~40
+    existing locales until translations are contributed.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="module_status_awaiting">Module enabled</string>
+    <string name="module_hint_awaiting">LSPosed sees SwiftSlate, but no keyboard has loaded it yet. In LSPosed, add your keyboard to SwiftSlate\'s scope, then force-stop the keyboard (or reboot).</string>
+    <string name="module_hint_inactive">Enable the SwiftSlate module in LSPosed, add your keyboard to its scope, then restart the keyboard. The accessibility service is no longer needed.</string>
+</resources>
