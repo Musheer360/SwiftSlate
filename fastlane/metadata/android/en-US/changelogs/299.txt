@@ -1,0 +1,8 @@
+- chore(deps): bump actions/upload-artifact from 7.0.1 to 7.0.2
+- chore(deps): bump gradle-wrapper from 9.7.1 to 9.8.0
+- chore(deps): bump gradle/actions/setup-gradle from 6.3.0 to 6.4.0
+- chore(deps): bump com.android.application from 9.4.0 to 9.4.1
+- chore(deps): bump org.robolectric:robolectric from 4.16.1 to 4.17
+- chore(deps): bump androidx.compose:compose-bom
+- chore(deps): bump actions/setup-java from 6.0.0 to 6.0.1
+- chore(deps): bump org.jetbrains.kotlin.plugin.compo
