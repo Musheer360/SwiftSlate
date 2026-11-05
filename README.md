@@ -679,7 +679,29 @@ Preview builds are shrunk and non-debuggable like release builds, but signed wit
 - **WeChat deliberately degrades third-party accessibility services.** Since WeChat 8.0.52+, non-whitelisted services (everything except system apps) receive wiped or faked node trees and incomplete text-change events — this is enforced by WeChat itself and cannot be fixed from any accessibility app. SwiftSlate cannot reliably detect triggers inside WeChat chat input; use the [text-selection menu](#%EF%B8%8F-text-selection-menu) there instead.
 - **Some OEMs restrict accessibility services.** Certain manufacturers (e.g., OnePlus, Xiaomi) may hide or block third-party accessibility services in their settings UI. If SwiftSlate doesn't appear in your accessibility settings, check for a "Downloaded apps" or "Installed services" section, or try searching for it. On Android 13+, sideloaded apps must also be allowed via **App info → ⋮ → Allow restricted settings** before the accessibility toggle unlocks.
 - **Aggressive battery optimization can silently disable the service.** Some OEM skins (Xiaomi/MIUI, OnePlus/OxygenOS, Infinix/XOS, Samsung One UI, and others) kill background accessibility services after a period of inactivity to save battery, and Android itself does not let an accessibility service run as a foreground/persistent service to defend against this. If SwiftSlate stops responding and shows as inactive on the Dashboard after running for a while, this is the most common cause — re-enable it in Accessibility Settings and, per OEM: **Xiaomi/HyperOS** — enable *Autostart*, set Battery saver to *No restrictions*, lock SwiftSlate in Recents, and avoid Ultra Battery Saver (its force-stop also strips the permission, which flips the toggle itself OFF); **Infinix/XOS and OnePlus/OxygenOS** — set battery to *No restrictions* / *Don't optimize* and lock the app in Recents; **Samsung One UI** — set battery to *Unrestricted*, disable *Remove permissions if app is unused*, and remove the app from Sleeping/Deep-sleeping lists. If the service actually crashed, the Dashboard now shows a "SwiftSlate was interrupted" banner with a one-tap re-enable.
-- **Some banking apps refuse to open while any accessibility service is enabled**, including SwiftSlate. This is a security measure the bank's app controls entirely — it checks the OS's list of enabled accessibility services and blocks itself if that list isn't empty, regardless of which app is on it or what that app actually does. There's no manifest flag or API that lets a legitimate accessibility tool opt out of another app's own check, so this can't be fixed on SwiftSlate's end. Disable SwiftSlate's accessibility permission before opening the affected banking app, then re-enable it afterward. The [text-selection menu](#%EF%B8%8F-text-selection-menu) still works with accessibility disabled, since it doesn't use the service at all.
+- **Some banking apps refuse to open while any accessibility service is enabled**, including SwiftSlate. This is a security measure the bank's app controls entirely — it checks the OS's list of enabled accessibility services and blocks itself if that list isn't empty, regardless of which app is on it or what that app actually does. There's no manifest flag or API that lets a legitimate accessibility tool opt out of another app's own check, so this can't be fixed on SwiftSlate's end.
+
+  **The recommended solution is using Android's Accessibility Shortcut to toggle SwiftSlate on/off in 1 second:**
+  SwiftSlate provides instant feedback whenever you toggle it — a **status notification + single tick vibration** when turned on, and a **status notification + double-buzz vibration** when turned off (auto-dismissing after 3.5 seconds).
+
+  <details>
+  <summary>📲 <strong>How to set up the Accessibility Shortcut on your phone</strong></summary>
+
+  <br>
+
+  Android provides physical and gesture shortcuts so you never have to dig through Settings:
+  - **Stock Android / Pixel / Motorola:** Go to **Settings → Accessibility → SwiftSlate Assistant → SwiftSlate Assistant shortcut** → Toggle ON. Select **Hold volume keys** (press and hold both Volume Up + Down for 3 seconds) or **Accessibility button** in the navigation bar.
+  - **Samsung Galaxy (One UI):** Go to **Settings → Accessibility → Advanced settings → Volume up and down keys** (or **Accessibility button** / **Side and Volume up keys**) → Check **SwiftSlate Assistant**.
+  - **Xiaomi / Redmi / POCO (HyperOS / MIUI):** Go to **Settings → Additional settings → Accessibility → Downloaded apps → SwiftSlate Assistant → SwiftSlate shortcut** (or configure **Volume key shortcut** under Accessibility).
+  - **OnePlus / OPPO / Realme (OxygenOS / ColorOS):** Go to **Settings → Accessibility → Accessibility shortcut → Shortcut service** → Select **SwiftSlate Assistant**.
+
+  **Quick workflow before banking:**
+  1. Hold **Volume Up + Down** for 3 seconds (you'll feel a double-buzz and receive `"SwiftSlate deactivated"`).
+  2. Open and use your banking app freely.
+  3. Once done, hold **Volume Up + Down** again (you'll feel a single tick and receive `"SwiftSlate activated"`).
+
+  *(Note: The [text-selection menu](#%EF%B8%8F-text-selection-menu) also works 100% of the time without accessibility enabled!)*
+  </details>
 
 <br>
 

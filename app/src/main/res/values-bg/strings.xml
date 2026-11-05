@@ -151,4 +151,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate беше прекъснат</string>
     <string name="dashboard_service_killed_message">Фоновата услуга спря неочаквано. Активирайте я отново в настройките за достъпност, за да продължите да използвате командите.</string>
     <string name="dashboard_service_killed_dismiss">Отхвърли</string>
+    <string name="service_status_channel_name">Състояние на услугата</string>
+    <string name="service_status_channel_desc">Известява, когато SwiftSlate се активира или деактивира</string>
+    <string name="service_status_notification_enabled">SwiftSlate е активиран</string>
+    <string name="service_status_notification_disabled">SwiftSlate е деактивиран</string>
 </resources>

@@ -149,4 +149,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate đã bị gián đoạn</string>
     <string name="dashboard_service_killed_message">Dịch vụ nền đã dừng bất ngờ. Hãy bật lại trong cài đặt trợ năng để tiếp tục sử dụng lệnh.</string>
     <string name="dashboard_service_killed_dismiss">Bỏ qua</string>
+    <string name="service_status_channel_name">Trạng thái dịch vụ</string>
+    <string name="service_status_channel_desc">Thông báo khi SwiftSlate được bật hoặc tắt</string>
+    <string name="service_status_notification_enabled">Đã bật SwiftSlate</string>
+    <string name="service_status_notification_disabled">Đã tắt SwiftSlate</string>
 </resources>

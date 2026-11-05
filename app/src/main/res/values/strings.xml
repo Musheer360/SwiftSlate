@@ -155,4 +155,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate was interrupted</string>
     <string name="dashboard_service_killed_message">The background service stopped unexpectedly. Re-enable it in accessibility settings to keep using commands.</string>
     <string name="dashboard_service_killed_dismiss">Dismiss</string>
+    <string name="service_status_channel_name">Service Status</string>
+    <string name="service_status_channel_desc">Notifies when SwiftSlate is activated or deactivated</string>
+    <string name="service_status_notification_enabled">SwiftSlate activated</string>
+    <string name="service_status_notification_disabled">SwiftSlate deactivated</string>
 </resources>

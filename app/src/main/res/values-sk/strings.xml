@@ -149,4 +149,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate bol prerušený</string>
     <string name="dashboard_service_killed_message">Služba na pozadí sa nečakane zastavila. Znova ju povoľte v nastaveniach dostupnosti, aby ste mohli naďalej používať príkazy.</string>
     <string name="dashboard_service_killed_dismiss">Zavrieť</string>
+    <string name="service_status_channel_name">Stav služby</string>
+    <string name="service_status_channel_desc">Upozorní, keď je SwiftSlate aktivovaný alebo deaktivovaný</string>
+    <string name="service_status_notification_enabled">SwiftSlate aktivovaný</string>
+    <string name="service_status_notification_disabled">SwiftSlate deaktivovaný</string>
 </resources>

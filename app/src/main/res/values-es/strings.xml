@@ -148,4 +148,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate se interrumpió</string>
     <string name="dashboard_service_killed_message">El servicio en segundo plano se detuvo inesperadamente. Vuelve a activarlo en los ajustes de accesibilidad para seguir usando comandos.</string>
     <string name="dashboard_service_killed_dismiss">Descartar</string>
+    <string name="service_status_channel_name">Estado del servicio</string>
+    <string name="service_status_channel_desc">Notifica cuando SwiftSlate se activa o desactiva</string>
+    <string name="service_status_notification_enabled">SwiftSlate activado</string>
+    <string name="service_status_notification_disabled">SwiftSlate desactivado</string>
 </resources>

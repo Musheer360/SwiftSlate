@@ -151,4 +151,8 @@
     <string name="dashboard_service_killed_title">Το SwiftSlate διακόπηκε</string>
     <string name="dashboard_service_killed_message">Η υπηρεσία παρασκηνίου σταμάτησε απροσδόκητα. Ενεργοποιήστε την ξανά στις ρυθμίσεις προσβασιμότητας για να συνεχίσετε να χρησιμοποιείτε εντολές.</string>
     <string name="dashboard_service_killed_dismiss">Απόρριψη</string>
+    <string name="service_status_channel_name">Κατάσταση υπηρεσίας</string>
+    <string name="service_status_channel_desc">Ειδοποιεί όταν το SwiftSlate ενεργοποιείται ή απενεργοποιείται</string>
+    <string name="service_status_notification_enabled">Το SwiftSlate ενεργοποιήθηκε</string>
+    <string name="service_status_notification_disabled">Το SwiftSlate απενεργοποιήθηκε</string>
 </resources>

@@ -149,4 +149,8 @@
     <string name="dashboard_service_killed_title">SwiftSlate terganggu</string>
     <string name="dashboard_service_killed_message">Perkhidmatan latar belakang berhenti tanpa diduga. Dayakan semula dalam tetapan kebolehaksesan untuk terus menggunakan arahan.</string>
     <string name="dashboard_service_killed_dismiss">Abaikan</string>
+    <string name="service_status_channel_name">Status Perkhidmatan</string>
+    <string name="service_status_channel_desc">Memberitahu apabila SwiftSlate diaktifkan atau dinyahaktifkan</string>
+    <string name="service_status_notification_enabled">SwiftSlate diaktifkan</string>
+    <string name="service_status_notification_disabled">SwiftSlate dinyahaktifkan</string>
 </resources>
