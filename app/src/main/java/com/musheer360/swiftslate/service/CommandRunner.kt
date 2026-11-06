@@ -119,12 +119,16 @@ suspend fun runTextCommand(
             }
             is ApiError.InvalidKey -> {
                 lastErrorWasRateLimit = false
-                // Server-side sign-in failures (Ollama Cloud) are not the key's fault:
-                // don't bench it, don't record it as a failed key, and don't let an
-                // earlier iteration's permission verdict override the sign-in message.
-                if (msg.contains(ApiClientUtils.SIGNIN_REQUIRED_MARKER)) {
+                // Server-side sign-in failures (Ollama Cloud) and plan-gated API access (Command
+                // Code's Go plan returns 403 upgrade_required) are not the key's fault: don't
+                // bench it, don't record it as a failed key, and don't let an earlier iteration's
+                // permission verdict override the message that names the real fix.
+                if (msg.contains(ApiClientUtils.SIGNIN_REQUIRED_MARKER) || msg.contains("upgrade_required", ignoreCase = true)) {
                     lastFailedKey = null
                     lastErrorWasPermission = false
+                    // Account-level verdict: another key cannot change it, so stop rotating
+                    // instead of replaying the same doomed request once per key.
+                    break
                 } else {
                     lastFailedKey = key
                     // Distinguish "this key is bad" from "this key may not use this model" (both
