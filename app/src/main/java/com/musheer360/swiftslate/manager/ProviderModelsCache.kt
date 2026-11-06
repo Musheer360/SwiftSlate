@@ -1,10 +1,8 @@
 package com.musheer360.swiftslate.manager
 
-import com.musheer360.swiftslate.model.ProviderType
-
 /**
- * Process-lifetime cache of the model lists fetched from the Gemini and Groq
- * /models endpoints for the dynamic Settings dropdowns (issue #148).
+ * Process-lifetime cache of the model lists fetched from every provider's /models endpoint
+ * for the dynamic Settings dropdowns (issue #148).
  *
  * Session-only by design — never written to prefs — so a stale provider catalog
  * can never outlive this app process, matching how the Custom provider keeps its
@@ -16,19 +14,16 @@ import com.musheer360.swiftslate.model.ProviderType
 object ProviderModelsCache {
     data class Entry(val models: List<String>, val attempted: Boolean)
 
-    @Volatile private var gemini: Entry? = null
-    @Volatile private var groq: Entry? = null
+    private val entries = java.util.concurrent.ConcurrentHashMap<String, Entry>()
 
-    fun get(type: String): Entry? = when (type) {
-        ProviderType.GEMINI -> gemini
-        ProviderType.GROQ -> groq
-        else -> null
-    }
+    fun get(type: String): Entry? = entries[type]
 
     fun put(type: String, entry: Entry) {
-        when (type) {
-            ProviderType.GEMINI -> gemini = entry
-            ProviderType.GROQ -> groq = entry
-        }
+        entries[type] = entry
+    }
+
+    /** Forget a provider's list so the next Settings visit refetches it (e.g. after a key add). */
+    fun invalidate(type: String) {
+        entries.remove(type)
     }
 }

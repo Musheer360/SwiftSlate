@@ -1,7 +1,10 @@
 package com.musheer360.swiftslate.provider
 
+import com.musheer360.swiftslate.model.CommandCodeModels
+import com.musheer360.swiftslate.model.DeepSeekModels
 import com.musheer360.swiftslate.model.GeminiModels
 import com.musheer360.swiftslate.model.GroqModels
+import com.musheer360.swiftslate.model.OpenCodeGoModels
 import com.musheer360.swiftslate.model.PrefKeys
 import com.musheer360.swiftslate.model.ProviderType
 import org.junit.Assert.*
@@ -14,6 +17,9 @@ class ProviderConfigTest {
     fun forType_routes_each_provider() {
         assertSame(GeminiConfig, Providers.forType(ProviderType.GEMINI))
         assertSame(GroqConfig, Providers.forType(ProviderType.GROQ))
+        assertSame(CommandCodeConfig, Providers.forType(ProviderType.COMMAND_CODE))
+        assertSame(OpenCodeGoConfig, Providers.forType(ProviderType.OPENCODE_GO))
+        assertSame(DeepSeekConfig, Providers.forType(ProviderType.DEEPSEEK))
         assertSame(CustomConfig, Providers.forType(ProviderType.CUSTOM))
     }
 
@@ -27,6 +33,9 @@ class ProviderConfigTest {
     fun transports_are_correct() {
         assertEquals(Transport.GEMINI_NATIVE, GeminiConfig.transport)
         assertEquals(Transport.OPENAI_COMPAT, GroqConfig.transport)
+        assertEquals(Transport.OPENAI_COMPAT, CommandCodeConfig.transport)
+        assertEquals(Transport.OPENAI_COMPAT, OpenCodeGoConfig.transport)
+        assertEquals(Transport.OPENAI_COMPAT, DeepSeekConfig.transport)
         assertEquals(Transport.OPENAI_COMPAT, CustomConfig.transport)
     }
 
@@ -34,15 +43,27 @@ class ProviderConfigTest {
     fun model_pref_keys_and_defaults() {
         assertEquals(PrefKeys.GEMINI_MODEL, GeminiConfig.modelPrefKey)
         assertEquals(PrefKeys.GROQ_MODEL, GroqConfig.modelPrefKey)
+        assertEquals(PrefKeys.COMMAND_CODE_MODEL, CommandCodeConfig.modelPrefKey)
+        assertEquals(PrefKeys.OPENCODE_GO_MODEL, OpenCodeGoConfig.modelPrefKey)
+        assertEquals(PrefKeys.DEEPSEEK_MODEL, DeepSeekConfig.modelPrefKey)
         assertEquals(PrefKeys.CUSTOM_MODEL, CustomConfig.modelPrefKey)
         assertEquals(GeminiModels.DEFAULT, GeminiConfig.defaultModel)
         assertEquals(GroqModels.DEFAULT, GroqConfig.defaultModel)
+        assertEquals(CommandCodeModels.DEFAULT, CommandCodeConfig.defaultModel)
+        assertEquals(OpenCodeGoModels.DEFAULT, OpenCodeGoConfig.defaultModel)
+        assertEquals(DeepSeekModels.DEFAULT, DeepSeekConfig.defaultModel)
         assertEquals("", CustomConfig.defaultModel)
     }
 
     @Test
     fun endpoint_resolution() {
         assertEquals(GroqConfig.ENDPOINT, GroqConfig.resolveEndpoint("ignored"))
+        assertEquals(CommandCodeConfig.ENDPOINT, CommandCodeConfig.resolveEndpoint("ignored"))
+        assertEquals("https://api.commandcode.ai/provider/v1", CommandCodeConfig.ENDPOINT)
+        assertEquals(OpenCodeGoConfig.ENDPOINT, OpenCodeGoConfig.resolveEndpoint("ignored"))
+        assertEquals("https://opencode.ai/inference/go/openai/v1", OpenCodeGoConfig.ENDPOINT)
+        assertEquals(DeepSeekConfig.ENDPOINT, DeepSeekConfig.resolveEndpoint("ignored"))
+        assertEquals("https://api.deepseek.com", DeepSeekConfig.ENDPOINT)
         assertEquals("", GeminiConfig.resolveEndpoint("ignored"))
         assertEquals("https://my.endpoint/v1", CustomConfig.resolveEndpoint("https://my.endpoint/v1"))
     }
@@ -52,6 +73,9 @@ class ProviderConfigTest {
         assertTrue(GroqConfig.useJsonObjectMode(true))
         assertFalse(GroqConfig.useJsonObjectMode(false))
         assertFalse(GeminiConfig.useJsonObjectMode(true))
+        assertFalse(CommandCodeConfig.useJsonObjectMode(true))
+        assertFalse(OpenCodeGoConfig.useJsonObjectMode(true))
+        assertFalse(DeepSeekConfig.useJsonObjectMode(true))
         assertFalse(CustomConfig.useJsonObjectMode(true))
     }
 
@@ -59,6 +83,9 @@ class ProviderConfigTest {
     fun isConfigured_only_custom_requires_both() {
         assertTrue(GeminiConfig.isConfigured("", ""))
         assertTrue(GroqConfig.isConfigured("m", ""))
+        assertTrue(CommandCodeConfig.isConfigured("m", ""))
+        assertTrue(OpenCodeGoConfig.isConfigured("m", ""))
+        assertTrue(DeepSeekConfig.isConfigured("m", ""))
         assertTrue(CustomConfig.isConfigured("m", "https://x"))
         assertFalse(CustomConfig.isConfigured("", "https://x"))
         assertFalse(CustomConfig.isConfigured("m", ""))

@@ -51,6 +51,23 @@ class ErrorMessagesTest {
         assertEquals(R.string.error_no_model_access, ErrorMessages.map("PERMISSION_DENIED: invalid api key"))
     }
 
+    /**
+     * Command Code answers a plan without Provider API access (the Go plan) with
+     * 403 upgrade_required. That is neither a bad key nor a model-permission problem, and
+     * waiting or retrying cannot fix it, so it must win over both branches.
+     */
+    @Test
+    fun planWithoutApiAccess_isReportedAsPlanUpgrade() {
+        assertEquals(
+            R.string.error_plan_no_api_access,
+            ErrorMessages.map("Go plan does not include API access [upgrade_required]")
+        )
+        assertEquals(
+            R.string.error_plan_no_api_access,
+            ErrorMessages.map("permission denied: invalid api key [upgrade_required]")
+        )
+    }
+
     @Test
     fun rateLimitVariants() {
         assertEquals(R.string.error_rate_limited, ErrorMessages.map("Rate limit exceeded, retry after 30s"))

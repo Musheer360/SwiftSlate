@@ -10,7 +10,7 @@ package com.musheer360.swiftslate.model
  * stored preferences continue to resolve identically.
  */
 object PrefKeys {
-    /** Active provider ("gemini" | "groq" | "custom") — see [ProviderType]. */
+    /** Active provider ("gemini" | "groq" | "commandcode" | "opencodego" | "deepseek" | "custom") — see [ProviderType]. */
     const val PROVIDER_TYPE = "provider_type"
 
     /** Selected Gemini model id. */
@@ -18,6 +18,15 @@ object PrefKeys {
 
     /** Selected Groq model id. */
     const val GROQ_MODEL = "groq_model"
+
+    /** Selected Command Code Provider API model id. */
+    const val COMMAND_CODE_MODEL = "commandcode_model"
+
+    /** Selected OpenCode Go model id. */
+    const val OPENCODE_GO_MODEL = "opencodego_model"
+
+    /** Selected DeepSeek model id. */
+    const val DEEPSEEK_MODEL = "deepseek_model"
 
     /** Custom (OpenAI-compatible) model id. */
     const val CUSTOM_MODEL = "custom_model"

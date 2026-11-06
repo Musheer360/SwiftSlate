@@ -127,7 +127,7 @@ internal object ApiClientUtils {
     /**
      * Marker prefixed to failures where the endpoint rejected the request for server-side
      * sign-in reasons (Ollama Cloud / `-cloud` models), not because of the submitted key.
-     * Mapped to a localized message by ErrorMessages and KeysScreen.
+     * Mapped to a localized message by ErrorMessages and ProviderKeysCard.
      */
     const val SIGNIN_REQUIRED_MARKER = "signin_required"
 
@@ -184,11 +184,78 @@ internal object ApiClientUtils {
         return if (apiMessage.isNotEmpty()) apiMessage else fallbackMessage
     }
 
+    /**
+     * Model ids from a catalog response, keeping only the ones a Chat Completions request
+     * can serve.
+     *
+     * Command Code lists every model in one catalog and marks the routes that serve it in
+     * `supported_endpoints`; its Claude models answer on `/messages` only and return 400 on
+     * `/chat/completions`. Offering them in a chat-only provider's picker just handed the
+     * user a model that could never work. Entries without the field are kept (fail-open), so
+     * other OpenAI-compatible servers are unaffected.
+     */
+    fun parseChatCompletionModelIds(json: String): List<String> {
+        if (json.isBlank()) return emptyList()
+        // Once a catalog carries route metadata it is authoritative: falling back would put
+        // the /messages-only Claude models back in a chat-completions picker.
+        val hasRouteMetadata = json.contains("\"supported_endpoints\"")
+        return try {
+            val arr = JSONObject(json).optJSONArray("data") ?: return parseModelIds(json)
+            val out = LinkedHashSet<String>()
+            for (i in 0 until arr.length()) {
+                val obj = arr.optJSONObject(i) ?: continue
+                val id = listOf(obj.optString("id"), obj.optString("name"), obj.optString("model"))
+                    .firstOrNull { it.isNotBlank() }
+                    ?.trim() ?: continue
+                val endpoints = obj.optJSONArray("supported_endpoints")
+                // Empty means "no route advertises it"; keep it rather than hiding a model the
+                // server may still serve. Match loosely so "/v1/chat/completions" also counts.
+                val servesChat = endpoints == null || endpoints.length() == 0 ||
+                    (0 until endpoints.length()).any {
+                        endpoints.optString(it).contains("chat/completions")
+                    }
+                if (servesChat) out.add(id)
+            }
+            if (out.isEmpty() && !hasRouteMetadata) parseModelIds(json) else out.toList()
+        } catch (_: Exception) {
+            if (hasRouteMetadata) emptyList() else parseModelIds(json)
+        }
+    }
+
+    /**
+     * Whether a key-validation probe response proves the credential was accepted.
+     *
+     * Pure so the whole status table is unit-testable. 2xx and auth-passed 4xx mean yes;
+     * 401/403 mean no. 404 is ambiguous: a missing route means the endpoint is wrong, but
+     * providers also report an unserved model as 404 (Groq: `model_not_found`), and the probe
+     * runs a fixed default model, so a valid key must not be rejected for it.
+     */
+    fun probeAcceptsKey(responseCode: Int, errorBody: String): Boolean = when {
+        responseCode in 200..299 -> true
+        responseCode == 401 || responseCode == 403 -> false
+        responseCode == 404 -> {
+            val code = extractApiErrorCode(errorBody)
+            val message = extractApiErrorMessage(errorBody)
+            code.contains("model", ignoreCase = true) || message.contains("model", ignoreCase = true)
+        }
+        responseCode == 400 || responseCode == 422 || responseCode == 429 -> true
+        else -> false
+    }
+
     /** Provider machine-readable reason, e.g. Groq's error.code (json_validate_failed). */
     fun extractApiErrorCode(errorBody: String): String {
         if (errorBody.isBlank()) return ""
         return try {
-            JSONObject(errorBody).optJSONObject("error")?.optString("code", "") ?: ""
+            val root = JSONObject(errorBody)
+            val err = root.optJSONObject("error")
+            // Providers disagree on where the machine-readable reason lives: OpenAI/Groq use
+            // error.code, Anthropic uses error.type, some gateways put it at the root.
+            listOf(
+                err?.optString("code").orEmpty(),
+                err?.optString("type").orEmpty(),
+                root.optString("code"),
+                root.optString("status")
+            ).firstOrNull { it.isNotBlank() } ?: ""
         } catch (_: Exception) {
             ""
         }
