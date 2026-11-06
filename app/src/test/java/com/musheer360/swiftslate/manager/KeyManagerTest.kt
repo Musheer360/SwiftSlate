@@ -51,6 +51,8 @@ class KeyManagerTest {
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Application>()
         context.getSharedPreferences("secure_keys_prefs", 0).edit().clear().commit()
+        // Key storage is provider-scoped, so the provider selection must start clean too.
+        context.getSharedPreferences("settings", 0).edit().clear().commit()
         cipher = FakeCipher()
         keyManager = KeyManager(context, cipher)
     }
@@ -114,7 +116,7 @@ class KeyManagerTest {
     @Test
     fun keysAreNotStoredInPlaintext() {
         keyManager.addKey("super-secret-key")
-        val stored = prefs().getString("keys_array", null)
+        val stored = prefs().getString("keys_array_gemini", null)
         assertNotNull(stored)
         assertFalse("raw key must not appear in prefs", stored!!.contains("super-secret-key"))
     }
@@ -127,8 +129,98 @@ class KeyManagerTest {
 
     @Test
     fun undecryptableBlob_yieldsEmptyListInsteadOfCrashing() {
-        prefs().edit().putString("keys_array", "garbage]not-ours").commit()
+        prefs().edit().putString("keys_array_gemini", "garbage]not-ours").commit()
         assertTrue(freshManager().getKeys().isEmpty())
+    }
+
+    /**
+     * Keys are scoped per provider: a Command Code key must not be offered to Gemini, and
+     * switching back must still find the Gemini pool.
+     */
+    @Test
+    fun keysAreScopedPerProvider() {
+        val settings = ApplicationProvider.getApplicationContext<Application>()
+            .getSharedPreferences("settings", 0)
+        keyManager.addKey("gemini-key")
+
+        settings.edit().putString("provider_type", "commandcode").commit()
+        assertTrue("another provider must start empty", freshManager().getKeys().isEmpty())
+        assertTrue(freshManager().addKey("command-key"))
+
+        settings.edit().putString("provider_type", "gemini").commit()
+        assertEquals(listOf("gemini-key"), freshManager().getKeys())
+        settings.edit().putString("provider_type", "commandcode").commit()
+        assertEquals(listOf("command-key"), freshManager().getKeys())
+    }
+
+    /**
+     * Same instance, provider switched between calls: the 5s cache must not serve the previous
+     * provider's keys. A regression here sent one vendor's key to another vendor's endpoint.
+     */
+    @Test
+    fun switchingProvider_invalidatesCachedKeysWithinSameInstance() {
+        val settings = ApplicationProvider.getApplicationContext<Application>()
+            .getSharedPreferences("settings", 0)
+        keyManager.addKey("gemini-key")
+        assertEquals(listOf("gemini-key"), keyManager.getKeys()) // now cached
+
+        settings.edit().putString("provider_type", "commandcode").commit()
+        assertTrue("must not reuse the Gemini cache", keyManager.getKeys().isEmpty())
+        assertTrue(keyManager.addKey("cmd-key"))
+        assertEquals(listOf("cmd-key"), keyManager.getKeys())
+    }
+
+    /**
+     * The legacy single pool predates per-provider storage. Before this change the whole pool
+     * was used by whichever provider was active, so that provider keeps it — but only the three
+     * providers that existed then, never one added later.
+     */
+    @Test
+    fun legacyPool_migratesToTheActiveLegacyProvider() {
+        val settings = ApplicationProvider.getApplicationContext<Application>()
+            .getSharedPreferences("settings", 0)
+        prefs().edit().putString("keys_array", JSONArray(listOf("old1")).toString()).commit()
+        settings.edit().putString("provider_type", "groq").commit()
+
+        assertEquals(listOf("old1"), freshManager().getKeys())
+        assertNull(prefs().getString("keys_array", null))
+
+        // Adopted exactly once: Gemini must not get a second copy.
+        settings.edit().putString("provider_type", "gemini").commit()
+        assertTrue(freshManager().getKeys().isEmpty())
+    }
+
+    @Test
+    fun legacyPool_isNotAdoptedByProvidersAddedLater() {
+        val settings = ApplicationProvider.getApplicationContext<Application>()
+            .getSharedPreferences("settings", 0)
+        prefs().edit().putString("keys_array", JSONArray(listOf("old1")).toString()).commit()
+        settings.edit().putString("provider_type", "deepseek").commit()
+
+        assertTrue("legacy keys must not be handed to a provider that did not exist", freshManager().getKeys().isEmpty())
+        assertNotNull("legacy slot stays pending", prefs().getString("keys_array", null))
+    }
+
+    /** The UI always passes an explicit provider; the default argument must not override it. */
+    @Test
+    fun explicitProviderArg_overridesStoredSelection() {
+        val settings = ApplicationProvider.getApplicationContext<Application>()
+            .getSharedPreferences("settings", 0)
+        settings.edit().putString("provider_type", "gemini").commit()
+
+        keyManager.addKey("k-cmd", "commandcode")
+        assertEquals(listOf("k-cmd"), keyManager.getKeys("commandcode"))
+        assertTrue(keyManager.getKeys("gemini").isEmpty())
+    }
+
+    @Test
+    fun removeKey_isScopedToProvider() {
+        keyManager.addKey("g-key", "gemini")
+        keyManager.addKey("c-key", "commandcode")
+
+        assertTrue(keyManager.removeKey("c-key", "commandcode"))
+        assertTrue(keyManager.getKeys("commandcode").isEmpty())
+        assertEquals(listOf("g-key"), keyManager.getKeys("gemini"))
     }
 
     @Test
@@ -162,9 +254,12 @@ class KeyManagerTest {
         prefs().edit().putString("keys_array", JSONArray(listOf("old1", "old2")).toString()).commit()
         val migrated = freshManager()
         assertEquals(listOf("old1", "old2"), migrated.getKeys())
-        val stored = prefs().getString("keys_array", null)!!
+        // The pre-provider pool is adopted by the active provider (Gemini by default) and the
+        // old single slot is cleared so it can never be migrated twice.
+        val stored = prefs().getString("keys_array_gemini", null)!!
         assertFalse("must have been re-encrypted", KeyManager.isLegacyPlaintext(stored))
         assertFalse(stored.contains("old1"))
+        assertNull(prefs().getString("keys_array", null))
         // And still readable afterwards.
         assertEquals(listOf("old1", "old2"), freshManager().getKeys())
     }

@@ -46,13 +46,18 @@ class OpenAICompatibleClient {
                     429 -> Result.failure(Exception("Rate limited. Please try again later."))
                     401, 403 -> {
                         val signinUrl = ApiClientUtils.extractSigninUrl(errorBody)
+                        val providerCode = ApiClientUtils.extractApiErrorCode(errorBody)
                         val detail = when {
                             signinUrl != null || apiMessage.contains("not currently signed in", ignoreCase = true) ->
                                 "${ApiClientUtils.SIGNIN_REQUIRED_MARKER}: ${apiMessage.ifEmpty { "server sign-in required" }}"
                             apiMessage.isNotEmpty() -> apiMessage
                             else -> "Invalid API key"
                         }
-                        Result.failure(Exception(detail))
+                        // Keep the machine-readable reason: Command Code answers a plan without
+                        // API access with 403 upgrade_required, which is not the key's fault and
+                        // must not be reported as an invalid key.
+                        if (providerCode.isNotEmpty()) Result.failure(Exception("$detail [$providerCode]"))
+                        else Result.failure(Exception(detail))
                     }
                     404 -> {
                         // Some local servers (Ollama) only serve the OpenAI-compatible API
@@ -78,6 +83,75 @@ class OpenAICompatibleClient {
             connection?.disconnect()
         }
     }
+
+    /**
+     * Validates a key against an endpoint whose /models listing is public.
+     *
+     * Command Code and OpenCode Go both serve their model catalog without auth, so
+     * [validateKey]'s GET would accept any string — a placeholder key showed up as
+     * "Valid key added!". This sends the smallest possible authenticated chat completion
+     * (one output token) and reads only the status: 2xx or a non-auth 4xx proves the
+     * credential was accepted, 401/403 rejects it, and 429 means auth passed but the
+     * account is throttled.
+     */
+    suspend fun validateKeyWithProbe(apiKey: String, endpoint: String, model: String): Result<String> =
+        withContext(Dispatchers.IO) {
+            if (EndpointValidator.validate(endpoint) != EndpointValidator.Error.NONE) {
+                return@withContext Result.failure(Exception("Endpoint must be https:// or an http:// private-LAN address"))
+            }
+            var connection: HttpURLConnection? = null
+            try {
+                val baseUrl = endpoint.trimEnd('/')
+                connection = URL("$baseUrl/chat/completions").openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.setRequestProperty("Authorization", "Bearer $apiKey")
+                connection.doOutput = true
+                connection.connectTimeout = 15_000
+                connection.readTimeout = 30_000
+
+                val body = JSONObject().apply {
+                    put("model", model)
+                    put("messages", JSONArray().put(JSONObject().apply {
+                        put("role", "user")
+                        put("content", "ping")
+                    }))
+                    put("max_tokens", 1)
+                }
+                connection.outputStream.use { it.write(body.toString().toByteArray(Charsets.UTF_8)) }
+
+                val responseCode = connection.responseCode
+                if (responseCode in 200..299) {
+                    connection.inputStream?.use { stream ->
+                        val buf = ByteArray(1024)
+                        while (stream.read(buf) != -1) { /* drain */ }
+                    }
+                    Result.success("Valid")
+                } else {
+                    val errorBody = ApiClientUtils.readErrorBody(connection)
+                    if (ApiClientUtils.probeAcceptsKey(responseCode, errorBody)) {
+                        Result.success("Valid")
+                    } else {
+                        val apiMessage = ApiClientUtils.extractApiErrorMessage(errorBody)
+                        val providerCode = ApiClientUtils.extractApiErrorCode(errorBody)
+                        val detail = apiMessage.ifEmpty {
+                            when (responseCode) {
+                                401, 403 -> "Invalid API key"
+                                404 -> "Endpoint not found (HTTP 404)"
+                                else -> "Unexpected error (HTTP $responseCode)"
+                            }
+                        }
+                        Result.failure(
+                            Exception(if (providerCode.isNotEmpty()) "$detail [$providerCode]" else detail)
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                Result.failure(e)
+            } finally {
+                connection?.disconnect()
+            }
+        }
 
     /**
      * GETs [url] and reports whether the server answered 2xx. Used by [validateKey]'s
@@ -124,17 +198,35 @@ class OpenAICompatibleClient {
      *
      * [apiKey] may be null: local servers without a configured key (Ollama, LM Studio,
      * llama.cpp) want no Authorization header at all, and sending a placeholder helps nobody.
+     *
+     * [includeFallbackPaths] is false for providers with a fixed, known endpoint shape
+     * (Command Code's base already ends in /v1 and serves only /models), so those
+     * fetches do not burn three guaranteed 404s probing local-server paths.
+     *
+     * [chatCompletionsOnly] drops models the catalog says are served on another wire —
+     * Command Code lists its Claude models in the same catalog but answers them only on
+     * /messages, and picking one here failed every request with a 400.
      */
-    suspend fun fetchModels(apiKey: String?, endpoint: String): Result<List<String>> = withContext(Dispatchers.IO) {
+    suspend fun fetchModels(
+        apiKey: String?,
+        endpoint: String,
+        includeFallbackPaths: Boolean = true,
+        chatCompletionsOnly: Boolean = false
+    ): Result<List<String>> = withContext(Dispatchers.IO) {
         if (EndpointValidator.validate(endpoint) != EndpointValidator.Error.NONE) {
             return@withContext Result.failure(Exception("Endpoint must be https:// or an http:// private-LAN address"))
         }
         val baseUrl = endpoint.trimEnd('/')
+        val paths = if (includeFallbackPaths) {
+            listOf("$baseUrl/v1/models", "$baseUrl/models", "$baseUrl/api/tags", "$baseUrl/api/models")
+        } else {
+            listOf("$baseUrl/models")
+        }
         var lastDetail: String? = null
         // Set on the first 2xx, whatever the body: a server that answered is reachable even
         // when it lists no models, so "No models found" must win over a 404 seen elsewhere.
         var reachable = false
-        for (path in listOf("$baseUrl/v1/models", "$baseUrl/models", "$baseUrl/api/tags", "$baseUrl/api/models")) {
+        for (path in paths) {
             val probe = try {
                 httpGet(path, apiKey)
             } catch (e: Exception) {
@@ -143,20 +235,29 @@ class OpenAICompatibleClient {
             when {
                 probe.code in 200..299 -> {
                     reachable = true
-                    val ids = ApiClientUtils.parseModelIds(probe.body)
+                    val ids = if (chatCompletionsOnly) {
+                        ApiClientUtils.parseChatCompletionModelIds(probe.body)
+                    } else {
+                        ApiClientUtils.parseModelIds(probe.body)
+                    }
                     if (ids.isNotEmpty()) return@withContext Result.success(ids)
                     // Reachable but empty at this path — try the next one.
                 }
                 probe.code == 401 || probe.code == 403 -> {
                     val apiMessage = ApiClientUtils.extractApiErrorMessage(probe.body)
                     val signinUrl = ApiClientUtils.extractSigninUrl(probe.body)
+                    val providerCode = ApiClientUtils.extractApiErrorCode(probe.body)
                     val detail = when {
                         signinUrl != null || apiMessage.contains("not currently signed in", ignoreCase = true) ->
                             "${ApiClientUtils.SIGNIN_REQUIRED_MARKER}: ${apiMessage.ifEmpty { "server sign-in required" }}"
                         apiMessage.isNotEmpty() -> apiMessage
                         else -> "Invalid API key"
                     }
-                    return@withContext Result.failure(Exception(detail))
+                    // Same reason as validateKey: 403 upgrade_required means the plan lacks API
+                    // access, not that the key is wrong.
+                    return@withContext Result.failure(
+                        Exception(if (providerCode.isNotEmpty()) "$detail [$providerCode]" else detail)
+                    )
                 }
                 else -> {
                     // 404/405/5xx — this path is not served here; remember the detail and
@@ -369,7 +470,11 @@ class OpenAICompatibleClient {
                     apiMessage.isNotEmpty() -> apiMessage
                     else -> "Invalid API key"
                 }
-                Result.failure(ApiException(ApiError.InvalidKey(detail), detail))
+                // Carry the code so 403 upgrade_required (Command Code plan without API access)
+                // is mapped to a plan message and never benches a perfectly valid key.
+                val providerCode = ApiClientUtils.extractApiErrorCode(errorBody)
+                val withCode = if (providerCode.isNotEmpty()) "$detail [$providerCode]" else detail
+                Result.failure(ApiException(ApiError.InvalidKey(withCode), withCode))
             } else {
                 val errorBody = ApiClientUtils.readErrorBody(connection)
                 var detail = ApiClientUtils.sanitizeErrorForUser(responseCode, errorBody, "Unexpected error (HTTP $responseCode)")

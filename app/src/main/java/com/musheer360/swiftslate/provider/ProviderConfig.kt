@@ -1,7 +1,10 @@
 package com.musheer360.swiftslate.provider
 
+import com.musheer360.swiftslate.model.CommandCodeModels
+import com.musheer360.swiftslate.model.DeepSeekModels
 import com.musheer360.swiftslate.model.GeminiModels
 import com.musheer360.swiftslate.model.GroqModels
+import com.musheer360.swiftslate.model.OpenCodeGoModels
 import com.musheer360.swiftslate.model.PrefKeys
 import com.musheer360.swiftslate.model.ProviderType
 
@@ -92,6 +95,42 @@ object GroqConfig : ProviderConfig {
     override fun useJsonObjectMode(structuredOutputEnabled: Boolean): Boolean = structuredOutputEnabled
 }
 
+/** Command Code Provider API — OpenAI-compatible, fixed endpoint, live model catalog. */
+object CommandCodeConfig : ProviderConfig {
+    const val ENDPOINT = "https://api.commandcode.ai/provider/v1"
+
+    override val type = ProviderType.COMMAND_CODE
+    override val transport = Transport.OPENAI_COMPAT
+    override val modelPrefKey = PrefKeys.COMMAND_CODE_MODEL
+    override val defaultModel = CommandCodeModels.DEFAULT
+    override fun sanitizeModel(stored: String?): String = CommandCodeModels.sanitize(stored)
+    override fun resolveEndpoint(customEndpoint: String): String = ENDPOINT
+}
+
+/** OpenCode Go — OpenAI-compatible, fixed endpoint, live model catalog. */
+object OpenCodeGoConfig : ProviderConfig {
+    const val ENDPOINT = "https://opencode.ai/inference/go/openai/v1"
+
+    override val type = ProviderType.OPENCODE_GO
+    override val transport = Transport.OPENAI_COMPAT
+    override val modelPrefKey = PrefKeys.OPENCODE_GO_MODEL
+    override val defaultModel = OpenCodeGoModels.DEFAULT
+    override fun sanitizeModel(stored: String?): String = OpenCodeGoModels.sanitize(stored)
+    override fun resolveEndpoint(customEndpoint: String): String = ENDPOINT
+}
+
+/** DeepSeek — OpenAI-compatible, fixed endpoint, live model catalog. */
+object DeepSeekConfig : ProviderConfig {
+    const val ENDPOINT = "https://api.deepseek.com"
+
+    override val type = ProviderType.DEEPSEEK
+    override val transport = Transport.OPENAI_COMPAT
+    override val modelPrefKey = PrefKeys.DEEPSEEK_MODEL
+    override val defaultModel = DeepSeekModels.DEFAULT
+    override fun sanitizeModel(stored: String?): String = DeepSeekModels.sanitize(stored)
+    override fun resolveEndpoint(customEndpoint: String): String = ENDPOINT
+}
+
 /** Custom OpenAI-compatible endpoint — user-supplied endpoint and model. */
 object CustomConfig : ProviderConfig {
     override val type = ProviderType.CUSTOM
@@ -108,6 +147,9 @@ object CustomConfig : ProviderConfig {
 object Providers {
     fun forType(type: String?): ProviderConfig = when (ProviderType.sanitize(type)) {
         ProviderType.GROQ -> GroqConfig
+        ProviderType.COMMAND_CODE -> CommandCodeConfig
+        ProviderType.OPENCODE_GO -> OpenCodeGoConfig
+        ProviderType.DEEPSEEK -> DeepSeekConfig
         ProviderType.CUSTOM -> CustomConfig
         else -> GeminiConfig
     }

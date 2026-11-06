@@ -2,6 +2,8 @@ package com.musheer360.swiftslate.manager
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.musheer360.swiftslate.model.PrefKeys
+import com.musheer360.swiftslate.model.ProviderType
 import org.json.JSONArray
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -12,9 +14,15 @@ class KeyManager internal constructor(
     constructor(context: Context) : this(context, AndroidKeystoreCipher())
 
     private val prefs: SharedPreferences = context.getSharedPreferences("secure_keys_prefs", Context.MODE_PRIVATE)
+    /** Provider selection lives in the settings prefs; keys are stored per provider id. */
+    private val settingsPrefs: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
     companion object {
+        /** Pre-provider single pool, migrated to the active provider on first read. */
         private const val PREF_KEY_ARRAY = "keys_array"
+        private const val PREF_KEY_ARRAY_PREFIX = "keys_array_"
+        /** Providers that existed while the single shared pool was in use. */
+        private val LEGACY_POOL_PROVIDERS = setOf(ProviderType.GEMINI, ProviderType.GROQ, ProviderType.CUSTOM)
         private const val CACHE_TTL_MS = 5_000L
         private const val MAX_KEY_LENGTH = 256
         // Invalid-key marks expire. A 403 is not always the key's fault (e.g. selecting a
@@ -42,6 +50,9 @@ class KeyManager internal constructor(
     private val roundRobinIndex = AtomicInteger(0)
     @Volatile
     private var cachedKeys: List<String>? = null
+    /** Provider [cachedKeys] belongs to; a provider switch must not reuse another pool. */
+    @Volatile
+    private var cachedProvider: String? = null
     @Volatile
     private var cacheTimestamp = 0L
     /**
@@ -59,16 +70,44 @@ class KeyManager internal constructor(
     private fun JSONArray.toStringList(): List<String> =
         (0 until length()).map { getString(it) }
 
+    /**
+     * Keys are stored per provider. One shared pool meant switching to Command Code sent the
+     * Gemini keys to a different endpoint, where every request 401'd and benched them; the
+     * reverse switch then had no keys at all. Scoping keeps each provider's rotation intact.
+     */
+    private fun providerId(): String =
+        ProviderType.sanitize(settingsPrefs.getString(PrefKeys.PROVIDER_TYPE, null))
+
+    private fun storageKey(provider: String): String = "$PREF_KEY_ARRAY_PREFIX$provider"
+
     @Synchronized
-    fun getKeys(): List<String> {
+    fun getKeys(provider: String = providerId()): List<String> {
         val now = System.currentTimeMillis()
         val cached = cachedKeys
-        if (cached != null && now - cacheTimestamp < CACHE_TTL_MS) return cached
-        val stored = prefs.getString(PREF_KEY_ARRAY, null) ?: return emptyList()
+        if (cached != null && cachedProvider == provider && now - cacheTimestamp < CACHE_TTL_MS) return cached
+
+        val storageKey = storageKey(provider)
+        // One-time migration of the old single pool. Its keys cannot be attributed to a vendor,
+        // and before this change the whole pool was used by whichever provider was active — so
+        // it is filed under the provider active on first read, but only for the three providers
+        // that existed back then. Migrating to Gemini regardless stranded every Groq/Custom
+        // user with an empty key list; filing it under a provider added later would be wrong.
+        var stored = prefs.getString(storageKey, null)
+        if (stored == null && provider in LEGACY_POOL_PROVIDERS) {
+            val legacyPool = prefs.getString(PREF_KEY_ARRAY, null)
+            if (legacyPool != null) {
+                prefs.edit().putString(storageKey, legacyPool).remove(PREF_KEY_ARRAY).commit()
+                stored = legacyPool
+            }
+        }
+        if (stored == null) {
+            cacheKeys(provider, emptyList(), null)
+            return emptyList()
+        }
         // TTL expired but the stored ciphertext is byte-identical, so the plaintext cannot have
         // changed: revalidate the cache rather than paying for another KeyStore decrypt. Without
         // this, every 5s of active typing re-ran AES-GCM on the accessibility service's path.
-        if (cached != null && stored == cachedCipherText) {
+        if (cached != null && cachedProvider == provider && stored == cachedCipherText) {
             cacheTimestamp = now
             return cached
         }
@@ -76,9 +115,9 @@ class KeyManager internal constructor(
         if (isLegacyPlaintext(stored)) {
             return try {
                 val encrypted = cipher.encrypt(stored)
-                prefs.edit().putString(PREF_KEY_ARRAY, encrypted).commit()
+                prefs.edit().putString(storageKey, encrypted).commit()
                 val list = JSONArray(stored).toStringList()
-                cacheKeys(list, encrypted)
+                cacheKeys(provider, list, encrypted)
                 list
             } catch (_: Exception) {
                 // Encryption failed (e.g. keystore invalidated) — return the plaintext keys so
@@ -87,54 +126,56 @@ class KeyManager internal constructor(
             }
         }
         val jsonStr = cipher.decrypt(stored) ?: run {
-            cacheKeys(emptyList(), stored)
+            cacheKeys(provider, emptyList(), stored)
             return emptyList()
         }
         val list = try { JSONArray(jsonStr).toStringList() } catch (_: Exception) { emptyList() }
-        cacheKeys(list, stored)
+        cacheKeys(provider, list, stored)
         return list
     }
 
-    private fun cacheKeys(keys: List<String>, cipherText: String?) {
+    private fun cacheKeys(provider: String, keys: List<String>, cipherText: String?) {
         cachedKeys = keys
         cachedCipherText = cipherText
+        cachedProvider = provider
         cacheTimestamp = System.currentTimeMillis()
     }
 
     @Synchronized
-    private fun saveKeys(keys: List<String>): Boolean {
+    private fun saveKeys(keys: List<String>, provider: String): Boolean {
         val arr = JSONArray(keys)
         return try {
             val cipherText = cipher.encrypt(arr.toString())
-            prefs.edit().putString(PREF_KEY_ARRAY, cipherText).apply()
-            cacheKeys(keys, cipherText)
+            prefs.edit().putString(storageKey(provider), cipherText).apply()
+            cacheKeys(provider, keys, cipherText)
             true
         } catch (_: Exception) {
             // Invalidate: the stored value and the in-memory list may now disagree.
             cachedKeys = null
             cachedCipherText = null
+            cachedProvider = null
             cacheTimestamp = 0L
             false
         }
     }
 
     @Synchronized
-    fun addKey(key: String): Boolean {
+    fun addKey(key: String, provider: String = providerId()): Boolean {
         if (key.isBlank() || key.length > MAX_KEY_LENGTH) return false
-        val keys = getKeys().toMutableList()
+        val keys = getKeys(provider).toMutableList()
         if (!keys.contains(key)) {
             keys.add(key)
-            if (!saveKeys(keys)) return false
+            if (!saveKeys(keys, provider)) return false
         }
         invalidKeys.remove(key)
         return true
     }
 
     @Synchronized
-    fun removeKey(key: String): Boolean {
-        val keys = getKeys().toMutableList()
+    fun removeKey(key: String, provider: String = providerId()): Boolean {
+        val keys = getKeys(provider).toMutableList()
         keys.remove(key)
-        val saved = saveKeys(keys)
+        val saved = saveKeys(keys, provider)
         rateLimitedKeys.remove(key)
         invalidKeys.remove(key)
         return saved

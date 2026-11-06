@@ -223,6 +223,9 @@ Beyond AI, you can create **text replacer commands** that run **entirely offline
 |:---------|:-------|:------|
 | **Google Gemini** (default) | `gemini-3.5-flash-lite` (default), `gemini-3.6-flash` | Free tier available at [aistudio.google.com](https://aistudio.google.com) |
 | **Groq** | `openai/gpt-oss-120b` (default), `qwen/qwen3.6-27b` | Free tier at [console.groq.com](https://console.groq.com/keys) |
+| **Command Code** | `deepseek/deepseek-v4-flash` (default), plus the live catalog | OpenAI-compatible [Provider API](https://commandcode.ai/docs/provider). Every plan except **Go** has API access |
+| **OpenCode Go** | `glm-5.3-flash` (default), plus the live catalog | OpenAI-compatible endpoint for OpenCode's low-cost coding-model subscription |
+| **DeepSeek** | `deepseek-flash` (default), `deepseek-v4-pro` | OpenAI-compatible API at [platform.deepseek.com](https://platform.deepseek.com/api_keys) |
 | **Custom (OpenAI-compatible)** | Any model your endpoint supports | Works with Ollama, LM Studio, vLLM, any `/v1/chat/completions` endpoint |
 
 > [!TIP]
@@ -266,7 +269,7 @@ Beyond AI, you can create **text replacer commands** that run **entirely offline
 
 🔑 **Add API Key**
 
-Open the **Keys** tab, enter your API key. It's validated before saving. Add multiple keys for rotation.
+Open **Settings → Model Provider**, pick your provider, then enter and validate your API key in the same screen. Add multiple keys for rotation.
 
 </td>
 <td width="33%" align="center">
@@ -406,31 +409,21 @@ Find both options in the **Settings** tab under **Backup & Restore**.
 
 ## 🖥️ App Screens
 
-SwiftSlate has **four screens** accessible via the bottom navigation bar:
+SwiftSlate has **three screens** accessible via the bottom navigation bar:
 
 <table>
 <tr>
-<td width="25%" valign="top">
+<td width="33%" valign="top">
 
 #### 📊 Dashboard
 - Service status indicator (green/red)
 - Enable/disable toggle
-- API key count
+- API key count for the active provider
 - Quick-start guide
 - Version info & update check
 
 </td>
-<td width="25%" valign="top">
-
-#### 🔑 Keys
-- Add new keys (validated live)
-- Delete existing keys
-- AES-256-GCM encryption
-- Multi-key management
-- Direct link to get API keys
-
-</td>
-<td width="25%" valign="top">
+<td width="33%" valign="top">
 
 #### 📝 Commands
 - 5 built-in commands (read-only)
@@ -440,14 +433,13 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 - Delete custom commands
 
 </td>
-<td width="25%" valign="top">
+<td width="33%" valign="top">
 
 #### ⚙️ Settings
-- **Provider selection** (Gemini, Groq, Custom)
-- **Model picker** per provider
-- Custom endpoint URL & model
-- Trigger prefix customization
-- Backup & restore commands
+- **Provider selection** (Gemini, Groq, Command Code, OpenCode Go, DeepSeek, Custom)
+- **API key management** for the active provider (validated live, AES-256-GCM, multi-key rotation)
+- **Model picker** per provider, loaded from the provider's own catalog
+- Temperature, trigger prefix, backup & restore
 
 </td>
 </tr>
@@ -464,10 +456,9 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 <table>
 <tr>
 <td><img src="screenshots/dashboard.png" width="280" alt="Dashboard — Dark" /></td>
-<td><img src="screenshots/keys.png" width="280" alt="API Keys — Dark" /></td>
+<td><img src="screenshots/commands.png" width="280" alt="Commands — Dark" /></td>
 </tr>
 <tr>
-<td><img src="screenshots/commands.png" width="280" alt="Commands — Dark" /></td>
 <td><img src="screenshots/settings.png" width="280" alt="Settings — Dark" /></td>
 </tr>
 </table>
@@ -477,10 +468,9 @@ SwiftSlate has **four screens** accessible via the bottom navigation bar:
 <table>
 <tr>
 <td><img src="screenshots/dashboard_light.png" width="280" alt="Dashboard — Light" /></td>
-<td><img src="screenshots/keys_light.png" width="280" alt="API Keys — Light" /></td>
+<td><img src="screenshots/commands_light.png" width="280" alt="Commands — Light" /></td>
 </tr>
 <tr>
-<td><img src="screenshots/commands_light.png" width="280" alt="Commands — Light" /></td>
 <td><img src="screenshots/settings_light.png" width="280" alt="Settings — Light" /></td>
 </tr>
 </table>
@@ -580,15 +570,18 @@ com.musheer360.swiftslate/
 │                                # reasoning/thinking params) + registry
 ├── model/
 │   ├── Command.kt               # Command data class (AI or Text Replacer)
+│   ├── CommandCodeModels.kt     # Command Code catalog (default model, live /models)
+│   ├── DeepSeekModels.kt        # DeepSeek catalog (default model, live /models)
 │   ├── GeminiModels.kt          # Gemini model catalog + per-model thinking level
 │   ├── GroqModels.kt            # Groq model catalog + per-model reasoning params
+│   ├── OpenCodeGoModels.kt      # OpenCode Go catalog (default model, live /models)
 │   ├── PrefKeys.kt              # SharedPreferences key constants
-│   └── ProviderType.kt          # Provider constants (gemini, groq, custom)
+│   └── ProviderType.kt          # Provider constants (gemini, groq, commandcode, opencodego, deepseek, custom)
 ├── ui/
 │   ├── DashboardScreen.kt       # Service status, key count, usage stats, 7-day chart
-│   ├── KeysScreen.kt            # API key management with live validation
+│   ├── ProviderKeysCard.kt      # API key management for the active provider (inside Settings)
 │   ├── CommandsScreen.kt        # Command list, add/edit/delete with collapsible form
-│   ├── SettingsScreen.kt        # Provider, model, temperature, prefix, backup/restore
+│   ├── SettingsScreen.kt        # Provider, keys, model, temperature, prefix, backup/restore
 │   ├── processtext/             # ACTION_PROCESS_TEXT entry point (the text-selection menu)
 │   │   ├── ProcessTextActivity.kt      # One-shot dialog activity, owns the bottom sheet
 │   │   ├── ProcessTextViewModel.kt     # Picker -> loading -> result state machine
@@ -598,7 +591,7 @@ com.musheer360.swiftslate/
 │   ├── components/              # Reusable UI components (cards, text fields, dividers,
 │   │                            # the app's own bottom sheet and toast)
 │   └── theme/Theme.kt           # AMOLED dark + light Material 3 color schemes
-├── MainActivity.kt              # AnimatedContent tab navigation (4 tabs)
+├── MainActivity.kt              # AnimatedContent tab navigation (3 tabs)
 ├── SwiftSlateViewModel.kt       # Shared ViewModel exposing managers + prefs
 ├── SwiftSlateApp.kt             # Application class — SharedPreferences pre-warming,
 │                                # WorkManager update check scheduling

@@ -14,6 +14,11 @@ object ErrorMessages {
         if (raw.isBlank()) return R.string.error_bad_request
         val lower = raw.lowercase(Locale.ROOT)
         return when {
+            // Command Code's Provider API answers 403 upgrade_required when the account's plan
+            // has no API access (the Go plan). The key is fine and no amount of retrying helps,
+            // so this must win over the generic invalid-key branch below.
+            lower.contains("upgrade_required") || lower.contains("upgrade required") ->
+                R.string.error_plan_no_api_access
             lower.contains("permission_denied") || lower.contains("permission denied") ->
                 R.string.error_no_model_access
             lower.contains("invalid api key") || lower.contains("api key not valid") || lower.contains("api_key_invalid") ||

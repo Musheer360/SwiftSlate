@@ -68,6 +68,63 @@ class CatalogTest {
         assertTrue(GroqModels.isChatCandidate("allam-2-7b"))
     }
 
+    // ---------- CommandCodeModels ----------
+
+    @Test
+    fun commandCode_defaultIsUsableAndUnknownIdsPassThrough() {
+        assertEquals(CommandCodeModels.DEFAULT, CommandCodeModels.sanitize(null))
+        assertEquals(CommandCodeModels.DEFAULT, CommandCodeModels.sanitize(""))
+        assertEquals(CommandCodeModels.DEFAULT, CommandCodeModels.sanitize("   "))
+        // The live /models catalog decides what exists; stored ids are kept verbatim.
+        assertEquals("claude-sonnet-4-6", CommandCodeModels.sanitize(" claude-sonnet-4-6 "))
+        assertEquals("moonshotai/Kimi-K3", CommandCodeModels.sanitize("moonshotai/Kimi-K3"))
+    }
+
+    @Test
+    fun commandCode_catalogIsConsistent() {
+        assertTrue(CommandCodeModels.ALL.isNotEmpty())
+        assertTrue(CommandCodeModels.DEFAULT in CommandCodeModels.ALL)
+        for (id in CommandCodeModels.ALL) assertEquals(id, CommandCodeModels.sanitize(id))
+    }
+
+    // ---------- OpenCodeGoModels ----------
+
+    @Test
+    fun openCodeGo_defaultIsUsableAndUnknownIdsPassThrough() {
+        assertEquals(OpenCodeGoModels.DEFAULT, OpenCodeGoModels.sanitize(null))
+        assertEquals(OpenCodeGoModels.DEFAULT, OpenCodeGoModels.sanitize(""))
+        assertEquals(OpenCodeGoModels.DEFAULT, OpenCodeGoModels.sanitize("   "))
+        // The Go plan's live /models catalog decides what exists; ids are kept verbatim.
+        assertEquals("claude-haiku-5-5", OpenCodeGoModels.sanitize(" claude-haiku-5-5 "))
+        assertEquals("kimi-k3.1-pro", OpenCodeGoModels.sanitize("kimi-k3.1-pro"))
+    }
+
+    @Test
+    fun openCodeGo_catalogIsConsistent() {
+        assertTrue(OpenCodeGoModels.ALL.isNotEmpty())
+        assertTrue(OpenCodeGoModels.DEFAULT in OpenCodeGoModels.ALL)
+        for (id in OpenCodeGoModels.ALL) assertEquals(id, OpenCodeGoModels.sanitize(id))
+    }
+
+    // ---------- DeepSeekModels ----------
+
+    @Test
+    fun deepSeek_defaultIsUsableAndUnknownIdsPassThrough() {
+        assertEquals(DeepSeekModels.DEFAULT, DeepSeekModels.sanitize(null))
+        assertEquals(DeepSeekModels.DEFAULT, DeepSeekModels.sanitize(""))
+        assertEquals(DeepSeekModels.DEFAULT, DeepSeekModels.sanitize("   "))
+        // Live /models decides the catalog; ids stay verbatim (including legacy aliases).
+        assertEquals("deepseek-v4-pro", DeepSeekModels.sanitize(" deepseek-v4-pro "))
+        assertEquals("deepseek-v4-flash", DeepSeekModels.sanitize("deepseek-v4-flash"))
+    }
+
+    @Test
+    fun deepSeek_catalogIsConsistent() {
+        assertTrue(DeepSeekModels.ALL.isNotEmpty())
+        assertTrue(DeepSeekModels.DEFAULT in DeepSeekModels.ALL)
+        for (id in DeepSeekModels.ALL) assertEquals(id, DeepSeekModels.sanitize(id))
+    }
+
     // ---------- GeminiModels ----------
 
     @Test

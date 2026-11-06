@@ -10,7 +10,7 @@
     <string name="service_enable">Enable</string>
     <string name="dashboard_api_keys_title">API Keys</string>
     <string name="dashboard_keys_configured">%1$d keys configured</string>
-    <string name="dashboard_add_key_hint">Add an API key to get started.</string>
+    <string name="dashboard_add_key_hint">Add an API key in Settings to get started.</string>
     <string name="dashboard_monthly_requests">This Month</string>
     <string name="dashboard_favorite_command">Top Command</string>
     <string name="dashboard_no_data">—</string>
@@ -27,6 +27,7 @@
     <string name="keys_keystore_error">Secure key storage is unavailable on this device. Keys cannot be saved.</string>
     <string name="keys_custom_endpoint_required">Set the endpoint URL in Settings before adding a key for the Custom provider</string>
     <string name="keys_get_api_key">Get your %1$s API key ↗</string>
+    <string name="keys_provider_changed">Provider changed — add the key again.</string>
     <string name="keys_empty">No API keys added</string>
 
     <!-- Commands -->
@@ -53,6 +54,9 @@
     <string name="settings_provider_title">Model Provider</string>
     <string name="settings_provider_gemini">Google Gemini</string>
     <string name="settings_provider_groq">Groq</string>
+    <string name="settings_provider_commandcode" translatable="false">Command Code</string>
+    <string name="settings_provider_opencodego" translatable="false">OpenCode Go</string>
+    <string name="settings_provider_deepseek" translatable="false">DeepSeek</string>
     <string name="settings_provider_custom">Custom (OpenAI Compatible)</string>
     <string name="settings_model_title">Model</string>
     <string name="settings_temperature_title">Temperature</string>
@@ -121,6 +125,7 @@
     <!-- Runtime error messages (accessibility service) -->
     <string name="error_no_model_access">Your API key doesn\'t have access to this model.</string>
     <string name="error_invalid_key">Invalid API key. Please check your key in Settings.</string>
+    <string name="error_plan_no_api_access">Your plan doesn\'t include API access. Upgrade your plan or choose a different provider.</string>
     <string name="error_invalid_key_with_hint">Invalid API key (%1$s). Please check your keys in Settings.</string>
     <string name="error_provider_auth_required">Your endpoint rejected the request. If it is a cloud-based server, sign in on the server itself (e.g. `ollama signin`).</string>
     <string name="keys_endpoint_needs_v1">Endpoint is reachable, but the URL should end with /v1 (e.g. http://host:11434/v1).</string>

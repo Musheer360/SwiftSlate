@@ -282,4 +282,96 @@ class ApiClientUtilsTest {
         assertEquals(emptyList<String>(), ApiClientUtils.parseModelIds("""{"data":[]}"""))
         assertEquals(emptyList<String>(), ApiClientUtils.parseModelIds("""{"something":"else"}"""))
     }
+
+    // --- parseChatCompletionModelIds ---
+
+    /**
+     * Command Code's catalog carries `supported_endpoints`. Claude models answer /messages
+     * only, so listing them for a chat-completions provider offered models that always 400'd.
+     */
+    @Test
+    fun parseChatCompletionModelIds_dropsModelsServedOnAnotherWire() {
+        val json = """
+            {"object":"list","data":[
+              {"id":"claude-sonnet-5-5","supported_endpoints":["/messages"]},
+              {"id":"deepseek/deepseek-v4-flash","supported_endpoints":["/chat/completions","/responses"]},
+              {"id":"gpt-5.4-mini","supported_endpoints":["/responses"]},
+              {"id":"legacy-model"}
+            ]}
+        """.trimIndent()
+        assertEquals(
+            listOf("deepseek/deepseek-v4-flash", "legacy-model"),
+            ApiClientUtils.parseChatCompletionModelIds(json)
+        )
+    }
+
+    @Test
+    fun parseChatCompletionModelIds_emptyEndpointsAndBadJsonFailOpen() {
+        // An empty supported_endpoints array means "no route publishes it"; keep it rather
+        // than silently hiding a model the server may still serve.
+        assertEquals(
+            listOf("m"),
+            ApiClientUtils.parseChatCompletionModelIds("""{"data":[{"id":"m","supported_endpoints":[]}]}""")
+        )
+        assertEquals(listOf("m"), ApiClientUtils.parseChatCompletionModelIds("""{"data":[{"id":"m"}]}"""))
+        assertEquals(emptyList<String>(), ApiClientUtils.parseChatCompletionModelIds("not json"))
+        assertEquals(emptyList<String>(), ApiClientUtils.parseChatCompletionModelIds(""))
+    }
+
+    /**
+     * An unknown envelope falls back to the plain parser, but once a catalog carries
+     * `supported_endpoints` that metadata is authoritative — an all-filtered catalog must
+     * stay empty instead of putting /messages-only models back in the picker.
+     */
+    @Test
+    fun parseChatCompletionModelIds_fallsBackAndMatchesRoutesLoosely() {
+        // No "data" array: defer to parseModelIds, which also understands "models".
+        assertEquals(
+            listOf("llama3:70b"),
+            ApiClientUtils.parseChatCompletionModelIds("""{"models":[{"name":"llama3:70b"}]}""")
+        )
+        // Route metadata present but nothing serves chat: keep the picker honest.
+        assertEquals(
+            emptyList<String>(),
+            ApiClientUtils.parseChatCompletionModelIds(
+                """{"data":[{"id":"weird-model","supported_endpoints":["/embeddings"]}]}"""
+            )
+        )
+        // Versioned route spelling counts as chat-completions.
+        assertEquals(
+            listOf("ok-model"),
+            ApiClientUtils.parseChatCompletionModelIds(
+                """{"data":[{"id":"ok-model","supported_endpoints":["/v1/chat/completions"]}]}"""
+            )
+        )
+    }
+
+    /**
+     * Status table for the authenticated key probe. 404 is the subtle one: a missing route
+     * means a wrong endpoint, but an unserved model is also reported as 404, and the probe
+     * runs a fixed default model — a valid key must not be rejected for that.
+     */
+    @Test
+    fun probeAcceptsKey_statusTable() {
+        assertTrue(ApiClientUtils.probeAcceptsKey(200, ""))
+        assertTrue(ApiClientUtils.probeAcceptsKey(201, ""))
+        assertFalse(ApiClientUtils.probeAcceptsKey(401, """{"error":{"message":"bad key"}}"""))
+        assertFalse(ApiClientUtils.probeAcceptsKey(403, """{"error":{"code":"upgrade_required"}}"""))
+        // Auth passed, model/params complained.
+        assertTrue(ApiClientUtils.probeAcceptsKey(400, """{"error":{"message":"bad request"}}"""))
+        assertTrue(ApiClientUtils.probeAcceptsKey(422, ""))
+        assertTrue(ApiClientUtils.probeAcceptsKey(429, ""))
+        // 404: model_not_found means auth passed, a bare 404 means the route is wrong.
+        assertTrue(
+            ApiClientUtils.probeAcceptsKey(
+                404, """{"error":{"code":"model_not_found","message":"The model does not exist"}}"""
+            )
+        )
+        assertFalse(ApiClientUtils.probeAcceptsKey(404, """{"error":{"message":"Not Found"}}"""))
+        // Routing/server problems are failures, not silent successes.
+        assertFalse(ApiClientUtils.probeAcceptsKey(405, ""))
+        assertFalse(ApiClientUtils.probeAcceptsKey(402, ""))
+        assertFalse(ApiClientUtils.probeAcceptsKey(500, ""))
+        assertFalse(ApiClientUtils.probeAcceptsKey(503, ""))
+    }
 }
