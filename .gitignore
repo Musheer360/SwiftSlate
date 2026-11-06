@@ -25,3 +25,6 @@ local.properties
 app/build
 app/release
 release.keystore
+
+# Local device-test artifacts (screenshots, uiautomator dumps)
+screenshots-test/

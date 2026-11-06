@@ -43,7 +43,7 @@ fun SlateCard(
 
 /**
  * The page heading. Size and the gap below it come from the shared [SlateRhythm], so
- * all four tabs start at the same baseline and their first cards line up.
+ * all three tabs start at the same baseline and their first cards line up.
  */
 @Composable
 fun ScreenTitle(

@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -34,12 +36,18 @@ import kotlinx.coroutines.withContext
 import com.musheer360.swiftslate.manager.CommandManager
 import com.musheer360.swiftslate.manager.KeyManager
 import com.musheer360.swiftslate.manager.ProviderModelsCache
+import com.musheer360.swiftslate.model.CommandCodeModels
+import com.musheer360.swiftslate.model.DeepSeekModels
 import com.musheer360.swiftslate.model.GeminiModels
 import com.musheer360.swiftslate.model.GroqModels
+import com.musheer360.swiftslate.model.OpenCodeGoModels
 import com.musheer360.swiftslate.model.PrefKeys
 import com.musheer360.swiftslate.model.ProviderType
+import com.musheer360.swiftslate.provider.CommandCodeConfig
+import com.musheer360.swiftslate.provider.DeepSeekConfig
 import com.musheer360.swiftslate.provider.EndpointValidator
 import com.musheer360.swiftslate.provider.GroqConfig
+import com.musheer360.swiftslate.provider.OpenCodeGoConfig
 import com.musheer360.swiftslate.ui.components.LocalSlateRhythm
 import com.musheer360.swiftslate.ui.components.ScreenTitle
 import com.musheer360.swiftslate.ui.components.SlateCard
@@ -54,7 +62,6 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
     val uriHandler = LocalUriHandler.current
 
     val scope = rememberCoroutineScope()
-    var saveEndpointJob by remember { mutableStateOf<Job?>(null) }
     var saveModelJob by remember { mutableStateOf<Job?>(null) }
 
     var providerType by remember { mutableStateOf(prefs.getString(PrefKeys.PROVIDER_TYPE, ProviderType.GEMINI) ?: ProviderType.GEMINI) }
@@ -68,6 +75,24 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
     var groqModelExpanded by remember { mutableStateOf(false) }
     var groqModelList by remember { mutableStateOf(ProviderModelsCache.get(ProviderType.GROQ)?.models ?: emptyList()) }
 
+    var commandCodeModel by remember { mutableStateOf(prefs.getString(PrefKeys.COMMAND_CODE_MODEL, "") ?: "") }
+    var commandCodeModelExpanded by remember { mutableStateOf(false) }
+    var commandCodeModelList by remember {
+        mutableStateOf(ProviderModelsCache.get(ProviderType.COMMAND_CODE)?.models ?: emptyList())
+    }
+
+    var openCodeGoModel by remember { mutableStateOf(prefs.getString(PrefKeys.OPENCODE_GO_MODEL, "") ?: "") }
+    var openCodeGoModelExpanded by remember { mutableStateOf(false) }
+    var openCodeGoModelList by remember {
+        mutableStateOf(ProviderModelsCache.get(ProviderType.OPENCODE_GO)?.models ?: emptyList())
+    }
+
+    var deepSeekModel by remember { mutableStateOf(prefs.getString(PrefKeys.DEEPSEEK_MODEL, "") ?: "") }
+    var deepSeekModelExpanded by remember { mutableStateOf(false) }
+    var deepSeekModelList by remember {
+        mutableStateOf(ProviderModelsCache.get(ProviderType.DEEPSEEK)?.models ?: emptyList())
+    }
+
     var customEndpoint by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_ENDPOINT, "") ?: "") }
     var customModel by rememberSaveable { mutableStateOf(prefs.getString(PrefKeys.CUSTOM_MODEL, "") ?: "") }
     var endpointError by remember { mutableStateOf<String?>(null) }
@@ -80,6 +105,9 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
     var fetchSuccess by remember { mutableStateOf(false) }
     var isFetchingGeminiModels by remember { mutableStateOf(false) }
     var isFetchingGroqModels by remember { mutableStateOf(false) }
+    var isFetchingCommandCodeModels by remember { mutableStateOf(false) }
+    var isFetchingOpenCodeGoModels by remember { mutableStateOf(false) }
+    var isFetchingDeepSeekModels by remember { mutableStateOf(false) }
     var apiKeys by remember { mutableStateOf<List<String>>(emptyList()) }
     val openAIClient = remember { OpenAICompatibleClient() }
     val geminiClient = remember { GeminiClient() }
@@ -100,59 +128,131 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
     val modelsFailedMsg = stringResource(R.string.settings_fetch_models_failed)
     val signinRequiredMsg = stringResource(R.string.error_provider_auth_required)
 
-    // Registered keys are decrypted through the Keystore — load off the main thread, as
-    // KeysScreen does. The first key is sent as Bearer when fetching models; keyless local
-    // servers get no header at all.
-    LaunchedEffect(Unit) {
-        apiKeys = withContext(Dispatchers.IO) { keyManager.getKeys() }
+    // Registered keys are decrypted through the Keystore — load off the main thread, and reload
+    // whenever the provider changes because key storage is per provider. Without the provider
+    // key this kept the previous vendor's list, so the model picker stayed enabled and the API
+    // fetch reused that vendor's key against the new endpoint.
+    LaunchedEffect(providerType) {
+        // Blank synchronously: the sibling auto-fetch effect runs on this same recomposition,
+        // and a stale non-empty list there would send the previous provider's key to the new
+        // provider's endpoint.
+        apiKeys = emptyList()
+        apiKeys = withContext(Dispatchers.IO) { keyManager.getKeys(providerType) }
     }
 
-    // Fetches one provider's live model list (issue #148). Groq rides the existing
-    // OpenAI-compatible prober against its fixed endpoint; Gemini gets a native
-    // listing call. Results land in [ProviderModelsCache] plus local state so the
+    // Fetches one provider's live model list (issue #148). Groq, Command Code, OpenCode Go and
+    // DeepSeek ride the existing OpenAI-compatible prober against their fixed endpoints; Gemini
+    // gets a native listing call. Results land in [ProviderModelsCache] plus local state so the
     // dropdown renders without refetching on every visit.
     fun startModelFetch(type: String) {
-        val isGemini = type == ProviderType.GEMINI
-        if (!isGemini && type != ProviderType.GROQ) return
-        if (isGemini && isFetchingGeminiModels) return
-        if (!isGemini && isFetchingGroqModels) return
+        val known = type == ProviderType.GEMINI || type == ProviderType.GROQ ||
+            type == ProviderType.COMMAND_CODE || type == ProviderType.OPENCODE_GO ||
+            type == ProviderType.DEEPSEEK
+        if (!known) return
+        val alreadyFetching = when (type) {
+            ProviderType.GEMINI -> isFetchingGeminiModels
+            ProviderType.GROQ -> isFetchingGroqModels
+            ProviderType.COMMAND_CODE -> isFetchingCommandCodeModels
+            ProviderType.OPENCODE_GO -> isFetchingOpenCodeGoModels
+            ProviderType.DEEPSEEK -> isFetchingDeepSeekModels
+            else -> true
+        }
+        if (alreadyFetching) return
 
         val key = apiKeys.firstOrNull() ?: return
 
-        if (isGemini) isFetchingGeminiModels = true else isFetchingGroqModels = true
+        when (type) {
+            ProviderType.GEMINI -> isFetchingGeminiModels = true
+            ProviderType.GROQ -> isFetchingGroqModels = true
+            ProviderType.COMMAND_CODE -> isFetchingCommandCodeModels = true
+            ProviderType.OPENCODE_GO -> isFetchingOpenCodeGoModels = true
+            ProviderType.DEEPSEEK -> isFetchingDeepSeekModels = true
+        }
         scope.launch {
             val result = withContext(Dispatchers.IO) {
-                if (isGemini) {
-                    geminiClient.fetchModels(key)
-                } else {
-                    openAIClient.fetchModels(key, GroqConfig.ENDPOINT).map { ids ->
+                when (type) {
+                    ProviderType.GEMINI -> geminiClient.fetchModels(key)
+                    ProviderType.GROQ -> openAIClient.fetchModels(key, GroqConfig.ENDPOINT).map { ids ->
                         ids.filter { GroqModels.isChatCandidate(it) }
                     }
+                    ProviderType.COMMAND_CODE -> openAIClient.fetchModels(
+                        key, CommandCodeConfig.ENDPOINT, includeFallbackPaths = false, chatCompletionsOnly = true
+                    )
+                    ProviderType.OPENCODE_GO -> openAIClient.fetchModels(
+                        key, OpenCodeGoConfig.ENDPOINT, includeFallbackPaths = false
+                    )
+                    ProviderType.DEEPSEEK -> openAIClient.fetchModels(
+                        key, DeepSeekConfig.ENDPOINT, includeFallbackPaths = false
+                    )
+                    else -> Result.success(emptyList<String>())
                 }
             }
             val models = result.getOrNull().orEmpty()
             val success = result.isSuccess && models.isNotEmpty()
-            val currentModels = if (isGemini) geminiModelList else groqModelList
+            val currentModels = when (type) {
+                ProviderType.GEMINI -> geminiModelList
+                ProviderType.GROQ -> groqModelList
+                ProviderType.COMMAND_CODE -> commandCodeModelList
+                ProviderType.OPENCODE_GO -> openCodeGoModelList
+                ProviderType.DEEPSEEK -> deepSeekModelList
+                else -> emptyList()
+            }
             val toCache = if (success) models else (ProviderModelsCache.get(type)?.models ?: currentModels)
             ProviderModelsCache.put(type, ProviderModelsCache.Entry(toCache, attempted = true))
-            if (isGemini) {
-                isFetchingGeminiModels = false
-                if (success) {
-                    geminiModelList = models
-                    if (selectedModel.isBlank() && models.isNotEmpty()) {
-                        val pick = preferredModel(models, GeminiModels.DEFAULT)
-                        selectedModel = pick
-                        prefs.edit().putString(PrefKeys.GEMINI_MODEL, pick).apply()
+            when (type) {
+                ProviderType.GEMINI -> {
+                    isFetchingGeminiModels = false
+                    if (success) {
+                        geminiModelList = models
+                        if (selectedModel.isBlank() && models.isNotEmpty()) {
+                            val pick = preferredModel(models, GeminiModels.DEFAULT)
+                            selectedModel = pick
+                            prefs.edit().putString(PrefKeys.GEMINI_MODEL, pick).apply()
+                        }
                     }
                 }
-            } else {
-                isFetchingGroqModels = false
-                if (success) {
-                    groqModelList = models
-                    if (groqModel.isBlank() && models.isNotEmpty()) {
-                        val pick = preferredModel(models, GroqModels.DEFAULT)
-                        groqModel = pick
-                        prefs.edit().putString(PrefKeys.GROQ_MODEL, pick).apply()
+                ProviderType.GROQ -> {
+                    isFetchingGroqModels = false
+                    if (success) {
+                        groqModelList = models
+                        if (groqModel.isBlank() && models.isNotEmpty()) {
+                            val pick = preferredModel(models, GroqModels.DEFAULT)
+                            groqModel = pick
+                            prefs.edit().putString(PrefKeys.GROQ_MODEL, pick).apply()
+                        }
+                    }
+                }
+                ProviderType.COMMAND_CODE -> {
+                    isFetchingCommandCodeModels = false
+                    if (success) {
+                        commandCodeModelList = models
+                        if (commandCodeModel.isBlank() && models.isNotEmpty()) {
+                            val pick = preferredModel(models, CommandCodeModels.DEFAULT)
+                            commandCodeModel = pick
+                            prefs.edit().putString(PrefKeys.COMMAND_CODE_MODEL, pick).apply()
+                        }
+                    }
+                }
+                ProviderType.OPENCODE_GO -> {
+                    isFetchingOpenCodeGoModels = false
+                    if (success) {
+                        openCodeGoModelList = models
+                        if (openCodeGoModel.isBlank() && models.isNotEmpty()) {
+                            val pick = preferredModel(models, OpenCodeGoModels.DEFAULT)
+                            openCodeGoModel = pick
+                            prefs.edit().putString(PrefKeys.OPENCODE_GO_MODEL, pick).apply()
+                        }
+                    }
+                }
+                ProviderType.DEEPSEEK -> {
+                    isFetchingDeepSeekModels = false
+                    if (success) {
+                        deepSeekModelList = models
+                        if (deepSeekModel.isBlank() && models.isNotEmpty()) {
+                            val pick = preferredModel(models, DeepSeekModels.DEFAULT)
+                            deepSeekModel = pick
+                            prefs.edit().putString(PrefKeys.DEEPSEEK_MODEL, pick).apply()
+                        }
                     }
                 }
             }
@@ -163,7 +263,10 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
     // a Gemini/Groq provider whose list has never been fetched this process — including
     // the no-key case, so it runs automatically once a first key is added.
     LaunchedEffect(providerType, apiKeys) {
-        if (providerType == ProviderType.GEMINI || providerType == ProviderType.GROQ) {
+        if (providerType == ProviderType.GEMINI || providerType == ProviderType.GROQ ||
+            providerType == ProviderType.COMMAND_CODE || providerType == ProviderType.OPENCODE_GO ||
+            providerType == ProviderType.DEEPSEEK
+        ) {
             val cached = ProviderModelsCache.get(providerType)
             if (apiKeys.isNotEmpty() && (cached == null || !cached.attempted)) {
                 startModelFetch(providerType)
@@ -177,7 +280,6 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
 
     DisposableEffect(Unit) {
         onDispose {
-            saveEndpointJob?.cancel()
             saveModelJob?.cancel()
             val editor = prefs.edit()
             var needsWrite = false
@@ -251,11 +353,16 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
         modifier = Modifier
             .fillMaxSize()
             .graphicsLayer { }
+            // Settings now hosts provider, keys, model, temperature, prefix, backup and about.
+            // It can exceed one viewport, so it scrolls (the other tabs still fit fixed).
+            .verticalScroll(rememberScrollState())
+            // Keep the key field and its validation result above the keyboard.
+            .imePadding()
             .padding(horizontal = rhythm.screenPaddingH, vertical = rhythm.screenPaddingV)
     ) {
         ScreenTitle(stringResource(R.string.settings_title))
 
-        // Card 1: Provider + Model
+        // Card 1: Model Provider
         SlateCard {
             Text(
                 text = stringResource(R.string.settings_provider_title),
@@ -271,6 +378,9 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     value = when (providerType) {
                         ProviderType.GEMINI -> stringResource(R.string.settings_provider_gemini)
                         ProviderType.GROQ -> stringResource(R.string.settings_provider_groq)
+                        ProviderType.COMMAND_CODE -> stringResource(R.string.settings_provider_commandcode)
+                        ProviderType.OPENCODE_GO -> stringResource(R.string.settings_provider_opencodego)
+                        ProviderType.DEEPSEEK -> stringResource(R.string.settings_provider_deepseek)
                         else -> stringResource(R.string.settings_provider_custom)
                     },
                     onValueChange = {},
@@ -303,6 +413,33 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                         }
                     )
                     DropdownMenuItem(
+                        text = { Text(stringResource(R.string.settings_provider_commandcode)) },
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            providerType = ProviderType.COMMAND_CODE
+                            prefs.edit().putString(PrefKeys.PROVIDER_TYPE, ProviderType.COMMAND_CODE).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                            providerExpanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.settings_provider_opencodego)) },
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            providerType = ProviderType.OPENCODE_GO
+                            prefs.edit().putString(PrefKeys.PROVIDER_TYPE, ProviderType.OPENCODE_GO).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                            providerExpanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.settings_provider_deepseek)) },
+                        onClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            providerType = ProviderType.DEEPSEEK
+                            prefs.edit().putString(PrefKeys.PROVIDER_TYPE, ProviderType.DEEPSEEK).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                            providerExpanded = false
+                        }
+                    )
+                    DropdownMenuItem(
                         text = { Text(stringResource(R.string.settings_provider_custom)) },
                         onClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -313,8 +450,33 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(rhythm.formGap))
-            if (providerType == ProviderType.GEMINI) {
+        }
+
+        Spacer(modifier = Modifier.height(rhythm.cardGap))
+
+        // Order matches the setup flow: provider -> its API key -> model -> temperature.
+        ProviderKeysCard(
+            keyManager = keyManager,
+            prefs = prefs,
+            provider = providerType,
+            onKeysChanged = {
+                ProviderModelsCache.invalidate(providerType)
+                scope.launch { apiKeys = withContext(Dispatchers.IO) { keyManager.getKeys(providerType) } }
+            }
+        )
+
+        Spacer(modifier = Modifier.height(rhythm.cardGap))
+
+        SlateCard {
+            // Custom endpoints stay editable with no key: they need the endpoint before a key
+            // can be added at all, and local servers (Ollama, LM Studio) never take one.
+            if (apiKeys.isEmpty() && providerType != ProviderType.CUSTOM) {
+                Text(
+                    text = stringResource(R.string.settings_models_need_key),
+                    fontSize = rhythm.bodySize,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else if (providerType == ProviderType.GEMINI) {
                 Text(
                     text = stringResource(R.string.settings_model_title),
                     fontSize = rhythm.bodySize,
@@ -370,6 +532,90 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                     isFetching = isFetchingGroqModels,
                     fetchingText = fetchingModelsMsg
                 )
+            } else if (providerType == ProviderType.COMMAND_CODE) {
+                Text(
+                    text = stringResource(R.string.settings_model_title),
+                    fontSize = rhythm.bodySize,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(rhythm.formGap))
+                DynamicModelDropdown(
+                    selectedModel = if (apiKeys.isEmpty() || commandCodeModel.isBlank()) "" else commandCodeModel,
+                    enabled = apiKeys.isNotEmpty(),
+                    expanded = commandCodeModelExpanded,
+                    onExpandedChange = { isOpening ->
+                        commandCodeModelExpanded = isOpening
+                        if (isOpening && apiKeys.isNotEmpty() && !isFetchingCommandCodeModels) {
+                            startModelFetch(ProviderType.COMMAND_CODE)
+                        }
+                    },
+                    models = commandCodeModelList,
+                    onSelect = { id ->
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        commandCodeModel = id
+                        prefs.edit().putString(PrefKeys.COMMAND_CODE_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                        commandCodeModelExpanded = false
+                    },
+                    onDismiss = { commandCodeModelExpanded = false },
+                    isFetching = isFetchingCommandCodeModels,
+                    fetchingText = fetchingModelsMsg
+                )
+            } else if (providerType == ProviderType.OPENCODE_GO) {
+                Text(
+                    text = stringResource(R.string.settings_model_title),
+                    fontSize = rhythm.bodySize,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(rhythm.formGap))
+                DynamicModelDropdown(
+                    selectedModel = if (apiKeys.isEmpty() || openCodeGoModel.isBlank()) "" else openCodeGoModel,
+                    enabled = apiKeys.isNotEmpty(),
+                    expanded = openCodeGoModelExpanded,
+                    onExpandedChange = { isOpening ->
+                        openCodeGoModelExpanded = isOpening
+                        if (isOpening && apiKeys.isNotEmpty() && !isFetchingOpenCodeGoModels) {
+                            startModelFetch(ProviderType.OPENCODE_GO)
+                        }
+                    },
+                    models = openCodeGoModelList,
+                    onSelect = { id ->
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        openCodeGoModel = id
+                        prefs.edit().putString(PrefKeys.OPENCODE_GO_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                        openCodeGoModelExpanded = false
+                    },
+                    onDismiss = { openCodeGoModelExpanded = false },
+                    isFetching = isFetchingOpenCodeGoModels,
+                    fetchingText = fetchingModelsMsg
+                )
+            } else if (providerType == ProviderType.DEEPSEEK) {
+                Text(
+                    text = stringResource(R.string.settings_model_title),
+                    fontSize = rhythm.bodySize,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(rhythm.formGap))
+                DynamicModelDropdown(
+                    selectedModel = if (apiKeys.isEmpty() || deepSeekModel.isBlank()) "" else deepSeekModel,
+                    enabled = apiKeys.isNotEmpty(),
+                    expanded = deepSeekModelExpanded,
+                    onExpandedChange = { isOpening ->
+                        deepSeekModelExpanded = isOpening
+                        if (isOpening && apiKeys.isNotEmpty() && !isFetchingDeepSeekModels) {
+                            startModelFetch(ProviderType.DEEPSEEK)
+                        }
+                    },
+                    models = deepSeekModelList,
+                    onSelect = { id ->
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        deepSeekModel = id
+                        prefs.edit().putString(PrefKeys.DEEPSEEK_MODEL, id).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
+                        deepSeekModelExpanded = false
+                    },
+                    onDismiss = { deepSeekModelExpanded = false },
+                    isFetching = isFetchingDeepSeekModels,
+                    fetchingText = fetchingModelsMsg
+                )
             } else {
                 Text(
                     text = stringResource(R.string.settings_endpoint_title),
@@ -392,11 +638,10 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
                             else -> endpointErrorScheme
                         }
                         if (endpointError == null) {
-                            saveEndpointJob?.cancel()
-                            saveEndpointJob = scope.launch {
-                                delay(500)
-                                prefs.edit().putString(PrefKeys.CUSTOM_ENDPOINT, it).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
-                            }
+                            // Persist immediately: the key card above validates against
+                            // prefs.CUSTOM_ENDPOINT, so a debounce made Add Key fail with
+                            // "set the endpoint" while the correct URL was on screen.
+                            prefs.edit().putString(PrefKeys.CUSTOM_ENDPOINT, it).remove(PrefKeys.STRUCTURED_OUTPUT_DISABLED_AT).apply()
                         }
                     },
                     placeholder = { Text(stringResource(R.string.settings_endpoint_placeholder)) },
@@ -664,24 +909,11 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
 
         Spacer(modifier = Modifier.height(rhythm.cardGap))
 
-        // Card 4: About. The only weighted child, so its bottom edge lands flush
-        // screenPaddingV above the nav bar exactly like the last card on every
-        // other tab, and it absorbs whatever slack the rhythm above did not take.
-        //
-        // That slack is split rather than pooled. The two text groups each sit in
-        // an equally weighted half, so the divider lands on the card's midline and
-        // each group is centred within its own half. Pooling it instead — whether
-        // as weighted spacers hugging the divider (which opened a ~104 dp void on
-        // tall screens) or as one centred block (which left dead space above the
-        // version line and below the sponsor line) — is what this replaces.
-        SlateCard(
-            modifier = Modifier.weight(1f),
-            fillHeight = true
-        ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center
-            ) {
+        // Card 4: About. Settings scrolls now that it also owns key management, so this card
+        // wraps its content instead of absorbing leftover height (weights are illegal inside a
+        // scrollable column).
+        SlateCard {
+            Column {
                 Text(
                     text = stringResource(R.string.app_name) + " v" + BuildConfig.VERSION_NAME,
                     fontSize = rhythm.emphasisSize,
@@ -701,10 +933,7 @@ fun SettingsScreen(commandManager: CommandManager, prefs: SharedPreferences, key
             Spacer(modifier = Modifier.height(rhythm.groupGap))
             SlateDivider()
             Spacer(modifier = Modifier.height(rhythm.groupGap))
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center
-            ) {
+            Column {
                 Text(
                     text = stringResource(R.string.settings_made_by),
                     fontSize = rhythm.bodySize,
@@ -840,6 +1069,21 @@ private fun DynamicModelDropdown(
                             )
                         },
                         onClick = { onSelect(id) }
+                    )
+                }
+                if (!isFetching && models.isEmpty()) {
+                    // A failed or empty catalog used to collapse into a blank popup with no
+                    // explanation; say so instead.
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = stringResource(R.string.settings_fetch_models_empty),
+                                fontSize = rhythm.bodySize,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
+                        onClick = {},
+                        enabled = false
                     )
                 }
             }

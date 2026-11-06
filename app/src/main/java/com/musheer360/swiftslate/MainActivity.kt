@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -34,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.musheer360.swiftslate.ui.CommandsScreen
 import com.musheer360.swiftslate.ui.DashboardScreen
-import com.musheer360.swiftslate.ui.KeysScreen
 import com.musheer360.swiftslate.ui.SettingsScreen
 import com.musheer360.swiftslate.ui.components.LocalSlateRhythm
 import com.musheer360.swiftslate.ui.components.SlateRhythm
@@ -42,7 +40,6 @@ import com.musheer360.swiftslate.ui.theme.SwiftSlateTheme
 
 enum class Tab(@param:StringRes val titleRes: Int, val icon: ImageVector) {
     Dashboard(R.string.dashboard_title, Icons.Default.Home),
-    Keys(R.string.keys_title, Icons.Default.Lock),
     Commands(R.string.commands_title, Icons.AutoMirrored.Filled.List),
     Settings(R.string.settings_title, Icons.Default.Settings)
 }
@@ -126,7 +123,6 @@ fun SwiftSlateMainScreen(vm: SwiftSlateViewModel = viewModel()) {
                 movableContentOf {
                     when (tab) {
                         Tab.Dashboard -> DashboardScreen(vm.keyManager, vm.commandManager, vm.statsManager)
-                        Tab.Keys -> KeysScreen(vm.keyManager, vm.prefs)
                         Tab.Commands -> CommandsScreen(vm.commandManager)
                         Tab.Settings -> SettingsScreen(vm.commandManager, vm.prefs, vm.keyManager)
                     }
@@ -150,7 +146,8 @@ fun SwiftSlateMainScreen(vm: SwiftSlateViewModel = viewModel()) {
             // One rhythm for every tab, derived from the height the content area
             // actually has after the nav bar and system insets. Resolving it here
             // rather than per screen is what keeps padding, gaps and type identical
-            // across Dashboard, Keys, Commands and Settings.
+            // across Dashboard, Commands and Settings. Settings is the one scrollable
+            // tab (it hosts provider, keys, model, temperature, prefix, backup and about).
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
                 val rhythm = remember(maxHeight) { SlateRhythm.forHeight(maxHeight) }
                 CompositionLocalProvider(LocalSlateRhythm provides rhythm) {

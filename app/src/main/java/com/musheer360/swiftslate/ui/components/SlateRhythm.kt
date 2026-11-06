@@ -10,9 +10,11 @@ import androidx.compose.ui.unit.sp
 /**
  * The one vertical rhythm every tab is laid out on.
  *
- * Each tab fits a single viewport with no root scroll and its last card anchored
- * flush [screenPaddingV] above the nav bar, so the four cards share a fixed height
- * budget that varies by roughly 120 dp between phones: a Galaxy S23 gives the
+ * Dashboard and Commands each fit a single viewport with no root scroll and their last
+ * card anchored flush [screenPaddingV] above the nav bar. Settings is the exception: it
+ * scrolls, because it also hosts provider, key, model and temperature settings.
+ *
+ * The height budget still varies by roughly 120 dp between phones: a Galaxy S23 gives the
  * content area ~697 dp, a Nothing Phone 2a ~821 dp. One rigid set of tokens cannot
  * serve both — at 14 dp padding the S23 was ~43 dp short and clipped the bottom
  * card, while the 2a had ~81 dp spare that piled up into a single void.
@@ -37,7 +39,7 @@ import androidx.compose.ui.unit.sp
 data class SlateRhythm(
     /** Page side padding. Aligns card edges with the nav bar items. */
     val screenPaddingH: Dp,
-    /** Page top/bottom padding. Also the last card's gap above the nav bar. */
+    /** Page top/bottom padding. Also the last card's gap above the nav bar (scrolling tabs). */
     val screenPaddingV: Dp,
     /** Screen title type size. */
     val titleSize: TextUnit,
